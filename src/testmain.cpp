@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "Log.h"
 #include "Camera.h"
 #include "Mesh.h"
 #include "Shader.h"

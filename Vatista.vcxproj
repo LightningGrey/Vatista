@@ -15,18 +15,12 @@
     <ClInclude Include="include\GLFW\glfw3.h" />
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
-    <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\Mesh.h" />
-    <ClInclude Include="src\ObjLoader.h" />
-    <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\glad\glad.c" />
-    <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\Mesh.cpp" />
-    <ClCompile Include="src\ObjLoader.cpp" />
-    <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\testmain.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
@@ -78,6 +72,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Year 2 Semester 1\GDW2\Vatista\include\spdlog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
