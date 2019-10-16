@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Log.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>

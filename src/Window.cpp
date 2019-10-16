@@ -50,7 +50,7 @@ float Window::checkRun()
 		std::cout << "Failed to load GLAD." << std::endl;
 		return -1.0f;
 	}
-	std::cout << "guruguru" << std::endl;
+	GAME_LOG_INFO("Window initialization successful.");
 	return 0;
 }
 
