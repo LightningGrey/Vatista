@@ -9,6 +9,7 @@ namespace Vatista {
 
 	public:
 		static void Init();
+		static void Uninitialize();
 
 		//logs engine actions
 		inline static std::shared_ptr<spdlog::logger>& GetEngineLog() { return engineLog; };
