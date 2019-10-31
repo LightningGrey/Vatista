@@ -14,7 +14,7 @@ namespace Vatista {
 		glBindVertexArray(myVao);
 
 		// Create 2 buffers, 1 for vertices and the other for indices
-		glCreateBuffers(2, myBuffers);
+		glGenBuffers(2, &myBuffers[0]);
 
 		// Bind and buffer our vertex data
 		glBindBuffer(GL_ARRAY_BUFFER, myBuffers[0]);

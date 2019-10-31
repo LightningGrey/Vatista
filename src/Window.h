@@ -11,12 +11,14 @@ namespace Vatista {
 		Window();
 		Window(int width, int height, const char* windowName);
 		~Window();
-		void init();
-		float checkRun();
-		void update();
+		bool init();
 		void clear();
 		void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 		void processInput(GLFWwindow* window);
+		//void resize(int width, int height);
+		bool shouldClose();
+
+		GLFWwindow* getWindow();
 
 	private:
 		GLFWwindow* window;

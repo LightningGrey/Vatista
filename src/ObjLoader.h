@@ -3,7 +3,7 @@
 #define OBJLOADER_H
 
 #include <vector>
-#include <glm/glm.hpp>
+#include "GLM/glm.hpp"
 
 namespace Vatista {
 	struct ObjLoader {

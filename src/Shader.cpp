@@ -116,12 +116,12 @@ namespace Vatista {
 	void Shader::Bind() {
 		glUseProgram(myShaderHandle);
 	}
-
-	void Shader::SetUniform(const char* name, const glm::mat4& value)
+	
+	void Shader::SetUniform(std::string name, const glm::mat4& value)
 	{
-		GLint loc = glGetUniformLocation(myShaderHandle, name);
+		GLint loc = glGetUniformLocation(myShaderHandle, name.c_str());
 		if (loc != -1) {
-			glProgramUniformMatrix4fv(myShaderHandle, loc, 1, false, &value[0][0]);
+			glUniformMatrix4fv(loc, 1, false, &value[0][0]);
 		}
 	}
 

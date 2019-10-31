@@ -1,74 +1,53 @@
 #include "Window.h"
 
 namespace Vatista {
-	Window::Window() : width(1920), height(1080), windowName("Vatista")
+	Window::Window() : window(nullptr), width(1920), height(1080), windowName("Vatista")
 	{
-		//initializing GLFW
-		glfwInit();
-
-		window = glfwCreateWindow(width, height, windowName, NULL, NULL);
-		glfwMakeContextCurrent(window);
-		//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		init();
 	}
 
-	Window::Window(int widthV, int heightV, const char* windowNameV) : width(widthV),
+	Window::Window(int widthV, int heightV, const char* windowNameV) : window(nullptr), width(widthV),
 		height(heightV), windowName(windowNameV)
 	{
-		//initializing GLFW
-		glfwInit();
-
-		window = glfwCreateWindow(width, height, windowName, NULL, NULL);
-		glfwMakeContextCurrent(window);
-		//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		init();
 	}
-
+	
 	Window::~Window()
 	{
 		glfwDestroyWindow(window);
 	}
 
-	void Window::init()
+	bool Window::init()
 	{
-	}
+		//initializing GLFW
+		glfwInit();
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	float Window::checkRun()
-	{
+		//window = glfwCreateWindow(width, height, windowName, NULL, NULL);
+		window = glfwCreateWindow(1600, 900, windowName, NULL, NULL);
+		glfwMakeContextCurrent(window);
+		//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
 		if (window == NULL) {
-			//std::cout << "Failed to create window." << std::endl;
-			VATISTA_LOG_ERROR ("Window creation failure");
+			VATISTA_LOG_ERROR("Window creation failure");
 			glfwTerminate();
 			return -1.0f;
 		}
 		//error if GLAD is not loaded 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-			//std::cout << "Failed to load GLAD." << std::endl;
 			VATISTA_LOG_ERROR("GLAD load failure");
 			return -1.0f;
 		}
 		VATISTA_LOG_INFO("Window initialization successful.");
-		return 0;
+		return 1;
 	}
 
 	void Window::clear()
 	{
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-	}
-
-	void Window::update()
-	{		
-		//clear();
-
-		glfwSwapBuffers(window);
-		glfwPollEvents();
 	}
 
 	//callback function
@@ -80,5 +59,27 @@ namespace Vatista {
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 			glfwSetWindowShouldClose(window, true);
 		}
+	}
+
+	bool Window::shouldClose()
+	{
+		if (glfwWindowShouldClose(window)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	//void Window::resize(int width, int height)
+	//{
+	//	myAspect = newWidth / (float)newHeight;
+	//	myCamera->Projection = glm::perspective(glm::radians(60.0f),
+	//		myAspect, 0.01f, 1000.0f);
+	//}
+
+	GLFWwindow* Window::getWindow()
+	{
+		return window;
 	}
 }

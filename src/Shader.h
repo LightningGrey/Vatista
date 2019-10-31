@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <memory>
 #include <GLM/glm.hpp>
+#include <string>
 
 namespace Vatista {
 	class Shader {
@@ -18,7 +19,7 @@ namespace Vatista {
 
 		void Bind();
 
-		void SetUniform(const char* name, const glm::mat4& value);
+		void SetUniform(std::string name, const glm::mat4& value);
 
 	private:
 		GLuint __CompileShaderPart(const char* source, GLenum type);

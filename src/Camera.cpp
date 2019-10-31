@@ -8,7 +8,7 @@ namespace Vatista {
 		myPosition(glm::vec3(0)),
 		myView(glm::mat4(1.0f)),
 		Projection(glm::mat4(1.0f))
-	{ }
+	{ } 
 
 	Camera::~Camera()
 	{
