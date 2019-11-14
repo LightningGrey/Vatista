@@ -46,10 +46,10 @@ void Vatista::Game::run()
 
 void Vatista::Game::init()
 {
-	gameWindow = new Vatista::Window(1600, 900, "Alpha Strike");
+	gameWindow = new Vatista::Window(1000, 1000, "Alpha Strike");
 
 	myCamera = std::make_shared<Vatista::Camera>();
-	myCamera->SetPosition(glm::vec3(0, 5, -6));
+	myCamera->SetPosition(glm::vec3(0, 1, -10));
 	myCamera->LookAt(glm::vec3(0));
 	myCamera->Projection = glm::ortho(-4.0f, 4.0f, -4.0f, 4.0f, 0.01f, 1000.0f);
 
@@ -58,7 +58,7 @@ void Vatista::Game::init()
 	std::vector<glm::vec3> normals;
 	std::vector<uint32_t> indices;
 
-	bool objectLoad = loader.load("./obj/x64/Alpha Strike/testsword.obj", vertices, UVs, normals, indices);
+	bool objectLoad = loader.load("./res/test_model.obj", vertices, UVs, normals, indices);
 
 	if (objectLoad) {
 		myMesh = std::make_shared<Mesh>(vertices, vertices.size(), UVs,
@@ -71,7 +71,14 @@ void Vatista::Game::init()
 		"./obj/x64/Vatista/passthrough.fs");
 
 	modelTransform = glm::mat4(1.0f);
-	modelTransform = glm::translate(modelTransform, glm::vec3(0.0f, 0.0f, 0.2f));
+	modelTransform = glm::rotate(modelTransform, -90.0f, glm::vec3(0, 1, 0));
+	modelTransform = glm::translate(modelTransform, glm::vec3(0, 0, -1.0f));
+	pos1 = glm::vec3(0, 0, -1.0f);
+
+	modelTransform2 = glm::mat4(1.0f);
+	modelTransform2 = glm::rotate(modelTransform2, 90.0f, glm::vec3(0, 1, 0));
+	modelTransform2 = glm::translate(modelTransform2, glm::vec3(0, 0, -2.0f));
+	pos1 = glm::vec3(0, 0, 1.0f);
 }
 
 void Vatista::Game::close()
@@ -83,23 +90,61 @@ void Vatista::Game::close()
 void Vatista::Game::update(float dt)
 {
 	glm::vec3 movement = glm::vec3(0.0f);
-	glm::vec3 rotation = glm::vec3(0.0f);
+	glm::vec3 movement2 = glm::vec3(0.0f);
+	//glm::vec3 rotation = glm::vec3(0.0f);
 	float speed = 1.0f;
 	float rotSpeed = 1.0f;
 
 	//movement and rotation of the camera
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_W) == GLFW_PRESS)
-		movement.z -= speed * dt;
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
-		movement.z += speed * dt;
+	//if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_W) == GLFW_PRESS)
+	//	//movement.z -= speed * dt;
+	//	movement.x -= speed * 0.001f;
+	//if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
+	//	//movement.x += speed * dt;
+	//	movement.x -= speed * 0.001f;
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
-		movement.x -= speed * dt;
+		//movement.x -= speed * dt;
+		movement.z -= speed * 0.001f;
+		pos1 += movement;
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
-		movement.x += speed * dt;
+		//movement.x += speed * dt;
+		movement.z += speed * 0.002f;
+		pos1 += movement;
+
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
+		//movement.x -= speed * dt;
+		movement2.z += speed * 0.002f;
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
+		//movement.x += speed * dt;
+		movement2.z -= speed * 0.001f;
+
+	if (pos1.z > 5.f)
+	{
+		pos1.z = 5.f;
+	}
+	if (pos1.z < -5.f)
+	{
+		pos1.z = -5.f;
+	}
+	//if (pos2.z > 6.0f)
+	//{
+	//	pos2.z = 6.0f;
+	//}
+	//if (pos2.z < -5.f)
+	//{
+	//	pos2.z = -5.f;
+	//}
+
+	//modelTransform = glm::translate(modelTransform, movement);
+	if (pos1.z > -5.f && pos1.z < 5.f) {
+		modelTransform = glm::translate(modelTransform, movement);
+	}
+	
+	modelTransform2 = glm::translate(modelTransform2, movement2);
 
 	// Rotate and move our camera based on input
-	myCamera->Rotate(rotation);
-	myCamera->Move(movement);
+	//myCamera->Rotate(rotation);
+	//myCamera->Move(movement);
 }
 
 void Vatista::Game::draw(float dt)
@@ -111,7 +156,11 @@ void Vatista::Game::draw(float dt)
 
 	//draw 
 	myShader->SetUniform("a_ModelViewProjection", myCamera->GetViewProjection() * modelTransform);
-	for (int i = 0; i < meshList.size(); i++) {
-		meshList[i]->Draw();
-	}
+	myMesh->Draw();
+	myShader->SetUniform("a_ModelViewProjection", myCamera->GetViewProjection() * modelTransform2);
+	myMesh->Draw();
+	//for (int i = 0; i < meshList.size(); i++) {
+	//	meshList[i]->Draw();
+	//	//std::cout << 1;
+	//}
 }

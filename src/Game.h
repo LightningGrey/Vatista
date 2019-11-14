@@ -40,7 +40,9 @@ namespace Vatista {
 		Vatista::Camera::Sptr myCamera;
 		
 		glm::mat4 modelTransform;
-		//glm::mat4 myModelTransform2;
+		glm::mat4 modelTransform2;
+		glm::vec3 pos1;
+		glm::vec3 pos2;
 		
 		Vatista::ObjLoader loader;
 	};
