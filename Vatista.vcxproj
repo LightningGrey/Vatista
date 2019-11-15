@@ -86,7 +86,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Year 2 Semester 1\GDW2\Vatista\include\spdlog;D:\Year 2 Semester 1\GDW2\Vatista\obj\x64\Vatista;D:\Year 2 Semester 1\GDW2\Vatista\include\GLM\include;D:\Year 2 Semester 1\GDW2\Vatista\obj;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/spdlog;./include/GLM/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
