@@ -56,19 +56,26 @@ void Vatista::Game::init()
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> UVs;
 	std::vector<glm::vec3> normals;
-	std::vector<uint32_t> indices;
+	std::vector<uint32_t> vertIndices;
+	std::vector<uint32_t> uvIndices;
+	std::vector<uint32_t> normIndices;
 
-	bool objectLoad = loader.load("./res/test_model.obj", vertices, UVs, normals, indices);
+	bool objectLoad = loader.load("./res/hammer_test.obj", vertices, UVs, normals, vertIndices,
+		uvIndices, normIndices);
 
 	if (objectLoad) {
 		myMesh = std::make_shared<Mesh>(vertices, vertices.size(), UVs,
-			UVs.size(), normals, normals.size(), indices, indices.size());
+			UVs.size(), normals, normals.size(), vertIndices, vertIndices.size(),
+			uvIndices, uvIndices.size(), normIndices, normIndices.size());
 		meshList.push_back(myMesh);
 	}
 
+	texture = std::make_shared<Texture>();
+	texture->loadFile("./res/Hammer.001texture.png");
+	
 	myShader = std::make_shared<Shader>();
-	myShader->Load("./obj/x64/Vatista/passthrough.vs", 
-		"./obj/x64/Vatista/passthrough.fs");
+	myShader->Load("./res/passthrough.vs", 
+		"./res/passthrough.fs");
 
 	modelTransform = glm::mat4(1.0f);
 	modelTransform = glm::rotate(modelTransform, -90.0f, glm::vec3(0, 1, 0));
@@ -151,6 +158,8 @@ void Vatista::Game::draw(float dt)
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	// glUniform1i(glGetUniformLocation(shader_program, "texSample"), 0);
 
 	myShader->Bind();
 

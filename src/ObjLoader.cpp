@@ -10,7 +10,8 @@
 namespace Vatista {
 	bool ObjLoader::load(std::string filename, std::vector<glm::vec3>& objVertices,
 		std::vector<glm::vec2>& objUVs, std::vector<glm::vec3>& objNormals,
-		std::vector<uint32_t>& objIndices)
+		std::vector<uint32_t>& objVertIndices, std::vector<uint32_t>& objUVIndices,
+		std::vector<uint32_t>& objNormIndices)
 	{
 		std::cout << "Object loading..." << std::endl;
 
@@ -82,7 +83,15 @@ namespace Vatista {
 		}
 
 		for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-			objIndices.push_back(vertexIndices[i]);
+			objVertIndices.push_back(vertexIndices[i]);
+		}
+
+		for (unsigned int i = 0; i < uvIndices.size(); i++) {
+			objUVIndices.push_back(uvIndices[i]);
+		}
+		
+		for (unsigned int i = 0; i < normalIndices.size(); i++) {
+			objNormIndices.push_back(normalIndices[i]);
 		}
 
 		file.close();

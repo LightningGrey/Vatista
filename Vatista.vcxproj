@@ -22,6 +22,8 @@
     <ClInclude Include="src\ObjLoader.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\Yun.h" />
   </ItemGroup>
@@ -35,6 +37,7 @@
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\testmain.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\Yun.cpp" />
   </ItemGroup>

@@ -1,13 +1,15 @@
 #pragma once
 
 #include <glad/glad.h>
-#include <memory>
 #include <GLM/glm.hpp>
 #include <string>
+#include "Utils.h"
 
 namespace Vatista {
 	class Shader {
 	public:
+		SharedPtr(Shader);
+
 		Shader();
 		~Shader();
 
@@ -26,6 +28,4 @@ namespace Vatista {
 
 		GLuint myShaderHandle;
 	};
-
-	typedef std::shared_ptr<Shader> Shader_sptr;
 }

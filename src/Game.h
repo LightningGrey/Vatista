@@ -12,6 +12,7 @@
 #include "Camera.h"
 #include "ObjLoader.h"
 #include "Window.h"
+#include "Texture.h"
 
 namespace Vatista {
 	class Game {
@@ -30,12 +31,14 @@ namespace Vatista {
 		std::string windowName;
 
 		//A shared pointer to our mesh
-		Vatista::Mesh_sptr   myMesh;
-		std::vector<Vatista::Mesh_sptr> meshList;
+		Vatista::Mesh::Sptr   myMesh;
+		std::vector<Vatista::Mesh::Sptr> meshList;
+
+		Vatista::Texture::Sptr texture;
 
 		// A shared pointer to our shader
-		Vatista::Shader_sptr myShader;
-		std::vector<Vatista::Shader_sptr> shaderList;
+		Vatista::Shader::Sptr myShader;
+		std::vector<Vatista::Shader::Sptr> shaderList;
 		
 		Vatista::Camera::Sptr myCamera;
 		
