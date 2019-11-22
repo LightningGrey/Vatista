@@ -14,7 +14,7 @@ namespace Vatista {
 		void bind(int slot) const;
 		static void unbind(int slot);
 
-		static Sptr loadFile(const std::string &filename, bool alpha = true);
+		void loadFile(const std::string &filename, bool alpha = true);
 	private:
 		int texWidth, texHeight, texChannels;
 		GLuint texture;

@@ -24,7 +24,7 @@ void Vatista::Texture::unbind(int slot)
 	glBindTextureUnit(slot, 0);
 }
 
-Vatista::Texture::Sptr Vatista::Texture::loadFile(const std::string& filename, bool alpha)
+void Vatista::Texture::loadFile(const std::string& filename, bool alpha)
 {
 	stbi_set_flip_vertically_on_load(true);
 
@@ -33,23 +33,18 @@ Vatista::Texture::Sptr Vatista::Texture::loadFile(const std::string& filename, b
 		&channels, 0);
 
 	if (data != nullptr && width != 0 && height != 0 && channels != 0) {
-		Sptr loadedTex = std::make_shared<Texture>();
-		loadedTex->texWidth = width;
-		loadedTex->texHeight = height;
-		loadedTex->texChannels = channels;
+		this->texWidth = width;
+		this->texHeight = height;
+		this->texChannels = channels;
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-			GL_UNSIGNED_INT, data);
+			GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
-
-		stbi_image_free(data);
-		return loadedTex;
 	}
 	else {
 		VATISTA_LOG_WARN("Failed to load texture.");
-		return nullptr;
 	}
-
+	stbi_image_free(data);
 }
 
 void Vatista::Texture::setup()

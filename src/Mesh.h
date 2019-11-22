@@ -37,8 +37,9 @@ namespace Vatista {
 		// 0 is vertices, 1 is indices
 		// 2 is uvs, 3 is indices
 		// 4 is normals, 5 is indices
-		GLuint myBuffers[6];
+		GLuint myBuffers[4];
 		// The number of vertices and indices in this mesh
-		size_t myVertexCount, myUVCount, myNormalCount, myIndexCount;
+		size_t myVertexCount, myUVCount, myNormalCount; 
+		size_t myVertIndexCount, myUVIndexCount, myNormalIndexCount;
 	};
 }

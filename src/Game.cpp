@@ -60,7 +60,7 @@ void Vatista::Game::init()
 	std::vector<uint32_t> uvIndices;
 	std::vector<uint32_t> normIndices;
 
-	bool objectLoad = loader.load("./res/hammer_test.obj", vertices, UVs, normals, vertIndices,
+	bool objectLoad = loader.load("./res/plane.obj", vertices, UVs, normals, vertIndices,
 		uvIndices, normIndices);
 
 	if (objectLoad) {
