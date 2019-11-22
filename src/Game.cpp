@@ -49,9 +49,9 @@ void Vatista::Game::init()
 	gameWindow = new Vatista::Window(1000, 1000, "Alpha Strike");
 
 	myCamera = std::make_shared<Vatista::Camera>();
-	myCamera->SetPosition(glm::vec3(0, 1, -10));
-	myCamera->LookAt(glm::vec3(0));
-	myCamera->Projection = glm::ortho(-4.0f, 4.0f, -4.0f, 4.0f, 0.01f, 1000.0f);
+	myCamera->SetPosition(glm::vec3(1, 0, 0));
+	myCamera->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
+	myCamera->Projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.f, 1000.0f);
 
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> UVs;
@@ -78,14 +78,13 @@ void Vatista::Game::init()
 		"./res/passthrough.fs");
 
 	modelTransform = glm::mat4(1.0f);
-	modelTransform = glm::rotate(modelTransform, -90.0f, glm::vec3(0, 1, 0));
-	modelTransform = glm::translate(modelTransform, glm::vec3(0, 0, -1.0f));
+	modelTransform = glm::rotate(modelTransform, 3.14f, glm::vec3(0, 1, 0));
 	pos1 = glm::vec3(0, 0, -1.0f);
+	modelTransform = glm::translate(modelTransform, pos1);
 
 	modelTransform2 = glm::mat4(1.0f);
-	modelTransform2 = glm::rotate(modelTransform2, 90.0f, glm::vec3(0, 1, 0));
-	modelTransform2 = glm::translate(modelTransform2, glm::vec3(0, 0, -2.0f));
-	pos1 = glm::vec3(0, 0, 1.0f);
+	pos2 = glm::vec3(0, 0, 0);
+	modelTransform2 = glm::translate(modelTransform2, pos2);
 }
 
 void Vatista::Game::close()
@@ -110,43 +109,41 @@ void Vatista::Game::update(float dt)
 	//	//movement.x += speed * dt;
 	//	movement.x -= speed * 0.001f;
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
-		//movement.x -= speed * dt;
 		movement.z -= speed * 0.001f;
-		pos1 += movement;
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
-		//movement.x += speed * dt;
 		movement.z += speed * 0.002f;
-		pos1 += movement;
 
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
-		//movement.x -= speed * dt;
 		movement2.z += speed * 0.002f;
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
-		//movement.x += speed * dt;
 		movement2.z -= speed * 0.001f;
 
+
+	pos1 += movement;
 	if (pos1.z > 5.f)
 	{
 		pos1.z = 5.f;
+		movement.z = 0;
 	}
 	if (pos1.z < -5.f)
 	{
 		pos1.z = -5.f;
+		movement.z = 0;
 	}
-	//if (pos2.z > 6.0f)
-	//{
-	//	pos2.z = 6.0f;
-	//}
-	//if (pos2.z < -5.f)
-	//{
-	//	pos2.z = -5.f;
-	//}
+	pos2 += movement2;
+	if (pos2.z > 5.f)
+	{
+		pos2.z = 5.f;
+		movement2.z = 0;
+	}
+	if (pos2.z < -5.f)
+	{
+		pos2.z = -5.f;
+		movement2.z = 0;
+	}
 
-	//modelTransform = glm::translate(modelTransform, movement);
-	if (pos1.z > -5.f && pos1.z < 5.f) {
-		modelTransform = glm::translate(modelTransform, movement);
-	}
 	
+	modelTransform = glm::translate(modelTransform, movement);
 	modelTransform2 = glm::translate(modelTransform2, movement2);
 
 	// Rotate and move our camera based on input
