@@ -10,8 +10,7 @@
 namespace Vatista {
 	bool ObjLoader::load(std::string filename, std::vector<glm::vec3>& objVertices,
 		std::vector<glm::vec2>& objUVs, std::vector<glm::vec3>& objNormals,
-		std::vector<uint32_t>& objVertIndices, std::vector<uint32_t>& objUVIndices,
-		std::vector<uint32_t>& objNormIndices)
+		std::vector<uint32_t>& objIndices, std::vector<Vertex>& vertData)
 	{
 		std::cout << "Object loading..." << std::endl;
 
@@ -82,16 +81,27 @@ namespace Vatista {
 			objNormals.push_back(tempNormals[i]);
 		}
 
-		for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-			objVertIndices.push_back(vertexIndices[i]);
-		}
+		//int count = 0;
+		bool check;
+		int indiceCount = 0;
 
-		for (unsigned int i = 0; i < uvIndices.size(); i++) {
-			objUVIndices.push_back(uvIndices[i]);
-		}
-		
-		for (unsigned int i = 0; i < normalIndices.size(); i++) {
-			objNormIndices.push_back(normalIndices[i]);
+		for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+			check = false;
+			for (unsigned int j = 0; j < vertData.size(); j++) {
+				if (vertData[j].Position == objVertices[vertexIndices[i]] &&
+					vertData[j].UV == objUVs[uvIndices[i]] &&
+					vertData[j].Normal == objNormals[normalIndices[i]] && check == false) 
+				{
+					check = true;
+					objIndices.push_back(j);
+				}
+			}
+			if (!check) {
+				objIndices.push_back(indiceCount);
+				indiceCount++;
+				vertData.push_back(Vertex(objVertices[vertexIndices[i]], 
+					objUVs[uvIndices[i]], objNormals[normalIndices[i]]));
+			}
 		}
 
 		file.close();

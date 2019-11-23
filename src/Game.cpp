@@ -56,17 +56,24 @@ void Vatista::Game::init()
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> UVs;
 	std::vector<glm::vec3> normals;
-	std::vector<uint32_t> vertIndices;
-	std::vector<uint32_t> uvIndices;
-	std::vector<uint32_t> normIndices;
+	std::vector<uint32_t> indices;
+	std::vector<Vertex> vertData;
 
-	bool objectLoad = loader.load("./res/plane.obj", vertices, UVs, normals, vertIndices,
-		uvIndices, normIndices);
+	bool objectLoad = loader.load("./res/plane.obj", vertices, UVs, normals, indices, vertData);
+
+	//for (int i = 0; i < indices.size(); i++)
+	//	std::cout << indices.at(i) << ' ';
+	//for (int i = 0; i < vertData.size(); i++) {
+	//	std::cout << vertData.at(i).Position.x << vertData.at(i).Position.y << vertData.at(i).Position.z << ' ';
+	//	std::cout << vertData.at(i).UV.x << vertData.at(i).UV.y << ' ';
+	//	std::cout << vertData.at(i).Normal.x << vertData.at(i).Normal.y << vertData.at(i).Normal.z << ' ';
+	//	std::cout << std::endl;
+	//}
 
 	if (objectLoad) {
 		myMesh = std::make_shared<Mesh>(vertices, vertices.size(), UVs,
-			UVs.size(), normals, normals.size(), vertIndices, vertIndices.size(),
-			uvIndices, uvIndices.size(), normIndices, normIndices.size());
+			UVs.size(), normals, normals.size(), indices, indices.size(), 
+			vertData, vertData.size());
 		meshList.push_back(myMesh);
 	}
 

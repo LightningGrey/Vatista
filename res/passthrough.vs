@@ -5,7 +5,7 @@ layout (location = 1) in vec2 inUV;
 layout (location = 2) in vec3 inNormal;
 
 //layout (location = 0) out vec4 outColor;
-layout (location = 0) out vec2 outUV;
+layout (location = 1) out vec2 outUV;
 
 uniform mat4 a_ModelViewProjection;
 
