@@ -44,6 +44,7 @@ namespace Vatista {
 		
 		glm::mat4 modelTransform;
 		glm::mat4 modelTransform2;
+		glm::mat4 modelTransform3;
 		glm::vec3 pos1;
 		glm::vec3 pos2;
 		

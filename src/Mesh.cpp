@@ -33,19 +33,19 @@ namespace Vatista {
 		glEnableVertexAttribArray(0);
 		// Our first attribute is 3 floats, the distance between 
 		// them is the size of our vertex, and they will map to the position in our vertices
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(glm::vec3), (void*)offsetof(Vertex, Position));
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, Position));
 
 		// Enable vertex attribute 0
 		glEnableVertexAttribArray(1);
 		// Our first attribute is 3 floats, the distance between 
 		// them is the size of our vertex, and they will map to the position in our vertices
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(glm::vec2), (void*)offsetof(Vertex, UV));
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, UV));
 
 		// Enable vertex attribute 0
 		glEnableVertexAttribArray(2);
 		// Our first attribute is 3 floats, the distance between 
 		// them is the size of our vertex, and they will map to the position in our vertices
-		glVertexAttribPointer(2, 3, GL_FLOAT, false, sizeof(glm::vec3), (void*)offsetof(Vertex, Normal));
+		glVertexAttribPointer(2, 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
 		
 
 		// Unbind our VAO

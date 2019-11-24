@@ -51,7 +51,7 @@ void Vatista::Game::init()
 	myCamera = std::make_shared<Vatista::Camera>();
 	myCamera->SetPosition(glm::vec3(1, 0, 0));
 	myCamera->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
-	myCamera->Projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.f, 1000.0f);
+	myCamera->Projection = glm::ortho(-4.0f, 4.0f, -4.0f, 4.0f, 0.f, 1000.0f);
 
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> UVs;
@@ -59,16 +59,20 @@ void Vatista::Game::init()
 	std::vector<uint32_t> indices;
 	std::vector<Vertex> vertData;
 
-	bool objectLoad = loader.load("./res/plane.obj", vertices, UVs, normals, indices, vertData);
+	bool objectLoad = loader.load("./res/hammer_test.obj", vertices, UVs, normals, indices, vertData);
 
 	//for (int i = 0; i < indices.size(); i++)
 	//	std::cout << indices.at(i) << ' ';
+	//std::cout << "\n";
+	//std::cout << "\n";
 	//for (int i = 0; i < vertData.size(); i++) {
-	//	std::cout << vertData.at(i).Position.x << vertData.at(i).Position.y << vertData.at(i).Position.z << ' ';
-	//	std::cout << vertData.at(i).UV.x << vertData.at(i).UV.y << ' ';
-	//	std::cout << vertData.at(i).Normal.x << vertData.at(i).Normal.y << vertData.at(i).Normal.z << ' ';
+	//
+	//	std::cout << vertData.at(i).Position.x << "/" << vertData.at(i).Position.y << "/" << vertData.at(i).Position.z << ' ';
+	//	std::cout << vertData.at(i).UV.x << "/" << vertData.at(i).UV.y << ' ';
+	//	std::cout << vertData.at(i).Normal.x << "/" << vertData.at(i).Normal.y << "/" <<vertData.at(i).Normal.z << ' ';
 	//	std::cout << std::endl;
 	//}
+	//std::cout << "\n";
 
 	if (objectLoad) {
 		myMesh = std::make_shared<Mesh>(vertices, vertices.size(), UVs,
@@ -90,8 +94,14 @@ void Vatista::Game::init()
 	modelTransform = glm::translate(modelTransform, pos1);
 
 	modelTransform2 = glm::mat4(1.0f);
-	pos2 = glm::vec3(0, 0, 0);
+	//modelTransform2 = glm::rotate(modelTransform2, 3.14f, glm::vec3(0, 1, 0));
+	pos2 = glm::vec3(0, 0, -1.0f);
 	modelTransform2 = glm::translate(modelTransform2, pos2);
+
+	modelTransform3 = glm::mat4(1.0f);
+	modelTransform3 = glm::rotate(modelTransform3, 3.14f, glm::vec3(0, 1, 0));
+
+	glEnable(GL_CULL_FACE);
 }
 
 void Vatista::Game::close()
@@ -170,7 +180,7 @@ void Vatista::Game::draw(float dt)
 	//draw 
 	myShader->SetUniform("a_ModelViewProjection", myCamera->GetViewProjection() * modelTransform);
 	myMesh->Draw();
-	myShader->SetUniform("a_ModelViewProjection", myCamera->GetViewProjection() * modelTransform2);
+	myShader->SetUniform("a_ModelViewProjection", myCamera->GetViewProjection() * modelTransform2 * modelTransform3);
 	myMesh->Draw();
 	//for (int i = 0; i < meshList.size(); i++) {
 	//	meshList[i]->Draw();
