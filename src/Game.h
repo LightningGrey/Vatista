@@ -12,6 +12,7 @@
 #include "Camera.h"
 #include "ObjLoader.h"
 #include "Window.h"
+#include <src\GameObject.h>
 #include "Texture.h"
 
 namespace Vatista {
@@ -31,23 +32,25 @@ namespace Vatista {
 		std::string windowName;
 
 		//A shared pointer to our mesh
-		Vatista::Mesh::Sptr   myMesh;
-		std::vector<Vatista::Mesh::Sptr> meshList;
+		Vatista::Mesh_sptr   myMesh;
+		std::vector<Vatista::Mesh_sptr> meshList;
+
+		// A shared pointer to our shader
+		Vatista::Shader_sptr myShader;
+		Vatista::Shader_sptr myNormalShader;
+		std::vector<Vatista::Shader_sptr> shaderList;
 
 		Vatista::Texture::Sptr texture;
 
-		// A shared pointer to our shader
-		Vatista::Shader::Sptr myShader;
-		std::vector<Vatista::Shader::Sptr> shaderList;
-		
 		Vatista::Camera::Sptr myCamera;
-		
-		glm::mat4 modelTransform;
-		glm::mat4 modelTransform2;
-		glm::mat4 modelTransform3;
+
+		std::vector<GameObject> myScene;
+
+		glm::mat4 modelTransform = glm::mat4(0.f);
+		glm::mat4 modelTransform2 = glm::mat4(0.f);
 		glm::vec3 pos1;
 		glm::vec3 pos2;
-		
+
 		Vatista::ObjLoader loader;
 	};
 }

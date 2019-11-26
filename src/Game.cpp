@@ -1,7 +1,10 @@
 #include "Game.h"
+#include "SceneManager.h"
+#include "MeshRenderer.h"
+#include <iostream>
 
 Vatista::Game::Game() : gameWindow(nullptr), clearColour(glm::vec4(0, 0, 0, 1)),
-	windowName("Vatista Engine")
+windowName("Vatista Engine")
 {
 }
 
@@ -51,7 +54,7 @@ void Vatista::Game::init()
 	myCamera = std::make_shared<Vatista::Camera>();
 	myCamera->SetPosition(glm::vec3(1, 0, 0));
 	myCamera->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
-	myCamera->Projection = glm::ortho(-4.0f, 4.0f, -4.0f, 4.0f, 0.f, 1000.0f);
+	myCamera->Projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.f, 1000.0f);
 
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> UVs;
@@ -59,49 +62,62 @@ void Vatista::Game::init()
 	std::vector<uint32_t> indices;
 	std::vector<Vertex> vertData;
 
-	bool objectLoad = loader.load("./res/hammer_test.obj", vertices, UVs, normals, indices, vertData);
-
-	//for (int i = 0; i < indices.size(); i++)
-	//	std::cout << indices.at(i) << ' ';
-	//std::cout << "\n";
-	//std::cout << "\n";
-	//for (int i = 0; i < vertData.size(); i++) {
-	//
-	//	std::cout << vertData.at(i).Position.x << "/" << vertData.at(i).Position.y << "/" << vertData.at(i).Position.z << ' ';
-	//	std::cout << vertData.at(i).UV.x << "/" << vertData.at(i).UV.y << ' ';
-	//	std::cout << vertData.at(i).Normal.x << "/" << vertData.at(i).Normal.y << "/" <<vertData.at(i).Normal.z << ' ';
-	//	std::cout << std::endl;
-	//}
-	//std::cout << "\n";
+	bool objectLoad = loader.load("./res/test_model.obj", vertices, UVs, normals, indices, vertData);
 
 	if (objectLoad) {
 		myMesh = std::make_shared<Mesh>(vertices, vertices.size(), UVs,
-			UVs.size(), normals, normals.size(), indices, indices.size(), 
+			UVs.size(), normals, normals.size(), indices, indices.size(),
 			vertData, vertData.size());
 		meshList.push_back(myMesh);
 	}
 
+	//myShader = std::make_shared<Shader>();
+	//myShader->Load("./res/passthrough.vs", "./res/passthrough.fs");
+
 	texture = std::make_shared<Texture>();
-	texture->loadFile("./res/Hammer.001texture.png");
-	
-	myShader = std::make_shared<Shader>();
-	myShader->Load("./res/passthrough.vs", 
-		"./res/passthrough.fs");
+	texture->loadFile("./res/color-grid.png");
+
+	Shader_sptr phong = std::make_shared<Shader>();
+	phong->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
+
+	//GAME_LOG_INFO(glGetString(GL_RENDERER));
+	//GAME_LOG_INFO(glGetString(GL_VERSION));
+	//
+	//for (int i = 0; i < vertData.size(); i++) {
+	//	std::cout << vertData.at(i).Position.x;
+	//	std::cout << vertData.at(i).Position.y;
+	//	std::cout << vertData.at(i).Position.z << std::endl;
+	//
+	//}
+
+	Material::Sptr testMat = std::make_shared<Material>(phong);
+	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	testMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	testMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	testMat->Set("a_AmbientPower", 0.5f);
+	testMat->Set("a_LightSpecPower", 0.9f);
+	testMat->Set("a_LightShininess", 256.0f);
+	testMat->Set("a_LightAttenuation", 0.04f);
+	//myNormalShader = std::make_shared<Shader>();
+	//myNormalShader->Load("./res/passthrough.vs", "./res/normalView.fs");
 
 	modelTransform = glm::mat4(1.0f);
 	modelTransform = glm::rotate(modelTransform, 3.14f, glm::vec3(0, 1, 0));
-	pos1 = glm::vec3(0, 0, -1.0f);
+	pos1 = glm::vec3(0, 0, 1.0f);
 	modelTransform = glm::translate(modelTransform, pos1);
+	myScene.emplace_back();
+	myScene[0].Position = pos1;
+	myScene[0].Material = testMat;
+	myScene[0].Mesh = myMesh;
+	myScene[0].EulerRotDeg.y = 180.0f;
 
 	modelTransform2 = glm::mat4(1.0f);
-	//modelTransform2 = glm::rotate(modelTransform2, 3.14f, glm::vec3(0, 1, 0));
 	pos2 = glm::vec3(0, 0, -1.0f);
 	modelTransform2 = glm::translate(modelTransform2, pos2);
-
-	modelTransform3 = glm::mat4(1.0f);
-	modelTransform3 = glm::rotate(modelTransform3, 3.14f, glm::vec3(0, 1, 0));
-
-	glEnable(GL_CULL_FACE);
+	myScene.emplace_back();
+	myScene[1].Position = pos2;
+	myScene[1].Material = testMat;
+	myScene[1].Mesh = myMesh;
 }
 
 void Vatista::Game::close()
@@ -126,9 +142,9 @@ void Vatista::Game::update(float dt)
 	//	//movement.x += speed * dt;
 	//	movement.x -= speed * 0.001f;
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
-		movement.z -= speed * 0.001f;
+		movement.z += speed * 0.001f;
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
-		movement.z += speed * 0.002f;
+		movement.z -= speed * 0.002f;
 
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
 		movement2.z += speed * 0.002f;
@@ -159,9 +175,10 @@ void Vatista::Game::update(float dt)
 		movement2.z = 0;
 	}
 
-	
-	modelTransform = glm::translate(modelTransform, movement);
-	modelTransform2 = glm::translate(modelTransform2, movement2);
+
+
+	myScene[0].Position = pos1;
+	myScene[1].Position = pos2;
 
 	// Rotate and move our camera based on input
 	//myCamera->Rotate(rotation);
@@ -173,15 +190,14 @@ void Vatista::Game::draw(float dt)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// glUniform1i(glGetUniformLocation(shader_program, "texSample"), 0);
-
-	myShader->Bind();
+	//myShader->Bind();
 
 	//draw 
-	myShader->SetUniform("a_ModelViewProjection", myCamera->GetViewProjection() * modelTransform);
-	myMesh->Draw();
-	myShader->SetUniform("a_ModelViewProjection", myCamera->GetViewProjection() * modelTransform2 * modelTransform3);
-	myMesh->Draw();
+	for (int i = 0; i < myScene.size(); i++) {
+		myScene[i].Draw(myCamera);
+	}
+	//myShader->SetUniform("a_ModelViewProjection", myCamera->GetViewProjection() * modelTransform2);
+	//myMesh->Draw();
 	//for (int i = 0; i < meshList.size(); i++) {
 	//	meshList[i]->Draw();
 	//	//std::cout << 1;

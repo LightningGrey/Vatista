@@ -1,12 +1,11 @@
 #version 410
 
-//layout (location = 0) in vec4 inColor;
-layout (location = 1) in vec2 outUV;
+layout (location = 0) in vec4 inColor;
 
 layout (location = 0) out vec4 outColor;
-uniform sampler2D texSample;
+
+uniform vec4 a_ColorMultiplier;
 
 void main() {
-    //outColor = vec4(1,1,1,1);
-   outColor = texture(texSample, outUV);
+	outColor = inColor;// * a_ColorMultiplier;
 }
