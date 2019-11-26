@@ -50,6 +50,12 @@ namespace Vatista {
 		glm::mat4 modelTransform2 = glm::mat4(0.f);
 		glm::vec3 pos1;
 		glm::vec3 pos2;
+		bool dashing1;
+		glm::vec3 lerpEnd;
+		bool dashing2;
+
+		float startTime;
+		float journeyLength;
 
 		Vatista::ObjLoader loader;
 	};
