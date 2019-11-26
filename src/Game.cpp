@@ -53,13 +53,10 @@ void Vatista::Game::init()
 	myCamera->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
 	myCamera->Projection = glm::ortho(-4.0f, 4.0f, -4.0f, 4.0f, 0.f, 1000.0f);
 
-	std::vector<glm::vec3> vertices;
-	std::vector<glm::vec2> UVs;
-	std::vector<glm::vec3> normals;
 	std::vector<uint32_t> indices;
 	std::vector<Vertex> vertData;
 
-	bool objectLoad = loader.load("./res/hammer_test.obj", vertices, UVs, normals, indices, vertData);
+	bool objectLoad = loader.load("./res/test_model.obj", indices, vertData);
 
 	//for (int i = 0; i < indices.size(); i++)
 	//	std::cout << indices.at(i) << ' ';
@@ -75,14 +72,13 @@ void Vatista::Game::init()
 	//std::cout << "\n";
 
 	if (objectLoad) {
-		myMesh = std::make_shared<Mesh>(vertices, vertices.size(), UVs,
-			UVs.size(), normals, normals.size(), indices, indices.size(), 
+		myMesh = std::make_shared<Mesh>(indices, indices.size(), 
 			vertData, vertData.size());
 		meshList.push_back(myMesh);
 	}
 
 	texture = std::make_shared<Texture>();
-	texture->loadFile("./res/Hammer.001texture.png");
+	texture->loadFile("./res/color-grid.png");
 	
 	myShader = std::make_shared<Shader>();
 	myShader->Load("./res/passthrough.vs", 
@@ -94,12 +90,18 @@ void Vatista::Game::init()
 	modelTransform = glm::translate(modelTransform, pos1);
 
 	modelTransform2 = glm::mat4(1.0f);
-	//modelTransform2 = glm::rotate(modelTransform2, 3.14f, glm::vec3(0, 1, 0));
 	pos2 = glm::vec3(0, 0, -1.0f);
 	modelTransform2 = glm::translate(modelTransform2, pos2);
 
-	modelTransform3 = glm::mat4(1.0f);
-	modelTransform3 = glm::rotate(modelTransform3, 3.14f, glm::vec3(0, 1, 0));
+	//modelTransform3 = glm::mat4(1.0f);
+	//modelTransform3 = glm::rotate(modelTransform3, 3.14f, glm::vec3(0, 1, 0));
+
+	//position for centre of weapon hitbox and character hurtbox
+	hitboxPos1 = glm::vec3(pos1.x, pos1.y, pos1.z + 0.2f);
+	collisionboxPos1 = glm::vec3(pos1.x, pos1.y, pos1.z);
+	//position for centre of weapon hitbox and character hurtbox
+	hitboxPos2 = glm::vec3();
+	collisionboxPos2 = glm::vec3();
 
 	glEnable(GL_CULL_FACE);
 }
@@ -114,17 +116,13 @@ void Vatista::Game::update(float dt)
 {
 	glm::vec3 movement = glm::vec3(0.0f);
 	glm::vec3 movement2 = glm::vec3(0.0f);
-	//glm::vec3 rotation = glm::vec3(0.0f);
+
 	float speed = 1.0f;
 	float rotSpeed = 1.0f;
 
-	//movement and rotation of the camera
-	//if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_W) == GLFW_PRESS)
-	//	//movement.z -= speed * dt;
-	//	movement.x -= speed * 0.001f;
-	//if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
-	//	//movement.x += speed * dt;
-	//	movement.x -= speed * 0.001f;
+	bool p1atk;
+	bool p2atk;
+
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
 		movement.z -= speed * 0.001f;
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
@@ -135,6 +133,87 @@ void Vatista::Game::update(float dt)
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
 		movement2.z -= speed * 0.001f;
 
+	//Attack buttons (Space bar for player 1 and right ctrl for player 2)
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
+		p1atk = true;
+	else
+		p1atk = false;
+
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
+		p2atk = true;
+	else
+		p2atk = false;
+
+	//Creating hitboxes
+
+	//This is an idea, not what's this code does
+	/*Create hitbox at the characters' weapons if they are attacking
+	 if player's state is attacking,
+	 get the position of a vector in the mesh of the weapon attack
+	 then transform the hitbox to fit over where that vector is
+	*/
+	//if (player1.state == attacking) {}
+
+	//else {}        //if not attacking, then hitbox can be moved/unloaded
+
+	//the position of the hitboxes are slightly in front of the player
+	hitboxPos1 = pos1 + 0.6f;
+	collisionboxPos1 = pos1;
+	hitboxPos2 = pos2 + 0.6f;
+	collisionboxPos2 = pos2;
+
+	float length = 0.2f; //square hitbox length from centre to sides
+
+
+	//Collisions
+
+	//in here, do the AABB collisions on
+	//player1's hitbox + player2's collisionbox
+	//player2's hitbox + player1's collisionbox
+	//player1's collisionbox + player2's collisionbox (to prevent them phasing through each other)
+	//might be better to make a single function to run all collision checks needed
+
+	if (collisionCheck(hitboxPos1, collisionboxPos2, length) && p1atk)
+	{
+		//player 2 is hit
+		std::cout << "player 2 is hit" << std::endl;
+	}
+	if (collisionCheck(collisionboxPos1, hitboxPos2, length) && p2atk)
+	{
+		//player 1 is hit
+		std::cout << "player 1 is hit" << std::endl;
+	}
+
+	if (collisionCheck(collisionboxPos1, collisionboxPos2, 0.5f)) //substitue 0.5f with the value of the player's box
+	{
+		//players are touching each other
+		//std::cout << "colliding" << std::endl;
+
+		if (movement.z >= 0 && movement2.z >= 0)
+		{
+			movement.z = 0;
+			movement2.z = 0;
+		}
+		else if (movement2.z < 0 && movement.z >= 0) //player 1 approaching 2
+		{
+			movement.z = 0;
+		}
+		else if (movement.z < 0 && movement2.z >= 0) //player 2 approaching 1
+		{
+			movement2.z = 0;
+		}
+
+		if (p1atk)
+		{
+			//player 2 is hit
+			std::cout << "player 2 is hit" << std::endl;
+		}
+		if (p2atk)
+		{
+			//player 1 is hit
+			std::cout << "player 1 is hit" << std::endl;
+		}
+	}
 
 	pos1 += movement;
 	if (pos1.z > 5.f)
@@ -158,14 +237,10 @@ void Vatista::Game::update(float dt)
 		pos2.z = -5.f;
 		movement2.z = 0;
 	}
-
 	
 	modelTransform = glm::translate(modelTransform, movement);
 	modelTransform2 = glm::translate(modelTransform2, movement2);
 
-	// Rotate and move our camera based on input
-	//myCamera->Rotate(rotation);
-	//myCamera->Move(movement);
 }
 
 void Vatista::Game::draw(float dt)
@@ -180,10 +255,41 @@ void Vatista::Game::draw(float dt)
 	//draw 
 	myShader->SetUniform("a_ModelViewProjection", myCamera->GetViewProjection() * modelTransform);
 	myMesh->Draw();
-	myShader->SetUniform("a_ModelViewProjection", myCamera->GetViewProjection() * modelTransform2 * modelTransform3);
+	myShader->SetUniform("a_ModelViewProjection", myCamera->GetViewProjection() * modelTransform2);
 	myMesh->Draw();
 	//for (int i = 0; i < meshList.size(); i++) {
 	//	meshList[i]->Draw();
 	//	//std::cout << 1;
 	//}
+}
+
+bool Vatista::Game::collisionCheck(glm::vec3 obj1, glm::vec3 obj2, float len)
+{
+	//std::cout << "           obj1.z = " << obj1.z << std::endl;
+	//std::cout << "                         obj2.z = " << obj2.z << std::endl;
+
+	if (obj1.z < 0 && obj2.z > 0)
+	{
+		obj1.z = abs(obj1.z);
+	}
+	else if (obj1.z > 0 && obj2.z < 0)
+	{
+		obj2.z = abs(obj2.z);
+	}
+	else if (obj1.z < 0 && obj2.z < 0)
+	{
+		if (abs(obj1.z + obj2.z) <= len)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool collisionX = obj1.z + len >= obj2.z &&
+		obj2.z + len >= obj1.z;
+
+	return collisionX;
 }

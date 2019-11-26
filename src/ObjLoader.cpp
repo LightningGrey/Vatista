@@ -8,8 +8,7 @@
 #include "Log.h"
 
 namespace Vatista {
-	bool ObjLoader::load(std::string filename, std::vector<glm::vec3>& objVertices,
-		std::vector<glm::vec2>& objUVs, std::vector<glm::vec3>& objNormals,
+	bool ObjLoader::load(std::string filename,
 		std::vector<uint32_t>& objIndices, std::vector<Vertex>& vertData)
 	{
 		std::cout << "Object loading..." << std::endl;
@@ -70,17 +69,6 @@ namespace Vatista {
 			}
 		}
 
-		//moves values into obj variables
-		for (unsigned int i = 0; i < tempVertices.size(); i++) {
-			objVertices.push_back(tempVertices[i]);
-		}
-		for (unsigned int i = 0; i < tempUVs.size(); i++) {
-			objUVs.push_back(tempUVs[i]);
-		}
-		for (unsigned int i = 0; i < tempNormals.size(); i++) {
-			objNormals.push_back(tempNormals[i]);
-		}
-
 		//int count = 0;
 		bool check;
 		int indiceCount = 0;
@@ -88,9 +76,9 @@ namespace Vatista {
 		for (unsigned int i = 0; i < vertexIndices.size(); i++) {
 			check = false;
 			for (unsigned int j = 0; j < vertData.size(); j++) {
-				if (vertData[j].Position == objVertices[vertexIndices[i]] &&
-					vertData[j].UV == objUVs[uvIndices[i]] &&
-					vertData[j].Normal == objNormals[normalIndices[i]] && check == false) 
+				if (vertData[j].Position == tempVertices[vertexIndices[i]] &&
+					vertData[j].UV == tempUVs[uvIndices[i]] &&
+					vertData[j].Normal == tempNormals[normalIndices[i]] && check == false) 
 				{
 					check = true;
 					objIndices.push_back(j);
@@ -99,8 +87,8 @@ namespace Vatista {
 			if (!check) {
 				objIndices.push_back(indiceCount);
 				indiceCount++;
-				vertData.push_back(Vertex(objVertices[vertexIndices[i]], 
-					objUVs[uvIndices[i]], objNormals[normalIndices[i]]));
+				vertData.push_back(Vertex(tempVertices[vertexIndices[i]], 
+					tempUVs[uvIndices[i]], tempNormals[normalIndices[i]]));
 			}
 		}
 

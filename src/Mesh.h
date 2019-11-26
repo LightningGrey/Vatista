@@ -23,10 +23,7 @@ namespace Vatista {
 
 		// Creates a new mesh from the given vertices and indices
 		//Mesh(Vertex* vertices, size_t numVerts, uint32_t* indices, size_t numIndices);
-		Mesh(std::vector<glm::vec3> vertices, size_t numVerts,
-			std::vector<glm::vec2> uvs, size_t numUVs,
-			std::vector<glm::vec3> normals, size_t numNormals,
-			std::vector<uint32_t> indices, size_t numIndices,
+		Mesh(std::vector<uint32_t> indices, size_t numIndices,
 			std::vector<Vertex> vertData, size_t numData);
 		~Mesh();
 

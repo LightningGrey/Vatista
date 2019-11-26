@@ -25,6 +25,7 @@ namespace Vatista {
 		void close();
 		void update(float dt);
 		void draw(float dt);
+		bool collisionCheck(glm::vec3 obj1, glm::vec3 obj2, float len);
 	private:
 		Vatista::Window* gameWindow;
 		glm::vec4 clearColour;
@@ -47,6 +48,12 @@ namespace Vatista {
 		glm::mat4 modelTransform3;
 		glm::vec3 pos1;
 		glm::vec3 pos2;
+
+		//collisions
+		glm::vec3 hitboxPos1;
+		glm::vec3 collisionboxPos1;
+		glm::vec3 hitboxPos2;
+		glm::vec3 collisionboxPos2;
 		
 		Vatista::ObjLoader loader;
 	};
