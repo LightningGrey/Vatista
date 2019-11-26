@@ -1,18 +1,18 @@
 #version 410
 
 layout (location = 0) in vec3 inPosition;
-layout (location = 1) in vec2 inUV;
+layout (location = 1) in vec4 inColor;
 layout (location = 2) in vec3 inNormal;
 
-//layout (location = 0) out vec4 outColor;
-layout (location = 1) out vec2 outUV;
+layout (location = 0) out vec4 outColor;
+layout (location = 1) out vec3 outNormal;
 
 uniform mat4 a_ModelViewProjection;
+uniform mat4 a_ModelView;
 
 void main() {
-	//change later for texture
-	//outColor = vec4(1,1,1,1);
-	outUV = inUV;
-
+	outColor = inColor;
+	outNormal = inNormal; //(a_ModelView * vec4(inNormal, 1)).xyz;
+	//outColor = inColor;
 	gl_Position = a_ModelViewProjection * vec4(inPosition, 1);
 }

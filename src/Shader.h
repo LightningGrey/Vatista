@@ -2,14 +2,12 @@
 
 #include <glad/glad.h>
 #include <GLM/glm.hpp>
+#include <memory>
 #include <string>
-#include "Utils.h"
 
 namespace Vatista {
 	class Shader {
 	public:
-		SharedPtr(Shader);
-
 		Shader();
 		~Shader();
 
@@ -19,13 +17,19 @@ namespace Vatista {
 		// the path to the fragment shader
 		void Load(const char* vsFile, const char* fsFile);
 
-		void Bind();
+		void SetUniform(const char* name, const glm::mat4& value);
+		void SetUniform(const char* name, const glm::vec4& value);
+		void SetUniform(const char* name, const glm::mat3& value);
+		void SetUniform(const char* name, const glm::vec3& value);
+		void SetUniform(const char* name, const float& value);
 
-		void SetUniform(std::string name, const glm::mat4& value);
+		void Bind();
 
 	private:
 		GLuint __CompileShaderPart(const char* source, GLenum type);
 
 		GLuint myShaderHandle;
 	};
+
+	typedef std::shared_ptr<Shader> Shader_sptr;
 }

@@ -36,3 +36,5 @@ namespace Vatista {
 #define GAME_LOG_WARN(...)	::Vatista::Log::GetGameLog()->warn(__VA_ARGS__);
 #define GAME_LOG_ERROR(...)	::Vatista::Log::GetGameLog()->error(__VA_ARGS__);
 
+// Allows us to assert if a value is true, and automagically debug break if it is false
+#define GAME_LOG_ASSERT(x, ...) { if (!(x)) { ::Vatista::Log::GetGameLog()->error(__VA_ARGS__); __debugbreak(); } }

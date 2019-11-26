@@ -5,7 +5,7 @@ namespace Vatista {
 
 		//counts for each element
 		myIndexCount = numIndices;
-		
+
 
 		// Create and bind our vertex array
 		glGenVertexArrays(1, &myVao);
@@ -16,7 +16,7 @@ namespace Vatista {
 
 
 		// Get a null vertex to get member offsets from
-		Vertex* vert = nullptr;
+		//Vertex* vert = nullptr;
 
 		// Bind and buffer our vertex data
 		glBindBuffer(GL_ARRAY_BUFFER, myBuffers[0]);
@@ -43,7 +43,7 @@ namespace Vatista {
 		// Our first attribute is 3 floats, the distance between 
 		// them is the size of our vertex, and they will map to the position in our vertices
 		glVertexAttribPointer(2, 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-		
+
 
 		// Unbind our VAO
 		glBindVertexArray(0);
