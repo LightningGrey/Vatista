@@ -236,8 +236,31 @@ void Vatista::Game::update(float dt)
 			std::cout << "player 1 is hit" << std::endl;
 		}
 	}
-
-	pos1 += movement;
+	if (!dashing1) {
+		if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_Q) == GLFW_PRESS) {
+			lerpEnd = pos1 + glm::vec3(0, 0, 0.02f);
+			dashing1 = true;
+			startTime = dt;
+			journeyLength = glm::distance(pos1, lerpEnd);
+		}
+		if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_E) == GLFW_PRESS) {
+			lerpEnd = pos1 - glm::vec3(0, 0, 0.02f);
+			dashing1 = true;
+			startTime = dt;
+			journeyLength = glm::distance(pos1, lerpEnd);
+		}
+		pos1 += movement;
+	}
+	else {
+		float distCovered = (dt - startTime) * 1.0f;
+		float fractionOfJourney = distCovered / journeyLength;
+		pos1.z = (1.0 - fractionOfJourney) * lerpEnd.z + (fractionOfJourney * pos1.z);
+		if (pos1.z == lerpEnd.z){
+			dashing1 = false;
+			startTime = dt;
+			journeyLength = glm::distance(pos1, lerpEnd);
+		}
+	}
 	if (pos1.z > 5.f)
 	{
 		pos1.z = 5.f;
