@@ -63,7 +63,7 @@ void Vatista::Game::init()
 	std::vector<uint32_t> morphIndices;
 	std::vector<MorphVertex> morphVertData;
 
-	bool objectLoad = loader.load("./res/test_model.obj", indices, vertData);
+	bool objectLoad = loader.load("./res/yun_idle_pose_1.obj", indices, vertData);
 
 	if (objectLoad) {
 		myMesh = std::make_shared<Mesh>(indices, indices.size(), 
@@ -71,18 +71,18 @@ void Vatista::Game::init()
 		meshList.push_back(myMesh);
 	}
 
-	//objectLoad = loader.load("./res/test_model.obj", indices2, vertData2);
-	//
-	//if (objectLoad) {
-	//	for (int i = 0; i < vertData2.size(); i++) {
-	//		morphVertData.push_back(MorphVertex((vertData2[i]), vertData[i].Position,
-	//			vertData[i].Normal));
-	//	}
-	//
-	//	myMesh2 = std::make_shared<Mesh>(indices2, indices2.size(),
-	//		vertData2, vertData2.size());
-	//	meshList.push_back(myMesh2);
-	//}
+	objectLoad = loader.load("./res/yun_idle_pose_1.obj", indices2, vertData2);
+	
+	if (objectLoad) {
+		for (int i = 0; i < vertData2.size(); i++) {
+			morphVertData.push_back(MorphVertex((vertData2[i]), vertData[i].Position,
+				vertData[i].Normal));
+		}
+	
+		myMesh2 = std::make_shared<Mesh>(indices2, indices2.size(),
+			morphVertData, morphVertData.size());
+		meshList.push_back(myMesh2);
+	}
 
 
 	//player texture
@@ -90,7 +90,8 @@ void Vatista::Game::init()
 	texture->loadFile("./res/color-grid.png");
 
 	Shader::Sptr phong = std::make_shared<Shader>();
-	phong->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
+	//phong->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
+	phong->Load("./res/passthroughMorph.vs", "./res/blinn-phong.fs.glsl"); 
 
 	//GAME_LOG_INFO(glGetString(GL_RENDERER));
 	//GAME_LOG_INFO(glGetString(GL_VERSION));
@@ -120,9 +121,14 @@ void Vatista::Game::init()
 	myScene.emplace_back();
 	myScene[0].Position = pos1;
 	myScene[0].Material = testMat;
+<<<<<<< Updated upstream
 	myScene[0].Mesh = myMesh;
 	myScene[0].EulerRotDeg.y = 90.0f;
 	myScene[0].Collider = glm::vec2(0.74f, 1.78f);
+=======
+	myScene[0].Mesh = myMesh2;
+	myScene[0].EulerRotDeg.y = 180.0f;
+>>>>>>> Stashed changes
 
 	//right player
 	modelTransform2 = glm::mat4(1.0f);
@@ -131,9 +137,13 @@ void Vatista::Game::init()
 	myScene.emplace_back();
 	myScene[1].Position = pos2;
 	myScene[1].Material = testMat;
+<<<<<<< Updated upstream
 	myScene[1].Mesh = myMesh;
 	myScene[1].EulerRotDeg.y = -90.0f;
 	myScene[1].Collider = glm::vec2(0.74f, 1.78f);
+=======
+	myScene[1].Mesh = myMesh2;
+>>>>>>> Stashed changes
 
 	//modelTransform3 = glm::mat4(1.0f);
 	//modelTransform3 = glm::rotate(modelTransform3, 3.14f, glm::vec3(0, 1, 0));
@@ -320,14 +330,17 @@ void Vatista::Game::update(float dt)
 
 void Vatista::Game::draw(float dt)
 {
+	//int speed = 10.0f;
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	//myShader->Bind();
 
+	time += dt;
+
 	//draw 
 	for (int i = 0; i < myScene.size(); i++) {
-		myScene[i].Draw(myCamera);
+		myScene[i].Draw(myCamera, dt);
 	}
 	//for (int i = 0; i < meshList.size(); i++) {
 	//	meshList[i]->Draw();

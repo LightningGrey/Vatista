@@ -1,7 +1,7 @@
 #include "GameObject.h"
 #include <GLM\include\GLM\gtc\matrix_transform.hpp>
 
-void GameObject::Draw(const Vatista::Camera::Sptr& camera)
+void GameObject::Draw(const Vatista::Camera::Sptr& camera, float time)
 {
 	glm::mat4 world = 
 		glm::translate(glm::mat4(1.0f), Position) *
@@ -24,6 +24,12 @@ void GameObject::Draw(const Vatista::Camera::Sptr& camera)
 
 	// Update the model matrix to the item's world transform
 	Material->GetShader()->SetUniform("a_NormalMatrix", normalMatrix);
+
+
+	float morph = time * speed;
+	Material->GetShader()->SetUniform("morphT", morph);
+	//Material->GetShader()->SetUniform("morphT", 0.5);
+
 	// Draw the item
 	
 	Mesh->Draw();
