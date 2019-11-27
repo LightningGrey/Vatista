@@ -13,16 +13,27 @@ namespace Vatista {
 		glm::vec2 UV;
 		glm::vec3 Normal;
 		Vertex(glm::vec3 pos, glm::vec2 uv, glm::vec3 norm) : Position(pos), UV(uv),
-			Normal(norm) {}
+			Normal(norm) {};
+	};
+
+	struct MorphVertex : public Vertex {
+		//start position
+		//vertex is end
+		glm::vec3 PositionS;
+		glm::vec3 NormalS;
+
+		MorphVertex(Vertex vert, 
+			glm::vec3 posS, glm::vec3 normS) : Vertex(vert),
+		PositionS(posS), NormalS(normS) {}
 	};
 
 	class Mesh {
 	public:	
 		// Creates a new mesh from the given vertices and indices
-		//Mesh(Vertex* vertices, size_t numVerts, uint32_t* indices, size_t numIndices);
 		Mesh(std::vector<uint32_t> indices, size_t numIndices,
 			std::vector<Vertex> vertData, size_t numData);
-		~Mesh();
+		Mesh(std::vector<uint32_t> indices, size_t numIndices,
+			std::vector<MorphVertex> vertData, size_t numData);
 
 		// Draws this mesh
 		void Draw();

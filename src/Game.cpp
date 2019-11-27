@@ -58,7 +58,12 @@ void Vatista::Game::init()
 
 	std::vector<uint32_t> indices;
 	std::vector<Vertex> vertData;
+	std::vector<uint32_t> indices2;
+	std::vector<Vertex> vertData2;
+	std::vector<uint32_t> morphIndices;
+	std::vector<MorphVertex> morphVertData;
 
+	bool objectLoad = loader.load("./res/plane.obj", indices, vertData);
 	bool objectLoad = loader.load("./res/test_model.obj", indices, vertData);
 
 	if (objectLoad) {
@@ -67,9 +72,21 @@ void Vatista::Game::init()
 		meshList.push_back(myMesh);
 	}
 
-	//myShader = std::make_shared<Shader>();
-	//myShader->Load("./res/passthrough.vs", "./res/passthrough.fs");
+	objectLoad = loader.load("./res/plane.obj", indices2, vertData2);
 
+	if (objectLoad) {
+		for (int i = 0; i < vertData2.size(); i++) {
+			morphVertData.push_back(MorphVertex((vertData2[i]), vertData[i].Position,
+				vertData[i].Normal));
+		}
+
+		myMesh2 = std::make_shared<Mesh>(indices2, indices2.size(),
+			vertData2, vertData2.size());
+		meshList.push_back(myMesh2);
+	}
+
+
+	//player texture
 	texture = std::make_shared<Texture>();
 	texture->loadFile("./res/color-grid.png");
 
@@ -107,6 +124,7 @@ void Vatista::Game::init()
 	myScene[0].Mesh = myMesh;
 	myScene[0].EulerRotDeg.y = 180.0f;
 
+	//right player
 	modelTransform2 = glm::mat4(1.0f);
 	pos2 = glm::vec3(0, 0, -1.0f);
 	modelTransform2 = glm::translate(modelTransform2, pos2);

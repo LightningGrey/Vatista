@@ -33,8 +33,9 @@ namespace Vatista {
 		std::string windowName;
 
 		//A shared pointer to our mesh
-		Vatista::Mesh_sptr   myMesh;
-		std::vector<Vatista::Mesh_sptr> meshList;
+		Vatista::Mesh::Sptr myMesh;
+		Vatista::Mesh::Sptr myMesh2;
+		std::vector<Vatista::Mesh::Sptr> meshList;
 
 		// A shared pointer to our shader
 		Vatista::Shader_sptr myShader;
@@ -43,6 +44,11 @@ namespace Vatista {
 
 		Vatista::Texture::Sptr texture;
 
+		// A shared pointer to our shader
+		Vatista::Shader::Sptr myShader;
+		Vatista::Shader::Sptr morphShader;
+		std::vector<Vatista::Shader::Sptr> shaderList;
+		
 		Vatista::Camera::Sptr myCamera;
 
 		std::vector<GameObject> myScene;

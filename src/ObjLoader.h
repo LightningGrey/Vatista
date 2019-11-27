@@ -9,8 +9,8 @@
 namespace Vatista {
 	struct ObjLoader {
 		//load model
-		bool load(std::string filename,
-			std::vector<uint32_t>& objIndices, std::vector<Vertex>& vertData);
+		bool load(std::string filename, std::vector<uint32_t>& objIndices, 
+			std::vector<Vertex>& vertData);
 	};
 }
 
