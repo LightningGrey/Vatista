@@ -27,7 +27,7 @@ namespace Vatista {
 		void close();
 		void update(float dt);
 		void draw(float dt);
-		bool collisionCheck(glm::vec3 obj1, glm::vec3 obj2, float len);
+		bool collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2);
 	private:
 		Vatista::Window* gameWindow;
 		glm::vec4 clearColour;
@@ -55,6 +55,7 @@ namespace Vatista {
 		bool dashing1;
 		glm::vec3 lerpEnd;
 		bool dashing2;
+		bool isBlocking;
 
 		float startTime;
 		float journeyLength;
