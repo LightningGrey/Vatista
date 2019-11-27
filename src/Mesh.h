@@ -6,6 +6,7 @@
 #include <memory> // Needed for smart pointers
 #include <cstddef>
 #include <vector>
+#include "Utils.h"
 
 namespace Vatista {
 	struct Vertex {
@@ -29,11 +30,13 @@ namespace Vatista {
 
 	class Mesh {
 	public:	
+		SharedPtr(Mesh);
 		// Creates a new mesh from the given vertices and indices
 		Mesh(std::vector<uint32_t> indices, size_t numIndices,
 			std::vector<Vertex> vertData, size_t numData);
 		Mesh(std::vector<uint32_t> indices, size_t numIndices,
 			std::vector<MorphVertex> vertData, size_t numData);
+		~Mesh();
 
 		// Draws this mesh
 		void Draw();

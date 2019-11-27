@@ -63,7 +63,6 @@ void Vatista::Game::init()
 	std::vector<uint32_t> morphIndices;
 	std::vector<MorphVertex> morphVertData;
 
-	bool objectLoad = loader.load("./res/plane.obj", indices, vertData);
 	bool objectLoad = loader.load("./res/test_model.obj", indices, vertData);
 
 	if (objectLoad) {
@@ -72,25 +71,25 @@ void Vatista::Game::init()
 		meshList.push_back(myMesh);
 	}
 
-	objectLoad = loader.load("./res/plane.obj", indices2, vertData2);
-
-	if (objectLoad) {
-		for (int i = 0; i < vertData2.size(); i++) {
-			morphVertData.push_back(MorphVertex((vertData2[i]), vertData[i].Position,
-				vertData[i].Normal));
-		}
-
-		myMesh2 = std::make_shared<Mesh>(indices2, indices2.size(),
-			vertData2, vertData2.size());
-		meshList.push_back(myMesh2);
-	}
+	//objectLoad = loader.load("./res/test_model.obj", indices2, vertData2);
+	//
+	//if (objectLoad) {
+	//	for (int i = 0; i < vertData2.size(); i++) {
+	//		morphVertData.push_back(MorphVertex((vertData2[i]), vertData[i].Position,
+	//			vertData[i].Normal));
+	//	}
+	//
+	//	myMesh2 = std::make_shared<Mesh>(indices2, indices2.size(),
+	//		vertData2, vertData2.size());
+	//	meshList.push_back(myMesh2);
+	//}
 
 
 	//player texture
 	texture = std::make_shared<Texture>();
 	texture->loadFile("./res/color-grid.png");
 
-	Shader_sptr phong = std::make_shared<Shader>();
+	Shader::Sptr phong = std::make_shared<Shader>();
 	phong->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
 
 	//GAME_LOG_INFO(glGetString(GL_RENDERER));

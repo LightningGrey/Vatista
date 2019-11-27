@@ -14,6 +14,7 @@
 #include "Window.h"
 #include <src\GameObject.h>
 #include "Texture.h"
+#include "Utils.h"
 
 namespace Vatista {
 	class Game {
@@ -38,17 +39,11 @@ namespace Vatista {
 		std::vector<Vatista::Mesh::Sptr> meshList;
 
 		// A shared pointer to our shader
-		Vatista::Shader_sptr myShader;
-		Vatista::Shader_sptr myNormalShader;
-		std::vector<Vatista::Shader_sptr> shaderList;
+		Vatista::Shader::Sptr myShader;
+		Vatista::Shader::Sptr myNormalShader;
+		std::vector<Vatista::Shader::Sptr> shaderList;
 
 		Vatista::Texture::Sptr texture;
-
-		// A shared pointer to our shader
-		Vatista::Shader::Sptr myShader;
-		Vatista::Shader::Sptr morphShader;
-		std::vector<Vatista::Shader::Sptr> shaderList;
-		
 		Vatista::Camera::Sptr myCamera;
 
 		std::vector<GameObject> myScene;
