@@ -52,13 +52,19 @@ namespace Vatista {
 		glm::mat4 modelTransform2 = glm::mat4(0.f);
 		glm::vec3 pos1;
 		glm::vec3 pos2;
+
+		glm::vec3 lerper1;
+		glm::vec3 lerper2;
+		glm::vec3 lerpEnd1;
+		glm::vec3 lerpEnd2;
 		bool dashing1;
-		glm::vec3 lerpEnd;
 		bool dashing2;
 		bool isBlocking;
-
-		float startTime;
-		float journeyLength;
+		//static bool doubleTap;
+		float startTime1;
+		float startTime2;
+		float journeyLength1;
+		float journeyLength2;
 
 		//collisions
 		glm::vec3 hitboxPos1;
@@ -67,5 +73,7 @@ namespace Vatista {
 		glm::vec3 collisionboxPos2;
 		
 		Vatista::ObjLoader loader;
+
+		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	};
 }

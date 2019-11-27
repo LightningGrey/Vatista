@@ -153,7 +153,21 @@ void Vatista::Game::close()
 	glfwTerminate();
 }
 
-
+struct keyboard {
+	bool a = false;
+	bool d = false;
+	bool left = false;
+	bool right = false;
+	bool space = false;
+	int tap1;
+	int tap2;
+	bool doubleTap1 = false;
+	bool doubleTap2 = false;
+	bool dash1 = false;
+	bool dash2 = false;
+	float tapTimer1;
+	float tapTimer2;
+}kb;
 void Vatista::Game::update(float dt)
 {
 	glm::vec3 movement = glm::vec3(0.0f);
@@ -165,15 +179,26 @@ void Vatista::Game::update(float dt)
 	bool p1atk;
 	bool p2atk;
 
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
-		movement.x -= speed * 0.001f;
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
-		movement.x += speed * 0.002f;
+	if (glfwGetTime() - kb.tapTimer1 > 0.2f)
+		kb.doubleTap1 = false;
+	if (glfwGetTime() - kb.tapTimer2 > 0.2f)
+		kb.doubleTap2 = false;
+	if (kb.a)
+		if (!kb.dash1)
+			movement.x -= speed * 0.001f;
+	if (kb.d)
+		if (!kb.dash1)
+			movement.x += speed * 0.002f;
 
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
-		movement2.x -= speed * 0.002f;
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
-		movement2.x += speed * 0.001f;
+	if (kb.left)
+		if (!kb.dash2)
+			movement2.x -= speed * 0.002f;
+	if (kb.right)
+		if (!kb.dash2)
+			movement2.x += speed * 0.001f;
+
+	glfwSetKeyCallback(gameWindow->getWindow(), key_callback);
+	glfwSetInputMode(gameWindow->getWindow(), GLFW_STICKY_KEYS, GLFW_TRUE);
 
 	//Attack buttons (Space bar for player 1 and right ctrl for player 2)
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
@@ -206,44 +231,6 @@ void Vatista::Game::update(float dt)
 
 	float length = 0.2f; //square hitbox length from centre to sides
 
-
-	//Collisions
-
-	//in here, do the AABB collisions on
-	//player1's hitbox + player2's collisionbox
-	//player2's hitbox + player1's collisionbox
-	//player1's collisionbox + player2's collisionbox (to prevent them phasing through each other)
-	//might be better to make a single function to run all collision checks needed
-
-	//if (collisionCheck(hitboxPos1, collisionboxPos2, length) && p1atk)
-	//{
-	//	//player 2 is hit
-	//	std::cout << "player 2 is hit" << std::endl;
-	//}
-	//if (collisionCheck(collisionboxPos1, hitboxPos2, length) && p2atk)
-	//{
-	//	//player 1 is hit
-	//	std::cout << "player 1 is hit" << std::endl;
-	//}
-	//
-	//if (collisionCheck(collisionboxPos1, collisionboxPos2, 0.5f)) //substitue 0.5f with the value of the player's box
-	//{
-	//	//players are touching each other
-	//	//std::cout << "colliding" << std::endl;
-	//
-	//	if (movement.z >= 0 && movement2.z >= 0)
-	//	{
-	//		movement.z = 0;
-	//		movement2.z = 0;
-	//	}
-	//	else if (movement2.z < 0 && movement.z >= 0) //player 1 approaching 2
-	//	{
-	//		movement.z = 0;
-	//	}
-	//	else if (movement.z < 0 && movement2.z >= 0) //player 2 approaching 1
-	//	{
-	//		movement2.z = 0;
-	//	}
 	//
 	//	if (p1atk)
 	//	{
@@ -256,42 +243,76 @@ void Vatista::Game::update(float dt)
 	//		std::cout << "player 1 is hit" << std::endl;
 	//	}
 	//}
+
 	if (!dashing1) {
-		if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_Q) == GLFW_PRESS) {
-			lerpEnd = pos1 - glm::vec3(0.02f, 0, 0);
+		if (kb.dash1 && kb.tap1 == GLFW_KEY_A) {
+			lerpEnd1 = pos1 - glm::vec3(2.f, 0, 0);
 			dashing1 = true;
-			startTime = dt;
-			journeyLength = glm::distance(pos1, lerpEnd);
 		}
-		if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_E) == GLFW_PRESS) {
-			lerpEnd = pos1 + glm::vec3(0.02f, 0, 0);
+		if (kb.dash1 && kb.tap1 == GLFW_KEY_D) {
+			lerpEnd1 = pos1 + glm::vec3(2.f, 0, 0);
 			dashing1 = true;
-			startTime = dt;
-			journeyLength = glm::distance(pos1, lerpEnd);
 		}
+		lerper1 = pos1;
+		startTime1 = glfwGetTime();
+		journeyLength1 = glm::distance(pos1, lerpEnd1);
+		kb.dash1 = false;
 		if (collisionCheck(pos1+movement, myScene[0].Collider, pos2, myScene[1].Collider))
 			movement.x = 0;
 		pos1 += movement;
 	}
 	else {
-		float distCovered = (dt - startTime) * 1.0f;
-		float fractionOfJourney = distCovered / journeyLength;
-		pos1.x = (1.0 - fractionOfJourney) * lerpEnd.x + (fractionOfJourney * pos1.x);
-		if (pos1.x == lerpEnd.x){
+		if (std::floor(lerper1.x*1000)/1000 == std::floor(lerpEnd1.x*1000)/1000) {
 			dashing1 = false;
-			startTime = dt;
-			journeyLength = glm::distance(pos1, lerpEnd);
+			std::cout << "done" << std::endl;
 		}
+		else {
+			float distCovered = (glfwGetTime() - startTime1) * 0.3f;
+			float fractionOfJourney = distCovered / journeyLength1;
+			lerper1.x = (1.0 - fractionOfJourney) * lerper1.x + (fractionOfJourney * lerpEnd1.x);
+			std::cout << lerper1 .x << " " << lerpEnd1.x << std::endl;
+		}
+		pos1 = lerper1;
 	}
 	if (pos1.x > 5.63f)
 		pos1.x = 5.63f;
 	if (pos1.x < -5.63f)
 		pos1.x = -5.63f;
-	pos2 += movement2;
-	if (pos2.x > 5.f)
-		pos2.x = 5.f;
-	if (pos2.x < -5.f)
-		pos2.x = -5.f;
+
+	if (!dashing2) {
+		if (kb.dash2 && kb.tap2 == GLFW_KEY_LEFT) {
+			lerpEnd2 = pos2 - glm::vec3(2.f, 0, 0);
+			dashing2 = true;
+		}
+		if (kb.dash2 && kb.tap2 == GLFW_KEY_RIGHT) {
+			lerpEnd2 = pos2 + glm::vec3(2.f, 0, 0);
+			dashing2 = true;
+		}
+		lerper2 = pos2;
+		startTime2 = glfwGetTime();
+		journeyLength2 = glm::distance(pos2, lerpEnd2);
+		kb.dash2 = false;
+		if (collisionCheck(pos2 + movement2, myScene[1].Collider, pos1, myScene[0].Collider))
+			movement2.x = 0;
+		pos2 += movement2;
+	}
+	else {
+		if (std::floor(lerper2.x * 1000) / 1000 == std::floor(lerpEnd2.x * 1000) / 1000) {
+			dashing2 = false;
+			std::cout << "done" << std::endl;
+		}
+		else {
+			float distCovered = (glfwGetTime() - startTime2) * 0.3f;
+			float fractionOfJourney = distCovered / journeyLength2;
+			lerper2.x = (1.0 - fractionOfJourney) * lerper2.x + (fractionOfJourney * lerpEnd2.x);
+			std::cout << lerper2.x << " " << lerpEnd2.x << std::endl;
+		}
+		pos2 = lerper2;
+	}
+	if (pos2.x > 5.63f)
+		pos2.x = 5.63f;
+	if (pos2.x < -5.63f)
+		pos2.x = -5.63f;
 	
 	myScene[0].Position = pos1;
 	myScene[1].Position = pos2;
@@ -319,10 +340,96 @@ bool Vatista::Game::collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y
 	//std::cout << "           obj1.z = " << obj1.z << std::endl;
 	//std::cout << "                         obj2.z = " << obj2.z << std::endl;
 	if (x.x < y.x + collider2.x && x.x + collider1.x > y.x&& x.y < y.y + collider2.y && x.y + collider1.y > y.y) {
-		std::cout << x.x << " " << collider1.x << " " << y.x << " " << collider2.x << std::endl;
 		return true;
 	}
 	else
 		return false;
 	
+}
+
+//bool Vatista::Game::doubleTap = false;
+void Vatista::Game::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	//if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+	//	if (doubleTap) {
+	//		if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+	//			std::cout << "space" << std::endl;
+	//			doubleTap = false;
+	//		}
+	//	}
+	//	else {
+	//		doubleTap = true;
+	//		kb.tapTimer = glfwGetTime();
+	//	}
+	//}
+
+	if (action == GLFW_PRESS) {
+		switch (key) {
+		case GLFW_KEY_A:
+			if (kb.doubleTap1 && kb.tap1 == key) {
+				std::cout << "dash" << std::endl;
+				kb.dash1 = true;
+				kb.doubleTap1 = false;
+			}
+			else {
+				kb.tapTimer1 = glfwGetTime();
+				kb.doubleTap1 = true;
+				kb.tap1 = key;
+			}
+			kb.a = true;
+			break;
+		case GLFW_KEY_D: 
+			if (kb.doubleTap1 && kb.tap1 == key) {
+				std::cout << "dash" << std::endl;
+				kb.dash1 = true;
+				kb.doubleTap1 = false;
+			}
+			else {
+				kb.tapTimer1 = glfwGetTime();
+				kb.doubleTap1 = true;
+				kb.tap1 = key;
+			}
+			kb.d = true;
+			break;
+		case GLFW_KEY_LEFT:
+			if (kb.doubleTap2 && kb.tap2 == key) {
+				std::cout << "dash" << std::endl;
+				kb.dash2 = true;
+				kb.doubleTap2 = false;
+			}
+			else {
+				kb.tapTimer2 = glfwGetTime();
+				kb.doubleTap2 = true;
+				kb.tap2 = key;
+			}
+			kb.left = true;
+			break;
+		case GLFW_KEY_RIGHT:
+			if (kb.doubleTap2 && kb.tap2 == key) {
+				std::cout << "dash" << std::endl;
+				kb.dash2 = true;
+				kb.doubleTap2 = false;
+			}
+			else {
+				kb.tapTimer2 = glfwGetTime();
+				kb.doubleTap2 = true;
+				kb.tap2 = key;
+			}
+			kb.right = true;
+			break;
+		case GLFW_KEY_SPACE: kb.space = true; break;
+		default: break;
+		}
+	}
+	if (action == GLFW_RELEASE) {
+		switch (key) {
+		case GLFW_KEY_A: kb.a = false; if (kb.dash1) { kb.dash1 = false; } break;
+		case GLFW_KEY_D: kb.d = false; if (kb.dash1) { kb.dash1 = false; } break;
+		case GLFW_KEY_LEFT: kb.left = false; if (kb.dash2) { kb.dash2 = false; } break;
+		case GLFW_KEY_RIGHT: kb.right = false; if (kb.dash2) { kb.dash2 = false; } break;
+		case GLFW_KEY_SPACE: kb.space = false; break;
+		default: break;
+		}
+	}
+
 }
