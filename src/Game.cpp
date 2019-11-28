@@ -60,18 +60,18 @@ void Vatista::Game::init()
 	std::vector<Vertex> vertData;
 	std::vector<uint32_t> indices2;
 	std::vector<Vertex> vertData2;
-	std::vector<uint32_t> morphIndices;
+	//std::vector<uint32_t> morphIndices;
 	std::vector<MorphVertex> morphVertData;
 
-	bool objectLoad = loader.load("./res/plane.obj", indices, vertData);
-
+	bool objectLoad = loader.load("./res/plane2.obj", indices, vertData);
+	
 	if (objectLoad) {
 		myMesh = std::make_shared<Mesh>(indices, indices.size(), 
 			vertData, vertData.size());
 		meshList.push_back(myMesh);
 	}
 
-	objectLoad = loader.load("./res/plane2.obj", indices2, vertData2);
+	objectLoad = loader.load("./res/plane.obj", indices2, vertData2);
 	
 	if (objectLoad) {
 		for (int i = 0; i < vertData2.size(); i++) {
@@ -84,6 +84,12 @@ void Vatista::Game::init()
 		meshList.push_back(myMesh2);
 	}
 
+	for (int i = 0; i < morphVertData.size(); i++) {
+		std::cout << morphVertData[i].PositionS.x << morphVertData[i].PositionS.y;
+		std::cout << morphVertData[i].PositionS.z << std::endl;
+		std::cout << morphVertData[i].NormalS.x << morphVertData[i].NormalS.y;
+		std::cout << morphVertData[i].NormalS.z << std::endl;
+	}
 
 	//player texture
 	texture = std::make_shared<Texture>();
@@ -328,6 +334,9 @@ void Vatista::Game::draw(float dt)
 	//myShader->Bind();
 
 	time += dt;
+	if (time > 1.0f){
+		time = 0.0f;
+	}
 
 	//draw 
 	for (int i = 0; i < myScene.size(); i++) {

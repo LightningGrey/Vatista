@@ -27,6 +27,9 @@ void GameObject::Draw(const Vatista::Camera::Sptr& camera, float time)
 
 
 	float morph = time * speed;
+	if (morph > 1.0f) {
+		morph = 0.0f;
+	}
 	Material->GetShader()->SetUniform("morphT", morph);
 	//Material->GetShader()->SetUniform("morphT", 0.5);
 

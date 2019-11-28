@@ -17,9 +17,9 @@ uniform mat3 a_NormalMatrix;
 uniform float morphT;
 
 void main() {
-	//morphT = 1.0f;
-	vec3 lerpPos = mix(inPositionS, inPosition, morphT);
-	vec3 lerpNorm = mix(inNormalS, inNormal, morphT);
+	//morphT = 0.5f;
+	vec3 lerpPos = mix(inPositionS, inPosition, 1.0);
+	vec3 lerpNorm = mix(inNormalS, inNormal, 1.0);
 
 	outNormal = a_NormalMatrix * lerpNorm;
 	outUV = inUV;
