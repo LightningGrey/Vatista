@@ -60,7 +60,6 @@ void Vatista::Game::init()
 	std::vector<Vertex> vertData;
 	std::vector<uint32_t> indices2;
 	std::vector<Vertex> vertData2;
-	//std::vector<uint32_t> morphIndices;
 	std::vector<MorphVertex> morphVertData;
 
 	bool objectLoad = loader.load("./res/plane2.obj", indices, vertData);
@@ -84,13 +83,6 @@ void Vatista::Game::init()
 		meshList.push_back(myMesh2);
 	}
 
-	for (int i = 0; i < morphVertData.size(); i++) {
-		std::cout << morphVertData[i].PositionS.x << morphVertData[i].PositionS.y;
-		std::cout << morphVertData[i].PositionS.z << std::endl;
-		std::cout << morphVertData[i].NormalS.x << morphVertData[i].NormalS.y;
-		std::cout << morphVertData[i].NormalS.z << std::endl;
-	}
-
 	//player texture
 	texture = std::make_shared<Texture>();
 	texture->loadFile("./res/color-grid.png");
@@ -98,16 +90,6 @@ void Vatista::Game::init()
 	Shader::Sptr phong = std::make_shared<Shader>();
 	//phong->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
 	phong->Load("./res/passthroughMorph.vs", "./res/blinn-phong.fs.glsl"); 
-
-	//GAME_LOG_INFO(glGetString(GL_RENDERER));
-	//GAME_LOG_INFO(glGetString(GL_VERSION));
-	//
-	//for (int i = 0; i < vertData.size(); i++) {
-	//	std::cout << vertData.at(i).Position.x;
-	//	std::cout << vertData.at(i).Position.y;
-	//	std::cout << vertData.at(i).Position.z << std::endl;
-	//
-	//}
 
 	Material::Sptr testMat = std::make_shared<Material>(phong);
 	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -127,7 +109,7 @@ void Vatista::Game::init()
 	myScene.emplace_back();
 	myScene[0].Position = pos1;
 	myScene[0].Material = testMat;
-	myScene[0].Mesh = myMesh;
+	myScene[0].Mesh = myMesh2;
 	myScene[0].EulerRotDeg.y = 90.0f;
 	myScene[0].Collider = glm::vec2(0.74f, 1.78f);
 
@@ -138,7 +120,7 @@ void Vatista::Game::init()
 	myScene.emplace_back();
 	myScene[1].Position = pos2;
 	myScene[1].Material = testMat;
-	myScene[1].Mesh = myMesh;
+	myScene[1].Mesh = myMesh2;
 	myScene[1].EulerRotDeg.y = -90.0f;
 	myScene[1].Collider = glm::vec2(0.74f, 1.78f);
 
@@ -327,20 +309,14 @@ void Vatista::Game::update(float dt)
 
 void Vatista::Game::draw(float dt)
 {
-	//int speed = 10.0f;
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	//myShader->Bind();
 
-	time += dt;
-	if (time > 1.0f){
-		time = 0.0f;
-	}
-
 	//draw 
 	for (int i = 0; i < myScene.size(); i++) {
-		myScene[i].Draw(myCamera, time);
+		myScene[i].Draw(myCamera);
 	}
 	//for (int i = 0; i < meshList.size(); i++) {
 	//	meshList[i]->Draw();
