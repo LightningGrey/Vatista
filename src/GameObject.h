@@ -15,4 +15,10 @@ public:
 	GameObject() : Scale(1.0f), Mesh(nullptr), Material(nullptr), Position(0.0f), EulerRotDeg(0.0f), Collider(0.0f){} 
 
 	void Draw(const Vatista::Camera::Sptr& camera);
+
+	float dt = 0.0167f;
+	float morph;
+
+	float currentTime = 0.0f;
+	float endTime = 10.0f;
 };

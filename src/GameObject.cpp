@@ -24,6 +24,21 @@ void GameObject::Draw(const Vatista::Camera::Sptr& camera)
 
 	// Update the model matrix to the item's world transform
 	Material->GetShader()->SetUniform("a_NormalMatrix", normalMatrix);
+
+
+	currentTime += dt;
+
+	if (currentTime > endTime) {
+		dt = -0.0167f;
+	}
+	else if (currentTime < 0.0f) {
+		dt = 0.0167f;
+	}
+
+	morph = currentTime / endTime;
+	
+	Material->GetShader()->SetUniform("morphT", morph);
+
 	// Draw the item
 	
 	Mesh->Draw();
