@@ -59,7 +59,9 @@ namespace Vatista {
 		glm::vec3 lerpEnd2;
 		bool dashing1;
 		bool dashing2;
-		bool isBlocking;
+		bool isBlocking1;
+		bool isBlocking2;
+
 		//static bool doubleTap;
 		float startTime1;
 		float startTime2;

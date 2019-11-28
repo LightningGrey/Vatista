@@ -183,19 +183,50 @@ void Vatista::Game::update(float dt)
 		kb.doubleTap1 = false;
 	if (glfwGetTime() - kb.tapTimer2 > 0.2f)
 		kb.doubleTap2 = false;
-	if (kb.a)
-		if (!kb.dash1)
-			movement.x -= speed * 0.001f;
-	if (kb.d)
-		if (!kb.dash1)
-			movement.x += speed * 0.002f;
 
-	if (kb.left)
-		if (!kb.dash2)
-			movement2.x -= speed * 0.002f;
-	if (kb.right)
-		if (!kb.dash2)
-			movement2.x += speed * 0.001f;
+
+
+	if (kb.a) {
+		if (!kb.dash1) {
+			if (myScene[0].EulerRotDeg.y == 90.0f)
+				movement.x -= speed * 0.001f;
+			else if (myScene[0].EulerRotDeg.y == -90.0f)
+				movement.x -= speed * 0.002f;
+		}
+		if (!dashing1 && myScene[0].EulerRotDeg.y == 90.0f)
+			isBlocking1 = true;
+	}
+	if (kb.d) {
+		if (!kb.dash1) {
+			if (myScene[0].EulerRotDeg.y == 90.0f)
+				movement.x += speed * 0.002f;
+			else if (myScene[0].EulerRotDeg.y == -90.0f)
+				movement.x += speed * 0.001f;
+		}
+		if (!dashing1 && myScene[0].EulerRotDeg.y == -90.0f)
+			isBlocking1 = true;
+	}
+
+	if (kb.left) {
+		if (!kb.dash2) {
+			if (myScene[1].EulerRotDeg.y == 90.0f)
+				movement2.x -= speed * 0.001f;
+			else if (myScene[1].EulerRotDeg.y == -90.0f)
+				movement2.x -= speed * 0.002f;
+		}
+		if (!dashing2 && myScene[1].EulerRotDeg.y == 90.0f)
+			isBlocking2 = true;
+	}
+	if (kb.right) {
+		if (!kb.dash2) {
+			if (myScene[1].EulerRotDeg.y == 90.0f)
+				movement2.x += speed * 0.002f;
+			else if (myScene[1].EulerRotDeg.y == -90.0f)
+				movement2.x += speed * 0.001f;
+		}
+		if (!dashing2 && myScene[1].EulerRotDeg.y == -90.0f)
+			isBlocking2 = true;
+	}
 
 	glfwSetKeyCallback(gameWindow->getWindow(), key_callback);
 	glfwSetInputMode(gameWindow->getWindow(), GLFW_STICKY_KEYS, GLFW_TRUE);
@@ -225,9 +256,7 @@ void Vatista::Game::update(float dt)
 
 	//the position of the hitboxes are slightly in front of the player
 	hitboxPos1 = pos1 + 0.6f;
-	collisionboxPos1 = pos1;
 	hitboxPos2 = pos2 + 0.6f;
-	collisionboxPos2 = pos2;
 
 	float length = 0.2f; //square hitbox length from centre to sides
 
@@ -262,18 +291,47 @@ void Vatista::Game::update(float dt)
 		pos1 += movement;
 	}
 	else {
+		isBlocking1 = false;
 		if (std::floor(lerper1.x*1000)/1000 == std::floor(lerpEnd1.x*1000)/1000) {
 			dashing1 = false;
 			std::cout << "done" << std::endl;
+			
 		}
 		else {
 			float distCovered = (glfwGetTime() - startTime1) * 0.3f;
 			float fractionOfJourney = distCovered / journeyLength1;
 			lerper1.x = (1.0 - fractionOfJourney) * lerper1.x + (fractionOfJourney * lerpEnd1.x);
-			std::cout << lerper1 .x << " " << lerpEnd1.x << std::endl;
+			std::cout << std::floor(lerper1.x * 1000) / 1000 << " " << std::floor(lerpEnd1.x * 1000) / 1000 << std::endl;
 		}
 		pos1 = lerper1;
+		if (collisionCheck(lerpEnd1, myScene[0].Collider, pos2, myScene[1].Collider)){
+			if (lerpEnd1.x > pos1.x  && lerpEnd1.x > pos2.x) {
+				std::cout << "rightA" << std::endl;
+				lerpEnd1.x = pos2.x + (myScene[1].Collider.x * 1.02f);
+				journeyLength1 = glm::distance(pos1, lerpEnd1);
+			}
+			else if (lerpEnd1.x < pos1.x && lerpEnd1.x < pos2.x) {
+				std::cout << "leftA" << std::endl;
+				lerpEnd1.x = pos2.x - (myScene[1].Collider.x * 1.02f);
+				journeyLength1 = glm::distance(pos1, lerpEnd1);
+			}
+			if (collisionCheck(pos1, myScene[0].Collider, pos2, myScene[1].Collider)) {
+				if (lerpEnd1.x > pos1.x) {
+					if (pos1.x < pos2.x) {
+						std::cout << "leftB" << std::endl;
+						pos1.x = pos2.x - (myScene[1].Collider.x);
+					}
+				}
+				else if (lerpEnd1.x < pos1.x) {
+					if (pos1.x > pos2.x) {
+						std::cout << "rightB" << std::endl;
+						pos1.x = pos2.x + (myScene[1].Collider.x);
+					}
+				}
+			}
+		}
 	}
+
 	if (pos1.x > 5.63f)
 		pos1.x = 5.63f;
 	if (pos1.x < -5.63f)
@@ -297,6 +355,7 @@ void Vatista::Game::update(float dt)
 		pos2 += movement2;
 	}
 	else {
+		isBlocking2 = false;
 		if (std::floor(lerper2.x * 1000) / 1000 == std::floor(lerpEnd2.x * 1000) / 1000) {
 			dashing2 = false;
 			std::cout << "done" << std::endl;
@@ -308,12 +367,46 @@ void Vatista::Game::update(float dt)
 			std::cout << lerper2.x << " " << lerpEnd2.x << std::endl;
 		}
 		pos2 = lerper2;
+		if (collisionCheck(lerpEnd2, myScene[1].Collider, pos1, myScene[0].Collider)) {
+			if (lerpEnd2.x > pos2.x && lerpEnd2.x > pos1.x) {
+				std::cout << "rightA" << std::endl;
+				lerpEnd2.x = pos1.x + (myScene[0].Collider.x * 1.02f);
+				journeyLength2 = glm::distance(pos2, lerpEnd2);
+			}
+			else if (lerpEnd2.x < pos2.x && lerpEnd2.x < pos1.x) {
+				std::cout << "leftA" << std::endl;
+				lerpEnd2.x = pos1.x - (myScene[0].Collider.x * 1.02f);
+				journeyLength2 = glm::distance(pos2, lerpEnd2);
+			}
+			if (collisionCheck(pos2, myScene[1].Collider, pos1, myScene[0].Collider)) {
+				if (lerpEnd2.x > pos2.x) {
+					if (pos2.x < pos1.x) {
+						std::cout << "leftB" << std::endl;
+						pos2.x = pos1.x - (myScene[0].Collider.x);
+					}
+				}
+				else if (lerpEnd2.x < pos2.x) {
+					if (pos2.x > pos1.x) {
+						std::cout << "rightB" << std::endl;
+						pos2.x = pos1.x + (myScene[0].Collider.x);
+					}
+				}
+			}
+		}
 	}
 	if (pos2.x > 5.63f)
 		pos2.x = 5.63f;
 	if (pos2.x < -5.63f)
 		pos2.x = -5.63f;
-	
+
+	if (pos1.x > pos2.x) {
+		myScene[0].EulerRotDeg.y = -90.0f;
+		myScene[1].EulerRotDeg.y = 90.0f;
+	}
+	else {
+		myScene[0].EulerRotDeg.y = 90.0f;
+		myScene[1].EulerRotDeg.y = -90.0f;
+	}
 	myScene[0].Position = pos1;
 	myScene[1].Position = pos2;
 }
