@@ -61,6 +61,8 @@ namespace Vatista {
 		bool dashing2;
 		bool isBlocking1;
 		bool isBlocking2;
+		bool isAttacking1;
+		bool isAttacking2;
 
 		//static bool doubleTap;
 		float startTime1;
@@ -69,10 +71,10 @@ namespace Vatista {
 		float journeyLength2;
 
 		//collisions
-		glm::vec3 hitboxPos1;
-		glm::vec3 collisionboxPos1;
-		glm::vec3 hitboxPos2;
-		glm::vec3 collisionboxPos2;
+		glm::vec3 p1AtkPos;
+		glm::vec3 p2AtkPos;
+		glm::vec2 p1AtkCollider;
+		glm::vec2 p2AtkCollider;
 		
 		Vatista::ObjLoader loader;
 
