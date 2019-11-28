@@ -101,7 +101,8 @@ void Vatista::Game::init()
 	testMat->Set("a_LightAttenuation", 0.04f);
 	//myNormalShader = std::make_shared<Shader>();
 	//myNormalShader->Load("./res/passthrough.vs", "./res/normalView.fs");
-
+	
+	//Player 1
 	modelTransform = glm::mat4(1.0f);
 	modelTransform = glm::rotate(modelTransform, 3.14f, glm::vec3(0, 1, 0));
 	pos1 = glm::vec3(-1, 0, 0);
@@ -112,8 +113,10 @@ void Vatista::Game::init()
 	myScene[0].Mesh = myMesh2;
 	myScene[0].EulerRotDeg.y = 90.0f;
 	myScene[0].Collider = glm::vec2(0.74f, 1.78f);
+	p1AtkPos = glm::vec3(0);
+	p1AtkCollider = glm::vec2(0.4f);
 
-	//right player
+	//Player 2
 	modelTransform2 = glm::mat4(1.0f);
 	pos2 = glm::vec3(1, 0, 0);
 	modelTransform2 = glm::translate(modelTransform2, pos2);
@@ -123,16 +126,12 @@ void Vatista::Game::init()
 	myScene[1].Mesh = myMesh2;
 	myScene[1].EulerRotDeg.y = -90.0f;
 	myScene[1].Collider = glm::vec2(0.74f, 1.78f);
+	p2AtkPos = glm::vec3(0);
+	p2AtkCollider = glm::vec2(0.4f);
 
 	//modelTransform3 = glm::mat4(1.0f);
 	//modelTransform3 = glm::rotate(modelTransform3, 3.14f, glm::vec3(0, 1, 0));
 
-	//position for centre of weapon hitbox and character hurtbox
-	hitboxPos1 = glm::vec3(pos1.x, pos1.y, pos1.z + 0.2f);
-	collisionboxPos1 = glm::vec3(pos1.x, pos1.y, pos1.z);
-	//position for centre of weapon hitbox and character hurtbox
-	hitboxPos2 = glm::vec3();
-	collisionboxPos2 = glm::vec3();
 
 	glEnable(GL_CULL_FACE);
 }
@@ -147,7 +146,10 @@ struct keyboard {
 	bool d = false;
 	bool left = false;
 	bool right = false;
-	bool space = false;
+	bool f = false;
+	bool rctrl = false;
+	float atkTimer1;
+	float atkTimer2;
 	int tap1;
 	int tap2;
 	bool doubleTap1 = false;
@@ -165,8 +167,9 @@ void Vatista::Game::update(float dt)
 	float speed = 1.0f;
 	float rotSpeed = 1.0f;
 
-	bool p1atk;
-	bool p2atk;
+	glfwSetKeyCallback(gameWindow->getWindow(), key_callback);
+	glfwSetInputMode(gameWindow->getWindow(), GLFW_STICKY_KEYS, GLFW_TRUE);
+
 
 	if (glfwGetTime() - kb.tapTimer1 > 0.2f)
 		kb.doubleTap1 = false;
@@ -174,8 +177,8 @@ void Vatista::Game::update(float dt)
 		kb.doubleTap2 = false;
 
 
-
-	if (kb.a) {
+	
+	if (kb.a && glfwGetTime() - kb.atkTimer1 > 0.8f) {
 		if (!kb.dash1) {
 			if (myScene[0].EulerRotDeg.y == 90.0f)
 				movement.x -= speed * 0.001f;
@@ -185,7 +188,7 @@ void Vatista::Game::update(float dt)
 		if (!dashing1 && myScene[0].EulerRotDeg.y == 90.0f)
 			isBlocking1 = true;
 	}
-	if (kb.d) {
+	if (kb.d && glfwGetTime() - kb.atkTimer1 > 0.8f) {
 		if (!kb.dash1) {
 			if (myScene[0].EulerRotDeg.y == 90.0f)
 				movement.x += speed * 0.002f;
@@ -196,7 +199,7 @@ void Vatista::Game::update(float dt)
 			isBlocking1 = true;
 	}
 
-	if (kb.left) {
+	if (kb.left && glfwGetTime() - kb.atkTimer2 > 0.8f) {
 		if (!kb.dash2) {
 			if (myScene[1].EulerRotDeg.y == 90.0f)
 				movement2.x -= speed * 0.001f;
@@ -206,7 +209,7 @@ void Vatista::Game::update(float dt)
 		if (!dashing2 && myScene[1].EulerRotDeg.y == 90.0f)
 			isBlocking2 = true;
 	}
-	if (kb.right) {
+	if (kb.right && glfwGetTime() - kb.atkTimer2 > 0.8f) {
 		if (!kb.dash2) {
 			if (myScene[1].EulerRotDeg.y == 90.0f)
 				movement2.x += speed * 0.002f;
@@ -217,50 +220,28 @@ void Vatista::Game::update(float dt)
 			isBlocking2 = true;
 	}
 
-	glfwSetKeyCallback(gameWindow->getWindow(), key_callback);
-	glfwSetInputMode(gameWindow->getWindow(), GLFW_STICKY_KEYS, GLFW_TRUE);
+	//std::cout << glfwGetTime() << std::endl;
+	if (glfwGetTime() - kb.atkTimer1 > 0.8f)
+		isAttacking1 = false;
+	if (glfwGetTime() - kb.atkTimer2 > 0.8f)
+		isAttacking2 = false;
+	if (kb.f && !dashing1 && glfwGetTime() - kb.atkTimer1 > 0.8f) {
+		isAttacking1 = true;
+		kb.atkTimer1 = glfwGetTime();
+		movement.x = 0;
+	}
+	if (kb.rctrl && !dashing2 && glfwGetTime() - kb.atkTimer2 > 0.8f) {
+		isAttacking2 = true;
+		kb.atkTimer2 = glfwGetTime();
+		movement2.x = 0;
+	}
 
-	//Attack buttons (Space bar for player 1 and right ctrl for player 2)
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
-		p1atk = true;
-	else
-		p1atk = false;
-
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
-		p2atk = true;
-	else
-		p2atk = false;
-
-	//Creating hitboxes
-
-	//This is an idea, not what's this code does
-	/*Create hitbox at the characters' weapons if they are attacking
-	 if player's state is attacking,
-	 get the position of a vector in the mesh of the weapon attack
-	 then transform the hitbox to fit over where that vector is
-	*/
-	//if (player1.state == attacking) {}
-
-	//else {}        //if not attacking, then hitbox can be moved/unloaded
-
-	//the position of the hitboxes are slightly in front of the player
-	hitboxPos1 = pos1 + 0.6f;
-	hitboxPos2 = pos2 + 0.6f;
-
-	float length = 0.2f; //square hitbox length from centre to sides
-
-	//
-	//	if (p1atk)
-	//	{
-	//		//player 2 is hit
-	//		std::cout << "player 2 is hit" << std::endl;
-	//	}
-	//	if (p2atk)
-	//	{
-	//		//player 1 is hit
-	//		std::cout << "player 1 is hit" << std::endl;
-	//	}
-	//}
+	if (isAttacking1 && glfwGetTime() - kb.atkTimer1 > 0.2f && glfwGetTime() - kb.atkTimer1 < 0.6f)
+		if (collisionCheck(p1AtkPos, p1AtkCollider, pos2, myScene[1].Collider))
+			std::cout << "p2 dies" << std::endl;
+	if (isAttacking2 && glfwGetTime() - kb.atkTimer2 > 0.2f && glfwGetTime() - kb.atkTimer2 < 0.6f)
+		if (collisionCheck(p2AtkPos, p2AtkCollider, pos1, myScene[0].Collider))
+			std::cout << "p1 dies" << std::endl;
 
 	if (!dashing1) {
 		if (kb.dash1 && kb.tap1 == GLFW_KEY_A) {
@@ -283,7 +264,7 @@ void Vatista::Game::update(float dt)
 		isBlocking1 = false;
 		if (std::floor(lerper1.x*1000)/1000 == std::floor(lerpEnd1.x*1000)/1000) {
 			dashing1 = false;
-			std::cout << "done" << std::endl;
+			//std::cout << "done" << std::endl;
 			
 		}
 		else {
@@ -295,25 +276,25 @@ void Vatista::Game::update(float dt)
 		pos1 = lerper1;
 		if (collisionCheck(lerpEnd1, myScene[0].Collider, pos2, myScene[1].Collider)){
 			if (lerpEnd1.x > pos1.x  && lerpEnd1.x > pos2.x) {
-				std::cout << "rightA" << std::endl;
+				//std::cout << "rightA" << std::endl;
 				lerpEnd1.x = pos2.x + (myScene[1].Collider.x * 1.02f);
 				journeyLength1 = glm::distance(pos1, lerpEnd1);
 			}
 			else if (lerpEnd1.x < pos1.x && lerpEnd1.x < pos2.x) {
-				std::cout << "leftA" << std::endl;
+				//std::cout << "leftA" << std::endl;
 				lerpEnd1.x = pos2.x - (myScene[1].Collider.x * 1.02f);
 				journeyLength1 = glm::distance(pos1, lerpEnd1);
 			}
 			if (collisionCheck(pos1, myScene[0].Collider, pos2, myScene[1].Collider)) {
 				if (lerpEnd1.x > pos1.x) {
 					if (pos1.x < pos2.x) {
-						std::cout << "leftB" << std::endl;
+						//std::cout << "leftB" << std::endl;
 						pos1.x = pos2.x - (myScene[1].Collider.x);
 					}
 				}
 				else if (lerpEnd1.x < pos1.x) {
 					if (pos1.x > pos2.x) {
-						std::cout << "rightB" << std::endl;
+						//std::cout << "rightB" << std::endl;
 						pos1.x = pos2.x + (myScene[1].Collider.x);
 					}
 				}
@@ -347,7 +328,7 @@ void Vatista::Game::update(float dt)
 		isBlocking2 = false;
 		if (std::floor(lerper2.x * 1000) / 1000 == std::floor(lerpEnd2.x * 1000) / 1000) {
 			dashing2 = false;
-			std::cout << "done" << std::endl;
+			//std::cout << "done" << std::endl;
 		}
 		else {
 			float distCovered = (glfwGetTime() - startTime2) * 0.3f;
@@ -358,25 +339,25 @@ void Vatista::Game::update(float dt)
 		pos2 = lerper2;
 		if (collisionCheck(lerpEnd2, myScene[1].Collider, pos1, myScene[0].Collider)) {
 			if (lerpEnd2.x > pos2.x && lerpEnd2.x > pos1.x) {
-				std::cout << "rightA" << std::endl;
+				//std::cout << "rightA" << std::endl;
 				lerpEnd2.x = pos1.x + (myScene[0].Collider.x * 1.02f);
 				journeyLength2 = glm::distance(pos2, lerpEnd2);
 			}
 			else if (lerpEnd2.x < pos2.x && lerpEnd2.x < pos1.x) {
-				std::cout << "leftA" << std::endl;
+				//std::cout << "leftA" << std::endl;
 				lerpEnd2.x = pos1.x - (myScene[0].Collider.x * 1.02f);
 				journeyLength2 = glm::distance(pos2, lerpEnd2);
 			}
 			if (collisionCheck(pos2, myScene[1].Collider, pos1, myScene[0].Collider)) {
 				if (lerpEnd2.x > pos2.x) {
 					if (pos2.x < pos1.x) {
-						std::cout << "leftB" << std::endl;
+						//std::cout << "leftB" << std::endl;
 						pos2.x = pos1.x - (myScene[0].Collider.x);
 					}
 				}
 				else if (lerpEnd2.x < pos2.x) {
 					if (pos2.x > pos1.x) {
-						std::cout << "rightB" << std::endl;
+						//std::cout << "rightB" << std::endl;
 						pos2.x = pos1.x + (myScene[0].Collider.x);
 					}
 				}
@@ -391,10 +372,14 @@ void Vatista::Game::update(float dt)
 	if (pos1.x > pos2.x) {
 		myScene[0].EulerRotDeg.y = -90.0f;
 		myScene[1].EulerRotDeg.y = 90.0f;
+		p1AtkPos.x = pos1.x - myScene[0].Collider.x - p1AtkCollider.x;
+		p2AtkPos.x = pos2.x + myScene[1].Collider.x + p2AtkCollider.x;
 	}
 	else {
 		myScene[0].EulerRotDeg.y = 90.0f;
 		myScene[1].EulerRotDeg.y = -90.0f;
+		p1AtkPos.x = pos1.x + myScene[0].Collider.x + p1AtkCollider.x;
+		p2AtkPos.x = pos2.x - myScene[1].Collider.x - p2AtkCollider.x;
 	}
 	myScene[0].Position = pos1;
 	myScene[1].Position = pos2;
@@ -432,23 +417,10 @@ bool Vatista::Game::collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y
 //bool Vatista::Game::doubleTap = false;
 void Vatista::Game::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	//if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-	//	if (doubleTap) {
-	//		if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-	//			std::cout << "space" << std::endl;
-	//			doubleTap = false;
-	//		}
-	//	}
-	//	else {
-	//		doubleTap = true;
-	//		kb.tapTimer = glfwGetTime();
-	//	}
-	//}
-
 	if (action == GLFW_PRESS) {
 		switch (key) {
 		case GLFW_KEY_A:
-			if (kb.doubleTap1 && kb.tap1 == key) {
+			if (kb.doubleTap1 && kb.tap1 == key && glfwGetTime() - kb.atkTimer1 > 0.8f) {
 				std::cout << "dash" << std::endl;
 				kb.dash1 = true;
 				kb.doubleTap1 = false;
@@ -461,8 +433,8 @@ void Vatista::Game::key_callback(GLFWwindow* window, int key, int scancode, int 
 			kb.a = true;
 			break;
 		case GLFW_KEY_D: 
-			if (kb.doubleTap1 && kb.tap1 == key) {
-				std::cout << "dash" << std::endl;
+			if (kb.doubleTap1 && kb.tap1 == key && glfwGetTime() - kb.atkTimer1 > 0.8f) {
+				//std::cout << "dash" << std::endl;
 				kb.dash1 = true;
 				kb.doubleTap1 = false;
 			}
@@ -474,8 +446,8 @@ void Vatista::Game::key_callback(GLFWwindow* window, int key, int scancode, int 
 			kb.d = true;
 			break;
 		case GLFW_KEY_LEFT:
-			if (kb.doubleTap2 && kb.tap2 == key) {
-				std::cout << "dash" << std::endl;
+			if (kb.doubleTap2 && kb.tap2 == key && glfwGetTime() - kb.atkTimer2 > 0.8f) {
+				//std::cout << "dash" << std::endl;
 				kb.dash2 = true;
 				kb.doubleTap2 = false;
 			}
@@ -487,8 +459,8 @@ void Vatista::Game::key_callback(GLFWwindow* window, int key, int scancode, int 
 			kb.left = true;
 			break;
 		case GLFW_KEY_RIGHT:
-			if (kb.doubleTap2 && kb.tap2 == key) {
-				std::cout << "dash" << std::endl;
+			if (kb.doubleTap2 && kb.tap2 == key && glfwGetTime() - kb.atkTimer2 > 0.8f) {
+				//std::cout << "dash" << std::endl;
 				kb.dash2 = true;
 				kb.doubleTap2 = false;
 			}
@@ -499,7 +471,12 @@ void Vatista::Game::key_callback(GLFWwindow* window, int key, int scancode, int 
 			}
 			kb.right = true;
 			break;
-		case GLFW_KEY_SPACE: kb.space = true; break;
+		case GLFW_KEY_F:
+			std::cout << "attack1" << std::endl;
+			kb.f = true; break;
+		case GLFW_KEY_RIGHT_CONTROL:
+			std::cout << "attack2" << std::endl;
+			kb.rctrl = true; break;
 		default: break;
 		}
 	}
@@ -509,7 +486,8 @@ void Vatista::Game::key_callback(GLFWwindow* window, int key, int scancode, int 
 		case GLFW_KEY_D: kb.d = false; if (kb.dash1) { kb.dash1 = false; } break;
 		case GLFW_KEY_LEFT: kb.left = false; if (kb.dash2) { kb.dash2 = false; } break;
 		case GLFW_KEY_RIGHT: kb.right = false; if (kb.dash2) { kb.dash2 = false; } break;
-		case GLFW_KEY_SPACE: kb.space = false; break;
+		case GLFW_KEY_F: kb.f = false; break;
+		case GLFW_KEY_RIGHT_CONTROL: kb.rctrl = false; break;
 		default: break;
 		}
 	}
