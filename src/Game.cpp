@@ -56,13 +56,18 @@ void Vatista::Game::init()
 	myCamera->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
 	myCamera->Projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.f, 1000.0f);
 
+	//for morphing
 	std::vector<uint32_t> indices;
 	std::vector<Vertex> vertData;
 	std::vector<uint32_t> indices2;
 	std::vector<Vertex> vertData2;
 	std::vector<MorphVertex> morphVertData;
 
-	bool objectLoad = loader.load("./res/plane2.obj", indices, vertData);
+	//for all static objects
+	std::vector<uint32_t> indices3;
+	std::vector<Vertex> vertData3;
+
+	bool objectLoad = loader.load("./res/yun_idle_pose_1.obj", indices, vertData);
 	
 	if (objectLoad) {
 		myMesh = std::make_shared<Mesh>(indices, indices.size(), 
@@ -70,7 +75,7 @@ void Vatista::Game::init()
 		meshList.push_back(myMesh);
 	}
 
-	objectLoad = loader.load("./res/plane.obj", indices2, vertData2);
+	objectLoad = loader.load("./res/yun_idle_pose_2.obj", indices2, vertData2);
 	
 	if (objectLoad) {
 		for (int i = 0; i < vertData2.size(); i++) {
@@ -83,13 +88,41 @@ void Vatista::Game::init()
 		meshList.push_back(myMesh2);
 	}
 
+	//objectLoad = loader.load("./res/yun_attack_pose_2.obj", indices2, vertData2);
+	//
+	//if (objectLoad) {
+	//	for (int i = 0; i < vertData2.size(); i++) {
+	//		morphVertData.push_back(MorphVertex((vertData2[i]), vertData[i].Position,
+	//			vertData[i].Normal));
+	//	}
+	//
+	//	myMesh2 = std::make_shared<Mesh>(indices2, indices2.size(),
+	//		morphVertData, morphVertData.size());
+	//	meshList.push_back(myMesh2);
+	//}
+	//
+	//objectLoad = loader.load("./res/ground terrain.obj", indices3, vertData3);
+
+	//if (objectLoad) {
+	//	for (int i = 0; i < vertData2.size(); i++) {
+	//		morphVertData.push_back(MorphVertex((vertData2[i]), vertData[i].Position,
+	//			vertData[i].Normal));
+	//	}
+	//
+	//	myMesh2 = std::make_shared<Mesh>(indices2, indices2.size(),
+	//		morphVertData, morphVertData.size());
+	//	meshList.push_back(myMesh2);
+	//}
+
 	//player texture
 	texture = std::make_shared<Texture>();
-	texture->loadFile("./res/color-grid.png");
+	texture->loadFile("./res/yuntexturepaint.png");
 
 	Shader::Sptr phong = std::make_shared<Shader>();
-	//phong->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
 	phong->Load("./res/passthroughMorph.vs", "./res/blinn-phong.fs.glsl"); 
+
+	//Shader::Sptr phong2 = std::make_shared<Shader>();
+	//phong2->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
 
 	Material::Sptr testMat = std::make_shared<Material>(phong);
 	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -99,6 +132,15 @@ void Vatista::Game::init()
 	testMat->Set("a_LightSpecPower", 0.9f);
 	testMat->Set("a_LightShininess", 256.0f);
 	testMat->Set("a_LightAttenuation", 0.04f);
+
+	//Material::Sptr testMat2 = std::make_shared<Material>(phong2);
+	//testMat2->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	//testMat2->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	//testMat2->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	//testMat2->Set("a_AmbientPower", 0.5f);
+	//testMat2->Set("a_LightSpecPower", 0.9f);
+	//testMat2->Set("a_LightShininess", 256.0f);
+	//testMat2->Set("a_LightAttenuation", 0.04f);
 	//myNormalShader = std::make_shared<Shader>();
 	//myNormalShader->Load("./res/passthrough.vs", "./res/normalView.fs");
 
