@@ -1,5 +1,5 @@
 # Blender MTL File: 'GameScene.blend'
-# Material Count: 35
+# Material Count: 38
 
 newmtl Material.001
 Ns 323.999994
@@ -284,7 +284,7 @@ Ni 1.450000
 d 1.000000
 illum 2
 
-newmtl None
+newmtl Material.029
 Ns 225.000000
 Ka 1.000000 1.000000 1.000000
 Kd 0.800000 0.800000 0.800000
@@ -292,6 +292,37 @@ Ks 0.500000 0.500000 0.500000
 Ke 0.0 0.0 0.0
 Ni 1.450000
 d 1.000000
+illum 2
+map_Kd d:\\Desktop\\SceneAssets\\GunUV2.png
+
+newmtl Material.030
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd d:\\Desktop\\SceneAssets\\DrillUV4.png
+
+newmtl Material.031
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd d:\\Desktop\\SceneAssets\\RealFutureMicrowave5.png
+
+newmtl None
+Ns 500
+Ka 0.8 0.8 0.8
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
 illum 2
 
 newmtl None.001
