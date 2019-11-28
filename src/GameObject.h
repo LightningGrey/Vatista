@@ -16,5 +16,5 @@ public:
 
 	void Draw(const Vatista::Camera::Sptr& camera, float time);
 
-	float speed = 0.1f;
+	float speed = 1000.0f;
 };

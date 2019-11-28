@@ -74,10 +74,9 @@ namespace Vatista {
 		
 		Vatista::ObjLoader loader;
 
-<<<<<<< Updated upstream
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-=======
+
 		float time = 0.0f;
->>>>>>> Stashed changes
+
 	};
 }
