@@ -25,7 +25,6 @@ namespace Vatista {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		//window = glfwCreateWindow(width, height, windowName, NULL, NULL);
 		window = glfwCreateWindow(width, height, windowName, NULL, NULL);
 		glfwMakeContextCurrent(window);
 		//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);

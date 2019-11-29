@@ -69,7 +69,8 @@ namespace Vatista {
 			}
 		}
 
-		//int count = 0;
+		
+		//creates new vector of vertices based on indices
 		bool check;
 		int indiceCount = 0;
 

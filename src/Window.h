@@ -15,7 +15,6 @@ namespace Vatista {
 		void clear();
 		void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 		void processInput(GLFWwindow* window);
-		//void resize(int width, int height);
 		bool shouldClose();
 
 		GLFWwindow* getWindow();

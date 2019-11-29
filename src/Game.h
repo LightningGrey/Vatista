@@ -36,6 +36,7 @@ namespace Vatista {
 		//A shared pointer to our mesh
 		Vatista::Mesh::Sptr myMesh;
 		Vatista::Mesh::Sptr myMesh2;
+		Vatista::Mesh::Sptr myMesh3;
 		std::vector<Vatista::Mesh::Sptr> meshList;
 
 		// A shared pointer to our shader
@@ -52,6 +53,7 @@ namespace Vatista {
 		glm::mat4 modelTransform2 = glm::mat4(0.f);
 		glm::vec3 pos1;
 		glm::vec3 pos2;
+		glm::vec3 pos3;
 
 		glm::vec3 lerper1;
 		glm::vec3 lerper2;
