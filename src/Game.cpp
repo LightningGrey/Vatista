@@ -31,6 +31,7 @@ void Vatista::Game::run()
 
 	static float previousFrame = glfwGetTime();
 
+	//game loop
 	while (!gameWindow->shouldClose()) {
 		static float currentFrame = glfwGetTime();
 		static float deltaTime = currentFrame - previousFrame;
@@ -49,6 +50,7 @@ void Vatista::Game::run()
 
 void Vatista::Game::init()
 {
+	//window and camera
 	gameWindow = new Vatista::Window(1000, 1000, "Alpha Strike");
 
 	myCamera = std::make_shared<Vatista::Camera>();
@@ -88,32 +90,6 @@ void Vatista::Game::init()
 		meshList.push_back(myMesh2);
 	}
 
-	//objectLoad = loader.load("./res/yun_attack_pose_2.obj", indices2, vertData2);
-	//
-	//if (objectLoad) {
-	//	for (int i = 0; i < vertData2.size(); i++) {
-	//		morphVertData.push_back(MorphVertex((vertData2[i]), vertData[i].Position,
-	//			vertData[i].Normal));
-	//	}
-	//
-	//	myMesh2 = std::make_shared<Mesh>(indices2, indices2.size(),
-	//		morphVertData, morphVertData.size());
-	//	meshList.push_back(myMesh2);
-	//}
-	//
-	//objectLoad = loader.load("./res/ground terrain.obj", indices3, vertData3);
-
-	//if (objectLoad) {
-	//	for (int i = 0; i < vertData2.size(); i++) {
-	//		morphVertData.push_back(MorphVertex((vertData2[i]), vertData[i].Position,
-	//			vertData[i].Normal));
-	//	}
-	//
-	//	myMesh2 = std::make_shared<Mesh>(indices2, indices2.size(),
-	//		morphVertData, morphVertData.size());
-	//	meshList.push_back(myMesh2);
-	//}
-
 	//player texture
 	texture = std::make_shared<Texture>();
 	texture->loadFile("./res/yuntexturepaint.png");
@@ -142,7 +118,7 @@ void Vatista::Game::init()
 	//testMat2->Set("a_LightShininess", 256.0f);
 	//testMat2->Set("a_LightAttenuation", 0.04f);
 	//myNormalShader = std::make_shared<Shader>();
-	//myNormalShader->Load("./res/passthrough.vs", "./res/normalView.fs");
+	//myNormalShader->Load("./res/passthrough.vs", "./res/blinn-phong.fs.glsl");
 	
 	//Player 1
 	modelTransform = glm::mat4(1.0f);
@@ -171,10 +147,6 @@ void Vatista::Game::init()
 	p2AtkPos = glm::vec3(0);
 	p2AtkCollider = glm::vec2(0.4f);
 
-	//modelTransform3 = glm::mat4(1.0f);
-	//modelTransform3 = glm::rotate(modelTransform3, 3.14f, glm::vec3(0, 1, 0));
-
-
 	glEnable(GL_CULL_FACE);
 }
 
@@ -201,25 +173,24 @@ struct keyboard {
 	float tapTimer1;
 	float tapTimer2;
 }kb;
+
 void Vatista::Game::update(float dt)
 {
+	//movement and speed
 	glm::vec3 movement = glm::vec3(0.0f);
 	glm::vec3 movement2 = glm::vec3(0.0f);
-
 	float speed = 1.0f;
-	float rotSpeed = 1.0f;
-
+	
 	glfwSetKeyCallback(gameWindow->getWindow(), key_callback);
 	glfwSetInputMode(gameWindow->getWindow(), GLFW_STICKY_KEYS, GLFW_TRUE);
 
 
+	//player 1 movement and dash
 	if (glfwGetTime() - kb.tapTimer1 > 0.2f)
 		kb.doubleTap1 = false;
 	if (glfwGetTime() - kb.tapTimer2 > 0.2f)
 		kb.doubleTap2 = false;
 
-
-	
 	if (kb.a && glfwGetTime() - kb.atkTimer1 > 0.8f) {
 		if (!kb.dash1) {
 			if (myScene[0].EulerRotDeg.y == 90.0f)
@@ -262,7 +233,7 @@ void Vatista::Game::update(float dt)
 			isBlocking2 = true;
 	}
 
-	//std::cout << glfwGetTime() << std::endl;
+	//attacking
 	if (glfwGetTime() - kb.atkTimer1 > 0.8f)
 		isAttacking1 = false;
 	if (glfwGetTime() - kb.atkTimer2 > 0.8f)
@@ -344,11 +315,14 @@ void Vatista::Game::update(float dt)
 		}
 	}
 
+	//edge collisions
 	if (pos1.x > 5.63f)
 		pos1.x = 5.63f;
 	if (pos1.x < -5.63f)
 		pos1.x = -5.63f;
 
+
+	//player 2 movement + dash
 	if (!dashing2) {
 		if (kb.dash2 && kb.tap2 == GLFW_KEY_LEFT) {
 			lerpEnd2 = pos2 - glm::vec3(2.f, 0, 0);
@@ -411,6 +385,7 @@ void Vatista::Game::update(float dt)
 	if (pos2.x < -5.63f)
 		pos2.x = -5.63f;
 
+	//switching sides after dash
 	if (pos1.x > pos2.x) {
 		myScene[0].EulerRotDeg.y = -90.0f;
 		myScene[1].EulerRotDeg.y = 90.0f;
@@ -432,16 +407,10 @@ void Vatista::Game::draw(float dt)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//myShader->Bind();
-
 	//draw 
 	for (int i = 0; i < myScene.size(); i++) {
 		myScene[i].Draw(myCamera);
 	}
-	//for (int i = 0; i < meshList.size(); i++) {
-	//	meshList[i]->Draw();
-	//	//std::cout << 1;
-	//}
 }
 
 bool Vatista::Game::collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2)
