@@ -98,7 +98,6 @@ void Vatista::Game::init()
 	//	meshList.push_back(myMesh3);
 	//}
 
-
 	//player texture
 	texture = std::make_shared<Texture>();
 	texture->loadFile("./res/yuntexturepaint.png");
@@ -156,6 +155,7 @@ void Vatista::Game::init()
 	p2AtkPos = glm::vec3(0);
 	p2AtkCollider = glm::vec2(0.4f);
 
+<<<<<<< HEAD
 	//pos3 = glm::vec3(1, 0, 0);
 	//myScene.emplace_back();
 	//myScene[2].Position = pos3;
@@ -164,6 +164,8 @@ void Vatista::Game::init()
 	//myScene[2].EulerRotDeg.y = -90.0f;
 	//myScene[2].Collider = glm::vec2(0.74f, 1.78f);
 
+=======
+>>>>>>> master
 	glEnable(GL_CULL_FACE);
 }
 
