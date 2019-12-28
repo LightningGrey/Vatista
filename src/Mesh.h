@@ -49,7 +49,4 @@ namespace Vatista {
 		// The number of vertices and indices in this mesh
 		size_t myVertexCount, myUVCount, myNormalCount, myIndexCount;
 	};
-
-	// Shorthand for shared_ptr
-	typedef std::shared_ptr<Mesh> Mesh_sptr;
 }

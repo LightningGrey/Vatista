@@ -16,6 +16,9 @@
 #include "Texture.h"
 #include "Utils.h"
 
+#include "Player.h"
+#include "Z3n.h"
+
 namespace Vatista {
 	class Game {
 	public:
@@ -83,6 +86,15 @@ namespace Vatista {
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 		float time = 0.0f;
+
+
+		//player classes
+		Vatista::Player::Sptr Player1;
+		Vatista::Player::Sptr Player2;
+
+		//related character classes
+		Vatista::Character::Sptr Character1;
+		Vatista::Character::Sptr Character2;
 
 	};
 }

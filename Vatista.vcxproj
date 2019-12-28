@@ -16,6 +16,7 @@
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Character.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\Log.h" />
@@ -28,7 +29,7 @@
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Window.h" />
-    <ClInclude Include="src\Yun.h" />
+    <ClInclude Include="src\Z3n.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\glad\glad.c" />
@@ -44,7 +45,7 @@
     <ClCompile Include="src\testmain.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Window.cpp" />
-    <ClCompile Include="src\Yun.cpp" />
+    <ClCompile Include="src\Z3n.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />
