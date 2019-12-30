@@ -50,6 +50,8 @@ void Vatista::Game::run()
 
 void Vatista::Game::init()
 {
+	Controls keyPre;
+
 	//window and camera
 	gameWindow = new Vatista::Window(1000, 1000, "Alpha Strike");
 
@@ -426,6 +428,9 @@ void Vatista::Game::update(float dt)
 	}
 	myScene[0].setPos(pos1);
 	myScene[1].setPos(pos2);
+
+	//Player1->getCharacter()->update(dt, keyPress);
+	//Player2->getCharacter()->update(dt, keyPress);
 }
 
 void Vatista::Game::draw(float dt)
@@ -469,7 +474,7 @@ void Vatista::Game::key_callback(GLFWwindow* window, int key, int scancode, int 
 			}
 			kb.a = true;
 			break;
-		case GLFW_KEY_D: 
+		case GLFW_KEY_D:
 			if (kb.doubleTap1 && kb.tap1 == key && glfwGetTime() - kb.atkTimer1 > 0.8f) {
 				//std::cout << "dash" << std::endl;
 				kb.dash1 = true;

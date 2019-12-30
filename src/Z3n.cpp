@@ -49,7 +49,7 @@ Vatista::Z3n::~Z3n()
 {
 }
 
-void Vatista::Z3n::movement(int keyPress)
+void Vatista::Z3n::movement(int keyPress, Controls button)
 {
 	if (true) {
 		this->state = State::WALKING;
@@ -62,7 +62,7 @@ void Vatista::Z3n::movement(int keyPress)
 	this->state = State::IDLE;
 }
 
-void Vatista::Z3n::attack(int keyPress)
+void Vatista::Z3n::attack(int keyPress, Controls button)
 {
 	//if (keyPress == 0) {
 		this->state = State::ATTACKING;
@@ -76,4 +76,16 @@ void Vatista::Z3n::collision()
 {
 	this->state = State::HITSTUN;
 	this->state = State::DEATH;
+}
+
+void Vatista::Z3n::update(float dt, Controls key)
+{
+	if (key == Controls::LEFT || key == Controls::RIGHT || 
+		key == Controls::UP || key == Controls::DOWN) {
+		movement(dt, key);
+	}
+	else if (key == Controls::X || key == Controls::Y) {
+		attack(dt, key);
+	}
+
 }

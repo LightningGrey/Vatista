@@ -26,9 +26,10 @@ namespace Vatista {
 		Character() {};
 		~Character() {};
 
-		virtual void movement(int keyPress) = 0;
-		virtual void attack() = 0;
+		virtual void movement(int keyPress, Controls button) = 0;
+		virtual void attack(int keyPress, Controls button) = 0;
 		virtual void collision() = 0;
+		virtual void update(float dt, Controls button) = 0;
 
 	protected:
 		//animation data

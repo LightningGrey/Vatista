@@ -15,6 +15,7 @@
 #include <src\GameObject.h>
 #include "Texture.h"
 #include "Utils.h"
+//#include "Controls.h"
 
 #include "Player.h"
 #include "Z3n.h"
@@ -95,6 +96,8 @@ namespace Vatista {
 		//related character classes
 		Vatista::Character::Sptr Character1;
 		Vatista::Character::Sptr Character2;
+		
+		static Controls keyPress;
 
 	};
 }
