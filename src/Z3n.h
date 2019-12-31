@@ -13,5 +13,7 @@ namespace Vatista {
 		void attack(int keyPress, Controls button);
 		void collision();
 		void update(float dt, Controls key);
+		
+		void draw(const Vatista::Camera::Sptr& camera);
 	};
 }

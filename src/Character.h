@@ -6,6 +6,7 @@
 #include <vector>
 #include "GameObject.h"
 #include "Utils.h"
+#include "Controls.h"
 
 //possible states of each character 
 enum class State {
@@ -30,6 +31,7 @@ namespace Vatista {
 		virtual void attack(int keyPress, Controls button) = 0;
 		virtual void collision() = 0;
 		virtual void update(float dt, Controls button) = 0;
+		virtual void draw(const Vatista::Camera::Sptr& camera) = 0;
 
 	protected:
 		//animation data
