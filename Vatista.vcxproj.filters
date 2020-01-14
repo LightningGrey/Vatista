@@ -9,12 +9,12 @@
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\ObjLoader.cpp" />
-    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\testmain.cpp" />
     <ClCompile Include="src\Window.cpp" />
-    <ClCompile Include="src\Yun.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Z3n.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />
@@ -29,12 +29,13 @@
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\MeshRenderer.h" />
     <ClInclude Include="src\ObjLoader.h" />
-    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Window.h" />
-    <ClInclude Include="src\Yun.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\Character.h" />
+    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\Z3n.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />

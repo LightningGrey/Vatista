@@ -3,11 +3,12 @@
 #include <memory>
 #include <GLM/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include "Utils.h"
 
 namespace Vatista {
 	class Camera {
 	public:
-		typedef std::shared_ptr<Camera> Sptr;
+		SharedPtr(Camera);
 
 		Camera();
 		virtual ~Camera();

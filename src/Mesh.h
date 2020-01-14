@@ -13,8 +13,6 @@ namespace Vatista {
 		glm::vec3 Position;
 		glm::vec2 UV;
 		glm::vec3 Normal;
-		Vertex(glm::vec3 pos, glm::vec2 uv, glm::vec3 norm) : Position(pos), UV(uv),
-			Normal(norm) {};
 	};
 
 	struct MorphVertex : public Vertex {
@@ -26,6 +24,17 @@ namespace Vatista {
 		MorphVertex(Vertex vert, 
 			glm::vec3 posS, glm::vec3 normS) : Vertex(vert),
 		PositionS(posS), NormalS(normS) {}
+	};
+
+	//used to load morph vertices
+	struct LoadMorphVertex {
+		//start position
+		//vertex is end
+		glm::vec3 Position;
+		glm::vec2 UV;
+		glm::vec3 Normal;
+		glm::vec3 PositionS;
+		glm::vec3 NormalS;
 	};
 
 	class Mesh {
@@ -49,7 +58,4 @@ namespace Vatista {
 		// The number of vertices and indices in this mesh
 		size_t myVertexCount, myUVCount, myNormalCount, myIndexCount;
 	};
-
-	// Shorthand for shared_ptr
-	typedef std::shared_ptr<Mesh> Mesh_sptr;
 }

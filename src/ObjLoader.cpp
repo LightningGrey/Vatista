@@ -88,8 +88,8 @@ namespace Vatista {
 			if (!check) {
 				objIndices.push_back(indiceCount);
 				indiceCount++;
-				vertData.push_back(Vertex(tempVertices[vertexIndices[i]], 
-					tempUVs[uvIndices[i]], tempNormals[normalIndices[i]]));
+				vertData.push_back(Vertex{ tempVertices[vertexIndices[i]],
+					tempUVs[uvIndices[i]], tempNormals[normalIndices[i]] });
 			}
 		}
 

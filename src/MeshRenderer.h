@@ -3,5 +3,5 @@
 #include "Mesh.h"
 struct MeshRenderer {
 	Vatista::Material::Sptr Material;
-	Vatista::Mesh_sptr Mesh;
+	Vatista::Mesh::Sptr Mesh;
 };

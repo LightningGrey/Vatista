@@ -58,45 +58,47 @@ void Vatista::Game::init()
 	myCamera->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
 	myCamera->Projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.f, 1000.0f);
 
-	//for morphing
-	std::vector<uint32_t> indices;
-	std::vector<Vertex> vertData;
-	std::vector<uint32_t> indices2;
-	std::vector<Vertex> vertData2;
-	std::vector<MorphVertex> morphVertData;
+	load("./res/init.txt");
 
-	//for all static objects
-	std::vector<uint32_t> indices3;
-	std::vector<Vertex> vertData3;
-
-	bool objectLoad = loader.load("./res/yun_idle_pose_1.obj", indices, vertData);
-	
-	if (objectLoad) {
-		myMesh = std::make_shared<Mesh>(indices, indices.size(), 
-			vertData, vertData.size());
-		meshList.push_back(myMesh);
-	}
-
-	objectLoad = loader.load("./res/yun_idle_pose_2.obj", indices2, vertData2);
-	
-	if (objectLoad) {
-		for (int i = 0; i < vertData2.size(); i++) {
-			morphVertData.push_back(MorphVertex((vertData2[i]), vertData[i].Position,
-				vertData[i].Normal));
-		}
-	
-		myMesh2 = std::make_shared<Mesh>(indices2, indices2.size(),
-			morphVertData, morphVertData.size());
-		meshList.push_back(myMesh2);
-	}
-
-	//objectLoad = loader.load("./res/GameScene.obj", indices3, vertData3);
+	////for morphing
+	//std::vector<uint32_t> indices;
+	//std::vector<Vertex> vertData;
+	//std::vector<uint32_t> indices2;
+	//std::vector<Vertex> vertData2;
+	//std::vector<MorphVertex> morphVertData;
+	//
+	////for all static objects
+	//std::vector<uint32_t> indices3;
+	//std::vector<Vertex> vertData3;
+	//
+	//bool objectLoad = loader.load("./res/yun_idle_pose_1.obj", indices, vertData);
+	//
+	////if (objectLoad) {
+	////	myMesh = std::make_shared<Mesh>(indices, indices.size(), 
+	////		vertData, vertData.size());
+	////	meshList.push_back(myMesh);
+	////}
+	//
+	//objectLoad = loader.load("./res/yun_idle_pose_2.obj", indices2, vertData2);
 	//
 	//if (objectLoad) {
-	//	myMesh3 = std::make_shared<Mesh>(indices3, indices3.size(),
-	//		vertData3, vertData3.size());
-	//	meshList.push_back(myMesh3);
+	//	for (int i = 0; i < vertData2.size(); i++) {
+	//		morphVertData.push_back(MorphVertex((vertData2[i]), vertData[i].Position,
+	//			vertData[i].Normal));
+	//	}
+	//
+	//	myMesh2 = std::make_shared<Mesh>(indices2, indices2.size(),
+	//		morphVertData, morphVertData.size());
+	//	meshList.push_back(myMesh2);
 	//}
+	
+	////objectLoad = loader.load("./res/GameScene.obj", indices3, vertData3);
+	////
+	////if (objectLoad) {
+	////	myMesh3 = std::make_shared<Mesh>(indices3, indices3.size(),
+	////		vertData3, vertData3.size());
+	////	meshList.push_back(myMesh3);
+	////}
 
 	//player texture
 	texture = std::make_shared<Texture>();
@@ -134,11 +136,11 @@ void Vatista::Game::init()
 	pos1 = glm::vec3(-1, 0, 0);
 	modelTransform = glm::translate(modelTransform, pos1);
 	myScene.emplace_back();
-	myScene[0].Position = pos1;
-	myScene[0].Material = testMat;
-	myScene[0].Mesh = myMesh2;
-	myScene[0].EulerRotDeg.y = 90.0f;
-	myScene[0].Collider = glm::vec2(0.74f, 1.78f);
+	myScene[0].setPos(pos1);
+	myScene[0].setMat(testMat);
+	myScene[0].setMesh(myMesh2);
+	myScene[0].setRotY(90.0f);
+	myScene[0].setCollider(glm::vec2(0.74f, 1.78f));
 	p1AtkPos = glm::vec3(0);
 	p1AtkCollider = glm::vec2(0.4f);
 
@@ -147,11 +149,11 @@ void Vatista::Game::init()
 	pos2 = glm::vec3(1, 0, 0);
 	modelTransform2 = glm::translate(modelTransform2, pos2);
 	myScene.emplace_back();
-	myScene[1].Position = pos2;
-	myScene[1].Material = testMat;
-	myScene[1].Mesh = myMesh2;
-	myScene[1].EulerRotDeg.y = -90.0f;
-	myScene[1].Collider = glm::vec2(0.74f, 1.78f);
+	myScene[1].setPos(pos2);
+	myScene[1].setMat(testMat);
+	myScene[1].setMesh(myMesh2);
+	myScene[1].setRotY(-90.0f);
+	myScene[1].setCollider(glm::vec2(0.74f, 1.78f));
 	p2AtkPos = glm::vec3(0);
 	p2AtkCollider = glm::vec2(0.4f);
 
@@ -209,43 +211,43 @@ void Vatista::Game::update(float dt)
 
 	if (kb.a && glfwGetTime() - kb.atkTimer1 > 0.8f) {
 		if (!kb.dash1) {
-			if (myScene[0].EulerRotDeg.y == 90.0f)
+			if (myScene[0].getRot().y == 90.0f)
 				movement.x -= speed * 0.001f;
-			else if (myScene[0].EulerRotDeg.y == -90.0f)
+			else if (myScene[0].getRot().y == -90.0f)
 				movement.x -= speed * 0.002f;
 		}
-		if (!dashing1 && myScene[0].EulerRotDeg.y == 90.0f)
+		if (!dashing1 && myScene[0].getRot().y == 90.0f)
 			isBlocking1 = true;
 	}
 	if (kb.d && glfwGetTime() - kb.atkTimer1 > 0.8f) {
 		if (!kb.dash1) {
-			if (myScene[0].EulerRotDeg.y == 90.0f)
+			if (myScene[0].getRot().y == 90.0f)
 				movement.x += speed * 0.002f;
-			else if (myScene[0].EulerRotDeg.y == -90.0f)
+			else if (myScene[0].getRot().y == -90.0f)
 				movement.x += speed * 0.001f;
 		}
-		if (!dashing1 && myScene[0].EulerRotDeg.y == -90.0f)
+		if (!dashing1 && myScene[0].getRot().y == -90.0f)
 			isBlocking1 = true;
 	}
 
 	if (kb.left && glfwGetTime() - kb.atkTimer2 > 0.8f) {
 		if (!kb.dash2) {
-			if (myScene[1].EulerRotDeg.y == 90.0f)
+			if (myScene[1].getRot().y == 90.0f)
 				movement2.x -= speed * 0.001f;
-			else if (myScene[1].EulerRotDeg.y == -90.0f)
+			else if (myScene[1].getRot().y == -90.0f)
 				movement2.x -= speed * 0.002f;
 		}
-		if (!dashing2 && myScene[1].EulerRotDeg.y == 90.0f)
+		if (!dashing2 && myScene[1].getRot().y == 90.0f)
 			isBlocking2 = true;
 	}
 	if (kb.right && glfwGetTime() - kb.atkTimer2 > 0.8f) {
 		if (!kb.dash2) {
-			if (myScene[1].EulerRotDeg.y == 90.0f)
+			if (myScene[1].getRot().y == 90.0f)
 				movement2.x += speed * 0.002f;
-			else if (myScene[1].EulerRotDeg.y == -90.0f)
+			else if (myScene[1].getRot().y == -90.0f)
 				movement2.x += speed * 0.001f;
 		}
-		if (!dashing2 && myScene[1].EulerRotDeg.y == -90.0f)
+		if (!dashing2 && myScene[1].getRot().y == -90.0f)
 			isBlocking2 = true;
 	}
 
@@ -266,10 +268,10 @@ void Vatista::Game::update(float dt)
 	}
 
 	if (isAttacking1 && glfwGetTime() - kb.atkTimer1 > 0.2f && glfwGetTime() - kb.atkTimer1 < 0.6f)
-		if (collisionCheck(p1AtkPos, p1AtkCollider, pos2, myScene[1].Collider))
+		if (collisionCheck(p1AtkPos, p1AtkCollider, pos2, myScene[1].getCollider()))
 			std::cout << "p2 dies" << std::endl;
 	if (isAttacking2 && glfwGetTime() - kb.atkTimer2 > 0.2f && glfwGetTime() - kb.atkTimer2 < 0.6f)
-		if (collisionCheck(p2AtkPos, p2AtkCollider, pos1, myScene[0].Collider))
+		if (collisionCheck(p2AtkPos, p2AtkCollider, pos1, myScene[0].getCollider()))
 			std::cout << "p1 dies" << std::endl;
 
 	if (!dashing1) {
@@ -285,7 +287,7 @@ void Vatista::Game::update(float dt)
 		startTime1 = glfwGetTime();
 		journeyLength1 = glm::distance(pos1, lerpEnd1);
 		kb.dash1 = false;
-		if (collisionCheck(pos1+movement, myScene[0].Collider, pos2, myScene[1].Collider))
+		if (collisionCheck(pos1+movement, myScene[0].getCollider(), pos2, myScene[1].getCollider()))
 			movement.x = 0;
 		pos1 += movement;
 	}
@@ -303,28 +305,28 @@ void Vatista::Game::update(float dt)
 			std::cout << std::floor(lerper1.x * 1000) / 1000 << " " << std::floor(lerpEnd1.x * 1000) / 1000 << std::endl;
 		}
 		pos1 = lerper1;
-		if (collisionCheck(lerpEnd1, myScene[0].Collider, pos2, myScene[1].Collider)){
+		if (collisionCheck(lerpEnd1, myScene[0].getCollider(), pos2, myScene[1].getCollider())){
 			if (lerpEnd1.x > pos1.x  && lerpEnd1.x > pos2.x) {
 				//std::cout << "rightA" << std::endl;
-				lerpEnd1.x = pos2.x + (myScene[1].Collider.x * 1.02f);
+				lerpEnd1.x = pos2.x + (myScene[1].getCollider().x * 1.02f);
 				journeyLength1 = glm::distance(pos1, lerpEnd1);
 			}
 			else if (lerpEnd1.x < pos1.x && lerpEnd1.x < pos2.x) {
 				//std::cout << "leftA" << std::endl;
-				lerpEnd1.x = pos2.x - (myScene[1].Collider.x * 1.02f);
+				lerpEnd1.x = pos2.x - (myScene[1].getCollider().x * 1.02f);
 				journeyLength1 = glm::distance(pos1, lerpEnd1);
 			}
-			if (collisionCheck(pos1, myScene[0].Collider, pos2, myScene[1].Collider)) {
+			if (collisionCheck(pos1, myScene[0].getCollider(), pos2, myScene[1].getCollider())) {
 				if (lerpEnd1.x > pos1.x) {
 					if (pos1.x < pos2.x) {
 						//std::cout << "leftB" << std::endl;
-						pos1.x = pos2.x - (myScene[1].Collider.x);
+						pos1.x = pos2.x - (myScene[1].getCollider().x);
 					}
 				}
 				else if (lerpEnd1.x < pos1.x) {
 					if (pos1.x > pos2.x) {
 						//std::cout << "rightB" << std::endl;
-						pos1.x = pos2.x + (myScene[1].Collider.x);
+						pos1.x = pos2.x + (myScene[1].getCollider().x);
 					}
 				}
 			}
@@ -352,7 +354,7 @@ void Vatista::Game::update(float dt)
 		startTime2 = glfwGetTime();
 		journeyLength2 = glm::distance(pos2, lerpEnd2);
 		kb.dash2 = false;
-		if (collisionCheck(pos2 + movement2, myScene[1].Collider, pos1, myScene[0].Collider))
+		if (collisionCheck(pos2 + movement2, myScene[1].getCollider(), pos1, myScene[0].getCollider()))
 			movement2.x = 0;
 		pos2 += movement2;
 	}
@@ -369,28 +371,28 @@ void Vatista::Game::update(float dt)
 			std::cout << lerper2.x << " " << lerpEnd2.x << std::endl;
 		}
 		pos2 = lerper2;
-		if (collisionCheck(lerpEnd2, myScene[1].Collider, pos1, myScene[0].Collider)) {
+		if (collisionCheck(lerpEnd2, myScene[1].getCollider(), pos1, myScene[0].getCollider())) {
 			if (lerpEnd2.x > pos2.x && lerpEnd2.x > pos1.x) {
 				//std::cout << "rightA" << std::endl;
-				lerpEnd2.x = pos1.x + (myScene[0].Collider.x * 1.02f);
+				lerpEnd2.x = pos1.x + (myScene[0].getCollider().x * 1.02f);
 				journeyLength2 = glm::distance(pos2, lerpEnd2);
 			}
 			else if (lerpEnd2.x < pos2.x && lerpEnd2.x < pos1.x) {
 				//std::cout << "leftA" << std::endl;
-				lerpEnd2.x = pos1.x - (myScene[0].Collider.x * 1.02f);
+				lerpEnd2.x = pos1.x - (myScene[0].getCollider().x * 1.02f);
 				journeyLength2 = glm::distance(pos2, lerpEnd2);
 			}
-			if (collisionCheck(pos2, myScene[1].Collider, pos1, myScene[0].Collider)) {
+			if (collisionCheck(pos2, myScene[1].getCollider(), pos1, myScene[0].getCollider())) {
 				if (lerpEnd2.x > pos2.x) {
 					if (pos2.x < pos1.x) {
 						//std::cout << "leftB" << std::endl;
-						pos2.x = pos1.x - (myScene[0].Collider.x);
+						pos2.x = pos1.x - (myScene[0].getCollider().x);
 					}
 				}
 				else if (lerpEnd2.x < pos2.x) {
 					if (pos2.x > pos1.x) {
 						//std::cout << "rightB" << std::endl;
-						pos2.x = pos1.x + (myScene[0].Collider.x);
+						pos2.x = pos1.x + (myScene[0].getCollider().x);
 					}
 				}
 			}
@@ -403,19 +405,22 @@ void Vatista::Game::update(float dt)
 
 	//switching sides after dash
 	if (pos1.x > pos2.x) {
-		myScene[0].EulerRotDeg.y = -90.0f;
-		myScene[1].EulerRotDeg.y = 90.0f;
-		p1AtkPos.x = pos1.x - myScene[0].Collider.x - p1AtkCollider.x;
-		p2AtkPos.x = pos2.x + myScene[1].Collider.x + p2AtkCollider.x;
+		myScene[0].setRotY(-90.0f);
+		myScene[1].setRotY(90.0f);
+		p1AtkPos.x = pos1.x - myScene[0].getCollider().x - p1AtkCollider.x;
+		p2AtkPos.x = pos2.x + myScene[1].getCollider().x + p2AtkCollider.x;
 	}
 	else {
-		myScene[0].EulerRotDeg.y = 90.0f;
-		myScene[1].EulerRotDeg.y = -90.0f;
-		p1AtkPos.x = pos1.x + myScene[0].Collider.x + p1AtkCollider.x;
-		p2AtkPos.x = pos2.x - myScene[1].Collider.x - p2AtkCollider.x;
+		myScene[0].setRotY(90.0f);
+		myScene[1].setRotY(-90.0f);
+		p1AtkPos.x = pos1.x + myScene[0].getCollider().x + p1AtkCollider.x;
+		p2AtkPos.x = pos2.x - myScene[1].getCollider().x - p2AtkCollider.x;
 	}
-	myScene[0].Position = pos1;
-	myScene[1].Position = pos2;
+	myScene[0].setPos(pos1);
+	myScene[1].setPos(pos2);
+
+	//Player1->getCharacter()->update(dt, keyPress);
+	//Player2->getCharacter()->update(dt, keyPress);
 }
 
 void Vatista::Game::draw(float dt)
@@ -441,6 +446,78 @@ bool Vatista::Game::collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y
 	
 }
 
+bool Vatista::Game::load(std::string filename)
+{
+	std::string line;
+
+	//vector of all data to load
+	std::vector<std::string> dataList;
+
+	loadingFile.open(filename, std::ios::in | std::ios::binary);
+	if (!loadingFile) {
+		VATISTA_LOG_ERROR("No file");
+		throw new std::runtime_error("File open failed");
+		return false;
+	}
+
+	while (std::getline(loadingFile, line)) {
+		dataList.push_back(line);
+	}
+	loadingFile.close();
+
+	for (int i = 0; i < dataList.size(); i++) {
+		dataFile.open("./res/" + dataList[i], std::ios::in | std::ios::binary);
+		if (!dataFile) {
+			VATISTA_LOG_ERROR("No file");
+			throw new std::runtime_error("File open failed");
+			return false;
+		}
+
+		int animBuffer; //check for static obj vs moving
+		int vertTotalBuffer; //check for verts total
+		int indiceTotalBuffer; //check for indices total
+		LoadMorphVertex* morphBuffer;
+		uint32_t* indicesBuffer;
+
+		std::cout << "reading now" << std::endl;
+
+		dataFile.read((char*)&animBuffer, sizeof(int));
+		dataFile.read((char*)&vertTotalBuffer, sizeof(int));
+		dataFile.read((char*)&indiceTotalBuffer, sizeof(int));
+
+		morphBuffer = new LoadMorphVertex[vertTotalBuffer];
+		indicesBuffer = new uint32_t[indiceTotalBuffer];
+
+		//access using pointer (*(value+n))
+		dataFile.read((char*)morphBuffer, sizeof(LoadMorphVertex) * vertTotalBuffer);
+		dataFile.read((char*)indicesBuffer, sizeof(uint32_t) * indiceTotalBuffer);
+
+		dataFile.close();
+
+		std::vector<uint32_t> indices;
+		std::vector<Vertex> vertData;
+		std::vector<MorphVertex> morphVertData;
+
+		for (int i = 0; i < vertTotalBuffer; i++) {
+			MorphVertex morph = { Vertex{(*(morphBuffer + i)).Position,
+			(*(morphBuffer + i)).UV, (*(morphBuffer + i)).Normal},
+				(*(morphBuffer + i)).PositionS, (*(morphBuffer + i)).NormalS };
+			morphVertData.push_back(morph);
+		}
+
+
+		for (int i = 0; i < indiceTotalBuffer; i++) {
+			indices.push_back(*(indicesBuffer + i));
+		}
+
+		myMesh2 = std::make_shared<Mesh>(indices, indices.size(), 
+			morphVertData, morphVertData.size());
+		meshList.push_back(myMesh2);
+	}
+
+	return true;
+}
+
 //bool Vatista::Game::doubleTap = false;
 void Vatista::Game::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -459,7 +536,7 @@ void Vatista::Game::key_callback(GLFWwindow* window, int key, int scancode, int 
 			}
 			kb.a = true;
 			break;
-		case GLFW_KEY_D: 
+		case GLFW_KEY_D:
 			if (kb.doubleTap1 && kb.tap1 == key && glfwGetTime() - kb.atkTimer1 > 0.8f) {
 				//std::cout << "dash" << std::endl;
 				kb.dash1 = true;

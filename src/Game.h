@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <fstream>
 
 #include "GLM/glm.hpp"
 #include "GLM/gtc/matrix_transform.hpp";
@@ -15,6 +16,10 @@
 #include <src\GameObject.h>
 #include "Texture.h"
 #include "Utils.h"
+//#include "Controls.h"
+
+#include "Player.h"
+#include "Z3n.h"
 
 namespace Vatista {
 	class Game {
@@ -28,6 +33,7 @@ namespace Vatista {
 		void update(float dt);
 		void draw(float dt);
 		bool collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2);
+		bool load(std::string filename);
 	private:
 		Vatista::Window* gameWindow;
 		glm::vec4 clearColour;
@@ -84,5 +90,20 @@ namespace Vatista {
 
 		float time = 0.0f;
 
+
+		//player classes
+		Vatista::Player::Sptr Player1;
+		Vatista::Player::Sptr Player2;
+
+		//related character classes
+		Vatista::Character::Sptr Character1;
+		Vatista::Character::Sptr Character2;
+		
+		static Controls keyPress;
+
+		//file on what to load
+		std::fstream loadingFile;
+		//file with actual data
+		std::fstream dataFile;
 	};
 }
