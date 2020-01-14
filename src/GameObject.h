@@ -11,7 +11,7 @@ public:
 	GameObject() : Scale(1.0f), model(nullptr), material(nullptr), Position(0.0f), EulerRotDeg(0.0f), Collider(0.0f){} 
 	~GameObject() {};
 
-	virtual void Draw(const Vatista::Camera::Sptr& camera) = 0;
+	void Draw(const Vatista::Camera::Sptr& camera);
 
 	//getters and setters
 	void setMesh(Vatista::Mesh::Sptr& newMesh) { model = newMesh; }
