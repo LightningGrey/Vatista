@@ -60,6 +60,8 @@ void Vatista::Game::init()
 
 	load("./res/init.txt");
 
+	std::string help = "why do i keep losing shit aaaaaaaaa";
+
 	////for morphing
 	//std::vector<uint32_t> indices;
 	//std::vector<Vertex> vertData;
