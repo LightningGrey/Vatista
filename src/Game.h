@@ -51,6 +51,8 @@ namespace Vatista {
 		std::vector<Vatista::Shader::Sptr> shaderList;
 
 		Vatista::Texture::Sptr texture;
+		Vatista::Texture::Sptr normalMap;
+
 		Vatista::Camera::Sptr myCamera;
 
 		std::vector<GameObject> myScene;

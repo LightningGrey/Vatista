@@ -3,20 +3,22 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbs/stb_image.h"
 
+static int textureTotal = 0;
+
 Vatista::Texture::Texture()
 {
-	texture = 0;
+	textureTotal++;
 	setup();
 }
 
 Vatista::Texture::~Texture()
 {
-	glDeleteTextures(1, &texture);
+	glDeleteTextures(1, &textureID);
 }
 
 void Vatista::Texture::bind(int slot) const
 {
-	glBindTextureUnit(slot, texture);
+	glBindTextureUnit(slot, textureID);
 }
 
 void Vatista::Texture::unbind(int slot)
@@ -49,8 +51,8 @@ void Vatista::Texture::loadFile(const std::string& filename, bool alpha)
 
 void Vatista::Texture::setup()
 {
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

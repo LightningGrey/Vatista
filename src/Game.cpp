@@ -60,8 +60,6 @@ void Vatista::Game::init()
 
 	load("./res/init.txt");
 
-	std::string help = "why do i keep losing shit aaaaaaaaa";
-
 	////for morphing
 	//std::vector<uint32_t> indices;
 	//std::vector<Vertex> vertData;
@@ -104,17 +102,25 @@ void Vatista::Game::init()
 
 	//player texture
 	texture = std::make_shared<Texture>();
-	texture->loadFile("./res/yuntexturepaint.png");
+	//texture->loadFile("./res/yuntexturepaint.png");
+	texture->loadFile("./res/base.png");
+
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, textures[0]);
+	
+	//normal map test
+	normalMap = std::make_shared<Texture>();
+	normalMap->loadFile("./res/default.png");
 
 	Shader::Sptr phong = std::make_shared<Shader>();
 	phong->Load("./res/passthroughMorph.vs", "./res/blinn-phong.fs.glsl"); 
-
+	
 	Shader::Sptr phong2 = std::make_shared<Shader>();
 	phong2->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
 
 	Material::Sptr testMat = std::make_shared<Material>(phong);
 	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	testMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	testMat->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
 	testMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	testMat->Set("a_AmbientPower", 0.5f);
 	testMat->Set("a_LightSpecPower", 0.9f);
@@ -129,8 +135,6 @@ void Vatista::Game::init()
 	testMat2->Set("a_LightSpecPower", 0.9f);
 	testMat2->Set("a_LightShininess", 256.0f);
 	testMat2->Set("a_LightAttenuation", 0.04f);
-	//myNormalShader = std::make_shared<Shader>();
-	//myNormalShader->Load("./res/passthrough.vs", "./res/blinn-phong.fs.glsl");
 	
 	//Player 1
 	modelTransform = glm::mat4(1.0f);
@@ -139,20 +143,20 @@ void Vatista::Game::init()
 	modelTransform = glm::translate(modelTransform, pos1);
 	myScene.emplace_back();
 	myScene[0].setPos(pos1);
-	myScene[0].setMat(testMat);
+	myScene[0].setMat(testMat2);
 	myScene[0].setMesh(myMesh2);
 	myScene[0].setRotY(90.0f);
 	myScene[0].setCollider(glm::vec2(0.74f, 1.78f));
 	p1AtkPos = glm::vec3(0);
 	p1AtkCollider = glm::vec2(0.4f);
-
+	
 	//Player 2
 	modelTransform2 = glm::mat4(1.0f);
 	pos2 = glm::vec3(1, 0, 0);
 	modelTransform2 = glm::translate(modelTransform2, pos2);
 	myScene.emplace_back();
 	myScene[1].setPos(pos2);
-	myScene[1].setMat(testMat);
+	myScene[1].setMat(testMat2);
 	myScene[1].setMesh(myMesh2);
 	myScene[1].setRotY(-90.0f);
 	myScene[1].setCollider(glm::vec2(0.74f, 1.78f));
@@ -161,10 +165,10 @@ void Vatista::Game::init()
 
 	//pos3 = glm::vec3(1, 0, 0);
 	//myScene.emplace_back();
-	//myScene[2].Position = pos3;
-	//myScene[2].Material = testMat2;
-	//myScene[2].Mesh = myMesh3;
-	//myScene[2].EulerRotDeg.y = -90.0f;
+	//myScene[2].setPos(pos3);
+	//myScene[2].setMat(testMat2);
+	//myScene[2].setMesh(meshList[0]);
+	//myScene[2].setRotY(-90.0f);
 	//myScene[2].Collider = glm::vec2(0.74f, 1.78f);
 
 	glEnable(GL_CULL_FACE);
@@ -478,7 +482,8 @@ bool Vatista::Game::load(std::string filename)
 		int animBuffer; //check for static obj vs moving
 		int vertTotalBuffer; //check for verts total
 		int indiceTotalBuffer; //check for indices total
-		LoadMorphVertex* morphBuffer;
+		Vertex* vertBuffer = nullptr;
+		LoadMorphVertex* morphBuffer = nullptr;
 		uint32_t* indicesBuffer;
 
 		std::cout << "reading now" << std::endl;
@@ -487,11 +492,16 @@ bool Vatista::Game::load(std::string filename)
 		dataFile.read((char*)&vertTotalBuffer, sizeof(int));
 		dataFile.read((char*)&indiceTotalBuffer, sizeof(int));
 
-		morphBuffer = new LoadMorphVertex[vertTotalBuffer];
-		indicesBuffer = new uint32_t[indiceTotalBuffer];
 
-		//access using pointer (*(value+n))
-		dataFile.read((char*)morphBuffer, sizeof(LoadMorphVertex) * vertTotalBuffer);
+		//access buffers using pointer (*(value+n))
+		if (animBuffer == 1) {
+			morphBuffer = new LoadMorphVertex[vertTotalBuffer];
+			dataFile.read((char*)morphBuffer, sizeof(LoadMorphVertex) * vertTotalBuffer);
+		} else {
+			vertBuffer = new Vertex[vertTotalBuffer];
+			dataFile.read((char*)vertBuffer, sizeof(Vertex) * vertTotalBuffer);
+		}
+		indicesBuffer = new uint32_t[indiceTotalBuffer];
 		dataFile.read((char*)indicesBuffer, sizeof(uint32_t) * indiceTotalBuffer);
 
 		dataFile.close();
@@ -500,21 +510,33 @@ bool Vatista::Game::load(std::string filename)
 		std::vector<Vertex> vertData;
 		std::vector<MorphVertex> morphVertData;
 
-		for (int i = 0; i < vertTotalBuffer; i++) {
-			MorphVertex morph = { Vertex{(*(morphBuffer + i)).Position,
-			(*(morphBuffer + i)).UV, (*(morphBuffer + i)).Normal},
-				(*(morphBuffer + i)).PositionS, (*(morphBuffer + i)).NormalS };
-			morphVertData.push_back(morph);
-		}
-
-
 		for (int i = 0; i < indiceTotalBuffer; i++) {
 			indices.push_back(*(indicesBuffer + i));
 		}
 
-		myMesh2 = std::make_shared<Mesh>(indices, indices.size(), 
-			morphVertData, morphVertData.size());
-		meshList.push_back(myMesh2);
+		if (animBuffer) {
+			for (int i = 0; i < vertTotalBuffer; i++) {
+				MorphVertex morph = { Vertex{(*(morphBuffer + i)).Position,
+				(*(morphBuffer + i)).UV, (*(morphBuffer + i)).Normal},
+					(*(morphBuffer + i)).PositionS, (*(morphBuffer + i)).NormalS };
+				morphVertData.push_back(morph);
+
+				myMesh2 = std::make_shared<Mesh>(indices, indices.size(),
+					morphVertData, morphVertData.size());
+				meshList.push_back(myMesh2);
+			}
+		}else{
+			for (int i = 0; i < vertTotalBuffer; i++) {
+				Vertex nomorph = {(*(vertBuffer + i)).Position,
+				(*(vertBuffer + i)).UV, (*(vertBuffer + i)).Normal};
+				vertData.push_back(nomorph);
+
+				myMesh2 = std::make_shared<Mesh>(indices, indices.size(),
+					vertData, vertData.size());
+				meshList.push_back(myMesh2);
+			}
+		}
+
 	}
 
 	return true;

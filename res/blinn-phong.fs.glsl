@@ -16,6 +16,7 @@ uniform vec3  a_LightColor;
 uniform float a_LightShininess;
 uniform float a_LightAttenuation;
 uniform sampler2D texSample;
+uniform sampler2D normalMap;
 
 void main() {
     // Re-normalize our input, so that it is always length 1

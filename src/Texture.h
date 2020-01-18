@@ -17,7 +17,7 @@ namespace Vatista {
 		void loadFile(const std::string &filename, bool alpha = true);
 	private:
 		int texWidth, texHeight, texChannels;
-		GLuint texture;
+		GLuint textureID;
 		void setup();
 	};
 }
