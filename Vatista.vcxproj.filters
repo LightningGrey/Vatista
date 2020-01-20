@@ -15,6 +15,7 @@
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\Character.cpp" />
+    <ClCompile Include="src\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />
@@ -36,6 +37,7 @@
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\UI.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />
