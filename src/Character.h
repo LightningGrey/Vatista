@@ -1,68 +1,32 @@
-#pragma once
-
-//character class
-//backbone of every character
-
-#include <vector>
-#include "GameObject.h"
-#include "Utils.h"
-#include "Controls.h"
-
-//possible states of each character 
-enum class State {
-	IDLE,
-	WALKING,
-	DASHING,
-	RUNNING,
-	BLOCKING,
-	ATTACKING,
-	HITSTUN,
-	DEATH
+#include "GameObject.h" 
+#include <GLFW/glfw3.h> 
+ 
+#include <iostream> 
+ 
+class Character : public GameObject { 
+public: 
+	bool playerID; 
+	int stanima; 
+	int enemyLives; 
+	Character() : enemyLives(3) {}; 
+	Character(bool ID, Vatista::Mesh::Sptr mesh, Vatista::Material::Sptr mat); 
+	void update(float dt, GLFWwindow* gameWindow, Character p2); 
+private: 
+	 
+	glm::vec3 lerper; 
+	glm::vec3 lerpEnd; 
+	bool dashing = false; 
+	bool isAttacking = false; 
+	bool atk = true; 
+	bool isBlocking = false; 
+ 
+	glm::vec3 Atk1Pos; 
+	glm::vec3 Atk2Pos; 
+	glm::vec2 Atk1Collider; 
+	glm::vec2 Atk2Collider; 
+ 
+	float startTime; 
+	float journeyLength; 
+ 
+	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods); 
 };
-
-namespace Vatista {
-	class Character : public GameObject {
-	public:
-		SharedPtr(Character);
-		Character() {};
-		~Character() {};
-
-		virtual void movement(int keyPress, Controls button) = 0;
-		virtual void attack(int keyPress, Controls button) = 0;
-		virtual void collision() = 0;
-		virtual void update(float dt, Controls button) = 0;
-		virtual void draw(const Vatista::Camera::Sptr& camera) = 0;
-
-	protected:
-		//animation data
-		std::vector<Vatista::Mesh::Sptr> modelClips;
-
-		//global chararcter variables
-		float moveSpeed;
-		
-		//health data
-		//Vatista::Health::Sptr health;
-
-		//attack data
-		//Vatista::Attack::Sptr lightAttack;
-		//Vatista::Attack::Sptr heavyAttack;
-
-		//hitbox data
-		//Vatista::Hitbox::Sptr hitbox;
-
-		//associated theme
-		//std::string themeName;
-
-		//associated stage
-		//std::string stageName;
-
-		//morphing variables
-		float dt = 0.0167f;
-		float morph = 0.0f;
-		float currentTime = 0.0f;
-		float endTime = 10.0f;
-
-		//current state
-		State state = State::IDLE;
-	};
-}

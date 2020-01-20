@@ -14,12 +14,11 @@
 #include "ObjLoader.h"
 #include "Window.h"
 #include <src\GameObject.h>
+#include "Character.h"
 #include "Texture.h"
 #include "Utils.h"
 //#include "Controls.h"
 
-#include "Player.h"
-#include "Z3n.h"
 
 namespace Vatista {
 	class Game {
@@ -32,7 +31,6 @@ namespace Vatista {
 		void close();
 		void update(float dt);
 		void draw(float dt);
-		bool collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2);
 		bool load(std::string filename);
 	private:
 		Vatista::Window* gameWindow;
@@ -53,53 +51,18 @@ namespace Vatista {
 		Vatista::Texture::Sptr texture;
 		Vatista::Camera::Sptr myCamera;
 
-		std::vector<GameObject> myScene;
+		Character C1;
+		Character C2;
 
 		glm::mat4 modelTransform = glm::mat4(0.f);
 		glm::mat4 modelTransform2 = glm::mat4(0.f);
 		glm::vec3 pos1;
 		glm::vec3 pos2;
 		glm::vec3 pos3;
-
-		glm::vec3 lerper1;
-		glm::vec3 lerper2;
-		glm::vec3 lerpEnd1;
-		glm::vec3 lerpEnd2;
-		bool dashing1;
-		bool dashing2;
-		bool isBlocking1;
-		bool isBlocking2;
-		bool isAttacking1;
-		bool isAttacking2;
-
-		//static bool doubleTap;
-		float startTime1;
-		float startTime2;
-		float journeyLength1;
-		float journeyLength2;
-
-		//collisions
-		glm::vec3 p1AtkPos;
-		glm::vec3 p2AtkPos;
-		glm::vec2 p1AtkCollider;
-		glm::vec2 p2AtkCollider;
 		
 		Vatista::ObjLoader loader;
 
-		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
 		float time = 0.0f;
-
-
-		//player classes
-		Vatista::Player::Sptr Player1;
-		Vatista::Player::Sptr Player2;
-
-		//related character classes
-		Vatista::Character::Sptr Character1;
-		Vatista::Character::Sptr Character2;
-		
-		static Controls keyPress;
 
 		//file on what to load
 		std::fstream loadingFile;

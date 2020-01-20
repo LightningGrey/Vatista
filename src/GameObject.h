@@ -12,6 +12,7 @@ public:
 	~GameObject() {};
 
 	void Draw(const Vatista::Camera::Sptr& camera);
+	bool collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2);
 
 	//getters and setters
 	void setMesh(Vatista::Mesh::Sptr& newMesh) { model = newMesh; }
