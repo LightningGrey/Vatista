@@ -12,14 +12,15 @@ public:
 	Character(bool ID, Vatista::Mesh::Sptr mesh, Vatista::Material::Sptr mat); 
 	void update(float dt, GLFWwindow* gameWindow, Character p2); 
 private: 
-	 
+	
 	glm::vec3 lerper; 
 	glm::vec3 lerpEnd; 
+	bool walking = false;
 	bool dashing = false; 
 	bool isAttacking = false; 
-	bool atk = true; 
 	bool isBlocking = false; 
- 
+	bool atk = true; 
+
 	glm::vec3 Atk1Pos; 
 	glm::vec3 Atk2Pos; 
 	glm::vec2 Atk1Collider; 

@@ -53,6 +53,7 @@ namespace Vatista {
 
 		Character C1;
 		Character C2;
+		std::vector<std::vector<Vatista::Mesh::Sptr>> animations;
 
 		glm::mat4 modelTransform = glm::mat4(0.f);
 		glm::mat4 modelTransform2 = glm::mat4(0.f);

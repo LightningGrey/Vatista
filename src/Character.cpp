@@ -47,48 +47,49 @@ void Character::update(float dt, GLFWwindow* gameWindow, Character p2)
 {
 	glm::vec3 movement = glm::vec3(0.0f);
 	float speed = 1.0f;
-
 	glfwSetKeyCallback(gameWindow, key_callback);
 	glfwSetInputMode(gameWindow, GLFW_STICKY_KEYS, GLFW_TRUE);
 	if (playerID) {
 		if (glfwGetTime() - kb.tapTimer1 > 0.2f)
 			kb.doubleTap1 = false;
 
-		if (kb.a && glfwGetTime() - kb.atkTimer1 > 0.8f) {
-			if (!kb.dash1) {
-				if (EulerRotDeg.y == 90.0f)
-					movement.x -= speed * 0.001f;
-				else if (EulerRotDeg.y == -90.0f) {
-					movement.x -= speed * 0.002f;
-					isBlocking = false;
-				}
+		if (kb.a && !kb.dash1 && glfwGetTime() - kb.atkTimer1 > 0.8f) {
+			walking = true;
+			if (EulerRotDeg.y == 90.0f) {
+				movement.x -= speed * 0.001f;
+				if (!dashing)
+					isBlocking = true;
 			}
-			if (!dashing && EulerRotDeg.y == 90.0f)
-				isBlocking = true;
+			else if (EulerRotDeg.y == -90.0f) {
+				movement.x -= speed * 0.002f;
+				isBlocking = false;
+			}
 		}
-		if (kb.d && glfwGetTime() - kb.atkTimer1 > 0.8f) {
-			if (!kb.dash1) {
-				if (EulerRotDeg.y == 90.0f) {
-					movement.x += speed * 0.002f;
-					isBlocking = false;
-				}
-				else if (EulerRotDeg.y == -90.0f)
-					movement.x += speed * 0.001f;
+		if (kb.d && !kb.dash1 && glfwGetTime() - kb.atkTimer1 > 0.8f) {
+			walking = true;
+			if (EulerRotDeg.y == 90.0f) {
+				movement.x += speed * 0.002f;
+				isBlocking = false;
 			}
-			if (!dashing && EulerRotDeg.y == -90.0f)
-				isBlocking = true;
+			else if (EulerRotDeg.y == -90.0f) {
+				movement.x += speed * 0.001f;
+				if (!dashing)
+					isBlocking = true;
+			}
 		}
 
 		if (glfwGetTime() - kb.atkTimer1 > 0.8f)
 			isAttacking = false;
 		if (kb.f && !dashing && glfwGetTime() - kb.atkTimer1 > 0.8f && !isAttacking) {
 			isAttacking = true;
+			isBlocking = false;
 			atk = true;
 			kb.atkTimer1 = glfwGetTime();
 			movement.x = 0;
 		}
 		else if (kb.g && !dashing && glfwGetTime() - kb.atkTimer1 > 0.8f && !isAttacking) {
 			isAttacking = true;
+			isBlocking = false;
 			atk = false;
 			kb.atkTimer1 = glfwGetTime();
 			movement.x = 0;
@@ -121,14 +122,17 @@ void Character::update(float dt, GLFWwindow* gameWindow, Character p2)
 			startTime = glfwGetTime();
 			journeyLength = glm::distance(Position, lerpEnd);
 			kb.dash1 = false;
-			if (movement.x == 0)
+			if (movement.x == 0) {
 				isBlocking = false;
+				walking = false;
+			}
 			if (collisionCheck(Position + movement, Collider, p2.Position, p2.Collider))
 				movement.x = 0;
 			Position += movement;
 		}
 		else {
 			isBlocking = false;
+			walking = false;
 			if (std::floor(lerper.x * 1000) / 1000 == std::floor(lerpEnd.x * 1000) / 1000) {
 				dashing = false;
 				//std::cout << "done" << std::endl;
@@ -186,37 +190,43 @@ void Character::update(float dt, GLFWwindow* gameWindow, Character p2)
 		if (glfwGetTime() - kb.tapTimer2 > 0.2f)
 			kb.doubleTap2 = false;
 
-		if (kb.left && glfwGetTime() - kb.atkTimer2 > 0.8f) {
-			if (!kb.dash2) {
-				if (EulerRotDeg.y == 90.0f)
-					movement.x -= speed * 0.001f;
-				else if (EulerRotDeg.y == -90.0f)
-					movement.x -= speed * 0.002f;
+		if (kb.left && !kb.dash2 && glfwGetTime() - kb.atkTimer2 > 0.8f) {
+			walking = true;
+			if (EulerRotDeg.y == 90.0f) {
+				movement.x -= speed * 0.001f;
+				if (!dashing)
+					isBlocking = true;
 			}
-			if (!dashing && EulerRotDeg.y == 90.0f)
-				isBlocking = true;
+			else if (EulerRotDeg.y == -90.0f) {
+				movement.x -= speed * 0.002f;
+				isBlocking = false;
+			}
 		}
 		if (kb.right && glfwGetTime() - kb.atkTimer2 > 0.8f) {
-			if (!kb.dash2) {
-				if (EulerRotDeg.y == 90.0f)
-					movement.x += speed * 0.002f;
-				else if (EulerRotDeg.y == -90.0f)
-					movement.x += speed * 0.001f;
+			walking = true;
+			if (EulerRotDeg.y == 90.0f) {
+				movement.x += speed * 0.002f;
+				isBlocking = false;
 			}
-			if (!dashing && EulerRotDeg.y == -90.0f)
-				isBlocking = true;
+			else if (EulerRotDeg.y == -90.0f) {
+				movement.x += speed * 0.001f;
+				if (!dashing)
+					isBlocking = true;
+			}
 		}
 
 		if (glfwGetTime() - kb.atkTimer2 > 0.8f)
 			isAttacking = false;
 		if (kb.rctrl && !dashing && glfwGetTime() - kb.atkTimer2 > 0.8f && !isAttacking) {
 			isAttacking = true;
+			isBlocking = false;
 			atk = true;
 			kb.atkTimer2 = glfwGetTime();
 			movement.x = 0;
 		}
 		else if (kb.ralt && !dashing && glfwGetTime() - kb.atkTimer2 > 0.8f && !isAttacking) {
 			isAttacking = true;
+			isBlocking = false;
 			atk = false;
 			kb.atkTimer2 = glfwGetTime();
 			movement.x = 0;
@@ -249,14 +259,17 @@ void Character::update(float dt, GLFWwindow* gameWindow, Character p2)
 			startTime = glfwGetTime();
 			journeyLength = glm::distance(Position, lerpEnd);
 			kb.dash2 = false;
-			if (movement.x == 0)
+			if (movement.x == 0) {
 				isBlocking = false;
+				walking = false;
+			}
 			if (collisionCheck(Position + movement, Collider, p2.Position, p2.Collider))
 				movement.x = 0;
 			Position += movement;
 		}
 		else {
 			isBlocking = false;
+			walking = false;
 			if (std::floor(lerper.x * 1000) / 1000 == std::floor(lerpEnd.x * 1000) / 1000) {
 				dashing = false;
 				//std::cout << "done" << std::endl;
@@ -311,8 +324,6 @@ void Character::update(float dt, GLFWwindow* gameWindow, Character p2)
 	}
 
 }
-
-Character p = Character();
 
 void Character::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
