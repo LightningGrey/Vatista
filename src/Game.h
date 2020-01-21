@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
+#include "UI.h"
 
 #include "GLM/glm.hpp"
 #include "GLM/gtc/matrix_transform.hpp";
@@ -30,7 +31,7 @@ namespace Vatista {
 		void init();
 		void close();
 		void update(float dt);
-		void draw(float dt);
+		void draw(float dt);//its this one finally found it 
 		
 	private:
 		Vatista::Window* gameWindow;
@@ -50,9 +51,12 @@ namespace Vatista {
 
 		Vatista::Texture::Sptr texture;
 		Vatista::Camera::Sptr myCamera;
+		Vatista::Camera::Sptr myCameraUI;//camera for the general UI elements -gary
+
 
 		Character C1;
 		Character C2;
+		Stamina staminaBar;// stamina bar for ui -gary
 
 		glm::mat4 modelTransform = glm::mat4(0.f);
 		glm::mat4 modelTransform2 = glm::mat4(0.f);

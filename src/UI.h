@@ -8,9 +8,9 @@
 //#include <imgui/imgui.h>
 
 
-	class StaminaBar {
+	class Stamina {
 	public:
-		StaminaBar(int _texture, glm::vec3 _position, glm::vec3 _scale);
+		Stamina(int _texture, glm::vec3 _position, glm::vec3 _scale);
 
 		glm::vec3 position; // =  glm::vec2(0.0, 1.0);
 		glm::vec3 scale;

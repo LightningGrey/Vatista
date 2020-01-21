@@ -1,6 +1,6 @@
 #include "UI.h"
 
-StaminaBar::StaminaBar(int _texture, glm::vec3 _position, glm::vec3 _scale)
+Stamina::Stamina(int _texture, glm::vec3 _position, glm::vec3 _scale)
 {
 	texture = _texture;
 	position = _position;
@@ -8,11 +8,11 @@ StaminaBar::StaminaBar(int _texture, glm::vec3 _position, glm::vec3 _scale)
 }
 
 
-void StaminaBar::setTexture(int value) {
+void Stamina::setTexture(int value) {
 
 	texture = value; }
 
-int StaminaBar::getTexture() const {
+int Stamina::getTexture() const {
 	return texture; }
 
 
@@ -41,3 +41,5 @@ int StaminaBar::getTexture() const {
 //	vec4 foreCol = vec4(testing(vec3(progress * 0.33333 - 0.1, 1.0, 1.0)), 1.0);
 //	fragColor = foreCol * blend + backgroundColor * (0.9 - blend);//background
 //}
+
+
