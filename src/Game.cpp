@@ -104,13 +104,12 @@ void Vatista::Game::init()
 	texture = std::make_shared<Texture>();
 	//texture->loadFile("./res/yuntexturepaint.png");
 	texture->loadFile("./res/base.png");
+	texture->bind(1);
 
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, textures[0]);
-	
 	//normal map test
 	normalMap = std::make_shared<Texture>();
 	normalMap->loadFile("./res/default.png");
+	normalMap->bind(2);
 
 	Shader::Sptr phong = std::make_shared<Shader>();
 	phong->Load("./res/passthroughMorph.vs", "./res/blinn-phong.fs.glsl"); 
