@@ -16,12 +16,13 @@ uniform vec3  a_LightColor;
 uniform float a_LightShininess;
 uniform float a_LightAttenuation;
 uniform sampler2D texSample;
+uniform sampler2D texSample2;
 
 void main() {
     // Re-normalize our input, so that it is always length 1
     vec3 norm = normalize(inNormal);
 
-	vec4 surfaceColour = texture(texSample,inUV);
+	vec4 surfaceColour = texture(texSample,inUV) * texture(texSample2, inUV);
 
     // Determine the direction from the position to the light
     vec3 toLight = a_LightPos - inWorldPos;

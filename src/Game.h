@@ -39,7 +39,6 @@ namespace Vatista {
 
 		//A shared pointer to our mesh
 		Vatista::Mesh::Sptr myMesh;
-		Vatista::Mesh::Sptr myMesh2;
 		Vatista::Mesh::Sptr myMesh3;
 		std::vector<Vatista::Mesh::Sptr> meshList;
 
@@ -49,6 +48,7 @@ namespace Vatista {
 		std::vector<Vatista::Shader::Sptr> shaderList;
 
 		Vatista::Texture::Sptr texture;
+		Vatista::Texture::Sptr texture2;
 		Vatista::Camera::Sptr myCamera;
 
 		Character C1;

@@ -51,12 +51,12 @@ void Vatista::Game::run()
 void Vatista::Game::init()
 {
 	//window and camera
-	gameWindow = new Vatista::Window(1000, 1000, "Alpha Strike");
+	gameWindow = new Vatista::Window(1920, 1080, "Alpha Strike");
 
 	myCamera = std::make_shared<Vatista::Camera>();
-	myCamera->SetPosition(glm::vec3(0, 0, 1));
-	myCamera->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
-	myCamera->Projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.f, 1000.0f);
+	myCamera->SetPosition(glm::vec3(0, 1, 10));
+	myCamera->LookAt(glm::vec3(0), glm::vec3(0, 30, 0));
+	myCamera->Projection = glm::perspective(45.0f, 16.f/9.f, 1.0f, 150.0f);
 
 	load("./res/init.txt");
 
@@ -102,8 +102,6 @@ void Vatista::Game::init()
 	////}
 
 	//player texture
-	texture = std::make_shared<Texture>();
-	texture->loadFile("./res/yuntexturepaint.png");
 
 	Shader::Sptr phong = std::make_shared<Shader>();
 	phong->Load("./res/passthroughMorph.vs", "./res/blinn-phong.fs.glsl"); 
@@ -131,15 +129,31 @@ void Vatista::Game::init()
 	//myNormalShader = std::make_shared<Shader>();
 	//myNormalShader->Load("./res/passthrough.vs", "./res/blinn-phong.fs.glsl");
 	
+
+	texture = std::make_shared<Texture>();
+	texture->loadFile("./res/yuntexturepaint.png");
+	texture->bind(1);
+
 	//Player 1
-	C1 = Character(true, myMesh2, testMat2);
+	C1 = Character(true, meshList[0], testMat2);
+	C1.setTexture(texture);
 
 	//Player 2
-	C2 = Character(false, myMesh2, testMat2);
+	C2 = Character(false, meshList[0], testMat2);
+	C2.setTexture(texture);
+
 
 	//pos3 = glm::vec3(1, 0, 0);
 	//myScene.emplace_back();
-	TestMap.setPos(glm::vec3(0));
+	texture2 = std::make_shared<Texture>();
+	texture2->loadFile("./res/Training_Map_New_Texture.png");
+	texture2->bind(2);
+	TestMap.setPos(glm::vec3(0,-1.f,1));
+	TestMap.setMesh(meshList[1]);
+	TestMap.setMat(testMat2);
+	TestMap.setRotY(-90.f);
+	TestMap.setTexture(texture2);
+	TestMap.setScale(glm::vec3(0.3f));
 	//myScene[2].Position = pos3;
 	//myScene[2].Material = testMat2;
 	//myScene[2].Mesh = myMesh3;
@@ -166,7 +180,7 @@ void Vatista::Game::draw(float dt)
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	//draw 
-	//TestMap.Draw(myCamera);
+	TestMap.Draw(myCamera);
 	C1.Draw(myCamera);
 	C2.Draw(myCamera);
 }
@@ -237,9 +251,9 @@ bool Vatista::Game::load(std::string filename)
 			indices.push_back(*(indicesBuffer + i));
 		}
 
-		myMesh2 = std::make_shared<Mesh>(indices, indices.size(), 
+		myMesh = std::make_shared<Mesh>(indices, indices.size(), 
 			morphVertData, morphVertData.size());
-		meshList.push_back(myMesh2);
+		meshList.push_back(myMesh);
 	}
 
 	return true;
