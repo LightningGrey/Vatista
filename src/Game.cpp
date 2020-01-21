@@ -139,6 +139,7 @@ void Vatista::Game::init()
 
 	//pos3 = glm::vec3(1, 0, 0);
 	//myScene.emplace_back();
+	TestMap.setPos(glm::vec3(0));
 	//myScene[2].Position = pos3;
 	//myScene[2].Material = testMat2;
 	//myScene[2].Mesh = myMesh3;
@@ -165,6 +166,7 @@ void Vatista::Game::draw(float dt)
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	//draw 
+	//TestMap.Draw(myCamera);
 	C1.Draw(myCamera);
 	C2.Draw(myCamera);
 }
@@ -184,6 +186,8 @@ bool Vatista::Game::load(std::string filename)
 	}
 
 	while (std::getline(loadingFile, line)) {
+		if (!line.empty() && line[line.size() - 1] == '\r')
+			line.pop_back();
 		dataList.push_back(line);
 	}
 	loadingFile.close();

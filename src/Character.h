@@ -21,6 +21,8 @@ private:
 	bool isBlocking = false; 
 	bool atk = true; 
 
+	std::vector<std::vector<Vatista::Mesh::Sptr>> animations;
+
 	glm::vec3 Atk1Pos; 
 	glm::vec3 Atk2Pos; 
 	glm::vec2 Atk1Collider; 
