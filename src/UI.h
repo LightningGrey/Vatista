@@ -18,7 +18,7 @@
 		void setTexture(int value);
 		int getTexture() const;
 
-		
+	
 
 	private:
 				int texture;
