@@ -5,7 +5,6 @@ namespace Vatista {
 
 		//counts for each element
 		myIndexCount = numIndices;		
-		//myVertexCount = numVerts;//do we need this to draw 2d shapes?
 
 
 		// Create and bind our vertex array

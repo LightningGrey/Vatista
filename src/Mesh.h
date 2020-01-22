@@ -7,15 +7,12 @@
 #include <cstddef>
 #include <vector>
 #include "Utils.h"
-#include "Mesh2.h"
 
 namespace Vatista {
 	struct Vertex {
 		glm::vec3 Position;
 		glm::vec2 UV;
 		glm::vec3 Normal;
-		glm::vec4 Color;//used for UI	 probably
-
 	};
 
 	struct MorphVertex : public Vertex {
@@ -48,15 +45,11 @@ namespace Vatista {
 			std::vector<Vertex> vertData, size_t numData);
 		Mesh(std::vector<uint32_t> indices, size_t numIndices,
 			std::vector<MorphVertex> vertData, size_t numData);
-		~Mesh(
-		);
+		~Mesh();
 
-
-		//// Creates a new mesh from the given vertices and indices (for 2d shapes like UI)
-		//Mesh(Vertex* vertices, size_t numVerts, uint32_t* indices, size_t numIndices);
-		//~Mesh();
 		// Draws this mesh
 		void Draw();
+
 	private:
 		// Our GL handle for the Vertex Array Object
 		GLuint myVao;

@@ -422,10 +422,13 @@ void Vatista::Game::draw(float dt)
 
 	C1.Draw(myCamera);
 	C2.Draw(myCamera);
-	C2.Draw(myCameraUI);
+	staminaBar.Draw(myCameraUI);
 
 
 }
+
+
+
 
 //bool Vatista::Game::doubleTap = false;
 //void Vatista::Game::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)

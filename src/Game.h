@@ -8,7 +8,6 @@
 
 #include "GLM/glm.hpp"
 #include "GLM/gtc/matrix_transform.hpp";
-#include "Mesh2.h"
 
 #include "Mesh.h"
 #include "Shader.h"
@@ -33,8 +32,7 @@ namespace Vatista {
 		void close();
 		void update(float dt);
 		void draw(float dt);//its this one finally found it 
-		void LoadContent();
-
+		
 	private:
 		Vatista::Window* gameWindow;
 		glm::vec4 clearColour;
@@ -45,8 +43,6 @@ namespace Vatista {
 		Vatista::Mesh::Sptr myMesh2;
 		Vatista::Mesh::Sptr myMesh3;
 		std::vector<Vatista::Mesh::Sptr> meshList;
-
-		Mesh2::Sptr my2dmesh;//this was painfull to do just to make 2d shapes
 
 		// A shared pointer to our shader
 		Vatista::Shader::Sptr myShader;
@@ -60,7 +56,7 @@ namespace Vatista {
 
 		Character C1;
 		Character C2;
-		//Stamina staminaBar;// stamina bar for ui -gary
+		Stamina staminaBar;// stamina bar for ui -gary
 
 		glm::mat4 modelTransform = glm::mat4(0.f);
 		glm::mat4 modelTransform2 = glm::mat4(0.f);

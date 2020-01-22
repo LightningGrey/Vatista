@@ -23,7 +23,6 @@
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Mesh.h" />
-    <ClInclude Include="src\Mesh2.h" />
     <ClInclude Include="src\MeshRenderer.h" />
     <ClInclude Include="src\ObjLoader.h" />
     <ClInclude Include="src\Player.h" />
@@ -42,7 +41,6 @@
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
-    <ClCompile Include="src\Mesh2.cpp" />
     <ClCompile Include="src\ObjLoader.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Shader.cpp" />
