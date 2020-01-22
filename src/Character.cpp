@@ -31,14 +31,14 @@ Character::Character(bool ID, Vatista::Mesh::Sptr mesh, Vatista::Material::Sptr 
 	if (playerID) {
 		Position = glm::vec3(-1.f, -2.f, 0);
 		EulerRotDeg.y = 90.f;
-		Atk1Pos = glm::vec3(Position.x + Collider.x + Atk1Collider.x, 0, 0);
-		Atk2Pos = glm::vec3(Position.x + Collider.x + Atk2Collider.x, 0, 0);
+		Atk1Pos = glm::vec3(Position.x + Collider.x + Atk1Collider.x, -2.f, 0);
+		Atk2Pos = glm::vec3(Position.x + Collider.x + Atk2Collider.x, -2.f, 0);
 	}
 	else {
 		Position = glm::vec3(1.f, -2.f, 0);
 		EulerRotDeg.y = -90.f;
-		Atk1Pos = glm::vec3(Position.x - Collider.x - Atk1Collider.x, 0, 0);
-		Atk2Pos = glm::vec3(Position.x + Collider.x + Atk2Collider.x, 0, 0);
+		Atk1Pos = glm::vec3(Position.x - Collider.x - Atk1Collider.x, -2.f, 0);
+		Atk2Pos = glm::vec3(Position.x + Collider.x + Atk2Collider.x, -2.f, 0);
 	}
 
 }
