@@ -22,7 +22,7 @@ void main() {
     // Re-normalize our input, so that it is always length 1
     vec3 norm = normalize(inNormal);
 
-	vec4 surfaceColour = texture(texSample, inUV) * texture(normalMap, inUV);
+	vec4 surfaceColour = texture(texSample, inUV); //* texture(normalMap, inUV);
 
     // Determine the direction from the position to the light
     vec3 toLight = a_LightPos - inWorldPos;

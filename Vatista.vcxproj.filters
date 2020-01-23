@@ -36,6 +36,8 @@
     <ClInclude Include="src\Character.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Z3n.h" />
+    <ClInclude Include="src\Controls.h" />
+    <ClInclude Include="src\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />

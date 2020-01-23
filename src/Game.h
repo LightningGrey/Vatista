@@ -16,6 +16,7 @@
 #include <src\GameObject.h>
 #include "Texture.h"
 #include "Utils.h"
+#include "Math.h"
 //#include "Controls.h"
 
 #include "Player.h"

@@ -22,6 +22,7 @@
     <ClInclude Include="src\Controls.h" />
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Material.h" />
+    <ClInclude Include="src\Math.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\MeshRenderer.h" />
     <ClInclude Include="src\ObjLoader.h" />
