@@ -12,10 +12,12 @@ public:
 	~GameObject() {};
 
 	void Draw(const Vatista::Camera::Sptr& camera);
+	bool collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2);
 
 	//getters and setters
 	void setMesh(Vatista::Mesh::Sptr& newMesh) { model = newMesh; }
 	void setMat(Vatista::Material::Sptr& newMat) { material = newMat; }
+	void setTexture(Vatista::Texture::Sptr& newTexture) { texture = newTexture; }
 	void setPos(glm::vec3 newPos) { Position = newPos; }
 	void setScale(glm::vec3 newScale) { Scale = newScale; }
 
@@ -30,6 +32,7 @@ public:
 	//may not need these all later, check
 	Vatista::Mesh::Sptr getMesh() { return model; }
 	Vatista::Material::Sptr getMat() { return material; }
+	Vatista::Texture::Sptr getTexture() { return texture; }
 	glm::vec3 getPos() { return Position; }
 	glm::vec3 getScale() { return Scale; }
 	glm::vec3 getRot() { return EulerRotDeg; }
@@ -46,7 +49,6 @@ protected:
 	const char* shaderName2;
 
 	//model data
-	Vatista::ObjLoader loader;
 	Vatista::Mesh::Sptr model;
 	Vatista::Texture::Sptr texture;
 	Vatista::Shader::Sptr shader;

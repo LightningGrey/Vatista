@@ -10,9 +10,9 @@ void GameObject::Draw(const Vatista::Camera::Sptr& camera)
 	glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(world)));
 
 	material->GetShader()->Bind();
-	material->Apply();
+	material->Apply(); 
 	material->GetShader()->SetUniform("texSample", 1);
-	material->GetShader()->SetUniform("normalMap", 2);
+	material->GetShader()->SetUniform("texSample2", 2);
 	material->GetShader()->SetUniform("a_CameraPos", camera->GetPosition());
 
 	// Update the MVP using the item's transform
@@ -44,4 +44,15 @@ void GameObject::Draw(const Vatista::Camera::Sptr& camera)
 	// Draw the item
 	
 	model->Draw();
+}
+
+bool GameObject::collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2)
+{
+	//std::cout << "           obj1.z = " << obj1.z << std::endl;
+	//std::cout << "                         obj2.z = " << obj2.z << std::endl;
+	if (x.x < y.x + collider2.x && x.x + collider1.x > y.x&& x.y < y.y + collider2.y && x.y + collider1.y > y.y)
+		return true;
+	else
+		return false;
+
 }

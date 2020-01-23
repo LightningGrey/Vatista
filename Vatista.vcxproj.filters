@@ -13,8 +13,7 @@
     <ClCompile Include="src\testmain.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\Player.cpp" />
-    <ClCompile Include="src\Z3n.cpp" />
+    <ClCompile Include="src\Character.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />
