@@ -60,11 +60,6 @@ protected:
 	glm::vec3 EulerRotDeg;
 	glm::vec2 Collider;
 
-	bool collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2);
-	GameObject() : Scale(1.0f), Mesh(nullptr), Material(nullptr), Position(0.0f), EulerRotDeg(0.0f), Collider(0.0f) {}
-
-	void Draw(const Vatista::Camera::Sptr& camera);
-
 	float dt = 0.0167f;
 	float morph;
 

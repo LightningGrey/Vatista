@@ -26,16 +26,16 @@ void GameObject::Draw(const Vatista::Camera::Sptr& camera)
 	material->GetShader()->SetUniform("a_CameraPos", camera->GetPosition());
 
 	// Update the MVP using the item's transform
-	Material->GetShader()->SetUniform(
+	material->GetShader()->SetUniform(
 		"a_ModelViewProjection",
 		camera->GetViewProjection() *
 		world);
 
 	// Update the model matrix to the item's world transform
-	Material->GetShader()->SetUniform("a_Model", world);
+	material->GetShader()->SetUniform("a_Model", world);
 
 	// Update the model matrix to the item's world transform
-	Material->GetShader()->SetUniform("a_NormalMatrix", normalMatrix);
+	material->GetShader()->SetUniform("a_NormalMatrix", normalMatrix);
 
 
 	currentTime += dt;
@@ -49,20 +49,9 @@ void GameObject::Draw(const Vatista::Camera::Sptr& camera)
 
 	morph = currentTime / endTime;
 
-	Material->GetShader()->SetUniform("morphT", morph);
+	material->GetShader()->SetUniform("morphT", morph);
 
 	// Draw the item
 
-	Mesh->Draw();
-}
-
-bool GameObject::collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2)
-{
-	//std::cout << "           obj1.z = " << obj1.z << std::endl;
-	//std::cout << "                         obj2.z = " << obj2.z << std::endl;
-	if (x.x < y.x + collider2.x && x.x + collider1.x > y.x&& x.y < y.y + collider2.y && x.y + collider1.y > y.y)
-		return true;
-	else
-		return false;
-
+	model->Draw();
 }
