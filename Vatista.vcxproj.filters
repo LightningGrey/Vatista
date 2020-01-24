@@ -13,7 +13,6 @@
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\testmain.cpp" />
     <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\Character.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +35,10 @@
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\Character.h" />
+    <ClInclude Include="src\Controls.h" />
+    <ClInclude Include="src\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />

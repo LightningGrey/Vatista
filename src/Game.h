@@ -17,6 +17,7 @@
 #include "Character.h"
 #include "Texture.h"
 #include "Utils.h"
+#include "Math.h"
 //#include "Controls.h"
 
 
@@ -31,7 +32,7 @@ namespace Vatista {
 		void close();
 		void update(float dt);
 		void draw(float dt);
-		
+		bool load(std::string filename);
 	private:
 		Vatista::Window* gameWindow;
 		glm::vec4 clearColour;
@@ -39,7 +40,6 @@ namespace Vatista {
 
 		//A shared pointer to our mesh
 		Vatista::Mesh::Sptr myMesh;
-		Vatista::Mesh::Sptr myMesh2;
 		Vatista::Mesh::Sptr myMesh3;
 		std::vector<Vatista::Mesh::Sptr> meshList;
 
@@ -49,46 +49,27 @@ namespace Vatista {
 		std::vector<Vatista::Shader::Sptr> shaderList;
 
 		Vatista::Texture::Sptr texture;
+		Vatista::Texture::Sptr texture2;
 		Vatista::Camera::Sptr myCamera;
 
 		Character C1;
 		Character C2;
+		GameObject TestMap;
 
-		glm::mat4 modelTransform = glm::mat4(0.f);
 		glm::mat4 modelTransform2 = glm::mat4(0.f);
-		//glm::vec3 pos1;
-		//glm::vec3 pos2;
-		//glm::vec3 pos3;
-		//
-		//glm::vec3 lerper1;
-		//glm::vec3 lerper2;
-		//glm::vec3 lerpEnd1;
-		//glm::vec3 lerpEnd2;
-		//bool dashing1;
-		//bool dashing2;
-		//bool isBlocking1;
-		//bool isBlocking2;
-		//bool isAttacking1;
-		//bool isAttacking2;
-		//
-		////static bool doubleTap;
-		//float startTime1;
-		//float startTime2;
-		//float journeyLength1;
-		//float journeyLength2;
-		//
-		////collisions
-		//glm::vec3 p1AtkPos;
-		//glm::vec3 p2AtkPos;
-		//glm::vec2 p1AtkCollider;
-		//glm::vec2 p2AtkCollider;
-		//
-
+		glm::vec3 pos1;
+		glm::vec3 pos2;
+		glm::vec3 pos3;
+		
 		Vatista::ObjLoader loader;
 		//
 		//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 		float time = 0.0f;
 
+		//file on what to load
+		std::fstream loadingFile;
+		//file with actual data
+		std::fstream dataFile;
 	};
 }
