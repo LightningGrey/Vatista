@@ -11,8 +11,6 @@ void GameObject::Draw(const Vatista::Camera::Sptr& camera)
 
 	material->GetShader()->Bind();
 	material->Apply(); 
-	material->GetShader()->SetUniform("texSample", 1);
-	material->GetShader()->SetUniform("texSample2", 2);
 	material->GetShader()->SetUniform("a_CameraPos", camera->GetPosition());
 
 	// Update the MVP using the item's transform

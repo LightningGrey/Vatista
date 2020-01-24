@@ -3,9 +3,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbs/stb_image.h"
 
-
 Vatista::Texture::Texture()
 {
+	textureID = 0;
 	setup();
 }
 
@@ -37,10 +37,10 @@ void Vatista::Texture::loadFile(const std::string& filename, bool alpha)
 		this->texHeight = height;
 		this->texChannels = channels;
 
-		glTextureSubImage2D(textureID, 0, 0, 0, texWidth, texHeight, GL_RGBA, 
-			GL_UNSIGNED_BYTE, data);
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+		//glTextureSubImage2D(textureID, 0, 0, 0, texWidth, texHeight, GL_RGBA, 
 		//	GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+			GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
@@ -51,10 +51,10 @@ void Vatista::Texture::loadFile(const std::string& filename, bool alpha)
 
 void Vatista::Texture::setup()
 {
-	//glGenTextures(1, &this->textureID);
-	//glBindTexture(GL_TEXTURE_2D, this->textureID);
-	glCreateTextures(GL_TEXTURE_2D, 1, &textureID);
-	glTextureStorage2D(textureID, 1, GL_RGBA, texWidth, texHeight);
+	glGenTextures(1, &this->textureID);
+	glBindTexture(GL_TEXTURE_2D, this->textureID);
+	//glCreateTextures(GL_TEXTURE_2D, 1, &textureID);
+	//glTextureStorage2D(textureID, 1, GL_RGBA, texWidth, texHeight);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
