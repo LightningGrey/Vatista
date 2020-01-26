@@ -118,6 +118,9 @@ void Vatista::Game::init()
 	texture2 = std::make_shared<Texture>();
 	texture2->loadFile("./res/Training_Map_New_Texture.png");
 
+	texture3 = std::make_shared<Texture>();
+	texture3->loadFile("./res/default.png");
+
 	Shader::Sptr phong = std::make_shared<Shader>();
 	phong->Load("./res/passthroughMorph.vs", "./res/blinn-phong.fs.glsl");
 
@@ -159,27 +162,29 @@ void Vatista::Game::init()
 	//p1AtkPos = glm::vec3(0); 
 	//p1AtkCollider = glm::vec2(0.4f); 
 
-	C1 = Character(true, meshList[0], testMat);
-	//C1.setTexture(texture); 
-
-	//Player 2 
-	C2 = Character(false, meshList[0], testMat);
-	//C2.setTexture(texture); 
-
-
 	//pos3 = glm::vec3(1, 0, 0); 
 	//myScene.emplace_back(); 
-	TestMap.setPos(glm::vec3(0, -1.f, 1));
-	TestMap.setMesh(meshList[1]);
-	TestMap.setMat(testMat2);
-	TestMap.setRotY(-90.f);
-	TestMap.setTexture(texture2);
-	TestMap.setScale(glm::vec3(0.3f));
+	TestMap = std::make_shared<GameObject>();
+	TestMap->setPos(glm::vec3(0, -1.f, 1));
+	TestMap->setMesh(meshList[1]);
+	TestMap->setMat(testMat2);
+	TestMap->setRotY(-90.f);
+	TestMap->setTexture(texture2);
+	TestMap->setScale(glm::vec3(0.3f));
+	ObjectList.push_back(TestMap);
 	//myScene[2].Position = pos3; 
 	//myScene[2].Material = testMat2; 
 	//myScene[2].Mesh = myMesh3; 
 	//myScene[2].EulerRotDeg.y = -90.0f; 
 	//myScene[2].Collider = glm::vec2(0.74f, 1.78f); 
+
+	C1 = std::make_shared<Character>(true, meshList[0], testMat);
+	ObjectList.push_back(C1);
+
+	//Player 2 
+	C2 = std::make_shared<Character>(false, meshList[0], testMat);
+	ObjectList.push_back(C2);
+
 
 	glEnable(GL_CULL_FACE);
 }
@@ -191,8 +196,8 @@ void Vatista::Game::close()
 
 void Vatista::Game::update(float dt)
 {
-	C1.update(dt, gameWindow->getWindow(), C2);
-	C2.update(dt, gameWindow->getWindow(), C1);
+	C1->update(dt, gameWindow->getWindow(), C2);
+	C2->update(dt, gameWindow->getWindow(), C1);
 }
 
 void Vatista::Game::draw(float dt)
@@ -201,9 +206,10 @@ void Vatista::Game::draw(float dt)
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	//draw  
-	TestMap.Draw(myCamera);
-	C1.Draw(myCamera);
-	C2.Draw(myCamera);
+	for (auto object : ObjectList) {
+		object->Draw(myCamera);
+	}
+
 }
 
 bool Vatista::Game::load(std::string filename)

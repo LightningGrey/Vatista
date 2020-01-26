@@ -3,17 +3,21 @@
 #include <unordered_map>
 #include "Shader.h"
 #include "Texture.h"
+#include "Utils.h"
 /*
  Represents settings for a shader
 */
 namespace Vatista {
 	class Material {
 	public:
-		typedef std::shared_ptr<Material> Sptr;
-		Material(const Vatista::Shader::Sptr& shader) { myShader = shader; }
+		SharedPtr(Material);
+
+		Material(const Shader::Sptr& shader) { myShader = shader; }
 		virtual ~Material() = default;
-		const Vatista::Shader::Sptr& GetShader() const { return myShader; }
+
+		const Shader::Sptr& GetShader() const { return myShader; }
 		virtual void Apply();
+
 		void Set(const std::string& name, const glm::mat4& value) { myMat4s[name] = value; }
 		void Set(const std::string& name, const glm::vec4& value) { myVec4s[name] = value; }
 		void Set(const std::string& name, const glm::vec3& value) { myVec3s[name] = value; }

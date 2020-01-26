@@ -34,34 +34,36 @@ namespace Vatista {
 		void draw(float dt);
 		bool load(std::string filename);
 	private:
-		Vatista::Window* gameWindow;
+		Window* gameWindow;
 		glm::vec4 clearColour;
 		std::string windowName;
 
 		//A shared pointer to our mesh
-		Vatista::Mesh::Sptr myMesh;
-		Vatista::Mesh::Sptr myMesh3;
-		std::vector<Vatista::Mesh::Sptr> meshList;
+		Mesh::Sptr myMesh;
+		std::vector<Mesh::Sptr> meshList;
 
 		// A shared pointer to our shader
-		Vatista::Shader::Sptr myShader;
-		Vatista::Shader::Sptr myNormalShader;
-		std::vector<Vatista::Shader::Sptr> shaderList;
+		Shader::Sptr myShader;
+		Shader::Sptr myNormalShader;
+		//std::vector<Vatista::Shader::Sptr> shaderList;
 
-		Vatista::Texture::Sptr texture;
-		Vatista::Texture::Sptr texture2;
-		Vatista::Camera::Sptr myCamera;
+		Texture::Sptr texture;
+		Texture::Sptr texture2;
+		Texture::Sptr texture3;
+		Texture::Sptr texture4;
+		Camera::Sptr myCamera;
 
-		Character C1;
-		Character C2;
-		GameObject TestMap;
+		std::vector<GameObject::Sptr> ObjectList;
+		Character::Sptr C1;
+		Character::Sptr C2;
+		GameObject::Sptr TestMap;
 
 		glm::mat4 modelTransform2 = glm::mat4(0.f);
 		glm::vec3 pos1;
 		glm::vec3 pos2;
 		glm::vec3 pos3;
 		
-		Vatista::ObjLoader loader;
+		ObjLoader loader;
 		//
 		//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 

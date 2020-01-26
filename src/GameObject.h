@@ -2,67 +2,72 @@
 #include "Mesh.h"
 #include "Material.h"
 #include "Camera.h"
+#include "Utils.h"
 
-class GameObject {
-public: 
-	GameObject() : Scale(1.0f), model(nullptr), material(nullptr), Position(0.0f), EulerRotDeg(0.0f), Collider(0.0f){} 
-	~GameObject() {};
+namespace Vatista {
+	class GameObject {
+	public:
+		SharedPtr(GameObject);
 
-	void Draw(const Vatista::Camera::Sptr& camera);
-	bool collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2);
+		GameObject() : Scale(1.0f), model(nullptr), material(nullptr), Position(0.0f), EulerRotDeg(0.0f), Collider(0.0f) {}
+		~GameObject() {};
 
-	//getters and setters
-	void setMesh(Vatista::Mesh::Sptr& newMesh) { model = newMesh; }
-	void setMat(Vatista::Material::Sptr& newMat) { material = newMat; }
-	void setTexture(Vatista::Texture::Sptr& newTexture) { texture = newTexture; }
-	void setPos(glm::vec3 newPos) { Position = newPos; }
-	void setScale(glm::vec3 newScale) { Scale = newScale; }
+		void Draw(const Vatista::Camera::Sptr& camera);
+		bool collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2);
 
-	void setRot(glm::vec3 newRot) { EulerRotDeg = newRot; }
-	//individual rotation components
-	void setRotY(float newRot) { EulerRotDeg.y = newRot; }
-	
-	void setCollider(glm::vec2 newColl) { Collider = newColl; }
-	//individual collider components
-	void setCollX(float newColl) { Collider.x = newColl; }
+		//getters and setters
+		void setMesh(Vatista::Mesh::Sptr& newMesh) { model = newMesh; }
+		void setMat(Vatista::Material::Sptr& newMat) { material = newMat; }
+		void setTexture(Vatista::Texture::Sptr& newTexture) { texture = newTexture; }
+		void setPos(glm::vec3 newPos) { Position = newPos; }
+		void setScale(glm::vec3 newScale) { Scale = newScale; }
 
-	//may not need these all later, check
-	Vatista::Mesh::Sptr getMesh() { return model; }
-	Vatista::Material::Sptr getMat() { return material; }
-	Vatista::Texture::Sptr getTexture() { return texture; }
-	glm::vec3 getPos() { return Position; }
-	glm::vec3 getScale() { return Scale; }
-	glm::vec3 getRot() { return EulerRotDeg; }
-	glm::vec2 getCollider() { return Collider; }
+		void setRot(glm::vec3 newRot) { EulerRotDeg = newRot; }
+		//individual rotation components
+		void setRotY(float newRot) { EulerRotDeg.y = newRot; }
 
-protected:
-	//name
-	std::string name;
+		void setCollider(glm::vec2 newColl) { Collider = newColl; }
+		//individual collider components
+		void setCollX(float newColl) { Collider.x = newColl; }
 
-	//model filename data
-	std::string modelName;
-	std::string textureName;
-	const char* shaderName;
-	const char* shaderName2;
+		//may not need these all later, check
+		Vatista::Mesh::Sptr getMesh() { return model; }
+		Vatista::Material::Sptr getMat() { return material; }
+		Vatista::Texture::Sptr getTexture() { return texture; }
+		glm::vec3 getPos() { return Position; }
+		glm::vec3 getScale() { return Scale; }
+		glm::vec3 getRot() { return EulerRotDeg; }
+		glm::vec2 getCollider() { return Collider; }
 
-	//model data
-	Vatista::Mesh::Sptr model;
-	Vatista::Texture::Sptr texture;
-	Vatista::Shader::Sptr shader;
-	Vatista::Material::Sptr material;
+	protected:
+		//name
+		std::string name;
 
-	//transforms
-	glm::mat4 transform = glm::mat4(0.f);
-	glm::vec3 pos;
+		//model filename data
+		std::string modelName;
+		std::string textureName;
+		const char* shaderName;
+		const char* shaderName2;
 
-	glm::vec3 Position;
-	glm::vec3 Scale;
-	glm::vec3 EulerRotDeg;
-	glm::vec2 Collider;
+		//model data
+		Vatista::Mesh::Sptr model;
+		Vatista::Texture::Sptr texture;
+		Vatista::Shader::Sptr shader;
+		Vatista::Material::Sptr material;
 
-	float dt = 0.0167f;
-	float morph;
+		//transforms
+		glm::mat4 transform = glm::mat4(0.f);
+		glm::vec3 pos;
 
-	float currentTime = 0.0f;
-	float endTime = 10.0f;
-};
+		glm::vec3 Position;
+		glm::vec3 Scale;
+		glm::vec3 EulerRotDeg;
+		glm::vec2 Collider;
+
+		float dt = 0.0167f;
+		float morph;
+
+		float currentTime = 0.0f;
+		float endTime = 10.0f;
+	};
+}
