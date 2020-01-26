@@ -59,7 +59,11 @@ void Vatista::Game::init()
 	myCamera->Projection = glm::perspective(45.0f, 16.f / 9.f, 1.0f, 150.0f);
 
 	load("./res/init.txt");
-
+	// don't delete its gonna be the ui camera later
+	//myCameraUI = std::make_shared<Vatista::Camera>();//its the ui camera but we already have it orthagraphic by default -gary
+	//myCameraUI->SetPosition(glm::vec3(0, 0, 1));
+	//myCameraUI->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
+	//myCameraUI->Projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.f, 1000.0f);
 
 	////for morphing 
 	//std::vector<uint32_t> indices; 
@@ -208,6 +212,10 @@ void Vatista::Game::draw(float dt)
 	//draw  
 	for (auto object : ObjectList) {
 		object->Draw(myCamera);
+
+		//object->Draw(myCameraUI); ortho camera for ui in work
+
+
 	}
 
 }

@@ -52,6 +52,7 @@ namespace Vatista {
 		Texture::Sptr texture3;
 		Texture::Sptr texture4;
 		Camera::Sptr myCamera;
+		//Camera::Sptr myCameraUI;//camera for the general UI elements 
 
 		std::vector<GameObject::Sptr> ObjectList;
 		Character::Sptr C1;
