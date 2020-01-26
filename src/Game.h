@@ -58,6 +58,8 @@ namespace Vatista {
 		Character::Sptr C1;
 		Character::Sptr C2;
 		GameObject::Sptr TestMap;
+		GameObject::Sptr TestStamina;
+
 
 		glm::mat4 modelTransform2 = glm::mat4(0.f);
 		glm::vec3 pos1;

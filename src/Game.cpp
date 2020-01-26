@@ -176,6 +176,20 @@ void Vatista::Game::init()
 	TestMap->setTexture(texture2);
 	TestMap->setScale(glm::vec3(0.3f));
 	ObjectList.push_back(TestMap);
+
+
+	//trying to insert a mesh used for stamina or icon - gary
+
+
+	//TestStamina = std::make_shared<GameObject>();
+	//TestStamina->setPos(glm::vec3(1, -1.f, 1));
+	//TestStamina->setMesh(meshList[2]);//3rd one on init.txt
+	//TestStamina->setMat(testMat2/*placeholder*/);
+	//TestStamina->setRotY(0.f);
+	//TestStamina->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
+	//TestStamina->setScale(glm::vec3(0.5f));
+	//ObjectList.push_back(TestStamina);
+
 	//myScene[2].Position = pos3; 
 	//myScene[2].Material = testMat2; 
 	//myScene[2].Mesh = myMesh3; 
