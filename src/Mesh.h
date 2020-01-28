@@ -13,6 +13,8 @@ namespace Vatista {
 		glm::vec3 Position;
 		glm::vec2 UV;
 		glm::vec3 Normal;
+		glm::vec3 Tangent;
+		glm::vec3 Bitangent;
 	};
 
 	struct MorphVertex : public Vertex {
@@ -58,6 +60,4 @@ namespace Vatista {
 		// The number of vertices and indices in this mesh
 		size_t myVertexCount, myUVCount, myNormalCount, myIndexCount;
 	};
-	// Shorthand for shared_ptr
-	typedef std::shared_ptr<Mesh> Mesh_sptr;
 }

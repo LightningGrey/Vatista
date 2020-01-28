@@ -2,6 +2,7 @@
 #include "SceneManager.h" 
 #include "MeshRenderer.h" 
 #include <iostream> 
+#include "Math.h"
 
 Vatista::Game::Game() : gameWindow(nullptr), clearColour(glm::vec4(0, 0, 0, 1)),
 windowName("Vatista Engine")
@@ -116,7 +117,7 @@ void Vatista::Game::init()
 	texture->loadFile("./res/yuntexturepaint.png");
 
 	texture2 = std::make_shared<Texture>();
-	texture2->loadFile("./res/Training_Map_New_Texture.png");
+	texture2->loadFile("./res/FIXED_TRAINING_MAP/Training_Map_Texture.png");
 
 	texture3 = std::make_shared<Texture>();
 	texture3->loadFile("./res/default.png");
@@ -318,14 +319,20 @@ bool Vatista::Game::load(std::string filename)
 
 		dataFile.close();
 
+		//vertex data
 		std::vector<uint32_t> indices;
 		std::vector<Vertex> vertData;
 		std::vector<MorphVertex> morphVertData;
 
+		//tangents
+		std::vector<glm::vec3> tangents;
+		std::vector<glm::vec3> bitangents;
+
+		//Math::computeTangents(morphVertData, indices, tangents, bitangents);
 		for (int i = 0; i < vertTotalBuffer; i++) {
 			MorphVertex morph = { Vertex{(*(morphBuffer + i)).Position,
-			(*(morphBuffer + i)).UV, (*(morphBuffer + i)).Normal},
-				(*(morphBuffer + i)).PositionS, (*(morphBuffer + i)).NormalS };
+			(*(morphBuffer + i)).UV, (*(morphBuffer + i)).Normal}, (*(morphBuffer + i)).PositionS, 
+				(*(morphBuffer + i)).NormalS };
 			morphVertData.push_back(morph);
 		}
 
