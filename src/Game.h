@@ -18,6 +18,7 @@
 #include "Texture.h"
 #include "Utils.h"
 #include "Math.h"
+#include "AudioEngine.h"
 //#include "Controls.h"
 
 
@@ -37,6 +38,7 @@ namespace Vatista {
 		Window* gameWindow;
 		glm::vec4 clearColour;
 		std::string windowName;
+		AudioEngine audioEngine;
 
 		//A shared pointer to our mesh
 		Mesh::Sptr myMesh;

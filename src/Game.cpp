@@ -59,6 +59,10 @@ void Vatista::Game::init()
 	myCamera->LookAt(glm::vec3(0), glm::vec3(0, 30, 0));
 	myCamera->Projection = glm::perspective(45.0f, 16.f / 9.f, 1.0f, 150.0f);
 
+	audioEngine.Init();
+	audioEngine.LoadBank("./res/Master", FMOD_STUDIO_LOAD_BANK_NORMAL);
+	audioEngine.LoadEvent("Music", "{7cd3c8cb-a575-4dd4-bf24-92345bcb126d}");
+	audioEngine.PlayEvent("Music");
 	load("./res/init.txt");
 
 
@@ -193,12 +197,14 @@ void Vatista::Game::init()
 void Vatista::Game::close()
 {
 	glfwTerminate();
+	audioEngine.Shutdown();
 }
 
 void Vatista::Game::update(float dt)
 {
 	C1->update(dt, gameWindow->getWindow(), C2);
 	C2->update(dt, gameWindow->getWindow(), C1);
+	audioEngine.Update();
 }
 
 void Vatista::Game::draw(float dt)
