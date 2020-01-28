@@ -29,6 +29,9 @@ namespace Vatista {
 		Collider = glm::vec2(0.74f, 1.78f);
 		Atk1Collider = glm::vec2(0.4f);
 		Atk2Collider = glm::vec2(0.4f);
+		lives = 3;
+		for (int i = 0; i < 6; i++)
+			animations.emplace_back();
 		if (playerID) {
 			Position = glm::vec3(-1.f, -2.f, 0);
 			EulerRotDeg.y = 90.f;
@@ -55,10 +58,10 @@ namespace Vatista {
 				kb.doubleTap1 = false;
 
 			if (kb.a && !kb.dash1 && glfwGetTime() - kb.atkTimer1 > 0.8f) {
-				walking = true;
+				isWalking = true;
 				if (EulerRotDeg.y == 90.0f) {
 					movement.x -= speed * 0.001f;
-					if (!dashing)
+					if (!isDashing)
 						isBlocking = true;
 				}
 				else if (EulerRotDeg.y == -90.0f) {
@@ -67,28 +70,28 @@ namespace Vatista {
 				}
 			}
 			if (kb.d && !kb.dash1 && glfwGetTime() - kb.atkTimer1 > 0.8f) {
-				walking = true;
+				isWalking = true;
 				if (EulerRotDeg.y == 90.0f) {
 					movement.x += speed * 0.003f;
 					isBlocking = false;
 				}
 				else if (EulerRotDeg.y == -90.0f) {
 					movement.x += speed * 0.0025f;
-					if (!dashing)
+					if (!isDashing)
 						isBlocking = true;
 				}
 			}
 
 			if (glfwGetTime() - kb.atkTimer1 > 0.8f)
 				isAttacking = false;
-			if (kb.f && !dashing && glfwGetTime() - kb.atkTimer1 > 0.8f && !isAttacking) {
+			if (kb.f && !isDashing && glfwGetTime() - kb.atkTimer1 > 0.8f && !isAttacking) {
 				isAttacking = true;
 				isBlocking = false;
 				atk = true;
 				kb.atkTimer1 = glfwGetTime();
 				movement.x = 0;
 			}
-			else if (kb.g && !dashing && glfwGetTime() - kb.atkTimer1 > 0.8f && !isAttacking) {
+			else if (kb.g && !isDashing && glfwGetTime() - kb.atkTimer1 > 0.8f && !isAttacking) {
 				isAttacking = true;
 				isBlocking = false;
 				atk = false;
@@ -97,27 +100,27 @@ namespace Vatista {
 			}
 			if (atk) {
 				if (isAttacking && glfwGetTime() - kb.atkTimer1 > 0.2f && glfwGetTime() - kb.atkTimer1 < 0.6f)
-					if (collisionCheck(Atk1Pos, Atk1Collider, p2->Position, p2->Collider) && !p2->dashing && !p2->isBlocking) {
-						enemyLives -= 1;
+					if (collisionCheck(Atk1Pos, Atk1Collider, p2->Position, p2->Collider) && !p2->isDashing && !p2->isBlocking) {
+						p2->lives -= 1;
 						std::cout << "p2 dies" << std::endl;
 					}
 			}
 			else {
 				if (isAttacking && glfwGetTime() - kb.atkTimer1 > 0.2f && glfwGetTime() - kb.atkTimer1 < 0.6f)
-					if (collisionCheck(Atk2Pos, Atk2Collider, p2->Position, p2->Collider) && !p2->dashing && !p2->isBlocking) {
-						enemyLives -= 1;
+					if (collisionCheck(Atk2Pos, Atk2Collider, p2->Position, p2->Collider) && !p2->isDashing && !p2->isBlocking) {
+						p2->lives -= 1;
 						std::cout << "p2 dies" << std::endl;
 					}
 			}
 
-			if (!dashing) {
+			if (!isDashing) {
 				if (kb.dash1 && kb.tap1 == GLFW_KEY_A) {
 					lerpEnd = Position - glm::vec3(3.f, 0, 0);
-					dashing = true;
+					isDashing = true;
 				}
 				if (kb.dash1 && kb.tap1 == GLFW_KEY_D) {
 					lerpEnd = Position + glm::vec3(3.f, 0, 0);
-					dashing = true;
+					isDashing = true;
 				}
 				lerper = Position;
 				startTime = glfwGetTime();
@@ -125,7 +128,7 @@ namespace Vatista {
 				kb.dash1 = false;
 				if (movement.x == 0) {
 					isBlocking = false;
-					walking = false;
+					isWalking = false;
 				}
 				if (collisionCheck(Position + movement, Collider, p2->Position, p2->Collider))
 					movement.x = 0;
@@ -133,9 +136,9 @@ namespace Vatista {
 			}
 			else {
 				isBlocking = false;
-				walking = false;
+				isWalking = false;
 				if (std::floor(lerper.x * 1000) / 1000 == std::floor(lerpEnd.x * 1000) / 1000) {
-					dashing = false;
+					isDashing = false;
 					//std::cout << "done" << std::endl;
 
 				}
@@ -192,10 +195,10 @@ namespace Vatista {
 				kb.doubleTap2 = false;
 
 			if (kb.left && !kb.dash2 && glfwGetTime() - kb.atkTimer2 > 0.8f) {
-				walking = true;
+				isWalking = true;
 				if (EulerRotDeg.y == 90.0f) {
 					movement.x -= speed * 0.001f;
-					if (!dashing)
+					if (!isDashing)
 						isBlocking = true;
 				}
 				else if (EulerRotDeg.y == -90.0f) {
@@ -204,28 +207,28 @@ namespace Vatista {
 				}
 			}
 			if (kb.right && glfwGetTime() - kb.atkTimer2 > 0.8f) {
-				walking = true;
+				isWalking = true;
 				if (EulerRotDeg.y == 90.0f) {
 					movement.x += speed * 0.0025f;
 					isBlocking = false;
 				}
 				else if (EulerRotDeg.y == -90.0f) {
 					movement.x += speed * 0.001f;
-					if (!dashing)
+					if (!isDashing)
 						isBlocking = true;
 				}
 			}
 
 			if (glfwGetTime() - kb.atkTimer2 > 0.8f)
 				isAttacking = false;
-			if (kb.rctrl && !dashing && glfwGetTime() - kb.atkTimer2 > 0.8f && !isAttacking) {
+			if (kb.rctrl && !isDashing && glfwGetTime() - kb.atkTimer2 > 0.8f && !isAttacking) {
 				isAttacking = true;
 				isBlocking = false;
 				atk = true;
 				kb.atkTimer2 = glfwGetTime();
 				movement.x = 0;
 			}
-			else if (kb.ralt && !dashing && glfwGetTime() - kb.atkTimer2 > 0.8f && !isAttacking) {
+			else if (kb.ralt && !isDashing && glfwGetTime() - kb.atkTimer2 > 0.8f && !isAttacking) {
 				isAttacking = true;
 				isBlocking = false;
 				atk = false;
@@ -234,27 +237,27 @@ namespace Vatista {
 			}
 			if (atk) {
 				if (isAttacking && glfwGetTime() - kb.atkTimer2 > 0.2f && glfwGetTime() - kb.atkTimer2 < 0.6f)
-					if (collisionCheck(Atk1Pos, Atk1Collider, p2->Position, p2->Collider) && !p2->dashing && !p2->isBlocking) {
-						enemyLives -= 1;
+					if (collisionCheck(Atk1Pos, Atk1Collider, p2->Position, p2->Collider) && !p2->isDashing && !p2->isBlocking) {
+						lives -= 1;
 						std::cout << "p1 dies" << std::endl;
 					}
 			}
 			else {
 				if (isAttacking && glfwGetTime() - kb.atkTimer2 > 0.2f && glfwGetTime() - kb.atkTimer2 < 0.6f)
-					if (collisionCheck(Atk1Pos, Atk1Collider, p2->Position, p2->Collider) && !p2->dashing && !p2->isBlocking) {
-						enemyLives -= 1;
+					if (collisionCheck(Atk1Pos, Atk1Collider, p2->Position, p2->Collider) && !p2->isDashing && !p2->isBlocking) {
+						lives -= 1;
 						std::cout << "p1 dies" << std::endl;
 					}
 			}
 
-			if (!dashing) {
+			if (!isDashing) {
 				if (kb.dash2 && kb.tap2 == GLFW_KEY_LEFT) {
 					lerpEnd = Position - glm::vec3(3.f, 0, 0);
-					dashing = true;
+					isDashing = true;
 				}
 				if (kb.dash2 && kb.tap2 == GLFW_KEY_RIGHT) {
 					lerpEnd = Position + glm::vec3(3.f, 0, 0);
-					dashing = true;
+					isDashing = true;
 				}
 				lerper = Position;
 				startTime = glfwGetTime();
@@ -262,7 +265,7 @@ namespace Vatista {
 				kb.dash2 = false;
 				if (movement.x == 0) {
 					isBlocking = false;
-					walking = false;
+					isWalking = false;
 				}
 				if (collisionCheck(Position + movement, Collider, p2->Position, p2->Collider))
 					movement.x = 0;
@@ -270,9 +273,9 @@ namespace Vatista {
 			}
 			else {
 				isBlocking = false;
-				walking = false;
+				isWalking = false;
 				if (std::floor(lerper.x * 1000) / 1000 == std::floor(lerpEnd.x * 1000) / 1000) {
-					dashing = false;
+					isDashing = false;
 					//std::cout << "done" << std::endl;
 				}
 				else {

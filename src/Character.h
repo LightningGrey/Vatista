@@ -10,21 +10,19 @@ namespace Vatista {
 
 		bool playerID;
 		int stanima;
-		int enemyLives;
-		Character() : enemyLives(3) {};
+		int lives;
+		std::vector<std::pair<std::string, std::vector<Vatista::Mesh::Sptr>>> animations;
 		Character(bool ID, Mesh::Sptr mesh, Material::Sptr mat);
 		void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2);
 	private:
 
 		glm::vec3 lerper;
 		glm::vec3 lerpEnd;
-		bool walking = false;
-		bool dashing = false;
+		bool isWalking = false;
+		bool isDashing = false;
 		bool isAttacking = false;
 		bool isBlocking = false;
 		bool atk = true;
-
-		std::vector<std::vector<Mesh::Sptr>> animations;
 
 		glm::vec3 Atk1Pos;
 		glm::vec3 Atk2Pos;
