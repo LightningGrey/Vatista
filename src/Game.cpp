@@ -78,7 +78,7 @@ void Vatista::Game::init()
 	//std::vector<Vertex> vertData3; 
 	// 
 	//bool objectLoad = loader.load("./res/yun_idle_pose_1.obj", indices, vertData); 
-	// 
+	//
 	////if (objectLoad) { 
 	////	myMesh = std::make_shared<Mesh>(indices, indices.size(),  
 	////		vertData, vertData.size()); 
@@ -118,7 +118,7 @@ void Vatista::Game::init()
 	//texture2->bind(2); 
 
 	texture = std::make_shared<Texture>();
-	texture->loadFile("./res/yuntexturepaint.png");
+	texture->loadFile("./res/colour-grid.png");
 
 	texture2 = std::make_shared<Texture>();
 	texture2->loadFile("./res/FIXED_TRAINING_MAP/Training_Map_Texture.png");
@@ -184,10 +184,12 @@ void Vatista::Game::init()
 	//myScene[2].Collider = glm::vec2(0.74f, 1.78f); 
 
 	C1 = std::make_shared<Character>(true, meshList[0], testMat);
+	C1->setScale(glm::vec3(0.35f));
 	ObjectList.push_back(C1);
 
 	//Player 2 
 	C2 = std::make_shared<Character>(false, meshList[0], testMat);
+	C2->setScale(glm::vec3(0.35f));
 	ObjectList.push_back(C2);
 
 

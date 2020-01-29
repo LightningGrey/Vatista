@@ -20,7 +20,12 @@ uniform sampler2D texSample;
 
 void main() {
     // Re-normalize our input, so that it is always length 1
-    vec3 norm = normalize(inNormal);
+    //vec3 norm = normalize(inNormal);
+
+    vec3 norm = texture(texSample, inUV).rgb;
+    // transform normal vector to range [-1,1]
+    norm = normalize(norm * 2.0 - 1.0);   
+
 
 	vec4 surfaceColour = texture(texSample, inUV); //* texture(texSample2, inUV);
 
