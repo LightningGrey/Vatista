@@ -151,7 +151,6 @@ void Vatista::Game::init()
 	testMat2->Set("a_LightAttenuation", 0.04f);
 	testMat2->Set("texSample", texture2);
 
-
 	////Player 1 
 	//modelTransform = glm::mat4(1.0f); 
 	//modelTransform = glm::rotate(modelTransform, 3.14f, glm::vec3(0, 1, 0)); 
@@ -178,17 +177,6 @@ void Vatista::Game::init()
 	ObjectList.push_back(TestMap);
 
 
-	//trying to insert a mesh used for stamina or icon - gary
-
-
-	//TestStamina = std::make_shared<GameObject>();
-	//TestStamina->setPos(glm::vec3(1, -1.f, 1));
-	//TestStamina->setMesh(meshList[2]);//3rd one on init.txt
-	//TestStamina->setMat(testMat2/*placeholder*/);
-	//TestStamina->setRotY(0.f);
-	//TestStamina->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
-	//TestStamina->setScale(glm::vec3(0.5f));
-	//ObjectList.push_back(TestStamina);
 
 	//myScene[2].Position = pos3; 
 	//myScene[2].Material = testMat2; 
@@ -202,6 +190,21 @@ void Vatista::Game::init()
 	//Player 2 
 	C2 = std::make_shared<Character>(false, meshList[0], testMat);
 	ObjectList.push_back(C2);
+
+
+
+	//trying to insert a mesh used for stamina or icon - gary
+
+
+	TestStamina = std::make_shared<GameObject>();
+	TestStamina->setPos(glm::vec3(1, -1.f, 1));
+	TestStamina->setMesh(meshList[2]);//3rd one on init.txt
+	TestStamina->setMat(testMat2/*placeholder*/);
+	TestStamina->setRotY(-90.f);
+	TestStamina->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
+	TestStamina->setScale(glm::vec3(0.5f));
+	ObjectList.push_back(TestStamina);
+	//get rid of camera transform 
 
 
 	glEnable(GL_CULL_FACE);
