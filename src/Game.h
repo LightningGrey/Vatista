@@ -19,6 +19,7 @@
 #include "Utils.h"
 #include "Math.h"
 #include "AudioEngine.h"
+#include "Stage.h"
 //#include "Controls.h"
 
 
@@ -53,6 +54,9 @@ namespace Vatista {
 		Texture::Sptr texture2;
 		Texture::Sptr texture3;
 		Texture::Sptr texture4;
+		std::vector<Texture::Sptr> textures;
+		std::vector<Material::Sptr> mats;
+		Stage::Sptr stage;
 		Camera::Sptr myCamera;
 
 		std::vector<GameObject::Sptr> ObjectList;

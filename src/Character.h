@@ -1,4 +1,4 @@
-#include "GameObject.h" 
+#include "GameObject.h"
 #include <GLFW/glfw3.h> 
 #include "Utils.h"
 #include <iostream> 
@@ -23,6 +23,7 @@ namespace Vatista {
 		bool isAttacking = false;
 		bool isBlocking = false;
 		bool atk = true;
+		float walls;
 
 		glm::vec3 Atk1Pos;
 		glm::vec3 Atk2Pos;

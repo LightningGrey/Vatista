@@ -55,9 +55,9 @@ void Vatista::Game::init()
 	gameWindow = new Vatista::Window(1920, 1080, "Alpha Strike");
 
 	myCamera = std::make_shared<Vatista::Camera>();
-	myCamera->SetPosition(glm::vec3(0, 1, 10));
-	myCamera->LookAt(glm::vec3(0), glm::vec3(0, 30, 0));
-	myCamera->Projection = glm::perspective(45.0f, 16.f / 9.f, 1.0f, 150.0f);
+	myCamera->SetPosition(glm::vec3(0, 2, 15));
+	myCamera->LookAt(glm::vec3(0,4,0), glm::vec3(0, 1, 0));
+	myCamera->Projection = glm::perspective(glm::radians(90.0f), 16.f / 9.f, 1.0f, 150.0f);
 
 	audioEngine.Init();
 	audioEngine.LoadBank("./res/Master", FMOD_STUDIO_LOAD_BANK_NORMAL);
@@ -118,10 +118,10 @@ void Vatista::Game::init()
 	//texture2->bind(2); 
 
 	texture = std::make_shared<Texture>();
-	texture->loadFile("./res/colour-grid.png");
+	texture->loadFile("./res/color-grid.png");
 
 	texture2 = std::make_shared<Texture>();
-	texture2->loadFile("./res/FIXED_TRAINING_MAP/Training_Map_Texture.png");
+	texture2->loadFile("./res/Catwalk_LargeSide_Texture.png");
 
 	texture3 = std::make_shared<Texture>();
 	texture3->loadFile("./res/default.png");
@@ -152,6 +152,45 @@ void Vatista::Game::init()
 	testMat2->Set("a_LightAttenuation", 0.04f);
 	testMat2->Set("texSample", texture2);
 
+	for (int i = 0; i < 11; i++) {
+		textures.emplace_back();
+		textures[i] = std::make_shared<Texture>();
+	}
+	textures[0]->loadFile("./res/Catwalk_Floor/Catwalk_Floor_Texture.png");
+	textures[1]->loadFile("./res/Catwalk_InsideCorner/Catwalk_Rail_Corners_Texture.png");
+	textures[2]->loadFile("./res/Catwalk_OutsideCorner/Catwalk_Rail_Corners_Texture.png");
+	textures[3]->loadFile("./res/Catwalk_Rail_Large/Catwalk_Rail_Large_Texture.png");
+	textures[4]->loadFile("./res/Catwalk_Rail_Short/Catwalk_Rail_Short_Texture.png");
+	textures[5]->loadFile("./res/CrateLarge/CrateLarge_Texture.png");
+	textures[6]->loadFile("./res/CrateMedium/CrateMedium_Texture.png");
+	textures[7]->loadFile("./res/CrateSmall/CrateSmall_Texture.png");
+	textures[8]->loadFile("./res/Girders/Girders_Texture.png");
+	textures[9]->loadFile("./res/MiningShip/MiningShip_Texture.png");
+	textures[10]->loadFile("./res/Barrel/Barrel_Texture.png");
+	for (int i = 0; i < 11;i++) {
+		mats.emplace_back();
+		mats[i] = std::make_shared<Material>(phong2);
+		mats[i]->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+		mats[i]->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+		mats[i]->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+		mats[i]->Set("a_AmbientPower", 0.5f);
+		mats[i]->Set("a_LightSpecPower", 0.9f);
+		mats[i]->Set("a_LightShininess", 256.0f);
+		mats[i]->Set("a_LightAttenuation", 0.04f);
+		mats[i]->Set("texSample", textures[i]);
+	}
+
+	stage = std::make_shared<Stage>();
+	for (int i = 0; i < 11;i++) {
+		stage->Props.emplace_back();
+		stage->Props[i] = std::make_shared<GameObject>();
+		stage->Props[i]->setMesh(meshList[i + 2]);
+		stage->Props[i]->setMat(mats[i]);
+		stage->Props[i]->setPos(glm::vec3(0,0,5));
+		stage->Props[i]->setRotY(-90.0f);
+		stage->Props[i]->setTexture(textures[i]);
+		ObjectList.push_back(stage->Props[i]);
+	}
 
 	////Player 1 
 	//modelTransform = glm::mat4(1.0f); 
@@ -169,14 +208,15 @@ void Vatista::Game::init()
 
 	//pos3 = glm::vec3(1, 0, 0); 
 	//myScene.emplace_back(); 
-	TestMap = std::make_shared<GameObject>();
-	TestMap->setPos(glm::vec3(0, -1.f, 1));
-	TestMap->setMesh(meshList[1]);
-	TestMap->setMat(testMat2);
-	TestMap->setRotY(-90.f);
-	TestMap->setTexture(texture2);
-	TestMap->setScale(glm::vec3(0.3f));
-	ObjectList.push_back(TestMap);
+	//TestMap = std::make_shared<GameObject>();
+	//TestMap->setPos(glm::vec3(0, 0.f, 5));
+	//TestMap->setMesh(meshList[1]);
+	//TestMap->setMat(testMat2);
+	//TestMap->setRotY(-90.f);
+	//TestMap->setTexture(texture2);
+	//TestMap->setScale(glm::vec3(0.4f));
+	//ObjectList.push_back(TestMap);
+	
 	//myScene[2].Position = pos3; 
 	//myScene[2].Material = testMat2; 
 	//myScene[2].Mesh = myMesh3; 
@@ -184,15 +224,14 @@ void Vatista::Game::init()
 	//myScene[2].Collider = glm::vec2(0.74f, 1.78f); 
 
 	C1 = std::make_shared<Character>(true, meshList[0], testMat);
-	C1->setScale(glm::vec3(0.35f));
+	C1->setScale(glm::vec3(0.5f));
 	ObjectList.push_back(C1);
 
 	//Player 2 
 	C2 = std::make_shared<Character>(false, meshList[0], testMat);
-	C2->setScale(glm::vec3(0.35f));
+	C2->setScale(glm::vec3(0.5f));
 	ObjectList.push_back(C2);
-
-
+	
 	glEnable(GL_CULL_FACE);
 }
 
@@ -214,7 +253,7 @@ void Vatista::Game::draw(float dt)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//draw  
+	//draw 
 	for (auto object : ObjectList) {
 		object->Draw(myCamera);
 	}

@@ -1,2 +1,13 @@
 retopo.vsf
 FIXED_TRAINING_MAP/Training_Map_New.vsf
+Catwalk_Floor/Catwalk_Floor.vsf
+Catwalk_InsideCorner/Catwalk_InsideCorner.vsf
+Catwalk_OutsideCorner/Catwalk_OutsideCorner.vsf
+Catwalk_Rail_Large/Catwalk_Rail_Large.vsf
+Catwalk_Rail_Short/Catwalk_Rail_Short.vsf
+CrateLarge/CrateLarge.vsf
+CrateMedium/CrateMedium.vsf
+CrateSmall/CrateSmall.vsf
+Girders/Girders.vsf
+MiningShip/MiningShip.vsf
+Barrel/Barrel.vsf

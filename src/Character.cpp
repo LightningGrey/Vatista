@@ -30,6 +30,7 @@ namespace Vatista {
 		Atk1Collider = glm::vec2(0.4f);
 		Atk2Collider = glm::vec2(0.4f);
 		lives = 3;
+		walls = 18.0f;
 		for (int i = 0; i < 6; i++)
 			animations.emplace_back();
 		if (playerID) {
@@ -50,7 +51,7 @@ namespace Vatista {
 	void Character::update(float dt, GLFWwindow* gameWindow, Character::Sptr p2)
 	{
 		glm::vec3 movement = glm::vec3(0.0f);
-		float speed = 5.0f;
+		float speed = 10.0f;
 		glfwSetKeyCallback(gameWindow, key_callback);
 		glfwSetInputMode(gameWindow, GLFW_STICKY_KEYS, GLFW_TRUE);
 		if (playerID) {
@@ -72,11 +73,11 @@ namespace Vatista {
 			if (kb.d && !kb.dash1 && glfwGetTime() - kb.atkTimer1 > 0.8f) {
 				isWalking = true;
 				if (EulerRotDeg.y == 90.0f) {
-					movement.x += speed * 0.003f;
+					movement.x += speed * 0.0025f;
 					isBlocking = false;
 				}
 				else if (EulerRotDeg.y == -90.0f) {
-					movement.x += speed * 0.0025f;
+					movement.x += speed * 0.001f;
 					if (!isDashing)
 						isBlocking = true;
 				}
@@ -115,11 +116,11 @@ namespace Vatista {
 
 			if (!isDashing) {
 				if (kb.dash1 && kb.tap1 == GLFW_KEY_A) {
-					lerpEnd = Position - glm::vec3(3.f, 0, 0);
+					lerpEnd = Position - glm::vec3(5.f, 0, 0);
 					isDashing = true;
 				}
 				if (kb.dash1 && kb.tap1 == GLFW_KEY_D) {
-					lerpEnd = Position + glm::vec3(3.f, 0, 0);
+					lerpEnd = Position + glm::vec3(5.f, 0, 0);
 					isDashing = true;
 				}
 				lerper = Position;
@@ -177,10 +178,10 @@ namespace Vatista {
 				}
 			}
 
-			if (Position.x > 7.5f)
-				Position.x = 7.5f;
-			if (Position.x < -7.5f)
-				Position.x = -7.5f;
+			if (Position.x > walls)
+				Position.x = walls;
+			if (Position.x < walls * -1)
+				Position.x = walls * -1;
 			if (Position.x > p2->Position.x) {
 				EulerRotDeg.y = -90.0f;
 				Atk1Pos.x = Position.x - Collider.x - Atk1Collider.x;
@@ -252,11 +253,11 @@ namespace Vatista {
 
 			if (!isDashing) {
 				if (kb.dash2 && kb.tap2 == GLFW_KEY_LEFT) {
-					lerpEnd = Position - glm::vec3(3.f, 0, 0);
+					lerpEnd = Position - glm::vec3(5.f, 0, 0);
 					isDashing = true;
 				}
 				if (kb.dash2 && kb.tap2 == GLFW_KEY_RIGHT) {
-					lerpEnd = Position + glm::vec3(3.f, 0, 0);
+					lerpEnd = Position + glm::vec3(5.f, 0, 0);
 					isDashing = true;
 				}
 				lerper = Position;
@@ -313,10 +314,10 @@ namespace Vatista {
 				}
 			}
 
-			if (Position.x > 7.5f)
-				Position.x = 7.5f;
-			if (Position.x < -7.5f)
-				Position.x = -7.5f;
+			if (Position.x > walls)
+				Position.x = walls;
+			if (Position.x < walls*-1)
+				Position.x = walls*-1;
 			if (Position.x > p2->Position.x) {
 				EulerRotDeg.y = -90.0f;
 				Atk1Pos.x = Position.x - Collider.x - Atk1Collider.x;
