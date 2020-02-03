@@ -17,6 +17,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Utils.h"
+
 //using namespace std;
 
 
@@ -56,33 +58,37 @@ struct Implementation
 
 };
 
-class AudioEngine 
-{
-public:
-	static void Init();
-	static void Update();
-	static void Shutdown();
-	static int ErrorCheck(FMOD_RESULT result);
+namespace Vatista {
+	class AudioEngine
+	{
+	public:
+		SharedPtr(AudioEngine);
+		AudioEngine();
+		static void Init();
+		static void Update();
+		static void Shutdown();
+		static int ErrorCheck(FMOD_RESULT result);
 
-	void LoadBank(const std::string& strBankName, FMOD_STUDIO_LOAD_BANK_FLAGS flags);
-	void LoadEvent(const std::string& strEventName, const std::string& strEventNumber);
-	void LoadSound(const std::string& strSoundName, bool b3d = true, bool bLooping = false, bool bStream = false);
-	void UnloadSound(const std::string& strSoundName);
-	//void Set3dListenerAndOrientation(const Vector3& vPos = Vector3{ 0, 0, 0 }, float  fVolumedB = 0.0f);
-	int PlaySound(const std::string& strSoundName, const glm::vec3& vPos = glm::vec3{ 0, 0, 0 }, float fVolumedB = 0.0f);
-	void PlayEvent(const std::string& strEventName);
-	//void StopChannel(int nChannelId);
-	void StopEvent(const std::string& strEventName, bool bImmediate = false);
-	void GetEventParameter(const std::string& strEventName, const std::string& strEventParameter, float* parameter);
-	void SetEventParameter(const std::string& strEventName, const std::string& strParameterName, float fValue);
-	void SetEventPosition(const std::string& strEventName, const glm::vec3 vPosition);
-	void SetEventVelocity(const std::string& strEventName, const glm::vec3 vVelocity);
-	//void StopAllChannels();
-	void SetChannel3dPosition(int nChannelId, const glm::vec3& vPosition);
-	void SetChannelVolume(int nChannelId, float fVolumedb); 
-	//bool isPlaying(int nChannelId) const;
-	bool isEventPlaying(const std::string& strEventName) const;
-	float dbToVolume(float db);
-	float VolumeTodb(float volume);
-	FMOD_VECTOR VectorToFmod(const glm::vec3& vPosition);
-};
+		void LoadBank(const std::string& strBankName, FMOD_STUDIO_LOAD_BANK_FLAGS flags);
+		void LoadEvent(const std::string& strEventName, const std::string& strEventNumber);
+		void LoadSound(const std::string& strSoundName, bool b3d = true, bool bLooping = false, bool bStream = false);
+		void UnloadSound(const std::string& strSoundName);
+		//void Set3dListenerAndOrientation(const Vector3& vPos = Vector3{ 0, 0, 0 }, float  fVolumedB = 0.0f);
+		int PlaySound(const std::string& strSoundName, const glm::vec3& vPos = glm::vec3{ 0, 0, 0 }, float fVolumedB = 0.0f);
+		void PlayEvent(const std::string& strEventName);
+		//void StopChannel(int nChannelId);
+		void StopEvent(const std::string& strEventName, bool bImmediate = false);
+		void GetEventParameter(const std::string& strEventName, const std::string& strEventParameter, float* parameter);
+		void SetEventParameter(const std::string& strEventName, const std::string& strParameterName, float fValue);
+		void SetEventPosition(const std::string& strEventName, const glm::vec3 vPosition);
+		void SetEventVelocity(const std::string& strEventName, const glm::vec3 vVelocity);
+		//void StopAllChannels();
+		void SetChannel3dPosition(int nChannelId, const glm::vec3& vPosition);
+		void SetChannelVolume(int nChannelId, float fVolumedb);
+		//bool isPlaying(int nChannelId) const;
+		bool isEventPlaying(const std::string& strEventName) const;
+		float dbToVolume(float db);
+		float VolumeTodb(float volume);
+		FMOD_VECTOR VectorToFmod(const glm::vec3& vPosition);
+	};
+}

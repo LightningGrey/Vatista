@@ -39,7 +39,7 @@ namespace Vatista {
 		Window* gameWindow;
 		glm::vec4 clearColour;
 		std::string windowName;
-		AudioEngine audioEngine;
+		AudioEngine::Sptr audioEngine;
 
 		//A shared pointer to our mesh
 		Mesh::Sptr myMesh;
