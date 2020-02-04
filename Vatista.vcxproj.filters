@@ -14,6 +14,8 @@
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Character.cpp" />
     <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\AudioEngine.cpp" />
+    <ClCompile Include="src\Stage.cpp" />
     <ClCompile Include="src\FrameBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -39,10 +41,35 @@
     <ClInclude Include="src\Character.h" />
     <ClInclude Include="src\Controls.h" />
     <ClInclude Include="src\Math.h" />
+    <ClInclude Include="include\fmod\fmod.h" />
+    <ClInclude Include="include\fmod\fmod.hpp" />
+    <ClInclude Include="include\fmod\fmod_codec.h" />
+    <ClInclude Include="include\fmod\fmod_common.h" />
+    <ClInclude Include="include\fmod\fmod_dsp.h" />
+    <ClInclude Include="include\fmod\fmod_dsp_effects.h" />
+    <ClInclude Include="include\fmod\fmod_errors.h" />
+    <ClInclude Include="include\fmod\fmod_output.h" />
+    <ClInclude Include="src\AudioEngine.h" />
+    <ClInclude Include="include\fmod\fmod_studio.h" />
+    <ClInclude Include="include\fmod\fmod_studio.hpp" />
+    <ClInclude Include="include\fmod\fmod_studio_common.h" />
+    <ClInclude Include="src\Stage.h" />
     <ClInclude Include="src\FrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />
+    <Library Include="lib\fmod_vc.lib" />
+    <Library Include="lib\fmodL_vc.lib" />
+    <Library Include="lib\fmodstudio_vc.lib" />
+    <Library Include="lib\fmodstudioL_vc.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lib\fmod.dll" />
+    <None Include="lib\fmodL.dll" />
+    <None Include="lib\fmodstudio.dll" />
+    <None Include="lib\fmodstudioL.dll" />
+    <None Include="include\fmod\fmod_studio.cs" />
+    <None Include="res\Master.bank" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\StaminaBar.vs.glsl" />

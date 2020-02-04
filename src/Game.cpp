@@ -2,6 +2,7 @@
 #include "SceneManager.h" 
 #include "MeshRenderer.h" 
 #include <iostream> 
+#include "Math.h"
 
 Vatista::Game::Game() : gameWindow(nullptr), clearColour(glm::vec4(0, 0, 0, 1)),
 windowName("Vatista Engine")
@@ -54,10 +55,18 @@ void Vatista::Game::init()
 	gameWindow = new Vatista::Window(1920, 1080, "Alpha Strike");
 
 	myCamera = std::make_shared<Vatista::Camera>();
-	myCamera->SetPosition(glm::vec3(0, 1, 10));
-	myCamera->LookAt(glm::vec3(0), glm::vec3(0, 30, 0));
-	myCamera->Projection = glm::perspective(45.0f, 16.f / 9.f, 1.0f, 150.0f);
+	myCamera->SetPosition(glm::vec3(0, 2, 15));
+	myCamera->LookAt(glm::vec3(0,4,0), glm::vec3(0, 1, 0));
+	myCamera->Projection = glm::perspective(glm::radians(90.0f), 16.f / 9.f, 1.0f, 150.0f);
 
+	audioEngine = std::make_shared<AudioEngine>();
+	audioEngine->Init();
+	audioEngine->LoadBank("./res/Master", FMOD_STUDIO_LOAD_BANK_NORMAL);
+	audioEngine->LoadEvent("Music", "{fd7618a1-5880-4a64-ae37-e0f01ef54912}");
+	audioEngine->LoadEvent("LightAttack", "{f64fa79a-565d-4493-b4bf-a73a37c31219}");
+	audioEngine->LoadEvent("HeavyAttack", "{621b2e70-27ea-4900-b397-96cb10366574}");
+	audioEngine->LoadEvent("Dash", "{53dbc862-3dec-411a-9fc4-bb15743c2b6b}");
+	audioEngine->PlayEvent("Music");
 	load("./res/init.txt");
 	// don't delete its gonna be the ui camera later
 	//myCameraUI = std::make_shared<Vatista::Camera>();//its the ui camera but we already have it orthagraphic by default -gary
@@ -77,7 +86,7 @@ void Vatista::Game::init()
 	//std::vector<Vertex> vertData3; 
 	// 
 	//bool objectLoad = loader.load("./res/yun_idle_pose_1.obj", indices, vertData); 
-	// 
+	//
 	////if (objectLoad) { 
 	////	myMesh = std::make_shared<Mesh>(indices, indices.size(),  
 	////		vertData, vertData.size()); 
@@ -120,10 +129,10 @@ void Vatista::Game::init()
 	textureStamina->loadFile("./res/STAMINATEST.png");
 
 	texture = std::make_shared<Texture>();
-	texture->loadFile("./res/yuntexturepaint.png");
+	texture->loadFile("./res/color-grid.png");
 
 	texture2 = std::make_shared<Texture>();
-	texture2->loadFile("./res/Training_Map_New_Texture.png");
+	texture2->loadFile("./res/Catwalk_LargeSide_Texture.png");
 
 	texture3 = std::make_shared<Texture>();
 	texture3->loadFile("./res/default.png");
@@ -157,6 +166,45 @@ void Vatista::Game::init()
 	testMat2->Set("a_LightAttenuation", 0.04f);
 	testMat2->Set("texSample", texture2);
 
+	for (int i = 0; i < 11; i++) {
+		textures.emplace_back();
+		textures[i] = std::make_shared<Texture>();
+	}
+	textures[0]->loadFile("./res/Catwalk_Floor/Catwalk_Floor_Texture.png");
+	textures[1]->loadFile("./res/Catwalk_InsideCorner/Catwalk_Rail_Corners_Texture.png");
+	textures[2]->loadFile("./res/Catwalk_OutsideCorner/Catwalk_Rail_Corners_Texture.png");
+	textures[3]->loadFile("./res/Catwalk_Rail_Large/Catwalk_Rail_Large_Texture.png");
+	textures[4]->loadFile("./res/Catwalk_Rail_Short/Catwalk_Rail_Short_Texture.png");
+	textures[5]->loadFile("./res/CrateLarge/CrateLarge_Texture.png");
+	textures[6]->loadFile("./res/CrateMedium/CrateMedium_Texture.png");
+	textures[7]->loadFile("./res/CrateSmall/CrateSmall_Texture.png");
+	textures[8]->loadFile("./res/Girders/Girders_Texture.png");
+	textures[9]->loadFile("./res/MiningShip/MiningShip_Texture.png");
+	textures[10]->loadFile("./res/Barrel/Barrel_Texture.png");
+	for (int i = 0; i < 11;i++) {
+		mats.emplace_back();
+		mats[i] = std::make_shared<Material>(phong2);
+		mats[i]->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+		mats[i]->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+		mats[i]->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+		mats[i]->Set("a_AmbientPower", 0.5f);
+		mats[i]->Set("a_LightSpecPower", 0.9f);
+		mats[i]->Set("a_LightShininess", 256.0f);
+		mats[i]->Set("a_LightAttenuation", 0.04f);
+		mats[i]->Set("texSample", textures[i]);
+	}
+
+	stage = std::make_shared<Stage>();
+	for (int i = 0; i < 11;i++) {
+		stage->Props.emplace_back();
+		stage->Props[i] = std::make_shared<GameObject>();
+		stage->Props[i]->setMesh(meshList[i + 2]);
+		stage->Props[i]->setMat(mats[i]);
+		stage->Props[i]->setPos(glm::vec3(0,0,5));
+		stage->Props[i]->setRotY(-90.0f);
+		stage->Props[i]->setTexture(textures[i]);
+		ObjectList.push_back(stage->Props[i]);
+	}
 
 	Material::Sptr testBlank = std::make_shared<Material>(staminaPhong);//blank stamina texture
 	testBlank->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -184,17 +232,15 @@ void Vatista::Game::init()
 
 	//pos3 = glm::vec3(1, 0, 0); 
 	//myScene.emplace_back(); 
-	TestMap = std::make_shared<GameObject>();
-	TestMap->setPos(glm::vec3(0, -1.f, 1));
-	TestMap->setMesh(meshList[1]);
-	TestMap->setMat(testMat2);
-	TestMap->setRotY(-90.f);
-	TestMap->setTexture(texture2);
-	TestMap->setScale(glm::vec3(0.3f));
-	ObjectList.push_back(TestMap);
-
-
-
+	//TestMap = std::make_shared<GameObject>();
+	//TestMap->setPos(glm::vec3(0, 0.f, 5));
+	//TestMap->setMesh(meshList[1]);
+	//TestMap->setMat(testMat2);
+	//TestMap->setRotY(-90.f);
+	//TestMap->setTexture(texture2);
+	//TestMap->setScale(glm::vec3(0.4f));
+	//ObjectList.push_back(TestMap);
+	
 	//myScene[2].Position = pos3; 
 	//myScene[2].Material = testMat2; 
 	//myScene[2].Mesh = myMesh3; 
@@ -202,11 +248,14 @@ void Vatista::Game::init()
 	//myScene[2].Collider = glm::vec2(0.74f, 1.78f); 
 
 	C1 = std::make_shared<Character>(true, meshList[0], testMat);
+	C1->setScale(glm::vec3(0.5f));
 	ObjectList.push_back(C1);
 
 	//Player 2 
 	C2 = std::make_shared<Character>(false, meshList[0], testMat);
+	C2->setScale(glm::vec3(0.5f));
 	ObjectList.push_back(C2);
+	
 
 
 
@@ -240,12 +289,14 @@ void Vatista::Game::init()
 void Vatista::Game::close()
 {
 	glfwTerminate();
+	audioEngine->Shutdown();
 }
 
 void Vatista::Game::update(float dt)
 {
-	C1->update(dt, gameWindow->getWindow(), C2);
-	C2->update(dt, gameWindow->getWindow(), C1);
+	C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
+	C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
+	audioEngine->Update();
 }
 
 void Vatista::Game::draw(float dt)
@@ -253,7 +304,7 @@ void Vatista::Game::draw(float dt)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//draw  
+	//draw 
 	for (auto object : ObjectList) {
 		object->Draw(myCamera);
 
@@ -370,14 +421,20 @@ bool Vatista::Game::load(std::string filename)
 
 		dataFile.close();
 
+		//vertex data
 		std::vector<uint32_t> indices;
 		std::vector<Vertex> vertData;
 		std::vector<MorphVertex> morphVertData;
 
+		//tangents
+		std::vector<glm::vec3> tangents;
+		std::vector<glm::vec3> bitangents;
+
+		//Math::computeTangents(morphVertData, indices, tangents, bitangents);
 		for (int i = 0; i < vertTotalBuffer; i++) {
 			MorphVertex morph = { Vertex{(*(morphBuffer + i)).Position,
-			(*(morphBuffer + i)).UV, (*(morphBuffer + i)).Normal},
-				(*(morphBuffer + i)).PositionS, (*(morphBuffer + i)).NormalS };
+			(*(morphBuffer + i)).UV, (*(morphBuffer + i)).Normal}, (*(morphBuffer + i)).PositionS, 
+				(*(morphBuffer + i)).NormalS };
 			morphVertData.push_back(morph);
 		}
 

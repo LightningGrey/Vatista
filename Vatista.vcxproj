@@ -11,10 +11,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\fmod\fmod.h" />
+    <ClInclude Include="include\fmod\fmod.hpp" />
+    <ClInclude Include="include\fmod\fmod_codec.h" />
+    <ClInclude Include="include\fmod\fmod_common.h" />
+    <ClInclude Include="include\fmod\fmod_dsp.h" />
+    <ClInclude Include="include\fmod\fmod_dsp_effects.h" />
+    <ClInclude Include="include\fmod\fmod_errors.h" />
+    <ClInclude Include="include\fmod\fmod_output.h" />
+    <ClInclude Include="include\fmod\fmod_studio.h" />
+    <ClInclude Include="include\fmod\fmod_studio.hpp" />
+    <ClInclude Include="include\fmod\fmod_studio_common.h" />
     <ClInclude Include="include\glad\glad.h" />
     <ClInclude Include="include\GLFW\glfw3.h" />
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
+    <ClInclude Include="src\AudioEngine.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Character.h" />
     <ClInclude Include="src\FrameBuffer.h" />
@@ -28,12 +40,14 @@
     <ClInclude Include="src\MeshRenderer.h" />
     <ClInclude Include="src\ObjLoader.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\Stage.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\glad\glad.c" />
+    <ClCompile Include="src\AudioEngine.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Character.cpp" />
     <ClCompile Include="src\FrameBuffer.cpp" />
@@ -44,12 +58,25 @@
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\ObjLoader.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Stage.cpp" />
     <ClCompile Include="src\testmain.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="lib\fmodL_vc.lib" />
+    <Library Include="lib\fmodstudioL_vc.lib" />
+    <Library Include="lib\fmodstudio_vc.lib" />
+    <Library Include="lib\fmod_vc.lib" />
     <Library Include="lib\glfw3.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\fmod\fmod_studio.cs" />
+    <None Include="lib\fmod.dll" />
+    <None Include="lib\fmodL.dll" />
+    <None Include="lib\fmodstudio.dll" />
+    <None Include="lib\fmodstudioL.dll" />
+    <None Include="res\Master.bank" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\StaminaBar.fs.glsl" />
@@ -105,7 +132,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fmodstudioL_vc.lib;fmodL_vc.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -121,6 +148,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>fmodstudio_vc.lib;fmod_vc.lb;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

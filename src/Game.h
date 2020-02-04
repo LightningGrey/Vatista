@@ -13,11 +13,13 @@
 #include "Camera.h"
 #include "ObjLoader.h"
 #include "Window.h"
-#include <src\GameObject.h>
+#include "GameObject.h"
 #include "Character.h"
 #include "Texture.h"
 #include "Utils.h"
 #include "Math.h"
+#include "AudioEngine.h"
+#include "Stage.h"
 //#include "Controls.h"
 
 
@@ -37,6 +39,7 @@ namespace Vatista {
 		Window* gameWindow;
 		glm::vec4 clearColour;
 		std::string windowName;
+		AudioEngine::Sptr audioEngine;
 
 		//A shared pointer to our mesh
 		Mesh::Sptr myMesh;
@@ -51,6 +54,9 @@ namespace Vatista {
 		Texture::Sptr texture2;
 		Texture::Sptr texture3;
 		Texture::Sptr texture4;
+		std::vector<Texture::Sptr> textures;
+		std::vector<Material::Sptr> mats;
+		Stage::Sptr stage;
 		Camera::Sptr myCamera;
 		//Camera::Sptr myCameraUI;//camera for the general UI elements 
 
