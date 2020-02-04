@@ -117,7 +117,7 @@ void Vatista::Game::init()
 	//texture2->bind(2); 
 
 	textureStamina = std::make_shared<Texture>();
-	texture->loadFile("./res/STAMINATEST.png");
+	textureStamina->loadFile("./res/STAMINATEST.png");
 
 	texture = std::make_shared<Texture>();
 	texture->loadFile("./res/yuntexturepaint.png");
@@ -134,8 +134,8 @@ void Vatista::Game::init()
 	Shader::Sptr phong2 = std::make_shared<Shader>();
 	phong2->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
 
-	Shader::Sptr staminaPhong = std::make_shared<Shader>();
-	phong2->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
+	Shader::Sptr staminaPhong = std::make_shared<Shader>();//stamina stuff
+	phong2->Load("./res/StaminaBar.vs.glsl", "./res/StaminaBar.fs.glsl");
 
 	Material::Sptr testMat = std::make_shared<Material>(phong);
 	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -156,6 +156,17 @@ void Vatista::Game::init()
 	testMat2->Set("a_LightShininess", 256.0f);
 	testMat2->Set("a_LightAttenuation", 0.04f);
 	testMat2->Set("texSample", texture2);
+
+
+	Material::Sptr testBlank = std::make_shared<Material>(staminaPhong);//blank stamina texture
+	testBlank->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	testBlank->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	testBlank->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	testBlank->Set("a_AmbientPower", 0.5f);
+	testBlank->Set("a_LightSpecPower", 0.9f);
+	testBlank->Set("a_LightShininess", 256.0f);
+	testBlank->Set("a_LightAttenuation", 0.04f);
+	testBlank->Set("texSample", textureStamina);
 
 	////Player 1 
 	//modelTransform = glm::mat4(1.0f); 
@@ -203,24 +214,24 @@ void Vatista::Game::init()
 
 
 	TestStamina = std::make_shared<GameObject>();
-	TestStamina->setPos(glm::vec3(1, -1.f, 1));
+	TestStamina->setPos(glm::vec3(1, 0.4, 0.1));
 	TestStamina->setMesh(meshList[2]);//3rd one on init.txt
-	TestStamina->setMat(testMat2/*placeholder*/);
+	TestStamina->setMat(testBlank);
 	TestStamina->setRotY(-90.f);
-	TestStamina->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
+	//TestStamina->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
 	TestStamina->setScale(glm::vec3(1.0f));
 	ObjectList.push_back(TestStamina);
 	 
 
 
-	TestStaminaBackground = std::make_shared<GameObject>();
-	TestStaminaBackground->setPos(glm::vec3(1, -1.f, 1));
-	TestStaminaBackground->setMesh(meshList[6/*placeholder*/]);//3rd one on init.txt
-	TestStaminaBackground->setMat(testMat2/*placeholder*/);
-	TestStaminaBackground->setRotY(-90.f);
-	TestStaminaBackground->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
-	TestStaminaBackground->setScale(glm::vec3(1.0f));
-	ObjectList.push_back(TestStaminaBackground);
+	//TestStaminaBackground = std::make_shared<GameObject>();
+	//TestStaminaBackground->setPos(glm::vec3(1, -1.f, 1));
+	//TestStaminaBackground->setMesh(meshList[6/*placeholder*/]);//3rd one on init.txt
+	//TestStaminaBackground->setMat(testMat2/*placeholder*/);
+	//TestStaminaBackground->setRotY(-90.f);
+	//TestStaminaBackground->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
+	//TestStaminaBackground->setScale(glm::vec3(1.0f));
+	//ObjectList.push_back(TestStaminaBackground);
 
 //get rid of camera transform
 	glEnable(GL_CULL_FACE);
