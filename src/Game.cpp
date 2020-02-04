@@ -62,7 +62,10 @@ void Vatista::Game::init()
 	audioEngine = std::make_shared<AudioEngine>();
 	audioEngine->Init();
 	audioEngine->LoadBank("./res/Master", FMOD_STUDIO_LOAD_BANK_NORMAL);
-	audioEngine->LoadEvent("Music", "{7cd3c8cb-a575-4dd4-bf24-92345bcb126d}");
+	audioEngine->LoadEvent("Music", "{fd7618a1-5880-4a64-ae37-e0f01ef54912}");
+	audioEngine->LoadEvent("LightAttack", "{f64fa79a-565d-4493-b4bf-a73a37c31219}");
+	audioEngine->LoadEvent("HeavyAttack", "{621b2e70-27ea-4900-b397-96cb10366574}");
+	audioEngine->LoadEvent("Dash", "{53dbc862-3dec-411a-9fc4-bb15743c2b6b}");
 	audioEngine->PlayEvent("Music");
 	load("./res/init.txt");
 
@@ -244,8 +247,8 @@ void Vatista::Game::close()
 
 void Vatista::Game::update(float dt)
 {
-	C1->update(dt, gameWindow->getWindow(), C2);
-	C2->update(dt, gameWindow->getWindow(), C1);
+	C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
+	C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
 	audioEngine->Update();
 }
 

@@ -1,5 +1,5 @@
 // Code edited from: https://codyclaborn.me/tutorials/making-a-basic-fmod-audio-engine-in-c/
-
+#pragma once
 #ifndef _AUDIO_ENGINE_H_
 #define _AUDIO_ENGINE_H_
 

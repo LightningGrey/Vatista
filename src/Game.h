@@ -13,7 +13,7 @@
 #include "Camera.h"
 #include "ObjLoader.h"
 #include "Window.h"
-#include <src\GameObject.h>
+#include "GameObject.h"
 #include "Character.h"
 #include "Texture.h"
 #include "Utils.h"
