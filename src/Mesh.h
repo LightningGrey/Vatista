@@ -47,6 +47,8 @@ namespace Vatista {
 			std::vector<MorphVertex> vertData, size_t numData);
 		~Mesh();
 
+
+		void resize();
 		// Draws this mesh
 		void Draw();
 
@@ -59,5 +61,6 @@ namespace Vatista {
 		size_t myVertexCount, myUVCount, myNormalCount, myIndexCount;
 	};
 	// Shorthand for shared_ptr
-	typedef std::shared_ptr<Mesh> Mesh_sptr;
+
+
 }

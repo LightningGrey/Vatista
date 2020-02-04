@@ -116,6 +116,9 @@ void Vatista::Game::init()
 	//texture2->loadFile("./res/default.png"); 
 	//texture2->bind(2); 
 
+	textureStamina = std::make_shared<Texture>();
+	texture->loadFile("./res/STAMINATEST.png");
+
 	texture = std::make_shared<Texture>();
 	texture->loadFile("./res/yuntexturepaint.png");
 
@@ -129,6 +132,9 @@ void Vatista::Game::init()
 	phong->Load("./res/passthroughMorph.vs", "./res/blinn-phong.fs.glsl");
 
 	Shader::Sptr phong2 = std::make_shared<Shader>();
+	phong2->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
+
+	Shader::Sptr staminaPhong = std::make_shared<Shader>();
 	phong2->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
 
 	Material::Sptr testMat = std::make_shared<Material>(phong);
@@ -202,11 +208,21 @@ void Vatista::Game::init()
 	TestStamina->setMat(testMat2/*placeholder*/);
 	TestStamina->setRotY(-90.f);
 	TestStamina->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
-	TestStamina->setScale(glm::vec3(0.5f));
+	TestStamina->setScale(glm::vec3(1.0f));
 	ObjectList.push_back(TestStamina);
-	//get rid of camera transform 
+	 
 
 
+	TestStaminaBackground = std::make_shared<GameObject>();
+	TestStaminaBackground->setPos(glm::vec3(1, -1.f, 1));
+	TestStaminaBackground->setMesh(meshList[6/*placeholder*/]);//3rd one on init.txt
+	TestStaminaBackground->setMat(testMat2/*placeholder*/);
+	TestStaminaBackground->setRotY(-90.f);
+	TestStaminaBackground->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
+	TestStaminaBackground->setScale(glm::vec3(1.0f));
+	ObjectList.push_back(TestStaminaBackground);
+
+//get rid of camera transform
 	glEnable(GL_CULL_FACE);
 }
 

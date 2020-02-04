@@ -52,7 +52,8 @@
     <Library Include="lib\glfw3.lib" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\StaminaBar.vs" />
+    <None Include="res\StaminaBar.fs.glsl" />
+    <None Include="res\StaminaBar.vs.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
