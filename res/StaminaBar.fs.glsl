@@ -17,18 +17,21 @@ const vec4 GREEN = vec4( 0.0, 1.0, 0.0, 1.0 );
 const vec4 WHITE = vec4( 1.0, 1.0, 1.0, 1.0 );
 const vec4 RED   = vec4( 1.0, 0.0, 0.0, 1.0 );
 
+uniform float staminaValue;
+
 void main() {
 
 	//outColor = inColor;
 
 
-	float U = <1>;
+	float u = staminaValue;
 
 u = clamp( u, 0.0, 1.0 );
 if( u < 0.5 )
     myOutputColor = mix( GREEN, WHITE, remap( 0.0, 0.5, u ) );
 else
     myOutputColor = mix( WHITE, RED, remap( 0.5, 1.0, u ) );
+
 }
 
 

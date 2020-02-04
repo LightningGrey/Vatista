@@ -14,9 +14,9 @@ void main() {
 	outPosition = inPosition;
 	outUV = inUV;
 	gl_Position = a_Model * vec4(inPosition, 1);
-	vec3 lerpPosition;
+	//vec3 lerpPosition;
 	
-	outPosition = (x = -1,y, z);
+	//outPosition = (x =, y , z);
 
 	//lerpPosition = mix( inPosition, vec3(), 0);
 }
