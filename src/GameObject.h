@@ -24,7 +24,9 @@ namespace Vatista {
 
 		void setRot(glm::vec3 newRot) { EulerRotDeg = newRot; }
 		//individual rotation components
+		void setRotX(float newRot) { EulerRotDeg.x = newRot; }
 		void setRotY(float newRot) { EulerRotDeg.y = newRot; }
+		void setRotZ(float newRot) { EulerRotDeg.z = newRot; }
 
 		void setCollider(glm::vec2 newColl) { Collider = newColl; }
 		//individual collider components

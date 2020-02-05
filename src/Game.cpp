@@ -54,10 +54,16 @@ void Vatista::Game::init()
 	//window and camera 
 	gameWindow = new Vatista::Window(1920, 1080, "Alpha Strike");
 
-	myCamera = std::make_shared<Vatista::Camera>();
-	myCamera->SetPosition(glm::vec3(0, 2, 15));
-	myCamera->LookAt(glm::vec3(0,4,0), glm::vec3(0, 1, 0));
-	myCamera->Projection = glm::perspective(glm::radians(90.0f), 16.f / 9.f, 1.0f, 150.0f);
+	mainCamera = std::make_shared<Vatista::Camera>();
+	mainCamera->SetPosition(glm::vec3(0, 2, 15));
+	mainCamera->LookAt(glm::vec3(0,4,0), glm::vec3(0, 1, 0));
+	mainCamera->Projection = glm::perspective(glm::radians(90.0f), 16.f / 9.f, 1.0f, 150.0f);
+
+	//doesn't work yet
+	orthoCamera = std::make_shared<Vatista::Camera>();
+	orthoCamera->SetPosition(glm::vec3(0, 0, 15));
+	orthoCamera->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
+	orthoCamera->Projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 150.0f);
 
 	audioEngine = std::make_shared<AudioEngine>();
 	audioEngine->Init();
@@ -235,6 +241,22 @@ void Vatista::Game::init()
 	C2 = std::make_shared<Character>(false, meshList[0], testMat);
 	C2->setScale(glm::vec3(0.5f));
 	ObjectList.push_back(C2);
+
+	staminaBar = std::make_shared<GameObject>();
+	staminaBar->setMesh(meshList[13]);
+	staminaBar->setMat(testMat);
+	staminaBar->setPos(glm::vec3(-11, 12, 5));
+	staminaBar->setRotX(90.0f);
+	staminaBar->setScale(glm::vec3(1.0f));
+	UIList.push_back(staminaBar);
+
+	staminaBar2 = std::make_shared<GameObject>();
+	staminaBar2->setMesh(meshList[13]);
+	staminaBar2->setMat(testMat);
+	staminaBar2->setPos(glm::vec3(10.7, 12, 5));
+	staminaBar2->setRotX(90.0f);
+	staminaBar2->setScale(glm::vec3(1.0f));
+	UIList.push_back(staminaBar2);
 	
 	glEnable(GL_CULL_FACE);
 }
@@ -249,6 +271,32 @@ void Vatista::Game::update(float dt)
 {
 	C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
 	C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
+
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_ADD)) {
+		x += 0.01f;
+		x = x > 1.0f ? 1.0f : x;
+		staminaBar->setScale(glm::vec3(x, 1.0f, 1.0f));
+	} 
+
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_SUBTRACT)){
+		x -= 0.01f;
+		x = x < 0.0f ? 0.0f : x;
+		staminaBar->setScale(glm::vec3(x, 1.0f, 1.0f));
+	}
+
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_8)){
+		y += 0.01f;
+		y = y > 1.0f ? 1.0f : y;
+		staminaBar2->setScale(glm::vec3(y, 1.0f, 1.0f));
+	}
+
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_2)) {
+		y -= 0.01f;
+		y = y < 0.0f ? 0.0f : y;
+		staminaBar2->setScale(glm::vec3(y, 1.0f, 1.0f));
+	}
+
+
 	audioEngine->Update();
 }
 
@@ -259,7 +307,11 @@ void Vatista::Game::draw(float dt)
 
 	//draw 
 	for (auto object : ObjectList) {
-		object->Draw(myCamera);
+		object->Draw(mainCamera);
+	}
+
+	for (auto component : UIList) {
+		component->Draw(mainCamera);
 	}
 
 }
