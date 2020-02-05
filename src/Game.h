@@ -55,7 +55,6 @@ namespace Vatista {
 		Texture::Sptr texture4;
 		std::vector<Texture::Sptr> textures;
 		std::vector<Material::Sptr> mats;
-		Stage::Sptr stage;
 		Camera::Sptr mainCamera;
 		Camera::Sptr orthoCamera;
 
