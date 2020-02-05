@@ -15,7 +15,6 @@
     <ClCompile Include="src\Character.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\AudioEngine.cpp" />
-    <ClCompile Include="src\Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />
@@ -52,7 +51,6 @@
     <ClInclude Include="include\fmod\fmod_studio.h" />
     <ClInclude Include="include\fmod\fmod_studio.hpp" />
     <ClInclude Include="include\fmod\fmod_studio_common.h" />
-    <ClInclude Include="src\Stage.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />

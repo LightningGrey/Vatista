@@ -19,7 +19,6 @@
 #include "Utils.h"
 #include "Math.h"
 #include "AudioEngine.h"
-#include "Stage.h"
 //#include "Controls.h"
 
 
@@ -65,6 +64,7 @@ namespace Vatista {
 		Character::Sptr C1;
 		Character::Sptr C2;
 		GameObject::Sptr TestMap;
+		GameObject::Sptr stage;
 		GameObject::Sptr staminaBar;
 		GameObject::Sptr staminaBar2; 
 		float x = 100.0f;

@@ -131,7 +131,7 @@ void Vatista::Game::init()
 	texture->loadFile("./res/color-grid.png");
 
 	texture2 = std::make_shared<Texture>();
-	texture2->loadFile("./res/Catwalk_LargeSide_Texture.png");
+	texture2->loadFile("./res/Catwalk_Floor/Catwalk_Floor_Texture.png");
 
 	texture3 = std::make_shared<Texture>();
 	texture3->loadFile("./res/default.png");
@@ -165,19 +165,44 @@ void Vatista::Game::init()
 	for (int i = 0; i < 11; i++) {
 		textures.emplace_back();
 		textures[i] = std::make_shared<Texture>();
+		switch (i) {
+		case 0:
+			textures[i]->loadFile("./res/Catwalk_Floor/Catwalk_Floor_Texture.png");
+			break;
+		case 1:
+			textures[i]->loadFile("./res/Catwalk_InsideCorner/Catwalk_Rail_Corners_Texture.png");
+			break;
+		case 2:
+			textures[i]->loadFile("./res/Catwalk_OutsideCorner/Catwalk_Rail_Corners_Texture.png");
+			break;
+		case 3:
+			textures[i]->loadFile("./res/Catwalk_Rail_Large/Catwalk_Rail_Large_Texture.png");
+			break;
+		case 4:
+			textures[i]->loadFile("./res/Catwalk_Rail_Short/Catwalk_Rail_Short_Texture.png");
+			break;
+		case 5:
+			textures[i]->loadFile("./res/CrateLarge/CrateLarge_Texture.png");
+			break;
+		case 6:
+			textures[i]->loadFile("./res/CrateMedium/CrateMedium_Texture.png");
+			break;
+		case 7:
+			textures[i]->loadFile("./res/CrateSmall/CrateSmall_Texture.png");
+			break;
+		case 8:
+			textures[i]->loadFile("./res/Girders/Girders_Texture.png");
+			break;
+		case 9:
+			textures[i]->loadFile("./res/MiningShip/MiningShip_Texture.png");
+			break;
+		case 10:
+			textures[i]->loadFile("./res/Barrel/Barrel_Texture.png");
+			break;
+		}
 	}
-	textures[0]->loadFile("./res/Catwalk_Floor/Catwalk_Floor_Texture.png");
-	textures[1]->loadFile("./res/Catwalk_InsideCorner/Catwalk_Rail_Corners_Texture.png");
-	textures[2]->loadFile("./res/Catwalk_OutsideCorner/Catwalk_Rail_Corners_Texture.png");
-	textures[3]->loadFile("./res/Catwalk_Rail_Large/Catwalk_Rail_Large_Texture.png");
-	textures[4]->loadFile("./res/Catwalk_Rail_Short/Catwalk_Rail_Short_Texture.png");
-	textures[5]->loadFile("./res/CrateLarge/CrateLarge_Texture.png");
-	textures[6]->loadFile("./res/CrateMedium/CrateMedium_Texture.png");
-	textures[7]->loadFile("./res/CrateSmall/CrateSmall_Texture.png");
-	textures[8]->loadFile("./res/Girders/Girders_Texture.png");
-	textures[9]->loadFile("./res/MiningShip/MiningShip_Texture.png");
-	textures[10]->loadFile("./res/Barrel/Barrel_Texture.png");
-	for (int i = 0; i < 11;i++) {
+
+	for (int i = 0; i < 11; i++) {
 		mats.emplace_back();
 		mats[i] = std::make_shared<Material>(phong2);
 		mats[i]->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -189,19 +214,16 @@ void Vatista::Game::init()
 		mats[i]->Set("a_LightAttenuation", 0.04f);
 		mats[i]->Set("texSample", textures[i]);
 	}
+	
 
-	stage = std::make_shared<Stage>();
-	for (int i = 0; i < 11;i++) {
-		stage->Props.emplace_back();
-		stage->Props[i] = std::make_shared<GameObject>();
-		stage->Props[i]->setMesh(meshList[i + 2]);
-		stage->Props[i]->setMat(mats[i]);
-		stage->Props[i]->setPos(glm::vec3(0,0,5));
-		stage->Props[i]->setRotY(-90.0f);
-		stage->Props[i]->setTexture(textures[i]);
-		ObjectList.push_back(stage->Props[i]);
+	for (int i = 0; i < 11; i++) {
+		stage = std::make_shared<GameObject>();
+		stage->setPos(glm::vec3(0, 0, 5));
+		stage->setRotY(-90.0f);
+		stage->setMesh(meshList[i+2]);
+		stage->setMat(mats[i]);
+		ObjectList.push_back(stage);
 	}
-
 	////Player 1 
 	//modelTransform = glm::mat4(1.0f); 
 	//modelTransform = glm::rotate(modelTransform, 3.14f, glm::vec3(0, 1, 0)); 
@@ -259,6 +281,7 @@ void Vatista::Game::init()
 	UIList.push_back(staminaBar2);
 	
 	glEnable(GL_CULL_FACE);
+	
 }
 
 void Vatista::Game::close()
