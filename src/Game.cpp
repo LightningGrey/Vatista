@@ -126,7 +126,7 @@ void Vatista::Game::init()
 	//texture2->bind(2); 
 
 	textureStamina = std::make_shared<Texture>();
-	textureStamina->loadFile("./res/STAMINATEST.png");
+//	textureStamina->loadFile("./res/STAMINATEST.png");
 
 	texture = std::make_shared<Texture>();
 	texture->loadFile("./res/color-grid.png");
@@ -144,7 +144,7 @@ void Vatista::Game::init()
 	phong2->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
 
 	Shader::Sptr staminaPhong = std::make_shared<Shader>();//stamina stuff
-	phong2->Load("./res/StaminaBar.vs.glsl", "./res/StaminaBar.fs.glsl");
+	staminaPhong->Load("./res/StaminaBar.vs.glsl", "./res/blinn-phong.fs.glsl");
 
 	Material::Sptr testMat = std::make_shared<Material>(phong);
 	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -259,16 +259,18 @@ void Vatista::Game::init()
 
 
 
-	//trying to insert a mesh used for stamina or icon - gary
-
+	float x = 1.0;
 
 	TestStamina = std::make_shared<GameObject>();
-	TestStamina->setPos(glm::vec3(1, 0.4, 0.1));
-	TestStamina->setMesh(meshList[2]);//3rd one on init.txt
-	TestStamina->setMat(testBlank);
-	TestStamina->setRotY(-90.f);
+	TestStamina->setPos(glm::vec3(-14, 14, 0));
+	TestStamina->setMesh(meshList[13]);//3rd one on init.txt
+	TestStamina->setMat(testMat/*testBlank*/);
+
+	TestStamina->setRot(glm::vec3(90, 0, 0));
 	//TestStamina->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
-	TestStamina->setScale(glm::vec3(1.0f));
+	//TestStamina->setScale(glm::vec3(1.0f));
+	TestStamina->setScale(glm::vec3(x, 1.0f, 1.0f));
+
 	ObjectList.push_back(TestStamina);
 	 
 
@@ -286,6 +288,8 @@ void Vatista::Game::init()
 	glEnable(GL_CULL_FACE);
 }
 
+
+
 void Vatista::Game::close()
 {
 	glfwTerminate();
@@ -297,6 +301,8 @@ void Vatista::Game::update(float dt)
 	C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
 	C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
 	audioEngine->Update();
+
+	//TestStamina.setScale(glm::vec3(0.5f));
 }
 
 void Vatista::Game::draw(float dt)
@@ -309,8 +315,6 @@ void Vatista::Game::draw(float dt)
 		object->Draw(myCamera);
 
 		//object->Draw(myCameraUI); ortho camera for ui in work
-
-
 	}
 
 }

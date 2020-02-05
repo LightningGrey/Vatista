@@ -11,4 +11,4 @@ CrateSmall/CrateSmall.vsf
 Girders/Girders.vsf
 MiningShip/MiningShip.vsf
 Barrel/Barrel.vsf
-staminabarplaceholder.vsf
+2x15.vsf

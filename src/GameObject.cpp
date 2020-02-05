@@ -38,6 +38,11 @@ namespace Vatista {
 		// Update the model matrix to the item's world transform
 		material->GetShader()->SetUniform("a_NormalMatrix", normalMatrix);
 
+		//get stamina vector
+		
+		glm::vec3 vec = glm::vec3(-9.0f, 0.0f, 0.0f);
+
+		material->GetShader()->SetUniform("staminaValue", vec);
 
 		currentTime += dt;
 
