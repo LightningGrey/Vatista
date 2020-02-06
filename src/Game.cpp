@@ -52,7 +52,7 @@ void Vatista::Game::run()
 void Vatista::Game::init()
 {
 	//window and camera 
-	gameWindow = new Vatista::Window(1920, 1080, "Alpha Strike");
+	gameWindow = new Vatista::Window(1600, 900, "Alpha Strike");
 
 	mainCamera = std::make_shared<Vatista::Camera>();
 	mainCamera->SetPosition(glm::vec3(0, 2, 15));
@@ -290,45 +290,26 @@ void Vatista::Game::init()
 	C2->setScale(glm::vec3(0.5f));
 	ObjectList.push_back(C2);
 
-	staminaBar = std::make_shared<GameObject>();
-	staminaBar->setMesh(meshList[13]);
-	staminaBar->setMat(testMat);
-	staminaBar->setPos(glm::vec3(-11, 12, 5));
-	staminaBar->setRotX(90.0f);
-	staminaBar->setScale(glm::vec3(1.0f));
-	UIList.push_back(staminaBar);
-
-	staminaBar2 = std::make_shared<GameObject>();
-	staminaBar2->setMesh(meshList[13]);
-	staminaBar2->setMat(testMat);
-	staminaBar2->setPos(glm::vec3(10.7, 12, 5));
-	staminaBar2->setRotX(90.0f);
-	staminaBar2->setScale(glm::vec3(1.0f));
-	UIList.push_back(staminaBar2);
-	
-
-
-
 
 	TestStamina = std::make_shared<GameObject>();
-	TestStamina->setPos(glm::vec3(-14, 14, 0));
+	TestStamina->setPos(glm::vec3(-17, 20, 0));
 	TestStamina->setMesh(meshList[13]);//3rd one on init.txt
 	TestStamina->setMat(staminaMat/*staminaMat*/);
 
 	TestStamina->setRot(glm::vec3(90, 0, 0));
 	TestStamina->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time
 	TestStamina->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
-	ObjectList.push_back(TestStamina);
+	UIList.push_back(TestStamina);
 
 	TestStamina2 = std::make_shared<GameObject>();
-	TestStamina2->setPos(glm::vec3(14, 14, 0));
+	TestStamina2->setPos(glm::vec3(17, 20, 0));
 	TestStamina2->setMesh(meshList[13]);//3rd one on init.txt
 	TestStamina2->setMat(staminaMat/*staminaMat*/);
 
 	TestStamina2->setRot(glm::vec3(90, 0, 0));
 	TestStamina2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time
 	TestStamina2->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
-	ObjectList.push_back(TestStamina2);
+	UIList.push_back(TestStamina2);
 	 
 
 
