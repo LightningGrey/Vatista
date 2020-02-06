@@ -40,6 +40,8 @@
     <ClInclude Include="src\MeshRenderer.h" />
     <ClInclude Include="src\ObjLoader.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\Stage.h" />
+    <ClInclude Include="src\Stamina.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Window.h" />

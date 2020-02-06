@@ -55,6 +55,7 @@
     <ClInclude Include="include\fmod\fmod_studio_common.h" />
     <ClInclude Include="src\Stage.h" />
     <ClInclude Include="src\FrameBuffer.h" />
+    <ClInclude Include="src\Stamina.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />

@@ -3,67 +3,30 @@
 layout (location = 0) in vec3 inPosition;
 layout (location = 1) in vec2 inUV;
 layout (location = 2) in vec3 inNormal;
+//layout (location = 3) in vec3 incolor;
 
-layout (location = 0) out vec3 colourvalue;
+
+
+layout (location = 0) out vec4 colourvalue;
 uniform vec4 myOutputColor;
-
-
-float remap( float minvalue, float maxvalue, float currentvalue )//remaping the values
-{
-    return ( currentvalue - minvalue ) / ( maxvalue - minvalue );
-} 
-
-const vec4 GREEN = vec4( 0.0, 1.0, 0.0, 1.0 );
-const vec4 WHITE = vec4( 1.0, 1.0, 1.0, 1.0 );
-const vec4 RED   = vec4( 1.0, 0.0, 0.0, 1.0 );
-
+uniform vec3 UVoffset;
+uniform sampler2D texSample;
 
 void main() {
 
 	//outColor = inColor;
 
 
-	 vec4 u = myOutputColor;
+	vec2 offset = vec2(UVoffset.x, UVoffset.y);//
 	
-//
-//u = clamp( u, 0.0, 1.0 );
-//if( u < 0.5 )
-//    myOutputColor = mix( GREEN, WHITE, remap( 0.0, 0.5, u ) );
-//else
-//    myOutputColor = mix( WHITE, RED, remap( 0.5, 1.0, u ) );
-//
 
-//if(true)
-//{
-//    discard;
-//}
+	vec4 surfaceColour = texture(texSample, inUV + offset);//pushing the UVs over of the texture
+	
+	colourvalue = surfaceColour;
 
+	colourvalue.a = int(colourvalue.x>0);//so colourvalue.x>0 returns ether 1 or 0 1 being true and 0 being false
+	//then the colour value will be ether green or cleared (if it was black it got turned transparent) 
+	//depending on if its true or false
+
+	//colourvalue.a = colourvalue.x;
 }
-
-//
-//
-//vec3 hsv2rgb(vec3 c)
-//{
-//    vec4 K = vec4(1.0, 0.6666666, 0.3333333, 3.0);
-//    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-//    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-//}
-//
-//
-//void mainImage( out vec4 fragColor, in vec2 fragCoord )
-//{
-//	vec2 border = vec2(0.05, 0.1);
-//    vec4 backCol = vec4(1,1,1,1);
-//    vec2 uv = fragCoord/iResolution.xy;
-//    
-//    // generate border mask
-//	vec2 mask2 = step(border, uv) * step(uv, 1.0-border);
-//    float mask = mask2.x*mask2.y;
-//    
-//    float progress = mod(iTime, 1.0);  
-//    float blend = ((uv.x - progress) <= 0.0 ? 1.0 : 0.0) * mask;
-//    vec4 foreCol = vec4(hsv2rgb(vec3(progress*0.33333 - 0.1, 1.0, 1.0)), 1.0);
-//    fragColor = foreCol*blend + backCol*(1.0-blend);
-//}
-//
-

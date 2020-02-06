@@ -69,6 +69,8 @@ namespace Vatista {
 		float x = 100.0f;
 		float y = 100.0f;
 		GameObject::Sptr TestStamina;
+		GameObject::Sptr TestStamina2;
+
 		GameObject::Sptr TestStaminaBackground;
 
 		glm::mat4 modelTransform2 = glm::mat4(0.f);

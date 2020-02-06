@@ -131,8 +131,8 @@ void Vatista::Game::init()
 	//texture2->loadFile("./res/default.png"); 
 	//texture2->bind(2); 
 
-	textureStamina = std::make_shared<Texture>();
-//	textureStamina->loadFile("./res/STAMINATEST.png");
+	textureStamina = std::make_shared<Texture>();//connected to staminamat
+	textureStamina->loadFile("./res/staminaRampTexture.png");
 
 	texture = std::make_shared<Texture>();
 	texture->loadFile("./res/color-grid.png");
@@ -150,7 +150,11 @@ void Vatista::Game::init()
 	phong2->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
 
 	Shader::Sptr staminaPhong = std::make_shared<Shader>();//stamina stuff
-	staminaPhong->Load("./res/StaminaBar.vs.glsl", "./res/blinn-phong.fs.glsl");
+	staminaPhong->Load("./res/StaminaBar.vs.glsl", "./res/StaminaBar.fs.glsl");
+
+	Shader::Sptr staminaRamp = std::make_shared<Shader>();//stamina stuff
+	staminaRamp->Load("./res/StaminaBar.vs.glsl", "./res/StaminaBar.fs.glsl");
+
 
 	Material::Sptr testMat = std::make_shared<Material>(phong);
 	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -235,15 +239,16 @@ void Vatista::Game::init()
 		ObjectList.push_back(stage);
 	}
 
-	Material::Sptr testBlank = std::make_shared<Material>(staminaPhong);//blank stamina texture
-	testBlank->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	testBlank->Set("a_LightColor", { 0.0f, 1.0f, 0 });
-	testBlank->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	testBlank->Set("a_AmbientPower", 0.5f);
-	testBlank->Set("a_LightSpecPower", 0.9f);
-	testBlank->Set("a_LightShininess", 256.0f);
-	testBlank->Set("a_LightAttenuation", 0.04f);
-	testBlank->Set("texSample", textureStamina);
+	Material::Sptr staminaMat = std::make_shared<Material>(staminaPhong);//blank stamina texture
+	staminaMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	staminaMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	staminaMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	staminaMat->Set("a_AmbientPower", 0.5f);
+	staminaMat->Set("a_LightSpecPower", 0.9f);
+	staminaMat->Set("a_LightShininess", 256.0f);
+	staminaMat->Set("a_LightAttenuation", 0.04f);
+	staminaMat->Set("texSample", textureStamina);
+	staminaMat->Set("UVoffset", glm::vec3(0.0f));
 
 	////Player 1 
 	//modelTransform = glm::mat4(1.0f); 
@@ -304,20 +309,28 @@ void Vatista::Game::init()
 
 
 
-	float x = 1.0;
 
 	TestStamina = std::make_shared<GameObject>();
 	TestStamina->setPos(glm::vec3(-14, 14, 0));
 	TestStamina->setMesh(meshList[13]);//3rd one on init.txt
-	TestStamina->setMat(testMat/*testBlank*/);
+	TestStamina->setMat(staminaMat/*staminaMat*/);
 
 	TestStamina->setRot(glm::vec3(90, 0, 0));
-	//TestStamina->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
-	//TestStamina->setScale(glm::vec3(1.0f));
-	TestStamina->setScale(glm::vec3(x, 1.0f, 1.0f));
-
+	TestStamina->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time
+	TestStamina->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
 	ObjectList.push_back(TestStamina);
+
+	TestStamina2 = std::make_shared<GameObject>();
+	TestStamina2->setPos(glm::vec3(14, 14, 0));
+	TestStamina2->setMesh(meshList[13]);//3rd one on init.txt
+	TestStamina2->setMat(staminaMat/*staminaMat*/);
+
+	TestStamina2->setRot(glm::vec3(90, 0, 0));
+	TestStamina2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time
+	TestStamina2->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
+	ObjectList.push_back(TestStamina2);
 	 
+
 
 
 	//TestStaminaBackground = std::make_shared<GameObject>();
@@ -331,7 +344,8 @@ void Vatista::Game::init()
 
 //get rid of camera transform
 	glEnable(GL_CULL_FACE);
-	
+
+	glEnable(GL_BLEND);
 }
 
 

@@ -4,14 +4,39 @@
 #include "Utils.h"
 #include <iostream>
 #include "AudioEngine.h"
- 
+
+struct keyboard {
+	bool a = false;
+	bool d = false;
+	bool left = false;
+	bool right = false;
+	bool f = false;
+	bool g = false;
+	bool rctrl = false;
+	bool ralt = false;
+	float atkTimer1 = 0;
+	float atkTimer2 = 0;
+	int tap1 = 0;
+	int tap2 = 0;
+	bool doubleTap1 = false;
+	bool doubleTap2 = false;
+	bool dash1 = false;
+	bool dash2 = false;
+	float tapTimer1 = 0;
+	float tapTimer2 = 0;
+}kb;
+
 namespace Vatista {
 	class Character : public GameObject {
+
 	public:
+
+		
+
 		SharedPtr(Character);
 
 		bool playerID;
-		int stanima;
+		int stamina;
 		int lives;
 		std::vector<std::pair<std::string, std::vector<Vatista::Mesh::Sptr>>> animations;
 		Character(bool ID, Mesh::Sptr mesh, Material::Sptr mat);
