@@ -29,6 +29,7 @@
     <ClInclude Include="src\AudioEngine.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Character.h" />
+    <ClInclude Include="src\FrameBuffer.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\Controls.h" />
@@ -49,6 +50,7 @@
     <ClCompile Include="src\AudioEngine.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Character.cpp" />
+    <ClCompile Include="src\FrameBuffer.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Log.cpp" />
@@ -75,6 +77,10 @@
     <None Include="lib\fmodstudio.dll" />
     <None Include="lib\fmodstudioL.dll" />
     <None Include="res\Master.bank" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\StaminaBar.fs.glsl" />
+    <None Include="res\StaminaBar.vs.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

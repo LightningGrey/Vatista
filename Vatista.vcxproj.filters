@@ -16,6 +16,7 @@
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\AudioEngine.cpp" />
     <ClCompile Include="src\Stage.cpp" />
+    <ClCompile Include="src\FrameBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />
@@ -53,6 +54,7 @@
     <ClInclude Include="include\fmod\fmod_studio.hpp" />
     <ClInclude Include="include\fmod\fmod_studio_common.h" />
     <ClInclude Include="src\Stage.h" />
+    <ClInclude Include="src\FrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />
@@ -68,5 +70,9 @@
     <None Include="lib\fmodstudioL.dll" />
     <None Include="include\fmod\fmod_studio.cs" />
     <None Include="res\Master.bank" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\StaminaBar.vs.glsl" />
+    <None Include="res\StaminaBar.fs.glsl" />
   </ItemGroup>
 </Project>

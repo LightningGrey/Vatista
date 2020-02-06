@@ -74,7 +74,11 @@ void Vatista::Game::init()
 	audioEngine->LoadEvent("Dash", "{53dbc862-3dec-411a-9fc4-bb15743c2b6b}");
 	audioEngine->PlayEvent("Music");
 	load("./res/init.txt");
-
+	// don't delete its gonna be the ui camera later
+	//myCameraUI = std::make_shared<Vatista::Camera>();//its the ui camera but we already have it orthagraphic by default -gary
+	//myCameraUI->SetPosition(glm::vec3(0, 0, 1));
+	//myCameraUI->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
+	//myCameraUI->Projection = glm::ortho(-6.0f, 6.0f, -6.0f, 6.0f, 0.f, 1000.0f);
 
 	////for morphing 
 	//std::vector<uint32_t> indices; 
@@ -127,6 +131,9 @@ void Vatista::Game::init()
 	//texture2->loadFile("./res/default.png"); 
 	//texture2->bind(2); 
 
+	textureStamina = std::make_shared<Texture>();
+//	textureStamina->loadFile("./res/STAMINATEST.png");
+
 	texture = std::make_shared<Texture>();
 	texture->loadFile("./res/color-grid.png");
 
@@ -141,6 +148,9 @@ void Vatista::Game::init()
 
 	Shader::Sptr phong2 = std::make_shared<Shader>();
 	phong2->Load("./res/lighting.vs.glsl", "./res/blinn-phong.fs.glsl");
+
+	Shader::Sptr staminaPhong = std::make_shared<Shader>();//stamina stuff
+	staminaPhong->Load("./res/StaminaBar.vs.glsl", "./res/blinn-phong.fs.glsl");
 
 	Material::Sptr testMat = std::make_shared<Material>(phong);
 	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -202,6 +212,16 @@ void Vatista::Game::init()
 		ObjectList.push_back(stage->Props[i]);
 	}
 
+	Material::Sptr testBlank = std::make_shared<Material>(staminaPhong);//blank stamina texture
+	testBlank->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	testBlank->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	testBlank->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	testBlank->Set("a_AmbientPower", 0.5f);
+	testBlank->Set("a_LightSpecPower", 0.9f);
+	testBlank->Set("a_LightShininess", 256.0f);
+	testBlank->Set("a_LightAttenuation", 0.04f);
+	testBlank->Set("texSample", textureStamina);
+
 	////Player 1 
 	//modelTransform = glm::mat4(1.0f); 
 	//modelTransform = glm::rotate(modelTransform, 3.14f, glm::vec3(0, 1, 0)); 
@@ -258,8 +278,39 @@ void Vatista::Game::init()
 	staminaBar2->setScale(glm::vec3(1.0f));
 	UIList.push_back(staminaBar2);
 	
+
+
+
+	float x = 1.0;
+
+	TestStamina = std::make_shared<GameObject>();
+	TestStamina->setPos(glm::vec3(-14, 14, 0));
+	TestStamina->setMesh(meshList[13]);//3rd one on init.txt
+	TestStamina->setMat(testMat/*testBlank*/);
+
+	TestStamina->setRot(glm::vec3(90, 0, 0));
+	//TestStamina->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
+	//TestStamina->setScale(glm::vec3(1.0f));
+	TestStamina->setScale(glm::vec3(x, 1.0f, 1.0f));
+
+	ObjectList.push_back(TestStamina);
+	 
+
+
+	//TestStaminaBackground = std::make_shared<GameObject>();
+	//TestStaminaBackground->setPos(glm::vec3(1, -1.f, 1));
+	//TestStaminaBackground->setMesh(meshList[6/*placeholder*/]);//3rd one on init.txt
+	//TestStaminaBackground->setMat(testMat2/*placeholder*/);
+	//TestStaminaBackground->setRotY(-90.f);
+	//TestStaminaBackground->setTexture(texture2/*placeholder*/);//might want to use fbo rended texture to change it in real time
+	//TestStaminaBackground->setScale(glm::vec3(1.0f));
+	//ObjectList.push_back(TestStaminaBackground);
+
+//get rid of camera transform
 	glEnable(GL_CULL_FACE);
 }
+
+
 
 void Vatista::Game::close()
 {
@@ -298,6 +349,8 @@ void Vatista::Game::update(float dt)
 
 
 	audioEngine->Update();
+
+	//TestStamina.setScale(glm::vec3(0.5f));
 }
 
 void Vatista::Game::draw(float dt)

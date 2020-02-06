@@ -28,13 +28,13 @@ namespace Vatista {
 		// them is the size of our vertex, and they will map to the position in our vertices
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, Position));
 
-		// Enable vertex attribute 0
+		// Enable vertex attribute 1
 		glEnableVertexAttribArray(1);
 		// Our first attribute is 3 floats, the distance between 
 		// them is the size of our vertex, and they will map to the position in our vertices
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, UV));
 
-		// Enable vertex attribute 0
+		// Enable vertex attribute 2
 		glEnableVertexAttribArray(2);
 		// Our first attribute is 3 floats, the distance between 
 		// them is the size of our vertex, and they will map to the position in our vertices

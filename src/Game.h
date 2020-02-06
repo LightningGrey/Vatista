@@ -49,7 +49,7 @@ namespace Vatista {
 		Shader::Sptr myShader;
 		Shader::Sptr myNormalShader;
 		//std::vector<Vatista::Shader::Sptr> shaderList;
-
+		Texture::Sptr textureStamina;//place holder texture will add more complex later
 		Texture::Sptr texture;
 		Texture::Sptr texture2;
 		Texture::Sptr texture3;
@@ -69,6 +69,8 @@ namespace Vatista {
 		GameObject::Sptr staminaBar2; 
 		float x = 100.0f;
 		float y = 100.0f;
+		GameObject::Sptr TestStamina;
+		GameObject::Sptr TestStaminaBackground;
 
 		glm::mat4 modelTransform2 = glm::mat4(0.f);
 		glm::vec3 pos1;

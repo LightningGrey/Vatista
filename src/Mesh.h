@@ -49,6 +49,8 @@ namespace Vatista {
 			std::vector<MorphVertex> vertData, size_t numData);
 		~Mesh();
 
+
+		void resize();
 		// Draws this mesh
 		void Draw();
 
