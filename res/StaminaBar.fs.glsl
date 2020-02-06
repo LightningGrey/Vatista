@@ -24,9 +24,9 @@ void main() {
 	
 	colourvalue = surfaceColour;
 
-	//colourvalue.a = int(colourvalue.x>0);//so colourvalue.x>0 returns ether 1 or 0 1 being true and 0 being false
+	colourvalue.a = int(colourvalue.x>0);//so colourvalue.x>0 returns ether 1 or 0 1 being true and 0 being false
 	//then the colour value will be ether green or cleared (if it was black it got turned transparent) 
 	//depending on if its true or false
 
-	colourvalue.a = colourvalue.x;
+	//colourvalue.a = colourvalue.x;
 }

@@ -65,6 +65,8 @@ namespace Vatista {
 		Character::Sptr C2;
 		GameObject::Sptr TestMap;
 		GameObject::Sptr TestStamina;
+		GameObject::Sptr TestStamina2;
+
 		GameObject::Sptr TestStaminaBackground;
 
 		glm::mat4 modelTransform2 = glm::mat4(0.f);

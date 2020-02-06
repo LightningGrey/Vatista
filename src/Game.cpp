@@ -273,8 +273,17 @@ void Vatista::Game::init()
 	TestStamina->setRot(glm::vec3(90, 0, 0));
 	TestStamina->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time
 	TestStamina->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
-
 	ObjectList.push_back(TestStamina);
+
+	TestStamina2 = std::make_shared<GameObject>();
+	TestStamina2->setPos(glm::vec3(14, 14, 0));
+	TestStamina2->setMesh(meshList[13]);//3rd one on init.txt
+	TestStamina2->setMat(staminaMat/*staminaMat*/);
+
+	TestStamina2->setRot(glm::vec3(90, 0, 0));
+	TestStamina2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time
+	TestStamina2->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
+	ObjectList.push_back(TestStamina2);
 	 
 
 
@@ -290,6 +299,8 @@ void Vatista::Game::init()
 
 //get rid of camera transform
 	glEnable(GL_CULL_FACE);
+
+	glEnable(GL_BLEND);
 }
 
 

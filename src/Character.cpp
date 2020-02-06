@@ -165,6 +165,7 @@ namespace Vatista {
 					lerpEnd = Position - glm::vec3(5.f, 0, 0);
 					isDashing = true;
 					ae->PlayEvent("Dash");
+
 				}
 				if (kb.dash1 && kb.tap1 == GLFW_KEY_D) {
 					lerpEnd = Position + glm::vec3(5.f, 0, 0);
