@@ -13,12 +13,16 @@ namespace Vatista {
 		SharedPtr(Character);
 
 		bool playerID;
-		int stamina;
-		int lives;
 		std::vector<std::pair<std::string, std::vector<Vatista::Mesh::Sptr>>> animations;
 		Character(bool ID, Mesh::Sptr mesh, Material::Sptr mat);
 		void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae);
+		int getStamina();
+		int getLives();
+		void setStamina(int s);
+		void setLives(int l);
 	private:
+		int stamina;
+		int lives;
 
 		glm::vec3 lerper;
 		glm::vec3 lerpEnd;
