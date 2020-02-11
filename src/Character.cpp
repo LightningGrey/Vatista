@@ -27,6 +27,26 @@ namespace Vatista {
 		}
 	}
 
+	float Character::getStamina()
+	{
+		return stamina;
+	}
+
+	int Character::getLives()
+	{
+		return lives;
+	}
+
+	void Character::setStamina(float s)
+	{
+		this->stamina = s;
+	}
+
+	void Character::setLives(int l)
+	{
+		this->lives = l;
+	}
+
 	void Character::update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae)
 	{
 		if (hitStun && glfwGetTime() - hitstunTimer > 1.f)

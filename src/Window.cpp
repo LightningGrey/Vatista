@@ -22,7 +22,8 @@ namespace Vatista {
 		//initializing GLFW
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.5);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5); 
+		glfwWindowHint(GLFW_SAMPLES, 4);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		window = glfwCreateWindow(width, height, windowName, NULL, NULL);
@@ -40,13 +41,14 @@ namespace Vatista {
 			return -1.0f;
 		}
 		VATISTA_LOG_INFO("Window initialization successful.");
+
 		return 1;
 	}
 
 	void Window::clear()
 	{
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	//callback function

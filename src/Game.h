@@ -64,12 +64,10 @@ namespace Vatista {
 		Character::Sptr C2;
 		GameObject::Sptr TestMap;
 		GameObject::Sptr stage;
-		GameObject::Sptr staminaBar;
-		GameObject::Sptr staminaBar2; 
+		GameObject::Sptr TestStamina;
+		GameObject::Sptr TestStamina2; 
 		float x = 100.0f;
 		float y = 100.0f;
-		GameObject::Sptr TestStamina;
-		GameObject::Sptr TestStamina2;
 
 		GameObject::Sptr TestStaminaBackground;
 

@@ -65,6 +65,7 @@ void Vatista::Game::init()
 	orthoCamera->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
 	orthoCamera->Projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 150.0f);
 
+	//audio
 	audioEngine = std::make_shared<AudioEngine>();
 	audioEngine->Init();
 	audioEngine->LoadBank("./res/Master", FMOD_STUDIO_LOAD_BANK_NORMAL);
@@ -339,10 +340,11 @@ void Vatista::Game::init()
 	//TestStaminaBackground->setScale(glm::vec3(1.0f));
 	//ObjectList.push_back(TestStaminaBackground);
 
-//get rid of camera transform
-	glEnable(GL_CULL_FACE);
 
-	glEnable(GL_BLEND);
+	glEnable(GL_CULL_FACE);
+	//glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_BLEND);
+	glEnable(GL_MULTISAMPLE);
 }
 
 
@@ -358,28 +360,32 @@ void Vatista::Game::update(float dt)
 	C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
 	C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
 
+	TestStamina->setStamina(C1->getStamina());
+	TestStamina2->setStamina(C2->getStamina());
+
+	//delete later
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_ADD)) {
 		x += 0.01f;
 		x = x > 1.0f ? 1.0f : x;
-		staminaBar->setScale(glm::vec3(x, 1.0f, 1.0f));
+		TestStamina->setScale(glm::vec3(x, 1.0f, 1.0f));
 	} 
 
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_SUBTRACT)){
 		x -= 0.01f;
 		x = x < 0.0f ? 0.0f : x;
-		staminaBar->setScale(glm::vec3(x, 1.0f, 1.0f));
+		TestStamina->setScale(glm::vec3(x, 1.0f, 1.0f));
 	}
 
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_8)){
 		y += 0.01f;
 		y = y > 1.0f ? 1.0f : y;
-		staminaBar2->setScale(glm::vec3(y, 1.0f, 1.0f));
+		TestStamina2->setScale(glm::vec3(y, 1.0f, 1.0f));
 	}
 
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_2)) {
 		y -= 0.01f;
 		y = y < 0.0f ? 0.0f : y;
-		staminaBar2->setScale(glm::vec3(y, 1.0f, 1.0f));
+		TestStamina2->setScale(glm::vec3(y, 1.0f, 1.0f));
 	}
 
 

@@ -57,6 +57,10 @@ namespace Vatista {
 		float getCollX() { return Collider.x; }
 		float getCollY() { return Collider.y; }
 
+		//change later
+		float getStamina() { return stamina; }
+		void setStamina(float stam) { stamina = stam; }
+
 	protected:
 		//name
 		std::string name;
@@ -87,5 +91,9 @@ namespace Vatista {
 
 		float currentTime = 0.0f;
 		float endTime = 10.0f;
+
+		//change later
+		float stamina = 100.0f;
+
 	};
 }

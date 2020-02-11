@@ -20,9 +20,9 @@ uniform mat4 a_ModelViewProjection;
 uniform mat4 a_Model;
 uniform mat4 a_ModelView;
 uniform mat3 a_NormalMatrix;
-uniform float staminaValue;
-uniform float staminaValueMax;
-uniform vec3 meshDimensions;
+//uniform float staminaValue;
+//uniform float staminaValueMax;
+//uniform vec3 meshDimensions;
 	
 void main() {
 	outPosition = inPosition;
