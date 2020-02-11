@@ -309,23 +309,23 @@ void Vatista::Game::init()
 
 
 	TestStamina = std::make_shared<GameObject>();
-	TestStamina->setPos(glm::vec3(-17, 20, 0));
+	TestStamina->setPos(glm::vec3(-5, 10, 3));
 	TestStamina->setMesh(meshList[18]);//3rd one on init.txt
 	TestStamina->setMat(staminaMat/*staminaMat*/);
 
 	TestStamina->setRot(glm::vec3(90, 0, 0));
 	TestStamina->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time
-	TestStamina->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
+	TestStamina->setScale(glm::vec3(0.5));
 	UIList.push_back(TestStamina);
 
 	TestStamina2 = std::make_shared<GameObject>();
-	TestStamina2->setPos(glm::vec3(17, 20, 0));
+	TestStamina2->setPos(glm::vec3(5, 10, 3));
 	TestStamina2->setMesh(meshList[18]);//3rd one on init.txt
 	TestStamina2->setMat(staminaMat/*staminaMat*/);
 
 	TestStamina2->setRot(glm::vec3(90, 0, 0));
 	TestStamina2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time
-	TestStamina2->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
+	TestStamina2->setScale(glm::vec3(0.5));
 	UIList.push_back(TestStamina2);
 	 
 
@@ -367,7 +367,7 @@ void Vatista::Game::update(float dt)
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_ADD)) {
 		x += 0.01f;
 		x = x > 1.0f ? 1.0f : x;
-		TestStamina->setScale(glm::vec3(x, 1.0f, 1.0f));
+		TestStamina->setStamina(C1->getStamina() + 0.01);
 	} 
 
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_SUBTRACT)){
