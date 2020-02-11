@@ -55,15 +55,15 @@ void Vatista::Game::init()
 	gameWindow = new Vatista::Window(1600, 900, "Alpha Strike");
 
 	mainCamera = std::make_shared<Vatista::Camera>();
-	mainCamera->SetPosition(glm::vec3(0, 4, 15));
-	mainCamera->LookAt(glm::vec3(0,4,0), glm::vec3(0, 1, 0));
+	mainCamera->SetPosition(glm::vec3(0.0f, 4.0f, 15.0f));
+	mainCamera->LookAt(glm::vec3(0.0f,4.0f,0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	mainCamera->Projection = glm::perspective(glm::radians(60.0f), 16.f / 9.f, 1.0f, 200.0f);
 
 	//doesn't work yet
-	orthoCamera = std::make_shared<Vatista::Camera>();
-	orthoCamera->SetPosition(glm::vec3(0, 0, 15));
-	orthoCamera->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
-	orthoCamera->Projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 150.0f);
+	//orthoCamera = std::make_shared<Vatista::Camera>();
+	//orthoCamera->SetPosition(glm::vec3(0, 0, 15));
+	//orthoCamera->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
+	//orthoCamera->Projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 150.0f);
 
 	//audio
 	audioEngine = std::make_shared<AudioEngine>();
@@ -251,7 +251,7 @@ void Vatista::Game::init()
 
 	for (int i = 0; i < 17; i++) {
 		stage = std::make_shared<GameObject>();
-		stage->setPos(glm::vec3(0, 0, 5));
+		stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
 		stage->setRotY(-90.0f);
 		stage->setMesh(meshList[i+1]);
 		stage->setMat(mats[i]);
@@ -360,33 +360,13 @@ void Vatista::Game::update(float dt)
 	C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
 	C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
 
+	C1->setStamina(C1->getStamina() - 0.0005f);
+
 	TestStamina->setStamina(C1->getStamina());
 	TestStamina2->setStamina(C2->getStamina());
 
-	//delete later
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_ADD)) {
-		x += 0.01f;
-		x = x > 1.0f ? 1.0f : x;
-		TestStamina->setStamina(C1->getStamina() + 0.01);
-	} 
-
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_SUBTRACT)){
-		x -= 0.01f;
-		x = x < 0.0f ? 0.0f : x;
-		TestStamina->setScale(glm::vec3(x, 1.0f, 1.0f));
-	}
-
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_8)){
-		y += 0.01f;
-		y = y > 1.0f ? 1.0f : y;
-		TestStamina2->setScale(glm::vec3(y, 1.0f, 1.0f));
-	}
-
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_2)) {
-		y -= 0.01f;
-		y = y < 0.0f ? 0.0f : y;
-		TestStamina2->setScale(glm::vec3(y, 1.0f, 1.0f));
-	}
+	//C1->setStamina(C1->getStamina() + 10.0f);
+	//C2->setStamina(C2->getStamina() + 10.0f);
 
 
 	audioEngine->Update();

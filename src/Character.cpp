@@ -7,6 +7,7 @@ namespace Vatista {
 		setMesh(mesh);
 		setMat(mat);
 		setCollider(0.74f, 1.78f);
+		stamina = 100.0f;
 		Atk1Collider = glm::vec2(0.4f);
 		Atk2Collider = glm::vec2(0.4f);
 		lives = 3;
@@ -14,22 +15,22 @@ namespace Vatista {
 		for (int i = 0; i < 6; i++)
 			animations.emplace_back();
 		if (playerID) {
-			setPos(-1.f, 1.f, 9);
-			setRotY(90.f);
-			Atk1Pos = glm::vec3(getPosX() + Collider.x + Atk1Collider.x, 1.f, 9);
-			Atk2Pos = glm::vec3(getPosX() + Collider.x + Atk2Collider.x, 1.f, 9);
+			setPos(-1.0f, 1.0f, 9.0f);
+			setRotY(90.0f);
+			Atk1Pos = glm::vec3(getPosX() + Collider.x + Atk1Collider.x, 1.0f, 9.0f);
+			Atk2Pos = glm::vec3(getPosX() + Collider.x + Atk2Collider.x, 1.0f, 9.0f);
 		}
 		else {
-			setPos(1.f, 1.f, 9);
+			setPos(1.0f, 1.0f, 9.0f);
 			setRotY(-90.f);
-			Atk1Pos = glm::vec3(getPosX() - Collider.x - Atk1Collider.x, 1.f, 9);
-			Atk2Pos = glm::vec3(getPosX() - Collider.x - Atk2Collider.x, 1.f, 9);
+			Atk1Pos = glm::vec3(getPosX() - Collider.x - Atk1Collider.x, 1.0f, 9.0f);
+			Atk2Pos = glm::vec3(getPosX() - Collider.x - Atk2Collider.x, 1.0f, 9.0f);
 		}
 	}
 
 	void Character::update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae)
 	{
-		if (hitStun && glfwGetTime() - hitstunTimer > 1.f)
+		if (hitStun && glfwGetTime() - hitstunTimer > 1.0f)
 			hitStun = false;
 		glm::vec3 movement = glm::vec3(0.0f);
 		float speed = 10.0f;
@@ -89,22 +90,22 @@ namespace Vatista {
 								p2->setHitStun(true);
 								p2->setHSTimer(glfwGetTime());
 								std::cout << "p2 dies" << std::endl;
-								ae->SetEventParameter("LightAttack", "Missed", 0.f);
-								ae->SetEventParameter("LightAttack", "Blocked", 0.f);
+								ae->SetEventParameter("LightAttack", "Missed", 0.0f);
+								ae->SetEventParameter("LightAttack", "Blocked", 0.0f);
 								ae->PlayEvent("LightAttack");
 							}
 							else {
 								std::cout << "p2 blocked" << std::endl;
 								p2->setHitStun(true);
 								p2->setHSTimer(glfwGetTime());
-								ae->SetEventParameter("LightAttack", "Missed", 0.f);
-								ae->SetEventParameter("LightAttack", "Blocked", 1.f);
+								ae->SetEventParameter("LightAttack", "Missed", 0.0f);
+								ae->SetEventParameter("LightAttack", "Blocked", 1.0f);
 								ae->PlayEvent("LightAttack");
 							}
 						}
 						else {
-							ae->SetEventParameter("LightAttack", "Missed", 1.f);
-							ae->SetEventParameter("LightAttack", "Blocked", 0.f);
+							ae->SetEventParameter("LightAttack", "Missed", 1.0f);
+							ae->SetEventParameter("LightAttack", "Blocked", 0.0f);
 							ae->PlayEvent("LightAttack");
 						}
 					}
@@ -115,22 +116,22 @@ namespace Vatista {
 								p2->setHitStun(true);
 								p2->setHSTimer(glfwGetTime());
 								std::cout << "p2 dies" << std::endl;
-								ae->SetEventParameter("HeavyAttack", "Missed", 0.f);
-								ae->SetEventParameter("HeavyAttack", "Blocked", 0.f);
+								ae->SetEventParameter("HeavyAttack", "Missed", 0.0f);
+								ae->SetEventParameter("HeavyAttack", "Blocked", 0.0f);
 								ae->PlayEvent("HeavyAttack");
 							}
 							else {
 								std::cout << "p2 blocked" << std::endl;
 								p2->setHitStun(true);
 								p2->setHSTimer(glfwGetTime());
-								ae->SetEventParameter("HeavyAttack", "Missed", 0.f);
-								ae->SetEventParameter("HeavyAttack", "Blocked", 1.f);
+								ae->SetEventParameter("HeavyAttack", "Missed", 0.0f);
+								ae->SetEventParameter("HeavyAttack", "Blocked", 1.0f);
 								ae->PlayEvent("HeavyAttack");
 							}
 						}
 						else {
-							ae->SetEventParameter("HeavyAttack", "Missed", 1.f);
-							ae->SetEventParameter("HeavyAttack", "Blocked", 0.f);
+							ae->SetEventParameter("HeavyAttack", "Missed", 1.0f);
+							ae->SetEventParameter("HeavyAttack", "Blocked", 0.0f);
 							ae->PlayEvent("HeavyAttack");
 						}
 					}
@@ -139,13 +140,13 @@ namespace Vatista {
 
 			if (!isDashing) {
 				if (kb.dash1 && kb.tap1 == GLFW_KEY_A) {
-					lerpEnd = getPos() - glm::vec3(5.f, 0, 0);
+					lerpEnd = getPos() - glm::vec3(5.0f, 0.0f, 0.0f);
 					isDashing = true;
 					ae->PlayEvent("Dash");
 
 				}
 				if (kb.dash1 && kb.tap1 == GLFW_KEY_D) {
-					lerpEnd = getPos() + glm::vec3(5.f, 0, 0);
+					lerpEnd = getPos() + glm::vec3(5.0f, 0.0f, 0.0f);
 					isDashing = true;
 					ae->PlayEvent("Dash");
 				}
@@ -258,22 +259,22 @@ namespace Vatista {
 								p2->hitStun = true;
 								p2->hitstunTimer = glfwGetTime();
 								std::cout << "p1 dies" << std::endl;
-								ae->SetEventParameter("LightAttack", "Missed", 0.f);
-								ae->SetEventParameter("LightAttack", "Blocked", 0.f);
+								ae->SetEventParameter("LightAttack", "Missed", 0.0f);
+								ae->SetEventParameter("LightAttack", "Blocked", 0.0f);
 								ae->PlayEvent("LightAttack");
 							}
 							else {
 								std::cout << "p1 blocked" << std::endl;
 								p2->hitStun = true;
 								p2->hitstunTimer = glfwGetTime();
-								ae->SetEventParameter("LightAttack", "Missed", 0.f);
-								ae->SetEventParameter("LightAttack", "Blocked", 1.f);
+								ae->SetEventParameter("LightAttack", "Missed", 0.0f);
+								ae->SetEventParameter("LightAttack", "Blocked", 1.0f);
 								ae->PlayEvent("LightAttack");
 							}
 						}
 						else {
-							ae->SetEventParameter("LightAttack", "Missed", 1.f);
-							ae->SetEventParameter("LightAttack", "Blocked", 0.f);
+							ae->SetEventParameter("LightAttack", "Missed", 1.0f);
+							ae->SetEventParameter("LightAttack", "Blocked", 0.0f);
 							ae->PlayEvent("LightAttack");
 						}
 					}
@@ -288,22 +289,22 @@ namespace Vatista {
 								p2->hitStun = true;
 								p2->hitstunTimer = glfwGetTime();
 								std::cout << "p1 dies" << std::endl;
-								ae->SetEventParameter("HeavyAttack", "Missed", 0.f);
-								ae->SetEventParameter("HeavyAttack", "Blocked", 0.f);
+								ae->SetEventParameter("HeavyAttack", "Missed", 0.0f);
+								ae->SetEventParameter("HeavyAttack", "Blocked", 0.0f);
 								ae->PlayEvent("HeavyAttack");
 							}
 							else {
 								std::cout << "p1 blocked" << std::endl;
 								p2->hitStun = true;
 								p2->hitstunTimer = glfwGetTime();
-								ae->SetEventParameter("HeavyAttack", "Missed", 0.f);
-								ae->SetEventParameter("HeavyAttack", "Blocked", 1.f);
+								ae->SetEventParameter("HeavyAttack", "Missed", 0.0f);
+								ae->SetEventParameter("HeavyAttack", "Blocked", 1.0f);
 								ae->PlayEvent("HeavyAttack");
 							}
 						}
 						else {
-							ae->SetEventParameter("HeavyAttack", "Missed", 1.f);
-							ae->SetEventParameter("HeavyAttack", "Blocked", 0.f);
+							ae->SetEventParameter("HeavyAttack", "Missed", 1.0f);
+							ae->SetEventParameter("HeavyAttack", "Blocked", 0.0f);
 							ae->PlayEvent("HeavyAttack");
 						}
 					}
@@ -311,12 +312,12 @@ namespace Vatista {
 
 			if (!isDashing) {
 				if (kb.dash2 && kb.tap2 == GLFW_KEY_LEFT) {
-					lerpEnd = getPos() - glm::vec3(5.f, 0, 0);
+					lerpEnd = getPos() - glm::vec3(5.0f, 0.0f, 0.0f);
 					isDashing = true;
 					ae->PlayEvent("Dash");
 				}
 				if (kb.dash2 && kb.tap2 == GLFW_KEY_RIGHT) {
-					lerpEnd = getPos() + glm::vec3(5.f, 0, 0);
+					lerpEnd = getPos() + glm::vec3(5.0f, 0.0f, 0.0f);
 					isDashing = true;
 					ae->PlayEvent("Dash");
 				}

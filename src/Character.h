@@ -14,16 +14,16 @@ typedef struct {
 	bool g = false;
 	bool rctrl = false;
 	bool ralt = false;
-	float atkTimer1 = 0;
-	float atkTimer2 = 0;
+	float atkTimer1 = 0.0f;
+	float atkTimer2 = 0.0f;
 	int tap1 = 0;
 	int tap2 = 0;
 	bool doubleTap1 = false;
 	bool doubleTap2 = false;
 	bool dash1 = false;
 	bool dash2 = false;
-	float tapTimer1 = 0;
-	float tapTimer2 = 0;
+	float tapTimer1 = 0.0f;
+	float tapTimer2 = 0.0f;
 }keyboard;
 
 namespace Vatista {
@@ -37,18 +37,18 @@ namespace Vatista {
 		Character(bool ID, Mesh::Sptr mesh, Material::Sptr mat);
 		virtual void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae);
 
-		void setStamina(int s) { stamina = s; }
+		void setStamina(float s) { stamina = s; }
 		void setLives(int l) { lives = l; }
 		void setHitStun(bool h) { hitStun = h; }
 		void setHSTimer(float t) { hitstunTimer = t; }
 
-		int getStamina() { return stamina; }
+		float getStamina() { return stamina; }
 		int getLives() { return lives; }
 		bool getHitStun() { return hitStun; }
 		float getHSTimer() { return hitstunTimer; }
 
 	protected:
-		int stamina;
+		float stamina;
 		int lives;
 
 		float lerper;
