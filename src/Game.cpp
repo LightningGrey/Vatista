@@ -55,9 +55,9 @@ void Vatista::Game::init()
 	gameWindow = new Vatista::Window(1600, 900, "Alpha Strike");
 
 	mainCamera = std::make_shared<Vatista::Camera>();
-	mainCamera->SetPosition(glm::vec3(0, 2, 15));
+	mainCamera->SetPosition(glm::vec3(0, 4, 15));
 	mainCamera->LookAt(glm::vec3(0,4,0), glm::vec3(0, 1, 0));
-	mainCamera->Projection = glm::perspective(glm::radians(90.0f), 16.f / 9.f, 1.0f, 150.0f);
+	mainCamera->Projection = glm::perspective(glm::radians(60.0f), 16.f / 9.f, 1.0f, 200.0f);
 
 	//doesn't work yet
 	orthoCamera = std::make_shared<Vatista::Camera>();
@@ -135,7 +135,7 @@ void Vatista::Game::init()
 	textureStamina->loadFile("./res/staminaRampTexture.png");
 
 	texture = std::make_shared<Texture>();
-	texture->loadFile("./res/color-grid.png");
+	texture->loadFile("./res/Z3N_Texture.png");
 
 	texture2 = std::make_shared<Texture>();
 	texture2->loadFile("./res/Catwalk_Floor/Catwalk_Floor_Texture.png");
@@ -176,51 +176,69 @@ void Vatista::Game::init()
 	testMat2->Set("a_LightAttenuation", 0.04f);
 	testMat2->Set("texSample", texture2);
 
-	for (int i = 0; i < 11; i++) {
+	for (int i = 0; i < 17; i++) {
 		textures.emplace_back();
 		textures[i] = std::make_shared<Texture>();
 		switch (i) {
 		case 0:
-			textures[i]->loadFile("./res/Catwalk_Floor/Catwalk_Floor_Texture.png");
+			textures[i]->loadFile("./res/Cave/Cave_Texture.png");
 			break;
 		case 1:
-			textures[i]->loadFile("./res/Catwalk_InsideCorner/Catwalk_Rail_Corners_Texture.png");
+			textures[i]->loadFile("./res/Background_Objects/Background_Objects_Texture.png");
 			break;
 		case 2:
-			textures[i]->loadFile("./res/Catwalk_OutsideCorner/Catwalk_Rail_Corners_Texture.png");
+			textures[i]->loadFile("./res/Bunker/Bunker_Texture.png");
 			break;
 		case 3:
-			textures[i]->loadFile("./res/Catwalk_Rail_Large/Catwalk_Rail_Large_Texture.png");
+			textures[i]->loadFile("./res/Bunker_Door/Bunker_Door_Texture.png");
 			break;
 		case 4:
-			textures[i]->loadFile("./res/Catwalk_Rail_Short/Catwalk_Rail_Short_Texture.png");
+			textures[i]->loadFile("./res/Drill_Texture.png");
 			break;
 		case 5:
-			textures[i]->loadFile("./res/CrateLarge/CrateLarge_Texture.png");
+			textures[i]->loadFile("./res/Catwalk_Floor/Catwalk_Floor_Texture.png");
 			break;
 		case 6:
-			textures[i]->loadFile("./res/CrateMedium/CrateMedium_Texture.png");
+			textures[i]->loadFile("./res/Catwalk_InsideCorner/Catwalk_Rail_Corners_Texture.png");
 			break;
 		case 7:
-			textures[i]->loadFile("./res/CrateSmall/CrateSmall_Texture.png");
+			textures[i]->loadFile("./res/Catwalk_OutsideCorner/Catwalk_Rail_Corners_Texture.png");
 			break;
 		case 8:
-			textures[i]->loadFile("./res/Girders/Girders_Texture.png");
+			textures[i]->loadFile("./res/Catwalk_Rail_Large/Catwalk_Rail_Large_Texture.png");
 			break;
 		case 9:
-			textures[i]->loadFile("./res/MiningShip/MiningShip_Texture.png");
+			textures[i]->loadFile("./res/Catwalk_Rail_Short/Catwalk_Rail_Short_Texture.png");
 			break;
 		case 10:
+			textures[i]->loadFile("./res/CrateLarge/CrateLarge_Texture.png");
+			break;
+		case 11:
+			textures[i]->loadFile("./res/CrateMedium/CrateMedium_Texture.png");
+			break;
+		case 12:
+			textures[i]->loadFile("./res/CrateSmall/CrateSmall_Texture.png");
+			break;
+		case 13:
+			textures[i]->loadFile("./res/Girders/Girders_Texture.png");
+			break;
+		case 14:
+			textures[i]->loadFile("./res/MiningShip/MiningShip_Texture.png");
+			break;
+		case 15:
 			textures[i]->loadFile("./res/Barrel/Barrel_Texture.png");
+			break;
+		case 16:
+			textures[i]->loadFile("./res/Electrical_Stuff/Wires_&_Lights_Texture.png");
 			break;
 		}
 	}
 
-	for (int i = 0; i < 11; i++) {
+	for (int i = 0; i < 17; i++) {
 		mats.emplace_back();
 		mats[i] = std::make_shared<Material>(phong2);
 		mats[i]->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-		mats[i]->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+		mats[i]->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
 		mats[i]->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 		mats[i]->Set("a_AmbientPower", 0.5f);
 		mats[i]->Set("a_LightSpecPower", 0.9f);
@@ -230,11 +248,11 @@ void Vatista::Game::init()
 	}
 	
 
-	for (int i = 0; i < 11; i++) {
+	for (int i = 0; i < 17; i++) {
 		stage = std::make_shared<GameObject>();
 		stage->setPos(glm::vec3(0, 0, 5));
 		stage->setRotY(-90.0f);
-		stage->setMesh(meshList[i+2]);
+		stage->setMesh(meshList[i+1]);
 		stage->setMat(mats[i]);
 		ObjectList.push_back(stage);
 	}
@@ -282,18 +300,16 @@ void Vatista::Game::init()
 	//myScene[2].Collider = glm::vec2(0.74f, 1.78f); 
 
 	C1 = std::make_shared<Character>(true, meshList[0], testMat);
-	C1->setScale(glm::vec3(0.5f));
 	ObjectList.push_back(C1);
 
 	//Player 2 
 	C2 = std::make_shared<Character>(false, meshList[0], testMat);
-	C2->setScale(glm::vec3(0.5f));
 	ObjectList.push_back(C2);
 
 
 	TestStamina = std::make_shared<GameObject>();
 	TestStamina->setPos(glm::vec3(-17, 20, 0));
-	TestStamina->setMesh(meshList[13]);//3rd one on init.txt
+	TestStamina->setMesh(meshList[18]);//3rd one on init.txt
 	TestStamina->setMat(staminaMat/*staminaMat*/);
 
 	TestStamina->setRot(glm::vec3(90, 0, 0));
@@ -303,7 +319,7 @@ void Vatista::Game::init()
 
 	TestStamina2 = std::make_shared<GameObject>();
 	TestStamina2->setPos(glm::vec3(17, 20, 0));
-	TestStamina2->setMesh(meshList[13]);//3rd one on init.txt
+	TestStamina2->setMesh(meshList[18]);//3rd one on init.txt
 	TestStamina2->setMat(staminaMat/*staminaMat*/);
 
 	TestStamina2->setRot(glm::vec3(90, 0, 0));
@@ -376,6 +392,12 @@ void Vatista::Game::draw(float dt)
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+
+
+	glEnable(GL_DEPTH_TEST);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LESS);
 
 	//draw 
 	for (auto object : ObjectList) {

@@ -5,9 +5,29 @@
 #include <iostream>
 #include "AudioEngine.h"
 
+typedef struct {
+	bool a = false;
+	bool d = false;
+	bool left = false;
+	bool right = false;
+	bool f = false;
+	bool g = false;
+	bool rctrl = false;
+	bool ralt = false;
+	float atkTimer1 = 0;
+	float atkTimer2 = 0;
+	int tap1 = 0;
+	int tap2 = 0;
+	bool doubleTap1 = false;
+	bool doubleTap2 = false;
+	bool dash1 = false;
+	bool dash2 = false;
+	float tapTimer1 = 0;
+	float tapTimer2 = 0;
+}keyboard;
+
 namespace Vatista {
 	class Character : public GameObject {
-
 	public:
 
 		SharedPtr(Character);
@@ -15,16 +35,23 @@ namespace Vatista {
 		bool playerID;
 		std::vector<std::pair<std::string, std::vector<Vatista::Mesh::Sptr>>> animations;
 		Character(bool ID, Mesh::Sptr mesh, Material::Sptr mat);
-		void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae);
-		int getStamina();
-		int getLives();
-		void setStamina(int s);
-		void setLives(int l);
-	private:
+		virtual void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae);
+
+		void setStamina(int s) { stamina = s; }
+		void setLives(int l) { lives = l; }
+		void setHitStun(bool h) { hitStun = h; }
+		void setHSTimer(float t) { hitstunTimer = t; }
+
+		int getStamina() { return stamina; }
+		int getLives() { return lives; }
+		bool getHitStun() { return hitStun; }
+		float getHSTimer() { return hitstunTimer; }
+
+	protected:
 		int stamina;
 		int lives;
 
-		glm::vec3 lerper;
+		float lerper;
 		glm::vec3 lerpEnd;
 		bool isWalking = false;
 		bool isDashing = false;
@@ -44,5 +71,6 @@ namespace Vatista {
 		float journeyLength;
 
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static keyboard kb;
 	};
 }

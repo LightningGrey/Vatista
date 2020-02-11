@@ -1,5 +1,9 @@
-retopo.vsf
-FIXED_TRAINING_MAP/Training_Map_New.vsf
+z3n_idle_1.vsf
+Cave/Cave.vsf
+Background_Objects/Background_Objects.vsf
+Bunker/Bunker.vsf
+Bunker_Door/Bunker_Door.vsf
+Drill.vsf
 Catwalk_Floor/Catwalk_Floor.vsf
 Catwalk_InsideCorner/Catwalk_InsideCorner.vsf
 Catwalk_OutsideCorner/Catwalk_OutsideCorner.vsf
@@ -11,4 +15,5 @@ CrateSmall/CrateSmall.vsf
 Girders/Girders.vsf
 MiningShip/MiningShip.vsf
 Barrel/Barrel.vsf
+Electrical_Stuff/Electrical_Stuff.vsf
 staminabar2x15.vsf
