@@ -37,18 +37,18 @@ namespace Vatista {
 		Character(bool ID, Mesh::Sptr mesh, Material::Sptr mat);
 		virtual void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae);
 
-		void setStamina(int s) { stamina = s; }
+		void setStamina(float s) { stamina = s; }
 		void setLives(int l) { lives = l; }
 		void setHitStun(bool h) { hitStun = h; }
 		void setHSTimer(float t) { hitstunTimer = t; }
 
-		int getStamina() { return stamina; }
+		float getStamina() { return stamina; }
 		int getLives() { return lives; }
 		bool getHitStun() { return hitStun; }
 		float getHSTimer() { return hitstunTimer; }
 
 	protected:
-		int stamina;
+		float stamina;
 		int lives;
 
 		float lerper;

@@ -7,6 +7,7 @@ namespace Vatista {
 		setMesh(mesh);
 		setMat(mat);
 		setCollider(0.74f, 1.78f);
+		stamina = 0.0f;
 		Atk1Collider = glm::vec2(0.4f);
 		Atk2Collider = glm::vec2(0.4f);
 		lives = 3;

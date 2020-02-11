@@ -363,30 +363,8 @@ void Vatista::Game::update(float dt)
 	TestStamina->setStamina(C1->getStamina());
 	TestStamina2->setStamina(C2->getStamina());
 
-	//delete later
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_ADD)) {
-		x += 0.01f;
-		x = x > 1.0f ? 1.0f : x;
-		TestStamina->setStamina(C1->getStamina() + 0.01);
-	} 
-
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_SUBTRACT)){
-		x -= 0.01f;
-		x = x < 0.0f ? 0.0f : x;
-		TestStamina->setScale(glm::vec3(x, 1.0f, 1.0f));
-	}
-
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_8)){
-		y += 0.01f;
-		y = y > 1.0f ? 1.0f : y;
-		TestStamina2->setScale(glm::vec3(y, 1.0f, 1.0f));
-	}
-
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_2)) {
-		y -= 0.01f;
-		y = y < 0.0f ? 0.0f : y;
-		TestStamina2->setScale(glm::vec3(y, 1.0f, 1.0f));
-	}
+	//C1->setStamina(C1->getStamina() + 10.0f);
+	//C2->setStamina(C2->getStamina() + 10.0f);
 
 
 	audioEngine->Update();

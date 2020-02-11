@@ -48,14 +48,15 @@ namespace Vatista {
 		//}
 
 
-		//material->GetShader()->SetUniform("staminaValue", currentStamina);
+		material->GetShader()->SetUniform("staminaValue", stamina);
 		
 	   /*for (int i = 0; i < 20; i++) {
 			vec - 50.0;
 		}*/
 		//float maxStamina = 100.0f;//max stamina value
 
-		//material->GetShader()->SetUniform("staminaValueMax", maxStamina);
+		material->GetShader()->SetUniform("staminaValueMax", 100.0f);
+
 
 
 		glm::vec2 offset = glm::vec2(stamina, 0.0f);//off set for the stamina bar don't change
@@ -67,7 +68,7 @@ namespace Vatista {
 
 
 		currentTime += dt;
-
+		
 		if (currentTime > endTime) {
 			dt = -0.0167f;
 		}
