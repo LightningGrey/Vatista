@@ -17,7 +17,7 @@ void main() {
 	//outColor = inColor;
 
 
-	vec2 offset = vec2(UVoffset.x, UVoffset.y);//
+	vec2 offset = vec2(UVoffset.x, UVoffset.y);
 	
 
 	vec4 surfaceColour = texture(texSample, inUV + offset);//pushing the UVs over of the texture

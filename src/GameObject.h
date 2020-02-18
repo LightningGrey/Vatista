@@ -93,7 +93,7 @@ namespace Vatista {
 		float endTime = 10.0f;
 
 		//change later
-		float stamina = 100.0f;
+		float stamina = 0.0f;
 
 	};
 }
