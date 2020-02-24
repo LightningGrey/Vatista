@@ -41,11 +41,27 @@ namespace Vatista {
 		void setLives(int l) { lives = l; }
 		void setHitStun(bool h) { hitStun = h; }
 		void setHSTimer(float t) { hitstunTimer = t; }
+		void setAtk1Pos(glm::vec3 a) { Atk1Pos = a; }
+		void setAtk2Pos(glm::vec3 a) { Atk2Pos = a; }
+		void setAtk1Coll(glm::vec2 a) { Atk1Collider = a; }
+		void setAtk2Coll(glm::vec2 a) { Atk2Collider = a; }
+		void setAtk1PosX(float x) { Atk1Pos.x = x; }
+		void setAtk2PosX(float x) { Atk2Pos.x = x; }
+		void setAtk1CollX(float x) { Atk1Collider.x = x; }
+		void setAtk2CollX(float x) { Atk2Collider.x = x; }
 
 		float getStamina() { return stamina; }
 		int getLives() { return lives; }
 		bool getHitStun() { return hitStun; }
 		float getHSTimer() { return hitstunTimer; }
+		glm::vec3 getAtk1Pos() { return Atk1Pos; }
+		glm::vec3 getAtk2Pos() { return Atk2Pos; }
+		glm::vec2 getAtk1Coll() { return Atk1Collider; }
+		glm::vec2 getAtk2Coll() { return Atk2Collider; }
+		float getAtk1PosX() { return Atk1Pos.x; }
+		float getAtk2PosX() { return Atk2Pos.x; }
+		float getAtk1CollX() { return Atk1Collider.x; }
+		float getAtk2CollX() { return Atk2Collider.x; }
 
 	protected:
 		float stamina;
