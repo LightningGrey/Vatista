@@ -11,20 +11,20 @@ namespace Vatista {
 		Atk1Collider = glm::vec2(0.4f);
 		Atk2Collider = glm::vec2(0.4f);
 		lives = 3;
-		walls = 18.0f;
+		walls = 9.0f;
 		for (int i = 0; i < 6; i++)
 			animations.emplace_back();
 		if (playerID) {
-			setPos(-1.0f, 1.0f, 9.0f);
+			setPos(-1.0f, 0.0f, 9.0f);
 			setRotY(90.0f);
-			Atk1Pos = glm::vec3(getPosX() + Collider.x + Atk1Collider.x, 1.0f, 9.0f);
-			Atk2Pos = glm::vec3(getPosX() + Collider.x + Atk2Collider.x, 1.0f, 9.0f);
+			Atk1Pos = glm::vec3(getPosX() + Collider.x + Atk1Collider.x, getPosY(), 9.0f);
+			Atk2Pos = glm::vec3(getPosX() + Collider.x + Atk2Collider.x, getPosY(), 9.0f);
 		}
 		else {
-			setPos(1.0f, 1.0f, 9.0f);
+			setPos(1.0f, 0.0f, 9.0f);
 			setRotY(-90.f);
-			Atk1Pos = glm::vec3(getPosX() - Collider.x - Atk1Collider.x, 1.0f, 9.0f);
-			Atk2Pos = glm::vec3(getPosX() - Collider.x - Atk2Collider.x, 1.0f, 9.0f);
+			Atk1Pos = glm::vec3(getPosX() - Collider.x - Atk1Collider.x, getPosY(), 9.0f);
+			Atk2Pos = glm::vec3(getPosX() - Collider.x - Atk2Collider.x, getPosY(), 9.0f);
 		}
 	}
 

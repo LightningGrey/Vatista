@@ -55,8 +55,8 @@ void Vatista::Game::init()
 	gameWindow = new Vatista::Window(1600, 900, "Alpha Strike");
 
 	mainCamera = std::make_shared<Vatista::Camera>();
-	mainCamera->SetPosition(glm::vec3(0.0f, 4.0f, 15.0f));
-	mainCamera->LookAt(glm::vec3(0.0f,4.0f,0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	mainCamera->SetPosition(glm::vec3(0.0f, 2.0f, 10.0f));
+	mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	mainCamera->Projection = glm::perspective(glm::radians(60.0f), 16.f / 9.f, 1.0f, 200.0f);
 
 	//doesn't work yet
@@ -364,10 +364,14 @@ void Vatista::Game::update(float dt)
 
 	TestStamina->setStamina(C1->getStamina());
 	TestStamina2->setStamina(C2->getStamina());
-
+	float dist = fabs(C1->getPosX() - C2->getPosX());
 	//C1->setStamina(C1->getStamina() + 10.0f);
 	//C2->setStamina(C2->getStamina() + 10.0f);
-
+	if (dist > 5.0f)
+		mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 11.0f+(dist/2.0f)));
+	else
+		mainCamera->SetPosition(glm::vec3((C1->getPosX()+C2->getPosX())/2.0f, 2.0f, 13.5f));
+	mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	audioEngine->Update();
 
