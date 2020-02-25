@@ -10,7 +10,6 @@
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\ObjLoader.cpp" />
     <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\testmain.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Character.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -18,6 +17,21 @@
     <ClCompile Include="src\FrameBuffer.cpp" />
     <ClCompile Include="src\StationaryObj.cpp" />
     <ClCompile Include="src\Stamina.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Game\Game.cpp" />
+    <ClCompile Include="src\VatistaEngine\Audio\AudioEngine.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Material.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Mesh.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Shader.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Texture.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Camera.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Window.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\Characters\Character.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\Stationary\StationaryObj.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\UI\Stamina.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\GameObject.cpp" />
+    <ClCompile Include="src\VatistaEngine\Post-Processing\FrameBuffer.cpp" />
+    <ClCompile Include="src\VatistaEngine\Utilities\Log.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />
@@ -59,6 +73,24 @@
     <ClInclude Include="src\Stamina.h" />
     <ClInclude Include="src\Objects\UIObject.h" />
     <ClInclude Include="src\StationaryObj.h" />
+    <ClInclude Include="src\Game\Game.h" />
+    <ClInclude Include="src\VatistaEngine\Audio\AudioEngine.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Material.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Mesh.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Shader.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Texture.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Camera.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Window.h" />
+    <ClInclude Include="src\VatistaEngine\Miscellaneous Files\Math.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\Characters\Character.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\Stationary\StationaryObj.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\UI\Stamina.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\UI\UIObject.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\GameObject.h" />
+    <ClInclude Include="src\VatistaEngine\Post-Processing\FrameBuffer.h" />
+    <ClInclude Include="src\VatistaEngine\Utilities\Log.h" />
+    <ClInclude Include="src\VatistaEngine\Utilities\Utils.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\MeshRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />

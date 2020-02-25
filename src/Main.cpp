@@ -6,8 +6,8 @@ Date: November 28th, 2019
 Authors: DHC Studios
 */
 
-#include "Log.h"
-#include "Game.h"
+#include "Utilities/Log.h"
+#include "Game/Game.h"
 
 int main() {
 
