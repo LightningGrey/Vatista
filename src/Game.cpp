@@ -58,12 +58,11 @@ void Vatista::Game::init()
 	mainCamera->SetPosition(glm::vec3(0.0f, 2.0f, 10.0f));
 	mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	mainCamera->Projection = glm::perspective(glm::radians(60.0f), 16.f / 9.f, 1.0f, 200.0f);
-
-	//doesn't work yet
-	//orthoCamera = std::make_shared<Vatista::Camera>();
-	//orthoCamera->SetPosition(glm::vec3(0, 0, 15));
-	//orthoCamera->LookAt(glm::vec3(0), glm::vec3(0, 1, 0));
-	//orthoCamera->Projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 150.0f);
+	
+	orthoCamera = std::make_shared<Vatista::Camera>();
+	orthoCamera->SetPosition(glm::vec3(0.0f));
+	orthoCamera->LookAt(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	orthoCamera->Projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -1.0f, 1.0f);
 
 	//audio
 	audioEngine = std::make_shared<AudioEngine>();
@@ -309,25 +308,25 @@ void Vatista::Game::init()
 
 
 	TestStamina = std::make_shared<GameObject>();
-	TestStamina->setPos(glm::vec3(-5, 10, 3));
+	TestStamina->setPos(glm::vec3(-5.f,7.f,0.f));
 	TestStamina->setMesh(meshList[18]);//3rd one on init.txt
 	TestStamina->setMat(staminaMat/*staminaMat*/);
 
-	TestStamina->setRot(glm::vec3(90, 0, 0));
+	TestStamina->setRot(glm::vec3(90.f, 0.f, 0.f));
 	TestStamina->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time
-	TestStamina->setScale(glm::vec3(0.5));
+	TestStamina->setScale(glm::vec3(0.5f));
 	UIList.push_back(TestStamina);
 
 	TestStamina2 = std::make_shared<GameObject>();
-	TestStamina2->setPos(glm::vec3(5, 10, 3));
+	TestStamina2->setPos(glm::vec3(5.f, 7.f, 0.f));
 	TestStamina2->setMesh(meshList[18]);//3rd one on init.txt
 	TestStamina2->setMat(staminaMat/*staminaMat*/);
 
-	TestStamina2->setRot(glm::vec3(90, 0, 0));
+	TestStamina2->setRot(glm::vec3(90.f, 0.f, 0.f));
 	TestStamina2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time
-	TestStamina2->setScale(glm::vec3(0.5));
+	TestStamina2->setScale(glm::vec3(0.5f));
 	UIList.push_back(TestStamina2);
-	 
+
 
 
 
@@ -368,10 +367,11 @@ void Vatista::Game::update(float dt)
 	//C1->setStamina(C1->getStamina() + 10.0f);
 	//C2->setStamina(C2->getStamina() + 10.0f);
 	if (dist > 5.0f)
-		mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 11.0f+(dist/2.0f)));
+		mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 11.0f + (dist / 2.0f)));
 	else
-		mainCamera->SetPosition(glm::vec3((C1->getPosX()+C2->getPosX())/2.0f, 2.0f, 13.5f));
+		mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 13.5f));
 	mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
 
 	audioEngine->Update();
 
@@ -380,8 +380,8 @@ void Vatista::Game::update(float dt)
 
 void Vatista::Game::draw(float dt)
 {
+
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
 
 
 	glEnable(GL_DEPTH_TEST);
@@ -393,11 +393,9 @@ void Vatista::Game::draw(float dt)
 	for (auto object : ObjectList) {
 		object->Draw(mainCamera);
 	}
-
 	for (auto component : UIList) {
-		component->Draw(mainCamera);
+		component->Draw(orthoCamera);
 	}
-
 }
 
 bool Vatista::Game::load(std::string filename)
