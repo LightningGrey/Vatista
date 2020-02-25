@@ -50,6 +50,8 @@ namespace Vatista {
 		void setAtk1CollX(float x) { Atk1Collider.x = x; }
 		void setAtk2CollX(float x) { Atk2Collider.x = x; }
 
+		void Draw(const Vatista::Camera::Sptr& camera);
+
 		float getStamina() { return stamina; }
 		int getLives() { return lives; }
 		bool getHitStun() { return hitStun; }

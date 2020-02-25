@@ -72,19 +72,6 @@ namespace Vatista {
 		//material->GetShader()->SetUniform("meshDimensions", vecVert);
 
 
-		currentTime += dt;
-		
-		if (currentTime > endTime) {
-			dt = -0.0167f;
-		}
-		else if (currentTime < 0.0f) {
-			dt = 0.0167f;
-		}
-
-		morph = currentTime / endTime;
-
-		material->GetShader()->SetUniform("morphT", morph);
-
 		// Draw the item
 
 		model->Draw();
