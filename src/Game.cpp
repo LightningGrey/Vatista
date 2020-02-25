@@ -199,7 +199,7 @@ void Vatista::Game::init()
 	
 
 	for (int i = 0; i < 17; i++) {
-		stage = std::make_shared<GameObject>();
+		stage = std::make_shared<StationaryObj>();
 		stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
 		stage->setRotY(-90.0f);
 		stage->setMesh(meshList[i+1]);
@@ -229,7 +229,7 @@ void Vatista::Game::init()
 	ObjectList.push_back(C2);
 
 
-	TestStamina = std::make_shared<GameObject>();
+	TestStamina = std::make_shared<Stamina>();
 	TestStamina->setPos(glm::vec3(-5, 10, 3));
 	TestStamina->setMesh(meshList[18]);//3rd one on init.txt
 	TestStamina->setMat(staminaMat/*staminaMat*/);
@@ -239,7 +239,7 @@ void Vatista::Game::init()
 	TestStamina->setScale(glm::vec3(0.5));
 	UIList.push_back(TestStamina);
 
-	TestStamina2 = std::make_shared<GameObject>();
+	TestStamina2 = std::make_shared<Stamina>();
 	TestStamina2->setPos(glm::vec3(5, 10, 3));
 	TestStamina2->setMesh(meshList[18]);//3rd one on init.txt
 	TestStamina2->setMat(staminaMat/*staminaMat*/);

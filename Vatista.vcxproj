@@ -43,6 +43,7 @@
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Stage.h" />
     <ClInclude Include="src\Stamina.h" />
+    <ClInclude Include="src\StationaryObj.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Window.h" />
@@ -60,6 +61,8 @@
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\ObjLoader.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Stamina.cpp" />
+    <ClCompile Include="src\StationaryObj.cpp" />
     <ClCompile Include="src\testmain.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Window.cpp" />

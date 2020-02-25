@@ -35,7 +35,8 @@ namespace Vatista {
 		bool playerID;
 		std::vector<std::pair<std::string, std::vector<Vatista::Mesh::Sptr>>> animations;
 		Character(bool ID, Mesh::Sptr mesh, Material::Sptr mat);
-		virtual void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae);
+		~Character();
+		void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae);
 
 		void setStamina(float s) { stamina = s; }
 		void setLives(int l) { lives = l; }
@@ -90,5 +91,12 @@ namespace Vatista {
 
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static keyboard kb;
+
+
+		float dt = 0.0167f;
+		float morph;
+
+		float currentTime = 0.0f;
+		float endTime = 10.0f;
 	};
 }

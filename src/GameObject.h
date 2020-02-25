@@ -10,9 +10,9 @@ namespace Vatista {
 		SharedPtr(GameObject);
 
 		GameObject() : Scale(1.0f), model(nullptr), material(nullptr), Position(0.0f), EulerRotDeg(0.0f), Collider(0.0f) {}
-		~GameObject() {};
+		~GameObject() {}
 
-		void Draw(const Vatista::Camera::Sptr& camera);
+		virtual void Draw(const Vatista::Camera::Sptr& camera) = 0;
 		bool collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2);
 
 		//getters and setters
@@ -57,9 +57,6 @@ namespace Vatista {
 		float getCollX() { return Collider.x; }
 		float getCollY() { return Collider.y; }
 
-		//change later
-		float getStamina() { return stamina; }
-		void setStamina(float stam) { stamina = stam; }
 
 	protected:
 		//name
@@ -85,15 +82,6 @@ namespace Vatista {
 		glm::vec3 Scale;
 		glm::vec3 EulerRotDeg;
 		glm::vec2 Collider;
-
-		float dt = 0.0167f;
-		float morph;
-
-		float currentTime = 0.0f;
-		float endTime = 10.0f;
-
-		//change later
-		float stamina = 0.0f;
 
 	};
 }

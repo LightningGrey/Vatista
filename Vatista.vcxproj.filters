@@ -16,6 +16,8 @@
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\AudioEngine.cpp" />
     <ClCompile Include="src\FrameBuffer.cpp" />
+    <ClCompile Include="src\StationaryObj.cpp" />
+    <ClCompile Include="src\Stamina.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />
@@ -56,6 +58,7 @@
     <ClInclude Include="src\FrameBuffer.h" />
     <ClInclude Include="src\Stamina.h" />
     <ClInclude Include="src\Objects\UIObject.h" />
+    <ClInclude Include="src\StationaryObj.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />

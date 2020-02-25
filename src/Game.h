@@ -19,7 +19,8 @@
 #include "Utils.h"
 #include "Math.h"
 #include "AudioEngine.h"
-//#include "Controls.h"
+#include "Stamina.h"
+#include "StationaryObj.h"
 
 
 namespace Vatista {
@@ -62,14 +63,14 @@ namespace Vatista {
 		std::vector<GameObject::Sptr> UIList;
 		Character::Sptr C1;
 		Character::Sptr C2;
-		GameObject::Sptr TestMap;
-		GameObject::Sptr stage;
-		GameObject::Sptr TestStamina;
-		GameObject::Sptr TestStamina2; 
+		//GameObject::Sptr TestMap;
+		StationaryObj::Sptr stage;
+		Stamina::Sptr TestStamina;
+		Stamina::Sptr TestStamina2; 
 		float x = 100.0f;
 		float y = 100.0f;
 
-		GameObject::Sptr TestStaminaBackground;
+		//GameObject::Sptr TestStaminaBackground;
 
 		glm::mat4 modelTransform2 = glm::mat4(0.f);
 		glm::vec3 pos1;
