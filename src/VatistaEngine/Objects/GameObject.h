@@ -56,6 +56,7 @@ namespace Vatista {
 		glm::vec2 getCollider() { return Collider; }
 		float getCollX() { return Collider.x; }
 		float getCollY() { return Collider.y; }
+		glm::mat4 getTransform() { return transform; }
 
 
 	protected:

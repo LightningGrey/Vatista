@@ -160,27 +160,28 @@ namespace Vatista {
 				startTime = glfwGetTime();
 				journeyLength = glm::distance(getPos(), lerpEnd);
 				kb.dash1 = false;
-				if (movement.x == 0) {
+				if (movement.x == 0.f) {
 					isBlocking = false;
 					isWalking = false;
 				}
 				if (collisionCheck(getPos() + movement, getCollider(), p2->getPos(), p2->getCollider()))
-					movement.x = 0;
+					movement.x = 0.f;
 				setPos(getPos() + movement);
 			}
 			else {
 				isBlocking = false;
 				isWalking = false;
-				if (std::floor(lerper * 1000) / 1000 == std::floor(lerpEnd.x * 1000) / 1000) {
+				float lerperFloored = std::floor(lerper * 1000.f);
+				float lerpendFloored = std::floor(lerpEnd.x * 1000.f);
+				if (lerperFloored < lerpendFloored + 10.f && lerperFloored > lerpendFloored - 10.f) {
 					isDashing = false;
-					//std::cout << "done" << std::endl;
-
+					std::cout << "done" << std::endl;
 				}
 				else {
 					float distCovered = (glfwGetTime() - startTime) * 0.45f;
 					float fractionOfJourney = distCovered / journeyLength;
-					lerper = (1.0 - fractionOfJourney) * lerper + (fractionOfJourney * lerpEnd.x);
-					std::cout << std::floor(lerper * 1000) / 1000 << " " << std::floor(lerpEnd.x * 1000) / 1000 << std::endl;
+					lerper = (1.0f - fractionOfJourney) * lerper + (fractionOfJourney * lerpEnd.x);
+					std::cout << lerperFloored << " " << lerpendFloored << std::endl;
 				}
 				setPosX(lerper);
 				if (collisionCheck(lerpEnd, getCollider(), p2->getPos(), p2->getCollider())) {
@@ -331,26 +332,28 @@ namespace Vatista {
 				startTime = glfwGetTime();
 				journeyLength = glm::distance(getPos(), lerpEnd);
 				kb.dash2 = false;
-				if (movement.x == 0) {
+				if (movement.x == 0.f) {
 					isBlocking = false;
 					isWalking = false;
 				}
 				if (collisionCheck(getPos() + movement, getCollider(), p2->getPos(), p2->getCollider()))
-					movement.x = 0;
+					movement.x = 0.f;
 				setPos(getPos() + movement);
 			}
 			else {
 				isBlocking = false;
 				isWalking = false;
-				if (std::floor(lerper * 1000) / 1000 == std::floor(lerpEnd.x * 1000) / 1000) {
+				float lerperFloored = std::floor(lerper * 1000.f);
+				float lerpendFloored = std::floor(lerpEnd.x * 1000.f);
+				if (lerperFloored < lerpendFloored + 10.f && lerperFloored > lerpendFloored - 10.f) {
 					isDashing = false;
-					//std::cout << "done" << std::endl;
+					std::cout << "done" << std::endl;
 				}
 				else {
 					float distCovered = (glfwGetTime() - startTime) * 0.45f;
 					float fractionOfJourney = distCovered / journeyLength;
-					lerper = (1.0 - fractionOfJourney) * lerper + (fractionOfJourney * lerpEnd.x);
-					std::cout << lerper << " " << lerpEnd.x << std::endl;
+					lerper = (1.0f - fractionOfJourney) * lerper + (fractionOfJourney * lerpEnd.x);
+					std::cout << lerperFloored << " " << lerpendFloored << std::endl;
 				}
 				setPosX(lerper);
 				if (collisionCheck(lerpEnd, getCollider(), p2->getPos(), p2->getCollider())) {

@@ -26,6 +26,7 @@
     <ClInclude Include="include\GLFW\glfw3.h" />
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
+    <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\VatistaEngine\Audio\AudioEngine.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Camera.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Material.h" />
