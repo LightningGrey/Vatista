@@ -23,9 +23,6 @@
     <ClInclude Include="include\GLFW\glfw3.h" />
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
-    <ClInclude Include="src\Texture.h" />
-    <ClInclude Include="src\Character.h" />
-    <ClInclude Include="src\Controls.h" />
     <ClInclude Include="include\fmod\fmod.h" />
     <ClInclude Include="include\fmod\fmod.hpp" />
     <ClInclude Include="include\fmod\fmod_codec.h" />
@@ -55,6 +52,7 @@
     <ClInclude Include="src\VatistaEngine\Utilities\Utils.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\MeshRenderer.h" />
     <ClInclude Include="src\Game\Game.h" />
+    <ClInclude Include="src\VatistaEngine\Post-Processing\EnumToString.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />
