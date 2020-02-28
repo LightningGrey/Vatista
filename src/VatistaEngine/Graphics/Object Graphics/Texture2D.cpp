@@ -1,40 +1,28 @@
-#include "Texture.h"
+#include "Texture2D.h"
 #include "Utilities/Log.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbs/stb_image.h"
 
-Vatista::Texture::Texture()
+Vatista::Texture2D::Texture2D() : Texture()
 {
-	textureID = 0;
 	setup();
 }
 
-Vatista::Texture::~Texture()
+Vatista::Texture2D::~Texture2D()
 {
-	glDeleteTextures(1, &this->textureID);
 }
 
-void Vatista::Texture::bind(int slot) const
-{
-	glBindTextureUnit(slot, textureID);
-}
-
-void Vatista::Texture::unbind(int slot)
-{
-	glBindTextureUnit(slot, 0);
-}
-
-void Vatista::Texture::loadFile(const std::string& filename, bool alpha)
+void Vatista::Texture2D::loadFile(const std::string& filename, bool alpha)
 {
 	stbi_set_flip_vertically_on_load(true);
 
 	int width, height, channels;
-	unsigned char* data = stbi_load(filename.c_str(), &width, &height, 
+	unsigned char* data = stbi_load(filename.c_str(), &width, &height,
 		&channels, 0);
 
 	if (data != nullptr && width != 0 && height != 0 && channels != 0) {
 		this->texWidth = width;
-		this->texHeight = height; 
+		this->texHeight = height;
 		this->texChannels = channels;
 
 		//glTextureSubImage2D(textureID, 0, 0, 0, texWidth, texHeight, GL_RGBA, 
@@ -51,8 +39,9 @@ void Vatista::Texture::loadFile(const std::string& filename, bool alpha)
 	stbi_image_free(data);
 }
 
-void Vatista::Texture::setup()
+void Vatista::Texture2D::setup()
 {
+
 	glGenTextures(1, &this->textureID);
 	glBindTexture(GL_TEXTURE_2D, this->textureID);
 	//glCreateTextures(GL_TEXTURE_2D, 1, &textureID);

@@ -5,10 +5,6 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\VatistaEngine\Audio\AudioEngine.cpp" />
-    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Material.cpp" />
-    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Mesh.cpp" />
-    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Shader.cpp" />
-    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Texture.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Camera.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Window.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\Characters\Character.cpp" />
@@ -17,15 +13,17 @@
     <ClCompile Include="src\VatistaEngine\Objects\GameObject.cpp" />
     <ClCompile Include="src\VatistaEngine\Post-Processing\FrameBuffer.cpp" />
     <ClCompile Include="src\VatistaEngine\Utilities\Log.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Material.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Mesh.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Shader.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Texture.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />
     <ClInclude Include="include\GLFW\glfw3.h" />
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
-    <ClInclude Include="src\Texture.h" />
-    <ClInclude Include="src\Character.h" />
-    <ClInclude Include="src\Controls.h" />
     <ClInclude Include="include\fmod\fmod.h" />
     <ClInclude Include="include\fmod\fmod.hpp" />
     <ClInclude Include="include\fmod\fmod_codec.h" />
@@ -38,10 +36,6 @@
     <ClInclude Include="include\fmod\fmod_studio.hpp" />
     <ClInclude Include="include\fmod\fmod_studio_common.h" />
     <ClInclude Include="src\VatistaEngine\Audio\AudioEngine.h" />
-    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Material.h" />
-    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Mesh.h" />
-    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Shader.h" />
-    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Texture.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Camera.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Window.h" />
     <ClInclude Include="src\VatistaEngine\Miscellaneous Files\Math.h" />
@@ -53,8 +47,13 @@
     <ClInclude Include="src\VatistaEngine\Post-Processing\FrameBuffer.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\Log.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\Utils.h" />
-    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\MeshRenderer.h" />
     <ClInclude Include="src\Game\Game.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Material.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Mesh.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\MeshRenderer.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Shader.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Texture.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />

@@ -1,5 +1,5 @@
 #include "Game.h" 
-#include "Graphics/Rendering/MeshRenderer.h"
+#include "Graphics/Object Graphics/MeshRenderer.h"
 #include <iostream> 
 
 Vatista::Game::Game() : gameWindow(nullptr), clearColour(glm::vec4(0, 0, 0, 1)),
@@ -75,13 +75,13 @@ void Vatista::Game::init()
 	load("./res/Objects/init.txt");
 
 
-	textureStamina = std::make_shared<Texture>();//connected to staminamat
+	textureStamina = std::make_shared<Texture2D>();//connected to staminamat
 	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture.png");
 
-	texture = std::make_shared<Texture>();
+	texture = std::make_shared<Texture2D>();
 	texture->loadFile("./res/Objects/Z3n/Z3N_Texture.png");
 
-	//texture3 = std::make_shared<Texture>();
+	//texture3 = std::make_shared<Texture2D>();
 	//texture3->loadFile("./res/default.png");
 
 	Shader::Sptr phong = std::make_shared<Shader>();
@@ -120,7 +120,7 @@ void Vatista::Game::init()
 	//load textures
 	for (int i = 0; i < 17; i++) {
 		textures.emplace_back();
-		textures[i] = std::make_shared<Texture>();
+		textures[i] = std::make_shared<Texture2D>();
 		switch (i) {
 		case 0:
 			textures[i]->loadFile("./res/Objects/Cave/Cave_Texture.png");
@@ -227,7 +227,7 @@ void Vatista::Game::init()
 	TestStamina->setMat(staminaMat/*staminaMat*/);
 
 	TestStamina->setRot(glm::vec3(90.f, 0.f, 0.f));
-	TestStamina->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
+	//TestStamina->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
 	TestStamina->setScale(glm::vec3(0.5f));
 	UIList.push_back(TestStamina);
 
@@ -237,7 +237,7 @@ void Vatista::Game::init()
 	TestStamina2->setMat(staminaMat/*staminaMat*/);
 
 	TestStamina2->setRot(glm::vec3(90.f, 0.f, 0.f));
-	TestStamina2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
+	//TestStamina2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
 	TestStamina2->setScale(glm::vec3(0.5f));
 	UIList.push_back(TestStamina2);
 	 

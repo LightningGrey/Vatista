@@ -8,12 +8,11 @@
 #include "GLM/glm.hpp"
 #include "GLM/gtc/matrix_transform.hpp";
 
-
 #include "Graphics/Camera.h"
 #include "Graphics/Window.h"
-#include "Graphics/Rendering/Mesh.h"
-#include "Graphics/Rendering/Shader.h"
-#include "Graphics/Rendering/Texture.h"
+#include "Graphics/Object Graphics/Mesh.h"
+#include "Graphics/Object Graphics/Shader.h"
+#include "Graphics/Object Graphics/Texture2D.h"
 
 #include "Utilities/Utils.h"
 #include "Miscellaneous Files/Math.h"
@@ -51,11 +50,11 @@ namespace Vatista {
 		Shader::Sptr myShader;
 		Shader::Sptr myNormalShader;
 		//std::vector<Vatista::Shader::Sptr> shaderList;
-		Texture::Sptr textureStamina;//place holder texture will add more complex later
-		Texture::Sptr texture;
-		Texture::Sptr texture2;
-		Texture::Sptr texture3;
-		Texture::Sptr texture4;
+		Texture2D::Sptr textureStamina;//place holder texture will add more complex later
+		Texture2D::Sptr texture;
+		Texture2D::Sptr texture2;
+		Texture2D::Sptr texture3;
+		Texture2D::Sptr texture4;
 		std::vector<Texture::Sptr> textures;
 		std::vector<Material::Sptr> mats;
 		Camera::Sptr mainCamera;

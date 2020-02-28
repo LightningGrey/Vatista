@@ -883,9 +883,9 @@ extern "C" {
  *  Framebuffer auxiliary buffer [hint](@ref GLFW_AUX_BUFFERS).
  */
 #define GLFW_AUX_BUFFERS            0x0002100B
-/*! @brief OpenGL stereoscopic rendering hint.
+/*! @brief OpenGL stereoscopic Object Graphics hint.
  *
- *  OpenGL stereoscopic rendering [hint](@ref GLFW_STEREO).
+ *  OpenGL stereoscopic Object Graphics [hint](@ref GLFW_STEREO).
  */
 #define GLFW_STEREO                 0x0002100C
 /*! @brief Framebuffer MSAA samples hint.
@@ -2214,7 +2214,7 @@ GLFWAPI const GLFWvidmode* glfwGetVideoMode(GLFWmonitor* monitor);
  *  This means that setting a perfectly linear ramp, or gamma 1.0, will produce
  *  the default (usually sRGB-like) behavior.
  *
- *  For gamma correct rendering with OpenGL or OpenGL ES, see the @ref
+ *  For gamma correct Object Graphics with OpenGL or OpenGL ES, see the @ref
  *  GLFW_SRGB_CAPABLE hint.
  *
  *  @param[in] monitor The monitor whose gamma ramp to set.
@@ -2277,7 +2277,7 @@ GLFWAPI const GLFWgammaramp* glfwGetGammaRamp(GLFWmonitor* monitor);
  *  This means that setting a perfectly linear ramp, or gamma 1.0, will produce
  *  the default (usually sRGB-like) behavior.
  *
- *  For gamma correct rendering with OpenGL or OpenGL ES, see the @ref
+ *  For gamma correct Object Graphics with OpenGL or OpenGL ES, see the @ref
  *  GLFW_SRGB_CAPABLE hint.
  *
  *  @param[in] monitor The monitor whose gamma ramp to set.
@@ -5227,7 +5227,7 @@ GLFWAPI GLFWwindow* glfwGetCurrentContext(void);
 /*! @brief Swaps the front and back buffers of the specified window.
  *
  *  This function swaps the front and back buffers of the specified window when
- *  rendering with OpenGL or OpenGL ES.  If the swap interval is greater than
+ *  Object Graphics with OpenGL or OpenGL ES.  If the swap interval is greater than
  *  zero, the GPU driver waits the specified number of screen updates before
  *  swapping the buffers.
  *
@@ -5235,7 +5235,7 @@ GLFWAPI GLFWwindow* glfwGetCurrentContext(void);
  *  a window without a context will generate a @ref GLFW_NO_WINDOW_CONTEXT
  *  error.
  *
- *  This function does not apply to Vulkan.  If you are rendering with Vulkan,
+ *  This function does not apply to Vulkan.  If you are Object Graphics with Vulkan,
  *  see `vkQueuePresentKHR` instead.
  *
  *  @param[in] window The window whose buffers to swap.
@@ -5275,7 +5275,7 @@ GLFWAPI void glfwSwapBuffers(GLFWwindow* window);
  *  A context must be current on the calling thread.  Calling this function
  *  without a current context will cause a @ref GLFW_NO_CURRENT_CONTEXT error.
  *
- *  This function does not apply to Vulkan.  If you are rendering with Vulkan,
+ *  This function does not apply to Vulkan.  If you are Object Graphics with Vulkan,
  *  see the present mode of your swapchain instead.
  *
  *  @param[in] interval The minimum number of screen updates to wait for
@@ -5352,7 +5352,7 @@ GLFWAPI int glfwExtensionSupported(const char* extension);
  *  A context must be current on the calling thread.  Calling this function
  *  without a current context will cause a @ref GLFW_NO_CURRENT_CONTEXT error.
  *
- *  This function does not apply to Vulkan.  If you are rendering with Vulkan,
+ *  This function does not apply to Vulkan.  If you are Object Graphics with Vulkan,
  *  see @ref glfwGetInstanceProcAddress, `vkGetInstanceProcAddr` and
  *  `vkGetDeviceProcAddr` instead.
  *
@@ -5426,7 +5426,7 @@ GLFWAPI int glfwVulkanSupported(void);
  *
  *  If Vulkan is available but no set of extensions allowing window surface
  *  creation was found, this function returns `NULL`.  You may still use Vulkan
- *  for off-screen rendering and compute work.
+ *  for off-screen Object Graphics and compute work.
  *
  *  @param[out] count Where to store the number of extensions in the returned
  *  array.  This is set to zero if an error occurred.

@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "GLM/glm.hpp"
-#include "Graphics/Rendering/Mesh.h"
+#include "Graphics/Object Graphics/Mesh.h"
 
 namespace Vatista {
 	struct Math {
