@@ -23,7 +23,7 @@ namespace Vatista {
 		myNumSamples = glm::clamp((int)numSamples, 1, maxSamples);
 		isValid = false;
 
-		glCreateFramebuffers(1, &myRendererID);
+		glCreateFramebuffers(1, &textureID);
 
 		if (myNumSamples > 1) {
 			myUnsampledFrameBuffer = std::make_shared<FrameBuffer>(width, height, 1);
@@ -31,8 +31,8 @@ namespace Vatista {
 	}
 	FrameBuffer::~FrameBuffer()
 	{
-		//LOG_INFO("Deleting frame buffer with ID: {}", myRendererID);
-		glDeleteFramebuffers(1, &myRendererID);
+		//LOG_INFO("Deleting frame buffer with ID: {}", textureID);
+		glDeleteFramebuffers(1, &textureID);
 	}
 	Texture::Sptr FrameBuffer::GetAttachment(RenderTargetAttachment attachment) {
 
@@ -84,7 +84,7 @@ namespace Vatista {
 		// If this is a new attachment, and it's a color, we need to update our DrawBuffers
 		else if (desc.Attachment >= RenderTargetAttachment::Color0 && desc.Attachment <= RenderTargetAttachment::Color7) {  // NEW
 			myDrawBuffers.push_back(desc.Attachment);
-			glNamedFramebufferDrawBuffers(myRendererID, myDrawBuffers.size(), reinterpret_cast<const GLenum*>(myDrawBuffers.data()));
+			glNamedFramebufferDrawBuffers(textureID, myDrawBuffers.size(), reinterpret_cast<const GLenum*>(myDrawBuffers.data()));
 		}
 
 		RenderBuffer& buffer = myLayers[desc.Attachment];
@@ -102,26 +102,38 @@ namespace Vatista {
 				glNamedRenderbufferStorage(buffer.RendererID, *desc.Format, myWidth, myHeight);
 
 			// Attach the renderbuffer to our RenderTarget
-			glNamedFramebufferRenderbuffer(myRendererID, *desc.Attachment, GL_RENDERBUFFER, buffer.RendererID);
+			glNamedFramebufferRenderbuffer(textureID, *desc.Attachment, GL_RENDERBUFFER, buffer.RendererID);
 		}
 		// We are going to use a texture as a backing resource
 		else {
-			// Create a descriptor for the image
-			florp::graphics::Texture2dDescription imageDesc = florp::graphics::Texture2dDescription();
+			// Create a descriptor for the image ///PLACE HOLDRES
+			/*florp::graphics::*/Texture2dDescription imageDesc = /*florp::graphics::*/Texture2dDescription();
 			imageDesc.Width = myWidth;
 			imageDesc.Height = myHeight;
 			imageDesc.WrapS = imageDesc.WrapT = florp::graphics::WrapMode::ClampToEdge;
-			imageDesc.MinFilter = florp::graphics::MinFilter::Linear;
-			imageDesc.Format = (florp::graphics::InternalFormat)desc.Format;
+			imageDesc.MinFilter = /*florp::graphics::*/MinFilter::Linear;
+			imageDesc.Format = (/*within TextureEnum.h*/InternalFormat)desc.Format;
 			imageDesc.NumSamples = myNumSamples;
 			imageDesc.MipmapLevels = 1; // NEW
+			//all the stuff here are gonna be needed in 2d texture
+			/*uint32_t       Width, Height;
+			MinFilter      MinFilter;
+			MagFilter      MagFilter;
+			WrapMode       WrapT;
+			WrapMode       WrapS;
+			InternalFormat Format;
+			uint32_t       MipmapLevels;
+			uint32_t       NumSamples; */
+			//PLace hOLDERS
+
+
 
 			// Create the image, and store it's info in our buffer tag
-			Texture::Sptr image = std::make_shared<FrameBuffer>(imageDesc);
+			Texture::Sptr image = std::make_shared<Texture>(imageDesc);
 			buffer.Resource = image;
-			buffer.RendererID = image->GetRenderID();
+			buffer.RendererID = image->getTexID();
 
-			glNamedFramebufferTexture(myRendererID, *desc.Attachment, image->GetRenderID(), 0);
+			glNamedFramebufferTexture(textureID, *desc.Attachment, image->textureID(), 0);
 
 			if (myNumSamples > 1) {
 				myUnsampledFrameBuffer->AddAttachment(desc);
@@ -129,6 +141,31 @@ namespace Vatista {
 		}
 		isValid = false;
 	}
+
+	bool FrameBuffer::Validate()
+	{
+
+		if (myNumSamples > 1) {
+			myUnsampledFrameBuffer->Validate();
+		}
+			GLenum result = glCheckNamedFramebufferStatus(textureID, GL_FRAMEBUFFER);
+			//INSERT LOG STUFF HERE ERROR CHECKING ETC.
+
+			//
+			//
+			//
+			//if (result != GL_FRAMEBUFFER_COMPLETE) {
+			//	switch (result) {
+			//	}
+				//	isValid = false;
+			//	return false;
+			//else {
+			//isValid = true;
+			//return true;
+	//}
+
+	}
+
 
 	//void FrameBuffer::bind(int slot) {
 	//		GetAttachment(RenderTargetAttachment::Color0)->Bind(slot);
@@ -142,9 +179,9 @@ namespace Vatista {
 	{
 		if (myBinding != RenderTargetBinding::None) {
 			if (myNumSamples > 1) {
-				glBindFramebuffer(GL_READ_FRAMEBUFFER, myRendererID);
+				glBindFramebuffer(GL_READ_FRAMEBUFFER, textureID);
 
-				glBindFramebuffer(GL_DRAW_FRAMEBUFFER, myUnsampledFrameBuffer->myRendererID);
+				glBindFramebuffer(GL_DRAW_FRAMEBUFFER, myUnsampledFrameBuffer->textureID);
 
 				//Blit({ 0, 0, myWidth, myHeight }, { 0, 0, myWidth, myHeight }, BufferFlags::All, MagFilter::Nearest); //no magfilter
 				for (auto& kvp : myLayers) {
@@ -163,10 +200,22 @@ namespace Vatista {
 		}
 	}
 
+	FrameBuffer::Sptr FrameBuffer::Clone() const
+	{
+		auto result = std::make_shared<FrameBuffer>(myWidth, myHeight, myNumSamples);
+
+		for (auto& kvp : myLayers) {
+			result->AddAttachment(kvp.second.Description);
+		}
+		result->Validate();
+		return result;
+
+	}
+
 
 	void FrameBuffer::bind(RenderTargetBinding bindMode) const {//binding for drawing
 		myBinding = bindMode;
-		glBindFramebuffer((GLenum)bindMode, myRendererID);
+		glBindFramebuffer((GLenum)bindMode, textureID);
 	}
 
 

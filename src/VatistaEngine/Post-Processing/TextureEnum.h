@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include "EnumToString.h"
 
-namespace florp
+namespace Vatista
 {
 
 	namespace graphics

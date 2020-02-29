@@ -53,6 +53,7 @@
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\MeshRenderer.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\VatistaEngine\Post-Processing\EnumToString.h" />
+    <ClInclude Include="src\VatistaEngine\Post-Processing\TextureEnum.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />
