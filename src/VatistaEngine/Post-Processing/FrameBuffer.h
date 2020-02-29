@@ -26,6 +26,11 @@ ENUM(RenderTargetAttachment, uint32_t,
 	Stencil = GL_STENCIL_ATTACHMENT
 );
 
+constexpr bool IsColorAttachment(RenderTargetAttachment attachment) {
+	return attachment >= RenderTargetAttachment::Color0 && attachment <= RenderTargetAttachment::Color7;
+}
+
+
 ENUM(RenderTargetType, uint32_t,
 	Color32 = GL_RGBA8,
 	Color24 = GL_RGB8,
@@ -72,17 +77,52 @@ namespace Vatista {
 	public:
 		typedef std::shared_ptr<FrameBuffer> Sptr;
 
-		void init();
+
+		FrameBuffer(uint32_t width, uint32_t height, uint8_t numSamples = 1);
+		virtual ~FrameBuffer();
+
+		//void init();
+
+
+		uint32_t GetWidth() const { return myWidth; }
+
+		uint32_t GetHeight() const { return myHeight; }
+
+		glm::ivec2 GetSize() const { return { myWidth, myHeight }; }
+
+
+		Texture::Sptr GetAttachment(RenderTargetAttachment attachment);
+
+
+		void Resize(uint32_t newWidth, uint32_t newHeight);
+
+		void AddAttachment(const RenderBufferDesc& desc);
+
+		//returns True if the FrameBuffer is ready for drawing, false if otherwise
+			
+		bool Validate();
+
+
 
 		virtual void bind(int slot) const override {
 
 		};//todo we probably need to change this to a base texture class
-		virtual void Bind(uint32_t slot, RenderTargetAttachment attachment);
 
-		Texture::Sptr GetAttachment(RenderTargetAttachment attachment);
+		virtual void bind(uint32_t slot, RenderTargetAttachment attachment);
+
+
+
+		void UnBind() const;
 
 		//Texture::Sptr  basicily(florp::graphics::Texture2D::Sptr) is whatever our standard shared pointer for our base texture class,
 		//if it changes in the future when texture.h gets altered all of it will have to change
+	
+		/*
+		static void Blit(
+			const glm::ivec4& srcBounds, const glm::ivec4& dstBounds,
+			BufferFlags flags = BufferFlags::All, MagFilter filterMode = MagFilter::Linear);*/
+
+
 	private:
 		uint32_t myWidth, myHeight;
 
@@ -92,10 +132,17 @@ namespace Vatista {
 
 		mutable RenderTargetBinding myBinding;
 
-		GLuint FramebufferName;
+		/*GLuint FramebufferName;
 		GLuint renderedTexture;
 
-		GLuint depthrenderbuffer;
+		GLuint depthrenderbuffer;*/
+		
+		uint32_t    myRendererID;//replacement for igraphics resource
+		//checks to see if the attachment point you're asking for is a color attachment
+
+	//store a pointer to another FBO if this one is multisampled
+		Sptr  myUnsampledFrameBuffer;
+
 		struct RenderBuffer {
 			GLuint  RendererID;//when we create a texture we get a number but instead of needing to remembmer a texture (texture 1,2)
 			//we can have an object represent the textures.
@@ -105,6 +152,9 @@ namespace Vatista {
 
 			RenderBuffer();
 		};
+		//can't use std unordered_map for some reason
+		std::map<RenderTargetAttachment, RenderBuffer> myLayers;
+		std::vector<RenderTargetAttachment> myDrawBuffers;  
 
 	};
 
@@ -112,16 +162,6 @@ namespace Vatista {
 	//add  InternalFormat, renderer ID, and Bind
 
 }
->>>>>>> Stashed changes
-
-	};
-
-	// missions
-	//add  InternalFormat, renderer ID, and Bind
 
 
 
-
-
-	
-}

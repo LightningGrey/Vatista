@@ -11,7 +11,7 @@ namespace Vatista {
 		Texture();
 		~Texture();
 
-		void bind(int slot) const;
+		void Bind(int slot) const;
 		static void unbind(int slot);
 
 		void loadFile(const std::string& filename, bool alpha = true);
