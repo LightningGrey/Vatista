@@ -137,7 +137,7 @@ namespace Vatista {
 
 		GLuint depthrenderbuffer;*/
 		
-		uint32_t    myRendererID;//replacement for igraphics resource
+		
 		//checks to see if the attachment point you're asking for is a color attachment
 
 	//store a pointer to another FBO if this one is multisampled

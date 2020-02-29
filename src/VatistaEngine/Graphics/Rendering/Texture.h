@@ -11,16 +11,15 @@ namespace Vatista {
 		Texture();
 		~Texture();
 
-		void Bind(int slot) const;
+		void bind(int slot) const;
 		static void unbind(int slot);
 
 		void loadFile(const std::string& filename, bool alpha = true);
 
 		GLuint getTexID() { return textureID; };
-
-	private:
-		int texWidth, texHeight, texChannels;
+	protected:
 		GLuint textureID;
+		int texWidth, texHeight, texChannels;
 		void setup();
 	};
 }
