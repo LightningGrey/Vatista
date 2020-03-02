@@ -6,7 +6,7 @@
 #include <fstream>
 
 #include "GLM/glm.hpp"
-#include "GLM/gtc/matrix_transform.hpp";
+#include "GLM/gtc/matrix_transform.hpp"
 
 #include "Graphics/Camera.h"
 #include "Graphics/Window.h"

@@ -16,7 +16,7 @@ Vatista::Game::~Game()
 {
 }
 
-void GlfwWindowResizedCallback(GLFWwindow* window, int width, int height) {
+void GlfwWindowResizedCallback(GLFWwindow*, int width, int height) {
 	glViewport(0, 0, width, height);
 	//Vatista::Window* gameWindow = ; 
 	//if (gameWindow != nullptr) { 
@@ -28,11 +28,11 @@ void Vatista::Game::run()
 {
 	init();
 
-	static float previousFrame = glfwGetTime();
+	static float previousFrame = (float)glfwGetTime();
 
 	//game loop 
 	while (!gameWindow->shouldClose()) {
-		static float currentFrame = glfwGetTime();
+		static float currentFrame = (float)glfwGetTime();
 		static float deltaTime = currentFrame - previousFrame;
 
 		update(deltaTime);
@@ -277,7 +277,7 @@ void Vatista::Game::update(float dt)
 	//TestStamina.setScale(glm::vec3(0.5f)); 
 }
 
-void Vatista::Game::draw(float dt)
+void Vatista::Game::draw(float)
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -357,16 +357,16 @@ bool Vatista::Game::load(std::string filename)
 		std::vector<glm::vec3> bitangents;
 
 		//Math::computeTangents(morphVertData, indices, tangents, bitangents);
-		for (int i = 0; i < vertTotalBuffer; i++) {
-			MorphVertex morph = { Vertex{(*(morphBuffer + i)).Position,
-			(*(morphBuffer + i)).UV, (*(morphBuffer + i)).Normal}, (*(morphBuffer + i)).PositionS, 
-				(*(morphBuffer + i)).NormalS };
+		for (int j = 0; j < vertTotalBuffer; j++) {
+			MorphVertex morph = { Vertex{(*(morphBuffer + j)).Position,
+			(*(morphBuffer + j)).UV, (*(morphBuffer + j)).Normal}, (*(morphBuffer + j)).PositionS, 
+				(*(morphBuffer + j)).NormalS };
 			morphVertData.push_back(morph);
 		}
 
 
-		for (int i = 0; i < indiceTotalBuffer; i++) {
-			indices.push_back(*(indicesBuffer + i));
+		for (int k = 0; k < indiceTotalBuffer; k++) {
+			indices.push_back(*(indicesBuffer + k));
 		}
 
 		myMesh = std::make_shared<Mesh>(indices, indices.size(),

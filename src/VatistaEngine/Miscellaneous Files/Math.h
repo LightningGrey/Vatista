@@ -8,7 +8,7 @@ namespace Vatista {
 		static void computeTangents(std::vector<Vertex>& verts, std::vector<uint32_t>& indices,
 			std::vector<glm::vec3>& tangents, std::vector<glm::vec3>& bitangents) {
 
-			for (int i = 0; i < verts.size(); i + 3) {
+			for (int i = 0; i < verts.size(); i += 3) {
 				//face vertices
 				glm::vec3& v0 = verts[indices[i]].Position;
 				glm::vec3& v1 = verts[indices[i + 1]].Position;
@@ -37,7 +37,7 @@ namespace Vatista {
 		static void computeTangents(std::vector<MorphVertex>& verts, std::vector<uint32_t>& indices,
 			std::vector<glm::vec3>& tangents, std::vector<glm::vec3>& bitangents) {
 
-			for (int i = 0; i < verts.size(); i + 3) {
+			for (int i = 0; i < verts.size(); i += 3) {
 				//face vertices
 				glm::vec3& v0 = verts[indices[i]].Position;
 				glm::vec3& v1 = verts[indices[i + 1]].Position;

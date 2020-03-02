@@ -21,7 +21,7 @@ namespace Vatista {
 	{
 		//initializing GLFW
 		glfwInit();
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.5);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5); 
 		glfwWindowHint(GLFW_SAMPLES, 4);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -33,16 +33,16 @@ namespace Vatista {
 		if (window == NULL) {
 			VATISTA_LOG_ERROR("Window creation failure");
 			glfwTerminate();
-			return -1.0f;
+			return false;
 		}
 		//error if GLAD is not loaded 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 			VATISTA_LOG_ERROR("GLAD load failure");
-			return -1.0f;
+			return false;
 		}
 		VATISTA_LOG_INFO("Window initialization successful.");
 
-		return 1;
+		return true;
 	}
 
 	void Window::clear()
@@ -52,13 +52,14 @@ namespace Vatista {
 	}
 
 	//callback function
-	void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-		glViewport(0, 0, width, height);
+	void Window::framebuffer_size_callback(GLFWwindow*, 
+		int windowWidth, int windowHeight) {
+		glViewport(0, 0, windowWidth, windowHeight);
 	}
 
-	void Window::processInput(GLFWwindow* window) {
-		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-			glfwSetWindowShouldClose(window, true);
+	void Window::processInput(GLFWwindow* currentWindow) {
+		if (glfwGetKey(currentWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+			glfwSetWindowShouldClose(currentWindow, true);
 		}
 	}
 
