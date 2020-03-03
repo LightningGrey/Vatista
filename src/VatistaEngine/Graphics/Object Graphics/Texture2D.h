@@ -4,7 +4,11 @@
 #include "Utilities/Utils.h"
 #include "Texture.h"
 
-namespace Vatista {
+//struct Texture2DDesc{
+//
+//};
+
+namespace Vatista { 
 	class Texture2D : public Texture {
 	public:
 		SharedPtr(Texture2D);
@@ -16,6 +20,8 @@ namespace Vatista {
 
 	protected:
 		int texWidth, texHeight, texChannels;
+		TextureSampler sample = TextureSampler();
 		void setup();
 	};
+
 }

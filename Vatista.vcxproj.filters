@@ -18,6 +18,7 @@
     <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Shader.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Texture.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Texture2D.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\TextureSampler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />
@@ -54,6 +55,9 @@
     <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Shader.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Texture.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Texture2D.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\TextureSampler.h" />
+    <ClInclude Include="src\VatistaEngine\Utilities\EnumToString.h" />
+    <ClInclude Include="src\VatistaEngine\Utilities\TextureEnums.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />

@@ -96,6 +96,11 @@ void Vatista::Game::init()
 	Shader::Sptr staminaRamp = std::make_shared<Shader>();//stamina stuff
 	staminaRamp->Load("./res/Shaders/StaminaBar.vs.glsl", "./res/Shaders/StaminaBar.fs.glsl");
 
+	//sample testing
+	TextureSampler::Sptr NearestMipped = std::make_shared<TextureSampler>();
+	NearestMipped->minFilter = MinFilter::NearestMipNearest;
+	NearestMipped->magFilter = MagFilter::Nearest;
+	NearestMipped->createSampler();
 
 	Material::Sptr testMat = std::make_shared<Material>(phong);
 	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -105,7 +110,7 @@ void Vatista::Game::init()
 	testMat->Set("a_LightSpecPower", 0.9f);
 	testMat->Set("a_LightShininess", 256.0f);
 	testMat->Set("a_LightAttenuation", 0.04f);
-	testMat->Set("texSample", texture);
+	testMat->Set("texSample", texture, NearestMipped);
 
 	Material::Sptr testMat2 = std::make_shared<Material>(phong2);
 	testMat2->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -115,7 +120,7 @@ void Vatista::Game::init()
 	testMat2->Set("a_LightSpecPower", 0.9f);
 	testMat2->Set("a_LightShininess", 256.0f);
 	testMat2->Set("a_LightAttenuation", 0.04f);
-	testMat2->Set("texSample", texture2);
+	testMat2->Set("texSample", texture2, NearestMipped);
 
 	//load textures
 	for (int i = 0; i < 17; i++) {
@@ -186,7 +191,7 @@ void Vatista::Game::init()
 		mats[i]->Set("a_LightSpecPower", 0.9f);
 		mats[i]->Set("a_LightShininess", 256.0f);
 		mats[i]->Set("a_LightAttenuation", 0.04f);
-		mats[i]->Set("texSample", textures[i]);
+		mats[i]->Set("texSample", textures[i], NearestMipped);
 	}
 	
 
@@ -208,7 +213,7 @@ void Vatista::Game::init()
 	staminaMat->Set("a_LightSpecPower", 0.9f);
 	staminaMat->Set("a_LightShininess", 256.0f);
 	staminaMat->Set("a_LightAttenuation", 0.04f);
-	staminaMat->Set("texSample", textureStamina);
+	staminaMat->Set("texSample", textureStamina, NearestMipped);
 	staminaMat->Set("UVoffset", glm::vec3(0.0f));
 
 

@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include "Shader.h"
 #include "Texture.h"
+#include "TextureSampler.h"
 #include "Utilities/Utils.h"
 /*
  Represents settings for a shader
@@ -22,13 +23,19 @@ namespace Vatista {
 		void Set(const std::string& name, const glm::vec4& value) { myVec4s[name] = value; }
 		void Set(const std::string& name, const glm::vec3& value) { myVec3s[name] = value; }
 		void Set(const std::string& name, const float& value) { myFloats[name] = value; }
-		void Set(const std::string& name, const Texture::Sptr& value) { myTextures[name] = value; }
+		void Set(const std::string& name, const Texture::Sptr& value, const TextureSampler::Sptr sampler) 
+			{ myTextures[name] = { value, sampler }; }
+	protected:
+		struct SamplerInfo {
+			Texture::Sptr Texture;
+			TextureSampler::Sptr Sampler;
+		};
 		Vatista::Shader::Sptr myShader;
 		std::unordered_map<std::string, glm::mat4> myMat4s;
 		std::unordered_map<std::string, glm::vec4> myVec4s;
 		std::unordered_map<std::string, glm::vec3> myVec3s;
 		std::unordered_map<std::string, glm::vec2> myVec2s;
 		std::unordered_map<std::string, float> myFloats;
-		std::unordered_map<std::string, Texture::Sptr> myTextures;
+		std::unordered_map<std::string, SamplerInfo> myTextures;
 	};
 }

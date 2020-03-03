@@ -1,7 +1,9 @@
 #pragma once
 //#define STB_IMAGE_IMPLEMENTATION
 #include <glad/glad.h>
+#include "Utilities/TextureEnums.h"
 #include "Utilities/Utils.h"
+#include "TextureSampler.h"
 
 namespace Vatista {
 	class Texture {
@@ -21,6 +23,10 @@ namespace Vatista {
 	protected:
 		//int texWidth, texHeight, texChannels;
 		GLuint textureID;
+		InternalFormat format;
+		bool mipEnable = false;
+		int mipLevels = -1;
+		
 		virtual void setup() = 0;
 	};
 }
