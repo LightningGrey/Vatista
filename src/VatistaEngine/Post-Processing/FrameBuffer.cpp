@@ -107,14 +107,14 @@ namespace Vatista {
 		// We are going to use a texture as a backing resource
 		else {
 			// Create a descriptor for the image ///PLACE HOLDRES
-			Vatista::Texture imageDesc = Vatista::Texture();
-			imageDesc.texWidth = myWidth;
-			imageDesc.Height = myHeight;
-			imageDesc.WrapS = imageDesc.WrapT = florp::graphics::WrapMode::ClampToEdge;
-			imageDesc.MinFilter = /*florp::graphics::*/MinFilter::Linear;
-			imageDesc.Format = (/*within TextureEnum.h*/InternalFormat)desc.Format;
-			imageDesc.NumSamples = myNumSamples;
-			imageDesc.MipmapLevels = 1; // NEW
+			Vatista::Texture2D::Sptr imageDesc = Vatista::Texture2D::Sptr();
+			imageDesc->texWidth = myWidth;
+			imageDesc->Height = myHeight;
+			imageDesc->WrapS = imageDesc->WrapT = WrapMode::ClampToEdge;
+			imageDesc->MinFilter = /*florp::graphics::*/MinFilter::Linear;
+			imageDesc->Format = (/*within TextureEnum.h*/InternalFormat)desc.Format;
+			imageDesc->NumSamples = myNumSamples;
+			imageDesc->MipmapLevels = 1; // NEW
 			//all the stuff here are gonna be needed in 2d texture
 			/*uint32_t       Width, Height;
 			MinFilter      MinFilter;
@@ -168,8 +168,8 @@ namespace Vatista {
 
 
 	//void FrameBuffer::bind(int slot) {
-	//		GetAttachment(RenderTargetAttachment::Color0)->Bind(slot);
-	//	}
+	//	GetAttachment(RenderTargetAttachment::Color0)->bind(slot);
+	//}
 
 	void FrameBuffer::bind(uint32_t slot, RenderTargetAttachment attachment) {
 		GetAttachment(attachment)->bind(slot);//binding a specific attachment to texture for reading

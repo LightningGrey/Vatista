@@ -9,7 +9,8 @@
 #include <stdint.h>
 #include <cstdint> 
 #include "Graphics/Rendering/Texture.h"
-#include "EnumToString.h"
+#include "Graphics/Rendering/Texture2D.h"
+#include "Utilities/EnumToString.h"
 
 //some enum stuff
 ENUM(RenderTargetAttachment, uint32_t,
@@ -73,10 +74,9 @@ struct RenderBufferDesc {
 };
 
 namespace Vatista {
-	class FrameBuffer : public Texture {
+	class FrameBuffer : public Vatista::Texture {
 	public:
-		typedef std::shared_ptr<FrameBuffer> Sptr;
-
+		SharedPtr(FrameBuffer);
 
 		FrameBuffer(uint32_t width, uint32_t height, uint8_t numSamples = 1);
 		virtual ~FrameBuffer();
@@ -104,9 +104,8 @@ namespace Vatista {
 
 
 
-		virtual void bind(int slot) const override {
-
-		};//todo we probably need to change this to a base texture class
+		virtual void bind(int slot) const override {};
+		//todo we probably need to change this to a base texture class
 
 		virtual void bind(uint32_t slot, RenderTargetAttachment attachment);
 

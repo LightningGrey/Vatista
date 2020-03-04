@@ -1,5 +1,5 @@
 #include "Game.h" 
-#include "Graphics/Object Graphics/MeshRenderer.h"
+#include "Graphics/Rendering/MeshRenderer.h"
 #include <iostream> 
 
 Vatista::Game::Game() : gameWindow(nullptr), clearColour(glm::vec4(0, 0, 0, 1)),
