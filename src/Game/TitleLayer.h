@@ -23,7 +23,6 @@
 #include "Objects/UI/Stamina.h"
 #include "Objects/Stationary/StationaryObj.h"
 
-
 namespace Vatista {
 	class Game {
 	public:
@@ -68,7 +67,7 @@ namespace Vatista {
 		//GameObject::Sptr TestMap;
 		StationaryObj::Sptr stage;
 		Stamina::Sptr TestStamina;
-		Stamina::Sptr TestStamina2; 
+		Stamina::Sptr TestStamina2;
 		float x = 100.0f;
 		float y = 100.0f;
 
@@ -78,7 +77,7 @@ namespace Vatista {
 		glm::vec3 pos1;
 		glm::vec3 pos2;
 		glm::vec3 pos3;
-		
+
 		//ObjLoader loader;
 		//
 		//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);

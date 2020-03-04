@@ -36,7 +36,8 @@ void Vatista::Game::run()
 		static float deltaTime = currentFrame - previousFrame;
 
 		update(deltaTime);
-		draw(deltaTime);
+		render(deltaTime);
+		//draw(deltaTime);
 
 		glfwSwapBuffers(gameWindow->getWindow());
 		glfwPollEvents();
@@ -282,7 +283,7 @@ void Vatista::Game::update(float dt)
 	//TestStamina.setScale(glm::vec3(0.5f)); 
 }
 
-void Vatista::Game::draw(float)
+void Vatista::Game::render(float dt)
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -291,11 +292,18 @@ void Vatista::Game::draw(float)
 	glDepthMask(GL_TRUE);
 	glDepthFunc(GL_LESS);
 
-	//draw 
+	draw(dt);
+}
+
+void Vatista::Game::draw(float)
+{
+
+	//draw game objects
 	for (auto object : ObjectList) {
 		object->Draw(mainCamera);
 	}
 
+	//draw UI
 	for (auto component : UIList) {
 		component->Draw(orthoCamera);
 	}
