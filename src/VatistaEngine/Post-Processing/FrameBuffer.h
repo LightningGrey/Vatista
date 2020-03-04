@@ -110,18 +110,12 @@ namespace Vatista {
 
 		virtual void bind(uint32_t slot, RenderTargetAttachment attachment);
 
+		void bind(RenderTargetBinding bindMode = RenderTargetBinding::Draw) const;
 
 
-		void UnBind() const;
+		void unBind() const;
 
-		//Texture::Sptr  basicily(florp::graphics::Texture2D::Sptr) is whatever our standard shared pointer for our base texture class,
-		//if it changes in the future when texture.h gets altered all of it will have to change
-	
-		/*
-		static void Blit(
-			const glm::ivec4& srcBounds, const glm::ivec4& dstBounds,
-			BufferFlags flags = BufferFlags::All, MagFilter filterMode = MagFilter::Linear);*/
-
+		
 		Sptr Clone() const;
 		//clones the buffer but no idea if it runs or clones properly yet
 
@@ -161,8 +155,6 @@ namespace Vatista {
 
 	};
 
-	// missions
-	//add  InternalFormat, renderer ID, and Bind
 
 }
 

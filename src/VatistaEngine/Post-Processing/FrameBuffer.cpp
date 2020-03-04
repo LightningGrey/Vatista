@@ -101,14 +101,14 @@ namespace Vatista {
 			else
 				glNamedRenderbufferStorage(buffer.RendererID, *desc.Format, myWidth, myHeight);
 
-			// Attach the renderbuffer to our RenderTarget
+			// Attach the renderbuffer to  RenderTarget
 			glNamedFramebufferRenderbuffer(textureID, *desc.Attachment, GL_RENDERBUFFER, buffer.RendererID);
 		}
 		// We are going to use a texture as a backing resource
 		else {
 			// Create a descriptor for the image ///PLACE HOLDRES
-			/*florp::graphics::*/Texture2dDescription imageDesc = /*florp::graphics::*/Texture2dDescription();
-			imageDesc.Width = myWidth;
+			Vatista::Texture imageDesc = Vatista::Texture();
+			imageDesc.texWidth = myWidth;
 			imageDesc.Height = myHeight;
 			imageDesc.WrapS = imageDesc.WrapT = florp::graphics::WrapMode::ClampToEdge;
 			imageDesc.MinFilter = /*florp::graphics::*/MinFilter::Linear;
@@ -175,7 +175,15 @@ namespace Vatista {
 		GetAttachment(attachment)->bind(slot);//binding a specific attachment to texture for reading
 	}
 
-	void FrameBuffer::UnBind() const
+	
+
+	void FrameBuffer::bind(RenderTargetBinding bindMode) const {//binding for drawing
+		myBinding = bindMode;
+		glBindFramebuffer((GLenum)bindMode, textureID);
+	}
+
+
+	void FrameBuffer::unBind() const
 	{
 		if (myBinding != RenderTargetBinding::None) {
 			if (myNumSamples > 1) {
@@ -213,10 +221,6 @@ namespace Vatista {
 	}
 
 
-	void FrameBuffer::bind(RenderTargetBinding bindMode) const {//binding for drawing
-		myBinding = bindMode;
-		glBindFramebuffer((GLenum)bindMode, textureID);
-	}
 
 
 	//void FrameBuffer::Blit(const glm::ivec4& srcBounds, const glm::ivec4& dstBounds, BufferFlags flags, MagFilter filterMode) {
