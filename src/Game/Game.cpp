@@ -1,5 +1,5 @@
 #include "Game.h" 
-#include "Graphics/Rendering/MeshRenderer.h"
+#include "Graphics/Object Graphics/MeshRenderer.h"
 #include <iostream> 
 
 Vatista::Game::Game() : gameWindow(nullptr), clearColour(glm::vec4(0, 0, 0, 1)),
@@ -16,7 +16,7 @@ Vatista::Game::~Game()
 {
 }
 
-void GlfwWindowResizedCallback(GLFWwindow* window, int width, int height) {
+void GlfwWindowResizedCallback(GLFWwindow*, int width, int height) {
 	glViewport(0, 0, width, height);
 	//Vatista::Window* gameWindow = ; 
 	//if (gameWindow != nullptr) { 
@@ -28,15 +28,16 @@ void Vatista::Game::run()
 {
 	init();
 
-	static float previousFrame = glfwGetTime();
+	static float previousFrame = (float)glfwGetTime();
 
 	//game loop 
 	while (!gameWindow->shouldClose()) {
-		static float currentFrame = glfwGetTime();
+		static float currentFrame = (float)glfwGetTime();
 		static float deltaTime = currentFrame - previousFrame;
 
 		update(deltaTime);
-		draw(deltaTime);
+		render(deltaTime);
+		//draw(deltaTime);
 
 		glfwSwapBuffers(gameWindow->getWindow());
 		glfwPollEvents();
@@ -75,13 +76,13 @@ void Vatista::Game::init()
 	load("./res/Objects/init.txt");
 
 
-	textureStamina = std::make_shared<Texture>();//connected to staminamat
+	textureStamina = std::make_shared<Texture2D>();//connected to staminamat
 	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture.png");
 
-	texture = std::make_shared<Texture>();
+	texture = std::make_shared<Texture2D>();
 	texture->loadFile("./res/Objects/Z3n/Z3N_Texture.png");
 
-	//texture3 = std::make_shared<Texture>();
+	//texture3 = std::make_shared<Texture2D>();
 	//texture3->loadFile("./res/default.png");
 
 	Shader::Sptr phong = std::make_shared<Shader>();
@@ -96,6 +97,11 @@ void Vatista::Game::init()
 	Shader::Sptr staminaRamp = std::make_shared<Shader>();//stamina stuff
 	staminaRamp->Load("./res/Shaders/StaminaBar.vs.glsl", "./res/Shaders/StaminaBar.fs.glsl");
 
+	//sample testing
+	TextureSampler::Sptr NearestMipped = std::make_shared<TextureSampler>();
+	NearestMipped->minFilter = MinFilter::NearestMipNearest;
+	NearestMipped->magFilter = MagFilter::Nearest;
+	NearestMipped->createSampler();
 
 	Material::Sptr testMat = std::make_shared<Material>(phong);
 	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -105,7 +111,7 @@ void Vatista::Game::init()
 	testMat->Set("a_LightSpecPower", 0.9f);
 	testMat->Set("a_LightShininess", 256.0f);
 	testMat->Set("a_LightAttenuation", 0.04f);
-	testMat->Set("texSample", texture);
+	testMat->Set("texSample", texture, NearestMipped);
 
 	Material::Sptr testMat2 = std::make_shared<Material>(phong2);
 	testMat2->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -115,12 +121,12 @@ void Vatista::Game::init()
 	testMat2->Set("a_LightSpecPower", 0.9f);
 	testMat2->Set("a_LightShininess", 256.0f);
 	testMat2->Set("a_LightAttenuation", 0.04f);
-	testMat2->Set("texSample", texture2);
+	testMat2->Set("texSample", texture2, NearestMipped);
 
 	//load textures
 	for (int i = 0; i < 17; i++) {
 		textures.emplace_back();
-		textures[i] = std::make_shared<Texture>();
+		textures[i] = std::make_shared<Texture2D>();
 		switch (i) {
 		case 0:
 			textures[i]->loadFile("./res/Objects/Cave/Cave_Texture.png");
@@ -186,7 +192,7 @@ void Vatista::Game::init()
 		mats[i]->Set("a_LightSpecPower", 0.9f);
 		mats[i]->Set("a_LightShininess", 256.0f);
 		mats[i]->Set("a_LightAttenuation", 0.04f);
-		mats[i]->Set("texSample", textures[i]);
+		mats[i]->Set("texSample", textures[i], NearestMipped);
 	}
 	
 
@@ -208,7 +214,7 @@ void Vatista::Game::init()
 	staminaMat->Set("a_LightSpecPower", 0.9f);
 	staminaMat->Set("a_LightShininess", 256.0f);
 	staminaMat->Set("a_LightAttenuation", 0.04f);
-	staminaMat->Set("texSample", textureStamina);
+	staminaMat->Set("texSample", textureStamina, NearestMipped);
 	staminaMat->Set("UVoffset", glm::vec3(0.0f));
 
 
@@ -227,7 +233,7 @@ void Vatista::Game::init()
 	TestStamina->setMat(staminaMat/*staminaMat*/);
 
 	TestStamina->setRot(glm::vec3(90.f, 0.f, 0.f));
-	TestStamina->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
+	//TestStamina->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
 	TestStamina->setScale(glm::vec3(0.5f));
 	UIList.push_back(TestStamina);
 
@@ -237,7 +243,7 @@ void Vatista::Game::init()
 	TestStamina2->setMat(staminaMat/*staminaMat*/);
 
 	TestStamina2->setRot(glm::vec3(90.f, 0.f, 0.f));
-	TestStamina2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
+	//TestStamina2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
 	TestStamina2->setScale(glm::vec3(0.5f));
 	UIList.push_back(TestStamina2);
 	 
@@ -277,7 +283,7 @@ void Vatista::Game::update(float dt)
 	//TestStamina.setScale(glm::vec3(0.5f)); 
 }
 
-void Vatista::Game::draw(float dt)
+void Vatista::Game::render(float dt)
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -286,11 +292,18 @@ void Vatista::Game::draw(float dt)
 	glDepthMask(GL_TRUE);
 	glDepthFunc(GL_LESS);
 
-	//draw 
+	draw(dt);
+}
+
+void Vatista::Game::draw(float)
+{
+
+	//draw game objects
 	for (auto object : ObjectList) {
 		object->Draw(mainCamera);
 	}
 
+	//draw UI
 	for (auto component : UIList) {
 		component->Draw(orthoCamera);
 	}
@@ -357,16 +370,16 @@ bool Vatista::Game::load(std::string filename)
 		std::vector<glm::vec3> bitangents;
 
 		//Math::computeTangents(morphVertData, indices, tangents, bitangents);
-		for (int i = 0; i < vertTotalBuffer; i++) {
-			MorphVertex morph = { Vertex{(*(morphBuffer + i)).Position,
-			(*(morphBuffer + i)).UV, (*(morphBuffer + i)).Normal}, (*(morphBuffer + i)).PositionS, 
-				(*(morphBuffer + i)).NormalS };
+		for (int j = 0; j < vertTotalBuffer; j++) {
+			MorphVertex morph = { Vertex{(*(morphBuffer + j)).Position,
+			(*(morphBuffer + j)).UV, (*(morphBuffer + j)).Normal}, (*(morphBuffer + j)).PositionS, 
+				(*(morphBuffer + j)).NormalS };
 			morphVertData.push_back(morph);
 		}
 
 
-		for (int i = 0; i < indiceTotalBuffer; i++) {
-			indices.push_back(*(indicesBuffer + i));
+		for (int k = 0; k < indiceTotalBuffer; k++) {
+			indices.push_back(*(indicesBuffer + k));
 		}
 
 		myMesh = std::make_shared<Mesh>(indices, indices.size(),

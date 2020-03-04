@@ -29,11 +29,13 @@
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\VatistaEngine\Audio\AudioEngine.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Camera.h" />
-    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Material.h" />
-    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Mesh.h" />
-    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\MeshRenderer.h" />
-    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Shader.h" />
-    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Texture.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Material.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Mesh.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\MeshRenderer.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Shader.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Texture.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\Texture2D.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Object Graphics\TextureSampler.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Window.h" />
     <ClInclude Include="src\VatistaEngine\Miscellaneous Files\Math.h" />
     <ClInclude Include="src\VatistaEngine\Objects\Characters\Character.h" />
@@ -43,8 +45,9 @@
     <ClInclude Include="src\VatistaEngine\Objects\UI\UIObject.h" />
     <ClInclude Include="src\VatistaEngine\Post-Processing\EnumToString.h" />
     <ClInclude Include="src\VatistaEngine\Post-Processing\FrameBuffer.h" />
-    <ClInclude Include="src\VatistaEngine\Post-Processing\TextureEnum.h" />
+    <ClInclude Include="src\VatistaEngine\Utilities\EnumToString.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\Log.h" />
+    <ClInclude Include="src\VatistaEngine\Utilities\TextureEnums.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -53,10 +56,12 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\VatistaEngine\Audio\AudioEngine.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Camera.cpp" />
-    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Material.cpp" />
-    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Mesh.cpp" />
-    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Shader.cpp" />
-    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Texture.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Material.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Mesh.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Shader.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Texture.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\Texture2D.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Object Graphics\TextureSampler.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Window.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\Characters\Character.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\GameObject.cpp" />
@@ -125,12 +130,13 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>./include/spdlog;./include/GLM/include;D:\Year 2 Semester 1\GDW2\Vatista\src\VatistaEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,12 +145,13 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

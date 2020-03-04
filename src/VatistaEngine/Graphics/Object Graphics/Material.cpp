@@ -13,7 +13,12 @@ namespace Vatista {
 
 		int slot = 0;   
 		for (auto& kvp : myTextures) { 
-			kvp.second->bind(slot);    
+			if (kvp.second.Sampler != nullptr)
+				kvp.second.Sampler->bind(slot);
+			else
+				TextureSampler::unbind(slot);
+
+			kvp.second.Texture->bind(slot);    
 			myShader->SetUniform(kvp.first.c_str(), slot);    
 			slot++; 
 		}
