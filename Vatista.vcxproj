@@ -67,6 +67,7 @@
     <ClCompile Include="src\VatistaEngine\Objects\GameObject.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\Stationary\StationaryObj.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\UI\Stamina.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\UI\UIObject.cpp" />
     <ClCompile Include="src\VatistaEngine\Post-Processing\FrameBuffer.cpp" />
     <ClCompile Include="src\VatistaEngine\Utilities\Log.cpp" />
   </ItemGroup>

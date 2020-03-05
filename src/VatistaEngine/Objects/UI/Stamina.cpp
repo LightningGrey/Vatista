@@ -44,9 +44,9 @@ namespace Vatista {
 		//	currentStamina = 1.0f;
 		//}
 		//
-		if (stamina < 95.0f) {
-			stamina = 0.0f;
-		}
+		//if (stamina < 95.0f) {
+		//	stamina = 0.0f;
+		//}
 	
 	
 		material->GetShader()->SetUniform("staminaValue", stamina);

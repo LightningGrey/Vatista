@@ -16,4 +16,12 @@ Girders/Girders.vsf
 MiningShip/MiningShip.vsf
 Barrel/Barrel.vsf
 Electrical_Stuff/Electrical_Stuff.vsf
-Stamina/staminabartexturefixedUVs.vsf
+Stamina/stamina_plane.vsf
+UI/ui_plane.vsf
+Z3n/Z3n_Run_Animation/z3n_run.vsf
+Z3n/Z3n_Run_Animation/z3n_run_2.vsf
+Z3n/Z3n_Run_Animation/z3n_run_3.vsf
+Z3n/Z3n_Run_Animation/z3n_run_4.vsf
+Z3n/Z3n_Run_Animation/z3n_run_5.vsf
+Z3n/Z3n_Run_Animation/z3n_run_6.vsf
+Z3n/Z3n_Run_Animation/z3n_run_7.vsf
