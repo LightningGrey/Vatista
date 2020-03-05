@@ -9,6 +9,13 @@ Vatista::Texture2D::Texture2D() : Texture()
 	setup();
 }
 
+Vatista::Texture2D::Texture2D(const Texture2DDesc& description) : Texture()
+{
+	texDesc = description;
+	setup();
+}
+
+
 Vatista::Texture2D::~Texture2D()
 {
 }

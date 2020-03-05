@@ -11,7 +11,7 @@ Vatista::Texture::~Texture()
 	glDeleteTextures(1, &this->textureID);
 }
 
-void Vatista::Texture::bind(int slot) const
+void Vatista::Texture::bind(int slot)
 {
 	glBindTextureUnit(slot, textureID);
 }

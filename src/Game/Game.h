@@ -10,9 +10,9 @@
 
 #include "Graphics/Camera.h"
 #include "Graphics/Window.h"
-#include "Graphics/Object Graphics/Mesh.h"
-#include "Graphics/Object Graphics/Shader.h"
-#include "Graphics/Object Graphics/Texture2D.h"
+#include "Graphics/Rendering/Mesh.h"
+#include "Graphics/Rendering/Shader.h"
+#include "Graphics/Rendering/Texture2D.h"
 
 #include "Utilities/Utils.h"
 #include "Miscellaneous Files/Math.h"

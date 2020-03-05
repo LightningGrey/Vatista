@@ -26,11 +26,11 @@ struct Texture2DDesc{
 	InternalFormat Format;
 
 	//horrizontal texture axis wrap
-	WrapMode       WrapHorizontal;
+	WrapMode       WrapS;
 
 	//The wrap parameter for the vertical texture axis
 
-	WrapMode       WrapVertical;
+	WrapMode       WrapT;
 
 	MinFilter      MinFilter;
 
@@ -54,11 +54,11 @@ struct Texture2DDesc{
 		NumSamples(1), // NEW
 		MipmapLevels(0),
 		Format(InternalFormat::RGBA8),
-		WrapHorizontal(WrapMode::Repeat), WrapVertical(WrapMode::Repeat),
+		WrapS(WrapMode::Repeat), WrapT(WrapMode::Repeat),
 		MinFilter(MinFilter::NearestMipLinear),
 		MagFilter(MagFilter::Linear),
 		Anisotropic(1.0f),
-		BorderColor({ 0.0f, 0.0f, 0.0f, 1.0f }) {			}
+		BorderColor({ 0.0f, 0.0f, 0.0f, 1.0f }) {}
 
 };
 
@@ -67,13 +67,15 @@ struct Texture2DDesc{
 	public:
 		SharedPtr(Texture2D);
 
-		Texture2D();
+		Texture2D(); 
+		Texture2D(const Texture2DDesc& description);
 		~Texture2D();
 
 		void loadFile(const std::string& filename, bool alpha = true);
 
 	protected:
 		int texWidth, texHeight, texChannels;
+		Texture2DDesc texDesc;
 		TextureSampler sample = TextureSampler();
 		void setup();
 	};

@@ -1,5 +1,6 @@
 #include "FrameBuffer.h"
 #include <GLM/glm.hpp>
+#include "Utilities/Log.h"
 
 
 namespace Vatista {
@@ -107,7 +108,7 @@ namespace Vatista {
 		// We are going to use a texture as a backing resource
 		else {
 			// Create a descriptor for the image ///PLACE HOLDRES
-			Vatista::Texture2DDesciption imageDesc = Vatista::Texture2DDesciption();
+			Vatista::Texture2DDesc imageDesc = Vatista::Texture2DDesc();
 			imageDesc.Width = myWidth;
 			imageDesc.Height = myHeight;
 			imageDesc.WrapS = imageDesc.WrapT = WrapMode::ClampToEdge;
@@ -150,21 +151,18 @@ namespace Vatista {
 			myUnsampledFrameBuffer->Validate();
 		}
 			GLenum result = glCheckNamedFramebufferStatus(textureID, GL_FRAMEBUFFER);
-			//INSERT LOG STUFF HERE ERROR CHECKING ETC.
-
-			//
-			//
-			//
-			//if (result != GL_FRAMEBUFFER_COMPLETE) {
+			if (result != GL_FRAMEBUFFER_COMPLETE) {
 			//	switch (result) {
-			//	}
-				//	isValid = false;
-			//	return false;
-			//else {
-			//isValid = true;
-			//return true;
-	//}
-
+			//	case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+			//		VATISTA_LOG_ERROR("Rendertarget failed to validate. One of the attachment points is framebuffer incomplete."); break;
+			//
+				isValid = false;
+				return false;
+			}
+			else {
+				isValid = true;
+				return true;
+			}
 	}
 
 
