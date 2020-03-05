@@ -120,7 +120,7 @@ namespace Vatista {
 
 
 	private:
-		uint32_t myWidth, myHeight;
+		uint32_t myWidth, myHeight;//dimensions of the framebuffer texture size of the screen
 
 		uint8_t  myNumSamples;
 
@@ -141,7 +141,9 @@ namespace Vatista {
 
 		struct RenderBuffer {
 			GLuint  RendererID;//when we create a texture we get a number but instead of needing to remembmer a texture (texture 1,2)
-			//we can have an object represent the textures.
+			//we can have an object represent the textures. replaced ment for igraphics version of the same variable
+			//replaced by textureid
+
 			Texture::Sptr Resource;
 			bool            IsRenderBuffer;
 			RenderBufferDesc Description;

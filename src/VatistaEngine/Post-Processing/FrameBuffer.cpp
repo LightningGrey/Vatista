@@ -107,14 +107,14 @@ namespace Vatista {
 		// We are going to use a texture as a backing resource
 		else {
 			// Create a descriptor for the image ///PLACE HOLDRES
-			Vatista::Texture2D::Sptr imageDesc = Vatista::Texture2D::Sptr();
-			imageDesc->texWidth = myWidth;
-			imageDesc->Height = myHeight;
-			imageDesc->WrapS = imageDesc->WrapT = WrapMode::ClampToEdge;
-			imageDesc->MinFilter = /*florp::graphics::*/MinFilter::Linear;
-			imageDesc->Format = (/*within TextureEnum.h*/InternalFormat)desc.Format;
-			imageDesc->NumSamples = myNumSamples;
-			imageDesc->MipmapLevels = 1; // NEW
+			Vatista::Texture2DDesciption imageDesc = Vatista::Texture2DDesciption();
+			imageDesc.Width = myWidth;
+			imageDesc.Height = myHeight;
+			imageDesc.WrapS = imageDesc.WrapT = WrapMode::ClampToEdge;
+			imageDesc.MinFilter = /*florp::graphics::*/MinFilter::Linear;
+			imageDesc.Format = (/*within TextureEnum.h*/InternalFormat)desc.Format;
+			imageDesc.NumSamples = myNumSamples;
+			imageDesc.MipmapLevels = 1; // NEW
 			//all the stuff here are gonna be needed in 2d texture
 			/*uint32_t       Width, Height;
 			MinFilter      MinFilter;
@@ -129,11 +129,12 @@ namespace Vatista {
 
 
 			// Create the image, and store it's info in our buffer tag
-			Texture::Sptr image = std::make_shared<Texture>(imageDesc);
+			Vatista::Texture2D::Sptr image = std::make_shared<Vatista::Texture2D>(imageDesc);
+
 			buffer.Resource = image;
 			buffer.RendererID = image->getTexID();
 
-			glNamedFramebufferTexture(textureID, *desc.Attachment, image->textureID(), 0);
+			glNamedFramebufferTexture(textureID, *desc.Attachment, image->getTexID(), 0);
 
 			if (myNumSamples > 1) {
 				myUnsampledFrameBuffer->AddAttachment(desc);
@@ -167,9 +168,11 @@ namespace Vatista {
 	}
 
 
-	//void FrameBuffer::bind(int slot) {
-	//	GetAttachment(RenderTargetAttachment::Color0)->bind(slot);
-	//}
+	void FrameBuffer::bind(int slot) {
+		GetAttachment(RenderTargetAttachment::Color0)->bind(slot);
+	}
+
+
 
 	void FrameBuffer::bind(uint32_t slot, RenderTargetAttachment attachment) {
 		GetAttachment(attachment)->bind(slot);//binding a specific attachment to texture for reading
