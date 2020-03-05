@@ -27,6 +27,8 @@
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
     <ClInclude Include="src\Game\Game.h" />
+    <ClInclude Include="src\Game\LoadingLayer.h" />
+    <ClInclude Include="src\Game\TitleLayer.h" />
     <ClInclude Include="src\VatistaEngine\Audio\AudioEngine.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Camera.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Material.h" />
@@ -37,7 +39,6 @@
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Texture2D.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Window.h" />
-    <ClInclude Include="src\VatistaEngine\Miscellaneous Files\Math.h" />
     <ClInclude Include="src\VatistaEngine\Objects\Characters\Character.h" />
     <ClInclude Include="src\VatistaEngine\Objects\GameObject.h" />
     <ClInclude Include="src\VatistaEngine\Objects\Stationary\StationaryObj.h" />

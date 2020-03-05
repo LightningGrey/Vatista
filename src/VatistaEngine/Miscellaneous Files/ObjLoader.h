@@ -4,7 +4,7 @@
 
 #include <vector>
 #include "GLM/glm.hpp"
-#include "Mesh.h"
+#include "Graphics/Rendering/Mesh.h
 
 namespace Vatista {
 	struct ObjLoader {

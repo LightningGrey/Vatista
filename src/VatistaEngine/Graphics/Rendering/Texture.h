@@ -13,10 +13,10 @@ namespace Vatista {
 		Texture();
 		~Texture();
 
-		virtual void bind(int slot) const;
+		virtual void bind(int slot);
 		static void unbind(int slot);
 
-		virtual void loadFile(const std::string& filename, bool alpha = true) = 0;
+		virtual void loadFile(const std::string& filename, bool alpha = true) {};
 
 		GLuint getTexID() { return textureID; };
 
@@ -27,6 +27,6 @@ namespace Vatista {
 		bool mipEnable = false;
 		int mipLevels = -1;
 		
-		virtual void setup() = 0;
+		//virtual void setup() = 0;
 	};
 }

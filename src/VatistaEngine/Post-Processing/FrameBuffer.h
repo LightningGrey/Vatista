@@ -104,7 +104,7 @@ namespace Vatista {
 
 
 
-		virtual void bind(int slot) const override {};
+		virtual void bind(int slot) override;
 		//todo we probably need to change this to a base texture class
 
 		virtual void bind(uint32_t slot, RenderTargetAttachment attachment);

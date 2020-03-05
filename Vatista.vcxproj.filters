@@ -39,7 +39,6 @@
     <ClInclude Include="src\VatistaEngine\Audio\AudioEngine.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Camera.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Window.h" />
-    <ClInclude Include="src\VatistaEngine\Miscellaneous Files\Math.h" />
     <ClInclude Include="src\VatistaEngine\Objects\Characters\Character.h" />
     <ClInclude Include="src\VatistaEngine\Objects\Stationary\StationaryObj.h" />
     <ClInclude Include="src\VatistaEngine\Objects\UI\Stamina.h" />
@@ -51,6 +50,8 @@
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\EnumToString.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\TextureEnums.h" />
+    <ClInclude Include="src\Game\LoadingLayer.h" />
+    <ClInclude Include="src\Game\TitleLayer.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Material.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Mesh.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\MeshRenderer.h" />
