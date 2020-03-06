@@ -8,6 +8,8 @@
 #include "GLM/glm.hpp"
 #include "GLM/gtc/matrix_transform.hpp"
 
+//#include <imgui/imgui.h>
+
 #include "Graphics/Camera.h"
 #include "Graphics/Window.h"
 #include "Graphics/Rendering/Mesh.h"
@@ -15,14 +17,12 @@
 #include "Graphics/Rendering/Texture2D.h"
 
 #include "Utilities/Utils.h"
-#include "Miscellaneous Files/Math.h"
-#include "Audio/AudioEngine.h"
 
 #include "Objects/GameObject.h"
 #include "Objects/Characters/Character.h"
-#include "Objects/UI/Stamina.h"
 #include "Objects/Stationary/StationaryObj.h"
 
+#include "Post-Processing/FrameBuffer.h"
 
 namespace Vatista {
 	class Game {
@@ -34,9 +34,15 @@ namespace Vatista {
 		void init();
 		void close();
 		void update(float dt);
+
 		void render(float dt);
 		void draw(float dt);
+		void bufferCreation();
+		void postProcess();
+		void lightPass();
+
 		bool load(std::string filename);
+
 	private:
 		Window* gameWindow;
 		glm::vec4 clearColour;
@@ -67,8 +73,6 @@ namespace Vatista {
 		Character::Sptr C2;
 		//GameObject::Sptr TestMap;
 		StationaryObj::Sptr stage;
-		Stamina::Sptr TestStamina;
-		Stamina::Sptr TestStamina2; 
 		float x = 100.0f;
 		float y = 100.0f;
 

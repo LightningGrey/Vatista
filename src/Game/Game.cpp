@@ -54,30 +54,11 @@ void Vatista::Game::init()
 	gameWindow = new Vatista::Window(1600, 900, "Alpha Strike");
 
 	mainCamera = std::make_shared<Vatista::Camera>();
-	mainCamera->SetPosition(glm::vec3(0.0f, 2.0f, 10.0f));
+	mainCamera->SetPosition(glm::vec3(0.0f, 2.0f, 15.0f));
 	mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	mainCamera->Projection = glm::perspective(glm::radians(60.0f), 16.f / 9.f, 1.0f, 200.0f);
 
-	orthoCamera = std::make_shared<Vatista::Camera>();
-	orthoCamera->SetPosition(glm::vec3(0.0f));
-	orthoCamera->LookAt(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	orthoCamera->Projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -1.0f, 1.0f);
-
-	//audio
-	audioEngine = std::make_shared<AudioEngine>();
-	audioEngine->Init();
-	audioEngine->LoadBank("./res/Music and Sound/Master", FMOD_STUDIO_LOAD_BANK_NORMAL);
-	audioEngine->LoadEvent("Music", "{fd7618a1-5880-4a64-ae37-e0f01ef54912}");
-	audioEngine->LoadEvent("LightAttack", "{f64fa79a-565d-4493-b4bf-a73a37c31219}");
-	audioEngine->LoadEvent("HeavyAttack", "{621b2e70-27ea-4900-b397-96cb10366574}");
-	audioEngine->LoadEvent("Dash", "{53dbc862-3dec-411a-9fc4-bb15743c2b6b}");
-	audioEngine->PlayEvent("Music");
-	
 	load("./res/Objects/init.txt");
-
-
-	textureStamina = std::make_shared<Texture2D>();//connected to staminamat
-	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture.png");
 
 	texture = std::make_shared<Texture2D>();
 	texture->loadFile("./res/Objects/Z3n/Z3N_Texture.png");
@@ -85,17 +66,11 @@ void Vatista::Game::init()
 	//texture3 = std::make_shared<Texture2D>();
 	//texture3->loadFile("./res/default.png");
 
-	Shader::Sptr phong = std::make_shared<Shader>();
-	phong->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
+	//Shader::Sptr phong = std::make_shared<Shader>();
+	//phong->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
 
 	Shader::Sptr phong2 = std::make_shared<Shader>();
-	phong2->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
-
-	Shader::Sptr staminaPhong = std::make_shared<Shader>();//stamina stuff
-	staminaPhong->Load("./res/Shaders/StaminaBar.vs.glsl", "./res/Shaders/StaminaBar.fs.glsl");
-
-	Shader::Sptr staminaRamp = std::make_shared<Shader>();//stamina stuff
-	staminaRamp->Load("./res/Shaders/StaminaBar.vs.glsl", "./res/Shaders/StaminaBar.fs.glsl");
+	phong2->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/lightingDeferred.fs.glsl");
 
 	//sample testing
 	TextureSampler::Sptr NearestMipped = std::make_shared<TextureSampler>();
@@ -103,15 +78,15 @@ void Vatista::Game::init()
 	NearestMipped->magFilter = MagFilter::Nearest;
 	NearestMipped->createSampler();
 
-	Material::Sptr testMat = std::make_shared<Material>(phong);
-	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	testMat->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
-	testMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	testMat->Set("a_AmbientPower", 0.5f);
-	testMat->Set("a_LightSpecPower", 0.9f);
-	testMat->Set("a_LightShininess", 256.0f);
-	testMat->Set("a_LightAttenuation", 0.04f);
-	testMat->Set("texSample", texture, NearestMipped);
+	//Material::Sptr testMat = std::make_shared<Material>(phong);
+	//testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	//testMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
+	//testMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	//testMat->Set("a_AmbientPower", 0.5f);
+	//testMat->Set("a_LightSpecPower", 0.9f);
+	//testMat->Set("a_LightShininess", 256.0f);
+	//testMat->Set("a_LightAttenuation", 0.04f);
+	//testMat->Set("texSample", texture, NearestMipped);
 
 	Material::Sptr testMat2 = std::make_shared<Material>(phong2);
 	testMat2->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -205,82 +180,33 @@ void Vatista::Game::init()
 		ObjectList.push_back(stage);
 	}
 
-	//stamina
-	Material::Sptr staminaMat = std::make_shared<Material>(staminaPhong);//blank stamina texture
-	staminaMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	staminaMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
-	staminaMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	staminaMat->Set("a_AmbientPower", 0.5f);
-	staminaMat->Set("a_LightSpecPower", 0.9f);
-	staminaMat->Set("a_LightShininess", 256.0f);
-	staminaMat->Set("a_LightAttenuation", 0.04f);
-	staminaMat->Set("texSample", textureStamina, NearestMipped);
-	staminaMat->Set("UVoffset", glm::vec3(0.0f));
 
+	////Player 1
+	//C1 = std::make_shared<Character>(true, meshList[0], testMat);
+	//ObjectList.push_back(C1);
+	//
+	////Player 2 
+	//C2 = std::make_shared<Character>(false, meshList[0], testMat);
+	//ObjectList.push_back(C2);
 
-	//Player 1
-	C1 = std::make_shared<Character>(true, meshList[0], testMat);
-	ObjectList.push_back(C1);
-
-	//Player 2 
-	C2 = std::make_shared<Character>(false, meshList[0], testMat);
-	ObjectList.push_back(C2);
-
-
-	TestStamina = std::make_shared<Stamina>();
-	TestStamina->setPos(glm::vec3(-5.f, 7.f, 0.f));
-	TestStamina->setMesh(meshList[18]);//3rd one on init.txt 
-	TestStamina->setMat(staminaMat/*staminaMat*/);
-
-	TestStamina->setRot(glm::vec3(90.f, 0.f, 0.f));
-	//TestStamina->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
-	TestStamina->setScale(glm::vec3(0.5f));
-	UIList.push_back(TestStamina);
-
-	TestStamina2 = std::make_shared<Stamina>();
-	TestStamina2->setPos(glm::vec3(5.f, 7.f, 0.f));
-	TestStamina2->setMesh(meshList[18]);//3rd one on init.txt 
-	TestStamina2->setMat(staminaMat/*staminaMat*/);
-
-	TestStamina2->setRot(glm::vec3(90.f, 0.f, 0.f));
-	//TestStamina2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
-	TestStamina2->setScale(glm::vec3(0.5f));
-	UIList.push_back(TestStamina2);
-	 
+	bufferCreation();
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_MULTISAMPLE);
+
+	GAME_LOG_INFO("Init complete.");
+
 }
 
 
 void Vatista::Game::close()
 {
 	glfwTerminate();
-	audioEngine->Shutdown();
 }
 
 void Vatista::Game::update(float dt)
 {
-	C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
-	C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
 
-	C1->setStamina(C1->getStamina() - 0.0005f);
-
-	TestStamina->setStamina(C1->getStamina());
-	TestStamina2->setStamina(C2->getStamina());
-	float dist = fabs(C1->getPosX() - C2->getPosX());
-	//C1->setStamina(C1->getStamina() + 10.0f);
-	//C2->setStamina(C2->getStamina() + 10.0f);
-	if (dist > 5.0f)
-		mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 11.0f + (dist / 2.0f)));
-	else
-		mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 13.5f));
-	mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
-
-	audioEngine->Update();
-
-	//TestStamina.setScale(glm::vec3(0.5f)); 
 }
 
 void Vatista::Game::render(float dt)
@@ -293,20 +219,96 @@ void Vatista::Game::render(float dt)
 	glDepthFunc(GL_LESS);
 
 	draw(dt);
+	//postProcess();
+
 }
 
 void Vatista::Game::draw(float)
 {
-
+	//mainCamera->state.BackBuffer->bind();
 	//draw game objects
 	for (auto object : ObjectList) {
 		object->Draw(mainCamera);
 	}
+	//mainCamera->state.BackBuffer->unBind();
 
-	//draw UI
-	for (auto component : UIList) {
-		component->Draw(orthoCamera);
-	}
+	//// If there's a front buffer, then this camera is double-buffered
+	//if (mainCamera->state.FrontBuffer != nullptr) {
+	//	// Swap the back and front buffers
+	//	auto temp = mainCamera->state.BackBuffer;
+	//	mainCamera->state.BackBuffer = mainCamera->state.FrontBuffer;
+	//	mainCamera->state.FrontBuffer = mainCamera->state.BackBuffer;
+	//}
+
+}
+
+void Vatista::Game::bufferCreation()
+{
+	RenderBufferDesc mainColour = RenderBufferDesc();
+	mainColour.ShaderReadable = true;
+	mainColour.Attachment = RenderTargetAttachment::Color0;
+	mainColour.Format = RenderTargetType::ColorRgb8; //RGB8
+
+	RenderBufferDesc normal = RenderBufferDesc();
+	normal.ShaderReadable = true;
+	normal.Attachment = RenderTargetAttachment::Color1;
+	normal.Format = RenderTargetType::ColorRgb10; //RGB10
+
+	RenderBufferDesc depth = RenderBufferDesc();
+	depth.ShaderReadable = true;
+	depth.Attachment = RenderTargetAttachment::Depth;
+	depth.Format = RenderTargetType::Depth32; //32 bit depth
+
+	FrameBuffer::Sptr buffer = std::make_shared<FrameBuffer>(gameWindow->getWidth(), gameWindow->getHeight(), 4);
+	buffer->AddAttachment(mainColour);
+	buffer->AddAttachment(normal);
+	buffer->AddAttachment(depth);
+	buffer->Validate();
+
+	mainCamera->state.BackBuffer = buffer;
+	mainCamera->state.FrontBuffer = buffer->Clone();
+
+}
+
+void Vatista::Game::postProcess()
+{
+	//lightPass();
+
+
+}
+
+void Vatista::Game::lightPass()
+{
+	//FrameBuffer::Sptr mainBuffer = mainCamera->state.BackBuffer;
+	//mainBuffer->bind();
+	//
+	//float vert[] = {
+	//	-1.0f, -1.0f,	0.0f, 0.0f,
+	//	1.0f, -1.0f,	1.0f, 0.0f,
+	//	-1.0f, 1.0f,	0.0f, 1.0f,
+	//	1.0f,  1.0f,	1.0f, 1.0f,	
+	//};
+	//uint32_t indices[] = {
+	//	0, 1, 2,
+	//	1, 3, 2
+	//};
+	//Mesh::Sptr myFullscreenQuad = std::make_shared<Mesh>(vert, 4, indices, 6);
+	//
+	//
+	//Shader::Sptr pointLight = std::make_shared<Shader>();
+	//pointLight;
+	//
+	//
+	//RenderBufferDesc mainColor = RenderBufferDesc();
+	//mainColor.ShaderReadable = true;
+	//mainColor.Attachment = RenderTargetAttachment::Color0;
+	//mainColor.Format = RenderTargetType::ColorRgb16F;
+	//
+	//// We'll use one buffer to accumulate all the lighting
+	//FrameBuffer::Sptr accumulationBuffer = std::make_shared<FrameBuffer>(gameWindow->getWidth(), 
+	//	gameWindow->getHeight());
+	//accumulationBuffer->AddAttachment(mainColor);
+	//accumulationBuffer->Validate();
 
 }
 

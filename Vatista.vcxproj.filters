@@ -74,6 +74,7 @@
     <None Include="lib\fmodstudioL.dll" />
     <None Include="include\fmod\fmod_studio.cs" />
     <None Include="res\Master.bank" />
+    <None Include="res\Shaders\passthroughDeferred.fs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\StaminaBar.vs.glsl" />

@@ -17,6 +17,9 @@ namespace Vatista {
 		void processInput(GLFWwindow* window);
 		bool shouldClose();
 
+		int getWidth() { return width; }
+		int getHeight() { return height; }
+
 		GLFWwindow* getWindow();
 
 	private:

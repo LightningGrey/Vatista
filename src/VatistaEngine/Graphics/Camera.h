@@ -4,8 +4,17 @@
 #include <GLM/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include "Utilities/Utils.h"
+#include "Post-Processing/FrameBuffer.h"
 
 namespace Vatista {
+	struct CameraState {
+		// The render target that this camera will render to
+		FrameBuffer::Sptr BackBuffer;
+		// The previous frame this camera rendered
+		FrameBuffer::Sptr FrontBuffer;
+	};
+
+
 	class Camera {
 	public:
 		SharedPtr(Camera);
@@ -29,6 +38,8 @@ namespace Vatista {
 		void Rotate(const glm::quat& rot);
 		void Rotate(const glm::vec3& rot) { Rotate(glm::quat(rot)); }
 		void Move(const glm::vec3& local);
+
+		CameraState state;
 
 	protected:
 		glm::vec3 myPosition;

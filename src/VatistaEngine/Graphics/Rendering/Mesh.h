@@ -49,6 +49,7 @@ namespace Vatista {
 			std::vector<Vertex> vertData, size_t numData);
 		Mesh(std::vector<uint32_t> indices, size_t numIndices,
 			std::vector<MorphVertex> vertData, size_t numData);
+		Mesh(void* vertices, size_t numVerts, uint32_t* indices, size_t numIndices);
 		~Mesh();
 
 
