@@ -16,4 +16,4 @@ Girders/Girders.vsf
 MiningShip/MiningShip.vsf
 Barrel/Barrel.vsf
 Electrical_Stuff/Electrical_Stuff.vsf
-Stamina/staminabartexturefixedUVs.vsf
+LightVolumes/volumeSphere.vsf

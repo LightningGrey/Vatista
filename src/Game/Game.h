@@ -21,6 +21,7 @@
 #include "Objects/GameObject.h"
 #include "Objects/Characters/Character.h"
 #include "Objects/Stationary/StationaryObj.h"
+#include "Graphics/Rendering/LightComponent.h"
 
 #include "Post-Processing/FrameBuffer.h"
 

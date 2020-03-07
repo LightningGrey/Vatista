@@ -99,7 +99,7 @@ namespace Vatista {
 		// Unbind our VAO
 		glBindVertexArray(0);
 	}
-
+	
 	Mesh::Mesh(void* vertices, size_t numVerts,  
 		uint32_t* indices, size_t numIndices) {
 

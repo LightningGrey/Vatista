@@ -62,7 +62,7 @@ void Vatista::Game::init()
 
 	texture = std::make_shared<Texture2D>();
 	texture->loadFile("./res/Objects/Z3n/Z3N_Texture.png");
-
+	
 	//texture3 = std::make_shared<Texture2D>();
 	//texture3->loadFile("./res/default.png");
 
@@ -188,6 +188,9 @@ void Vatista::Game::init()
 	////Player 2 
 	//C2 = std::make_shared<Character>(false, meshList[0], testMat);
 	//ObjectList.push_back(C2);
+
+
+	//Light::stage->setMat(mats[i]);
 
 	bufferCreation();
 

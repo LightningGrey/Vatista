@@ -19,6 +19,7 @@
     <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Texture.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Texture2D.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\LightComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />
@@ -59,6 +60,7 @@
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Texture.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Texture2D.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\LightComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />
@@ -74,7 +76,8 @@
     <None Include="lib\fmodstudioL.dll" />
     <None Include="include\fmod\fmod_studio.cs" />
     <None Include="res\Master.bank" />
-    <None Include="res\Shaders\passthroughDeferred.fs.glsl" />
+    <None Include="res\Shaders\lightingDeferred.fs.glsl" />
+    <None Include="res\Shaders\Post-Processing\pointLightPost.fs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\StaminaBar.vs.glsl" />

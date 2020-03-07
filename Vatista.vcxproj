@@ -31,6 +31,7 @@
     <ClInclude Include="src\Game\TitleLayer.h" />
     <ClInclude Include="src\VatistaEngine\Audio\AudioEngine.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Camera.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\LightComponent.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Material.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Mesh.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\MeshRenderer.h" />
@@ -56,6 +57,7 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\VatistaEngine\Audio\AudioEngine.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Camera.cpp" />
+    <ClCompile Include="src\VatistaEngine\Graphics\Rendering\LightComponent.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Material.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Mesh.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Shader.cpp" />
@@ -86,7 +88,8 @@
     <None Include="res\Master.bank" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\Shaders\passthroughDeferred.fs.glsl" />
+    <None Include="res\Shaders\lightingDeferred.fs.glsl" />
+    <None Include="res\Shaders\Post-Processing\pointLightPost.fs.glsl" />
     <None Include="res\StaminaBar.fs.glsl" />
     <None Include="res\StaminaBar.vs.glsl" />
   </ItemGroup>
