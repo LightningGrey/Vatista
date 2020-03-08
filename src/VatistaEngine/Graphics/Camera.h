@@ -7,13 +7,20 @@
 #include "Post-Processing/FrameBuffer.h"
 
 namespace Vatista {
-	struct CameraState {
-		// The render target that this camera will render to
-		FrameBuffer::Sptr BackBuffer;
-		// The previous frame this camera rendered
-		FrameBuffer::Sptr FrontBuffer;
+	// Represents the state for the previous or current frame
+	struct FrameState {
+		FrameBuffer::Sptr Output;
+		glm::mat4         View;
+		glm::mat4         Projection;
+		glm::mat4         ViewProjection;
 	};
 
+	// Stores the state of the current and last frames
+	struct AppFrameState
+	{
+		FrameState Current;
+		FrameState Last;
+	};
 
 	class Camera {
 	public:
@@ -23,6 +30,11 @@ namespace Vatista {
 		virtual ~Camera();
 
 		glm::mat4 Projection;
+		// The render target that this camera will render to
+		FrameBuffer::Sptr BackBuffer;
+		// The previous frame this camera rendered
+		FrameBuffer::Sptr FrontBuffer;
+
 
 		const glm::mat4& GetView() const { return myView; }
 		inline glm::mat4 GetViewProjection() const { return Projection * myView; }
@@ -39,7 +51,7 @@ namespace Vatista {
 		void Rotate(const glm::vec3& rot) { Rotate(glm::quat(rot)); }
 		void Move(const glm::vec3& local);
 
-		CameraState state;
+		AppFrameState state;
 
 	protected:
 		glm::vec3 myPosition;

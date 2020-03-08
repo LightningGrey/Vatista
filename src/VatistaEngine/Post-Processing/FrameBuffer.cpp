@@ -209,6 +209,13 @@ namespace Vatista {
 		}
 	}
 
+	void FrameBuffer::Blit(const glm::ivec4& srcBounds, const glm::ivec4& dstBounds, BufferFlags flags, MagFilter filterMode) {
+		glBlitFramebuffer(
+			srcBounds.x, srcBounds.y, srcBounds.z, srcBounds.w,
+			dstBounds.x, dstBounds.y, dstBounds.z, dstBounds.w,
+			*flags, *filterMode);
+	}
+
 	FrameBuffer::Sptr FrameBuffer::Clone() const
 	{
 		auto result = std::make_shared<FrameBuffer>(myWidth, myHeight, myNumSamples);

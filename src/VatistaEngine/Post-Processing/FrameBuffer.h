@@ -117,6 +117,10 @@ namespace Vatista {
 
 		void unBind() const;
 
+		static void Blit(
+			const glm::ivec4& srcBounds, const glm::ivec4& dstBounds,
+			BufferFlags flags = BufferFlags::All, MagFilter filterMode = MagFilter::Linear);
+
 		
 		Sptr Clone() const;
 		//clones the buffer but no idea if it runs or clones properly yet

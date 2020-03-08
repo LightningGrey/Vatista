@@ -1,7 +1,6 @@
 #include "Game.h" 
 #include "Graphics/Rendering/MeshRenderer.h"
 #include <iostream> 
-#include "GLM/detail/func_matrix.inl"
 
 Vatista::Game::Game() : gameWindow(nullptr), clearColour(glm::vec4(0, 0, 0, 1)),
 windowName("Vatista Engine")
@@ -77,8 +76,10 @@ void Vatista::Game::init()
 
 	lightComposite = std::make_shared<Shader>();
 	lightComposite->Load("./res/Shaders/post/post.vs.glsl", "./res/Shaders/post/pointLightPost.fs.glsl");
+	lightMat = std::make_shared<Material>(lightComposite);
 	finalLighting = std::make_shared<Shader>();
 	finalLighting->Load("./res/Shaders/post/post.vs.glsl", "./res/Shaders/post/finalLighting.fs.glsl");
+	finalLighting->SetUniform("a_Exposure", 1.0f);
 
 	//sample testing
 	TextureSampler::Sptr NearestMipped = std::make_shared<TextureSampler>();
@@ -153,20 +154,23 @@ void Vatista::Game::init()
 	point = std::make_shared<Light>();
 	point->setMesh(meshList[2]);
 	Material::Sptr pointMat = std::make_shared<Material>(phong2);
-	pointMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	pointMat->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
-	pointMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	pointMat->Set("a_AmbientPower", 0.5f);
-	pointMat->Set("a_LightSpecPower", 0.9f);
-	pointMat->Set("a_LightShininess", 256.0f);
-	pointMat->Set("a_LightAttenuation", 0.04f);
 	pointMat->Set("texSample", textureVol, NearestMipped);
-	//point->setRotY(-90.0f);
-
 	point->setMat(pointMat);
+
+	point->setColour(glm::vec3(1.0f, 1.0f, 0.0f));
+	point->setAttenuation(0.50f);
 	point->setPos(glm::vec3(0.0f, 0.0f, -10.0f));
 	point->setScale(glm::vec3(4.f));
-	//LightList.push_back(point);
+	LightList.push_back(point);
+
+	//Light::Sptr point2 = std::make_shared<Light>();
+	//point2->setMesh(meshList[2]);
+	//point2->setColour(glm::vec3(0.0f, 0.0f, 1.0f));
+	//point2->setAttenuation(0.010f);
+	//point2->setMat(pointMat);
+	//point2->setPos(glm::vec3(0.0f, 3.0f, -25.0f));
+	//point2->setScale(glm::vec3(2.5f));
+	//LightList.push_back(point2);
 
 	bufferCreation();
 
@@ -206,14 +210,14 @@ void Vatista::Game::render(float dt)
 	glDepthFunc(GL_LESS);
 
 	draw(dt);
-	//lightPass();
+	lightPass();
 	//postProcess();
 
 }
 
 void Vatista::Game::draw(float)
 {
-	//mainCamera->state.BackBuffer->bind();
+	mainCamera->BackBuffer->bind();
 	//draw game objects
 	for (auto object : ObjectList) {
 		object->Draw(mainCamera);
@@ -221,15 +225,22 @@ void Vatista::Game::draw(float)
 	for (auto object : LightList) {
 		object->Draw(mainCamera);
 	}
-	//mainCamera->state.BackBuffer->unBind();
+	mainCamera->BackBuffer->unBind();
 
-	//// If there's a front buffer, then this camera is double-buffered
-	//if (mainCamera->state.FrontBuffer != nullptr) {
-	//	// Swap the back and front buffers
-	//	auto temp = mainCamera->state.BackBuffer;
-	//	mainCamera->state.BackBuffer = mainCamera->state.FrontBuffer;
-	//	mainCamera->state.FrontBuffer = mainCamera->state.BackBuffer;
-	//}
+	// If there's a front buffer, then this camera is double-buffered
+	if (mainCamera->FrontBuffer != nullptr) {
+		// Swap the back and front buffers
+		auto temp = mainCamera->BackBuffer;
+		mainCamera->BackBuffer = mainCamera->FrontBuffer;
+		mainCamera->FrontBuffer = mainCamera->BackBuffer;
+	}
+
+	mainCamera->state.Last = mainCamera->state.Current;
+	mainCamera->state.Last.Output = mainCamera->FrontBuffer != nullptr ? mainCamera->BackBuffer : nullptr;
+	mainCamera->state.Current.Output = mainCamera->FrontBuffer != nullptr ? mainCamera->FrontBuffer : mainCamera->BackBuffer;
+	mainCamera->state.Current.View = mainCamera->GetView();
+	mainCamera->state.Current.Projection = mainCamera->Projection;
+	mainCamera->state.Current.ViewProjection = mainCamera->GetViewProjection();
 
 }
 
@@ -256,9 +267,8 @@ void Vatista::Game::bufferCreation()
 	buffer->AddAttachment(depth);
 	buffer->Validate();
 
-	mainCamera->state.BackBuffer = buffer;
-	mainCamera->state.FrontBuffer = buffer->Clone();
-
+	mainCamera->BackBuffer = buffer;
+	mainCamera->FrontBuffer = buffer->Clone();
 
 	RenderBufferDesc mainColor = RenderBufferDesc();
 	mainColor.ShaderReadable = true;
@@ -288,6 +298,85 @@ void Vatista::Game::bufferCreation()
 void Vatista::Game::postProcess()
 {
 
+	//// We'll get the back buffer from the frame state
+	//FrameBuffer::Sptr mainBuffer = mainCamera->state.BackBuffer;
+	//
+	//// Unbind the main framebuffer, so that we can read from it
+	////mainBuffer->UnBind();
+	//glDisable(GL_DEPTH_TEST);
+	//
+	//// The last output will start as the output from the rendering
+	//FrameBuffer::Sptr lastPass = mainBuffer;
+	//
+	//float m22 = mainCamera->Projection[2][2];
+	//float m32 = mainCamera->Projection[3][2];
+	//float nearPlane = (2.0f * m32) / (2.0f * m22 - 2.0f);
+	//float farPlane = ((m22 - 1.0f) * nearPlane) / (m22 + 1.0);
+	//
+	//// We'll iterate over all of our render passes
+	//for (const PostPass::Sptr& pass : myPasses) {
+	//	if (pass->Enabled) {
+	//		// We'll bind our post-processing output as the current render target and clear it
+	//		pass->Output->Bind(RenderTargetBinding::Draw);
+	//		glClear(GL_COLOR_BUFFER_BIT);
+	//		// Set the viewport to be the entire size of the passes output
+	//		glViewport(0, 0, pass->Output->GetWidth(), pass->Output->GetHeight());
+	//
+	//		// Use the post processing shader to draw the fullscreen quad
+	//		pass->Shader->Use();
+	//		lastPass->Bind(0);
+	//		pass->Shader->SetUniform("xImage", 0);
+	//
+	//		// Expose camera state to shaders
+	//		pass->Shader->SetUniform("a_View", state.Current.View);
+	//		pass->Shader->SetUniform("a_Projection", state.Current.Projection);
+	//		pass->Shader->SetUniform("a_ProjectionInv", glm::inverse(state.Current.Projection));
+	//		pass->Shader->SetUniform("a_ViewProjection", state.Current.ViewProjection);
+	//		pass->Shader->SetUniform("a_ViewProjectionInv", glm::inverse(state.Current.ViewProjection));
+	//
+	//		pass->Shader->SetUniform("a_PrevView", state.Last.View);
+	//		pass->Shader->SetUniform("a_PrevProjection", state.Last.Projection);
+	//		pass->Shader->SetUniform("a_PrevProjectionInv", glm::inverse(state.Last.Projection));
+	//		pass->Shader->SetUniform("a_PrevViewProjection", state.Last.ViewProjection);
+	//		pass->Shader->SetUniform("a_PrevViewProjectionInv", glm::inverse(state.Last.ViewProjection));
+	//
+	//		pass->Shader->SetUniform("a_NearPlane", nearPlane);
+	//		pass->Shader->SetUniform("a_FarPlane", farPlane);
+	//
+	//		// We'll bind all the inputs as textures in the order they were added (starting at index 1)
+	//		for (size_t ix = 0; ix < pass->Inputs.size(); ix++) {
+	//			const auto& input = pass->Inputs[ix];
+	//			if (input.Pass == nullptr) {
+	//				if (input.UsePrevFrame && state.Last.Output != nullptr) {
+	//					state.Last.Output->Bind(ix + 1, input.Attachment);
+	//				}
+	//				else {
+	//					mainBuffer->bind(ix + 1, input.Attachment);
+	//				}
+	//			}
+	//			else {
+	//				input.Pass->Output->Bind(ix + 1, input.Attachment);
+	//			}
+	//		}
+	//		pass->Shader->SetUniform("xScreenRes", glm::ivec2(pass->Output->GetWidth(), pass->Output->GetHeight()));
+	//		fullscreenQuad->Draw();
+	//
+	//		// Unbind the output pass so that we can read from it
+	//		pass->Output->UnBind();
+	//
+	//		// Update the last pass output to be this passes output
+	//		lastPass = pass->Output;
+	//	}
+	//}
+	//
+	//// Bind the last buffer we wrote to as our source for read operations
+	//lastPass->bind(RenderTargetBinding::Read);
+	//// Copies the image from lastPass into the default back buffer
+	//FrameBuffer::Blit({ 0, 0, lastPass->GetWidth(), lastPass->GetHeight() },
+	//	{ 0, 0, app->GetWindow()->GetWidth(), app->GetWindow()->GetHeight() }, BufferFlags::All, MagFilter::Nearest);
+	//
+	//// Unbind the last buffer from read operations, so we can write to it again later
+	//lastPass->unBind();
 
 
 }
@@ -295,7 +384,7 @@ void Vatista::Game::postProcess()
 void Vatista::Game::lightPass()
 {
 	
-	FrameBuffer::Sptr mainBuffer = mainCamera->state.BackBuffer;
+	FrameBuffer::Sptr renderBuffer = mainCamera->state.Current.Output;
 
 	//bind accumulation buffer
 	accumulationBuffer->bind();
@@ -307,25 +396,26 @@ void Vatista::Game::lightPass()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ONE);
 
+	FrameBuffer::Sptr mainBuffer = mainCamera->state.Current.Output;
 
 	// We set up all the camera state once, since we use the same shader for compositing all shadow-casting lights
 	lightComposite->Bind();
-	//lightComposite->SetUniform("a_View", mainCamera->GetPosition());
-	//glm::mat4 viewInv = glm::inverse(state.Current.View);
-	lightComposite->SetUniform("a_CameraPos", mainCamera->GetPosition());
-	lightComposite->SetUniform("a_ViewProjectionInv", glm::inverse(mainCamera->GetViewProjection()));
+	lightComposite->SetUniform("a_View", mainCamera->state.Current.View);
+	glm::mat4 viewInv = glm::inverse(mainCamera->state.Current.View);
+	lightComposite->SetUniform("a_CameraPos", glm::vec3(viewInv * glm::vec4(0, 0, 0, 1)));
+	lightComposite->SetUniform("a_ViewProjectionInv", glm::inverse(mainCamera->state.Current.ViewProjection));
 	lightComposite->SetUniform("a_MatShininess", 1.0f);
 	
 	mainBuffer->bind(0, RenderTargetAttachment::Color0); // The color buffer
 	mainBuffer->bind(1, RenderTargetAttachment::Depth);
 	mainBuffer->bind(2, RenderTargetAttachment::Color1); // The normal buffer
 	
-	
 	for (auto light : LightList) {
 		lightComposite->SetUniform("a_LightPos", light->getPos());
 		lightComposite->SetUniform("a_LightColor", light->getColour());
 		lightComposite->SetUniform("a_LightAttenuation", light->getAttenuation());
-		lightComposite->SetUniform("a_LightRadius", light->getScale());
+		//lightComposite->SetUniform("a_LightRadius", light->getScale());
+		
 		light->getMesh()->Draw();
 	}
 
@@ -334,16 +424,16 @@ void Vatista::Game::lightPass()
 	glDisable(GL_BLEND);
 
 	// Set the main buffer as the output again
-	mainBuffer->bind();
+	renderBuffer->bind();
 	// We'll use an additive shader for now, this should be a multiply with the albedo of the scene
 	finalLighting->Bind();
 	// We'll combine the GBuffer color and our lighting contributions
-	mainBuffer->bind(1, RenderTargetAttachment::Color0);
+	renderBuffer->bind(1, RenderTargetAttachment::Color0);
 	accumulationBuffer->bind(2);
 	// Render the quad
 	fullscreenQuad->Draw();
 	// Unbind main buffer to perform multisample blitting
-	mainBuffer->unBind();
+	renderBuffer->unBind();
 }
 
 
@@ -426,4 +516,3 @@ bool Vatista::Game::load(std::string filename)
 
 	return true;
 }
-

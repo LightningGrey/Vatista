@@ -86,6 +86,7 @@ namespace Vatista {
 		Shader::Sptr finalLighting;
 		FrameBuffer::Sptr accumulationBuffer;
 		Mesh::Sptr fullscreenQuad;
+		Material::Sptr lightMat;
 		
 		//ObjLoader loader;
 		//

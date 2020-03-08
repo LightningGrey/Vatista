@@ -22,7 +22,7 @@ uniform float a_LightAttenuation;
 // This should really be a GBuffer parameter
 uniform float a_MatShininess;
 //distance of light
-uniform float a_LightRadius;
+//uniform float a_LightRadius;
 
 const vec3 HALF = vec3(0.5);
 const vec3 DOUBLE = vec3(2.0);
