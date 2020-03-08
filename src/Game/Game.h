@@ -58,7 +58,7 @@ namespace Vatista {
 		Shader::Sptr myShader;
 		Shader::Sptr myNormalShader;
 		//std::vector<Vatista::Shader::Sptr> shaderList;
-		Texture2D::Sptr textureStamina;//place holder texture will add more complex later
+		
 		Texture2D::Sptr texture;
 		Texture2D::Sptr texture2;
 		Texture2D::Sptr texture3;
@@ -70,6 +70,7 @@ namespace Vatista {
 
 		std::vector<GameObject::Sptr> ObjectList;
 		std::vector<GameObject::Sptr> UIList;
+		std::vector<Light::Sptr> LightList;
 		Character::Sptr C1;
 		Character::Sptr C2;
 		//GameObject::Sptr TestMap;
@@ -79,10 +80,8 @@ namespace Vatista {
 
 		//GameObject::Sptr TestStaminaBackground;
 
-		glm::mat4 modelTransform2 = glm::mat4(0.f);
-		glm::vec3 pos1;
-		glm::vec3 pos2;
-		glm::vec3 pos3;
+	
+		Light::Sptr point;
 		
 		//ObjLoader loader;
 		//
