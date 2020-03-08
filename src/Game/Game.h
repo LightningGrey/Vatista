@@ -82,6 +82,8 @@ namespace Vatista {
 
 	
 		Light::Sptr point;
+		Shader::Sptr lightComposite;
+		Shader::Sptr finalLighting;
 		
 		//ObjLoader loader;
 		//

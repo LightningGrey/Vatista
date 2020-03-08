@@ -1,6 +1,7 @@
 #include "Game.h" 
 #include "Graphics/Rendering/MeshRenderer.h"
 #include <iostream> 
+#include "GLM/detail/func_matrix.inl"
 
 Vatista::Game::Game() : gameWindow(nullptr), clearColour(glm::vec4(0, 0, 0, 1)),
 windowName("Vatista Engine")
@@ -73,6 +74,11 @@ void Vatista::Game::init()
 
 	Shader::Sptr phong2 = std::make_shared<Shader>();
 	phong2->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/lightingDeferred.fs.glsl");
+
+	lightComposite = std::make_shared<Shader>();
+	lightComposite->Load("./res/Shaders/post/post.vs.glsl", "./res/Shaders/post/pointLightPost.fs.glsl");
+	finalLighting = std::make_shared<Shader>();
+	finalLighting->Load("./res/Shaders/post/post.vs.glsl", "./res/Shaders/post/finalLighting.fs.glsl");
 
 	//sample testing
 	TextureSampler::Sptr NearestMipped = std::make_shared<TextureSampler>();
@@ -160,7 +166,7 @@ void Vatista::Game::init()
 	point->setMat(pointMat);
 	point->setPos(glm::vec3(0.0f, 0.0f, -10.0f));
 	point->setScale(glm::vec3(4.f));
-	LightList.push_back(point);
+	//LightList.push_back(point);
 
 	bufferCreation();
 
@@ -200,6 +206,7 @@ void Vatista::Game::render(float dt)
 	glDepthFunc(GL_LESS);
 
 	draw(dt);
+	//lightPass();
 	//postProcess();
 
 }
@@ -256,7 +263,7 @@ void Vatista::Game::bufferCreation()
 
 void Vatista::Game::postProcess()
 {
-	//lightPass();
+
 
 
 }
@@ -283,18 +290,69 @@ void Vatista::Game::lightPass()
 	//pointLight;
 	//
 	//
-	//RenderBufferDesc mainColor = RenderBufferDesc();
-	//mainColor.ShaderReadable = true;
-	//mainColor.Attachment = RenderTargetAttachment::Color0;
-	//mainColor.Format = RenderTargetType::ColorRgb16F;
-	//
-	//// We'll use one buffer to accumulate all the lighting
-	//FrameBuffer::Sptr accumulationBuffer = std::make_shared<FrameBuffer>(gameWindow->getWidth(), 
-	//	gameWindow->getHeight());
-	//accumulationBuffer->AddAttachment(mainColor);
-	//accumulationBuffer->Validate();
 
+	RenderBufferDesc mainColor = RenderBufferDesc();
+	mainColor.ShaderReadable = true;
+	mainColor.Attachment = RenderTargetAttachment::Color0;
+	mainColor.Format = RenderTargetType::ColorRgb16F;
+	
+	// We'll use one buffer to accumulate all the lighting
+	FrameBuffer::Sptr accumulationBuffer = std::make_shared<FrameBuffer>(gameWindow->getWidth(), 
+		gameWindow->getHeight());
+	accumulationBuffer->AddAttachment(mainColor);
+	accumulationBuffer->Validate();
+
+	FrameBuffer::Sptr mainBuffer = mainCamera->state.BackBuffer;
+
+	//bind accumulation buffer
+	accumulationBuffer->bind();
+	glClearColor(0.01f, 0.01f, 0.01f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	//additive blending. depth disable
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
+
+
+	// We set up all the camera state once, since we use the same shader for compositing all shadow-casting lights
+	lightComposite->Bind();
+	//lightComposite->SetUniform("a_View", mainCamera->GetPosition());
+	//glm::mat4 viewInv = glm::inverse(state.Current.View);
+	lightComposite->SetUniform("a_CameraPos", mainCamera->GetPosition());
+	lightComposite->SetUniform("a_ViewProjectionInv", glm::inverse(mainCamera->GetViewProjection()));
+	lightComposite->SetUniform("a_MatShininess", 1.0f);
+	
+	mainBuffer->bind(0, RenderTargetAttachment::Color0); // The color buffer
+	mainBuffer->bind(1, RenderTargetAttachment::Depth);
+	mainBuffer->bind(2, RenderTargetAttachment::Color1); // The normal buffer
+	
+	
+	for (auto light : LightList) {
+		lightComposite->SetUniform("a_LightPos", light->getPos());
+		lightComposite->SetUniform("a_LightColor", light->getColour());
+		lightComposite->SetUniform("a_LightAttenuation", light->getAttenuation());
+		lightComposite->SetUniform("a_LightRadius", light->getScale());
+		light->getMesh()->Draw();
+	}
+
+	//unbind accumulation from framebuffer
+	accumulationBuffer->unBind();
+	glDisable(GL_BLEND);
+
+	// Set the main buffer as the output again
+	mainBuffer->bind();
+	// We'll use an additive shader for now, this should be a multiply with the albedo of the scene
+	finalLighting->Bind();
+	// We'll combine the GBuffer color and our lighting contributions
+	mainBuffer->bind(1, RenderTargetAttachment::Color0);
+	accumulationBuffer->bind(2);
+	// Render the quad
+	myFullscreenQuad->Draw();
+	// Unbind main buffer to perform multisample blitting
+	mainBuffer->unBind();
 }
+
 
 bool Vatista::Game::load(std::string filename)
 {
