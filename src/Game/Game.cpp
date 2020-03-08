@@ -259,6 +259,30 @@ void Vatista::Game::bufferCreation()
 	mainCamera->state.BackBuffer = buffer;
 	mainCamera->state.FrontBuffer = buffer->Clone();
 
+
+	RenderBufferDesc mainColor = RenderBufferDesc();
+	mainColor.ShaderReadable = true;
+	mainColor.Attachment = RenderTargetAttachment::Color0;
+	mainColor.Format = RenderTargetType::ColorRgb16F;
+
+	// We'll use one buffer to accumulate all the lighting
+	accumulationBuffer = std::make_shared<FrameBuffer>(gameWindow->getWidth(),
+		gameWindow->getHeight());
+	accumulationBuffer->AddAttachment(mainColor);
+	accumulationBuffer->Validate();
+
+	float vert[] = {
+		-1.0f, -1.0f,	0.0f, 0.0f,
+		1.0f, -1.0f,	1.0f, 0.0f,
+		-1.0f, 1.0f,	0.0f, 1.0f,
+		1.0f,  1.0f,	1.0f, 1.0f
+	};
+	uint32_t indices[] = {
+		0, 1, 2,
+		1, 3, 2
+	};
+	fullscreenQuad = std::make_shared<Mesh>(vert, 4, indices, 6);
+
 }
 
 void Vatista::Game::postProcess()
@@ -270,38 +294,7 @@ void Vatista::Game::postProcess()
 
 void Vatista::Game::lightPass()
 {
-	//FrameBuffer::Sptr mainBuffer = mainCamera->state.BackBuffer;
-	//mainBuffer->bind();
-	//
-	//float vert[] = {
-	//	-1.0f, -1.0f,	0.0f, 0.0f,
-	//	1.0f, -1.0f,	1.0f, 0.0f,
-	//	-1.0f, 1.0f,	0.0f, 1.0f,
-	//	1.0f,  1.0f,	1.0f, 1.0f,	
-	//};
-	//uint32_t indices[] = {
-	//	0, 1, 2,
-	//	1, 3, 2
-	//};
-	//Mesh::Sptr myFullscreenQuad = std::make_shared<Mesh>(vert, 4, indices, 6);
-	//
-	//
-	//Shader::Sptr pointLight = std::make_shared<Shader>();
-	//pointLight;
-	//
-	//
-
-	RenderBufferDesc mainColor = RenderBufferDesc();
-	mainColor.ShaderReadable = true;
-	mainColor.Attachment = RenderTargetAttachment::Color0;
-	mainColor.Format = RenderTargetType::ColorRgb16F;
 	
-	// We'll use one buffer to accumulate all the lighting
-	FrameBuffer::Sptr accumulationBuffer = std::make_shared<FrameBuffer>(gameWindow->getWidth(), 
-		gameWindow->getHeight());
-	accumulationBuffer->AddAttachment(mainColor);
-	accumulationBuffer->Validate();
-
 	FrameBuffer::Sptr mainBuffer = mainCamera->state.BackBuffer;
 
 	//bind accumulation buffer
@@ -348,7 +341,7 @@ void Vatista::Game::lightPass()
 	mainBuffer->bind(1, RenderTargetAttachment::Color0);
 	accumulationBuffer->bind(2);
 	// Render the quad
-	myFullscreenQuad->Draw();
+	fullscreenQuad->Draw();
 	// Unbind main buffer to perform multisample blitting
 	mainBuffer->unBind();
 }

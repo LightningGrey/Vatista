@@ -77,7 +77,8 @@
     <None Include="include\fmod\fmod_studio.cs" />
     <None Include="res\Master.bank" />
     <None Include="res\Shaders\lightingDeferred.fs.glsl" />
-    <None Include="res\Shaders\Post-Processing\pointLightPost.fs.glsl" />
+    <None Include="res\Shaders\post\pointLightPost.fs.glsl" />
+    <None Include="res\Shaders\post\finalLighting.fs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\StaminaBar.vs.glsl" />
