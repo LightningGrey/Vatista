@@ -41,4 +41,11 @@ void Vatista::Light::controller(Window* window)
 		this->setPosZ(this->getPosY() - 0.01);
 	}
 
+	//
+	else if (glfwGetKey(window->getWindow(), GLFW_KEY_KP_ADD) == GLFW_PRESS) {
+		//this->setPosZ(this->getPosY() - 0.01);
+		//placeholder
+	}        
+
+
 }

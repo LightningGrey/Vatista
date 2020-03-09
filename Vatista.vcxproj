@@ -31,6 +31,7 @@
     <ClInclude Include="src\Game\TitleLayer.h" />
     <ClInclude Include="src\VatistaEngine\Audio\AudioEngine.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Camera.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\adding lights\LightSpawner.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\LightComponent.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Material.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Mesh.h" />

@@ -61,6 +61,7 @@
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Texture2D.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\LightComponent.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\adding lights\LightSpawner.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />
