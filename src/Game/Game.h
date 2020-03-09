@@ -77,9 +77,9 @@ namespace Vatista {
 		StationaryObj::Sptr stage;
 		float x = 100.0f;
 		float y = 100.0f;
-
+		float move = 0.1f;
 		//GameObject::Sptr TestStaminaBackground;
-
+		std::vector<bool> toggles{0,0,0,0,0,0,0,0,0,0};
 	
 		Light::Sptr point;
 		StationaryObj::Sptr prop;
