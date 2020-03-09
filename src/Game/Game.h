@@ -82,6 +82,7 @@ namespace Vatista {
 
 	
 		Light::Sptr point;
+		StationaryObj::Sptr prop;
 		
 		//ObjLoader loader;
 		//

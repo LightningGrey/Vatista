@@ -68,6 +68,9 @@ void Vatista::Game::init()
 	//Texture2D::Sptr terminalTexture = std::make_shared<Texture2D>();
 	//terminalTexture->loadFile("./res/Objects/Terminal/Terminal_Texture.png");
 
+	Texture2D::Sptr textureProp = std::make_shared<Texture2D>();
+	textureProp->loadFile("./res/Objects/CrateMedium/CrateMedium_Texture.png");
+
 	//Shader::Sptr phong = std::make_shared<Shader>();
 	//phong->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
 
@@ -161,6 +164,24 @@ void Vatista::Game::init()
 	point->setPos(glm::vec3(0.0f, 0.0f, -10.0f));
 	point->setScale(glm::vec3(4.f));
 	LightList.push_back(point);
+
+
+	prop = std::make_shared<StationaryObj>();
+	prop->setMesh(meshList[3]);
+	Material::Sptr propMat = std::make_shared<Material>(phong2);
+	propMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	propMat->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
+	propMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	propMat->Set("a_AmbientPower", 0.5f);
+	propMat->Set("a_LightSpecPower", 0.9f);
+	propMat->Set("a_LightShininess", 256.0f);
+	propMat->Set("a_LightAttenuation", 0.04f);
+	propMat->Set("texSample", textureProp, NearestMipped);
+	prop->setMat(propMat);
+	prop->setPos(glm::vec3(0.f, 0.f, 0.f));
+	ObjectList.push_back(prop);
+	
+
 
 	bufferCreation();
 
