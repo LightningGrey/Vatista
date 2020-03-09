@@ -217,7 +217,7 @@ void Vatista::Game::render(float dt)
 
 void Vatista::Game::draw(float)
 {
-	mainCamera->BackBuffer->bind();
+	//mainCamera->BackBuffer->bind();
 	//draw game objects
 	for (auto object : ObjectList) {
 		object->Draw(mainCamera);
@@ -225,7 +225,7 @@ void Vatista::Game::draw(float)
 	for (auto object : LightList) {
 		object->Draw(mainCamera);
 	}
-	mainCamera->BackBuffer->unBind();
+	//mainCamera->BackBuffer->unBind();
 
 	// If there's a front buffer, then this camera is double-buffered
 	if (mainCamera->FrontBuffer != nullptr) {
