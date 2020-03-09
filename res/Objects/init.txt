@@ -1,4 +1,4 @@
-Z3n/z3n_idle_1.vsf
+Z3n/z3n_idle_pose_1.vsf
 Cave/Cave.vsf
 Background_Objects/Background_Objects.vsf
 Bunker/Bunker.vsf
@@ -18,6 +18,9 @@ Barrel/Barrel.vsf
 Electrical_Stuff/Electrical_Stuff.vsf
 Stamina/stamina_plane.vsf
 UI/ui_plane.vsf
+UI/character_profile_plane.vsf
+Z3n/sword_idle_pose_1.vsf
+Z3n/sheath_idle_pose_1.vsf
 Z3n/Z3n_Run_Animation/z3n_run.vsf
 Z3n/Z3n_Run_Animation/z3n_run_2.vsf
 Z3n/Z3n_Run_Animation/z3n_run_3.vsf

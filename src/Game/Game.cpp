@@ -225,7 +225,20 @@ void Vatista::Game::init()
 		stamUIMats[i]->Set("texSample", stamUIText, NearestMipped);
 	}
 	textureStamina = std::make_shared<Texture2D>();//connected to staminamat
-	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture.png");
+	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture2.png");
+
+	stamUIText = std::make_shared<Texture2D>();
+	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
+
+	Material::Sptr profileMat = std::make_shared<Material>(phong);
+	profileMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	profileMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	profileMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	profileMat->Set("a_AmbientPower", 0.5f);
+	profileMat->Set("a_LightSpecPower", 0.9f);
+	profileMat->Set("a_LightShininess", 256.0f);
+	profileMat->Set("a_LightAttenuation", 0.04f);
+	profileMat->Set("texSample", stamUIText, NearestMipped);
 
 	//stamina
 	Material::Sptr staminaMat = std::make_shared<Material>(staminaPhong);//blank stamina texture
@@ -241,18 +254,75 @@ void Vatista::Game::init()
 
 	//Player 1
 	C1 = std::make_shared<Character>(true, meshList[0], testMat);
+	C1->setScale(0.01f);
 	ObjectList.push_back(C1);
 
 	//Player 2 
 	C2 = std::make_shared<Character>(false, meshList[0], testMat);
+	C2->setScale(0.01f);
 	ObjectList.push_back(C2);
 
-	StamUI1 = std::make_shared<UIObject>();
-	StamUI1->setPos(glm::vec3(-4.8f, 7.f, 0.f));
-	StamUI1->setMesh(meshList[19]);
-	StamUI1->setMat(stamUIMats[C1->getLives()]);
-	StamUI1->setScale(2.5f);
-	UIList.push_back(StamUI1);
+	bladeText = std::make_shared<Texture2D>();
+	bladeText->loadFile("./res/Objects/Z3n/z3n_blade_Texture.png");
+	Material::Sptr bladeMat = std::make_shared<Material>(phong);//blank stamina texture
+	bladeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	bladeMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	bladeMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	bladeMat->Set("a_AmbientPower", 0.5f);
+	bladeMat->Set("a_LightSpecPower", 0.9f);
+	bladeMat->Set("a_LightShininess", 256.0f);
+	bladeMat->Set("a_LightAttenuation", 0.04f);
+	bladeMat->Set("texSample", bladeText, NearestMipped);
+
+	sword1 = std::make_shared<StationaryObj>();
+	sword1->setMesh(meshList[21]);
+	sword1->setMat(bladeMat);
+	sword1->setPos(C1->getPos());
+	sword1->setScale(0.01f);
+	ObjectList.push_back(sword1);
+	sword2 = std::make_shared<StationaryObj>();
+	sword2->setMesh(meshList[21]);
+	sword2->setMat(bladeMat);
+	sword2->setPos(C2->getPos());
+	sword2->setScale(0.01f);
+	ObjectList.push_back(sword2);
+	bladeText = std::make_shared<Texture2D>();
+	bladeText->loadFile("./res/Objects/Z3n/z3n_Sheath_Texture.png");
+	bladeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	bladeMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	bladeMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	bladeMat->Set("a_AmbientPower", 0.5f);
+	bladeMat->Set("a_LightSpecPower", 0.9f);
+	bladeMat->Set("a_LightShininess", 256.0f);
+	bladeMat->Set("a_LightAttenuation", 0.04f);
+	bladeMat->Set("texSample", bladeText, NearestMipped);
+
+	sheath1 = std::make_shared<StationaryObj>();
+	sheath1->setMesh(meshList[22]);
+	sheath1->setMat(bladeMat);
+	sheath1->setPos(C1->getPos());
+	sheath1->setScale(0.01f);
+	ObjectList.push_back(sheath1);
+	sheath2 = std::make_shared<StationaryObj>();
+	sheath2->setMesh(meshList[22]);
+	sheath2->setMat(bladeMat);
+	sheath2->setPos(C2->getPos());
+	sheath2->setScale(0.01f);
+	ObjectList.push_back(sheath2);
+
+	UI1 = std::make_shared<UIObject>();
+	UI1->setPos(glm::vec3(-4.8f, 7.f, 0.f));
+	UI1->setMesh(meshList[19]);
+	UI1->setMat(stamUIMats[C1->getLives()]);
+	UI1->setScale(2.5f);
+	UIList.push_back(UI1);
+
+	charProfile1 = std::make_shared<UIObject>();
+	charProfile1->setPos(glm::vec3(-4.8f, 7.f, 1.f));
+	charProfile1->setMesh(meshList[20]);
+	charProfile1->setMat(profileMat);
+	charProfile1->setScale(2.5f);
+	UIList.push_back(charProfile1);
 
 	S1 = std::make_shared<Stamina>();
 	S1->setPos(glm::vec3(-4.8f, 7.f, 1.f));
@@ -263,19 +333,27 @@ void Vatista::Game::init()
 	UIList.push_back(S1);
 
 
-	StamUI2 = std::make_shared<UIObject>();
-	StamUI2->setPos(glm::vec3(4.8f, 7.f, 0.f));
-	StamUI2->setMesh(meshList[19]);
-	StamUI2->setMat(stamUIMats[C2->getLives()]);
+	UI2 = std::make_shared<UIObject>();
+	UI2->setPos(glm::vec3(4.8f, 7.f, 0.f));
+	UI2->setMesh(meshList[19]);
+	UI2->setMat(stamUIMats[C2->getLives()]);
 
-	StamUI2->setRotY(180.f);
-	StamUI2->setScale(2.5f);
-	UIList.push_back(StamUI2);
+	UI2->setRotY(180.f);
+	UI2->setScale(2.5f);
+	UIList.push_back(UI2);
+
+	charProfile2 = std::make_shared<UIObject>();
+	charProfile2->setPos(glm::vec3(4.8f, 7.f, 1.f));
+	charProfile2->setMesh(meshList[20]);
+	charProfile2->setMat(profileMat);
+	charProfile2->setRotY(180.f);
+	charProfile2->setScale(2.5f);
+	UIList.push_back(charProfile2);
 
 	S2 = std::make_shared<Stamina>();
 	S2->setPos(glm::vec3(4.8f, 7.f, 1.f));
 	S2->setMesh(meshList[18]);//3rd one on init.txt 
-	S2->setMat(testMat2/*staminaMat*/);
+	S2->setMat(staminaMat/*staminaMat*/);
 	S2->setRotY(180.f);
 	//S2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
 	S2->setScale(2.5f);
@@ -297,11 +375,19 @@ void Vatista::Game::update(float dt)
 {
 	C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
 	C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
-	C1->setStamina(C1->getStamina() + 5.f);
-	StamUI1->setMat(stamUIMats[C1->getLives()]);
-	StamUI2->setMat(stamUIMats[C2->getLives()]);
+	sword1->setPos(C1->getPos());
+	sword1->setRotY(C1->getRot().y);
+	sheath1->setPos(C1->getPos());
+	sheath1->setRotY(C1->getRot().y);
+	sword2->setPos(C2->getPos());
+	sword2->setRotY(C2->getRot().y);
+	sheath2->setPos(C2->getPos());
+	sheath2->setRotY(C2->getRot().y);
+	UI1->setMat(stamUIMats[C1->getLives()]);
+	UI2->setMat(stamUIMats[C2->getLives()]);
 	S1->setStamina(C1->getStamina());
 	S2->setStamina(C2->getStamina());
+	//std::cout << C1->getPosX() << " " << C2->getPosX() << std::endl;
 	float dist = fabs(C1->getPosX() - C2->getPosX());
 	//C1->setStamina(C1->getStamina() + 10.0f);
 	//C2->setStamina(C2->getStamina() + 10.0f);

@@ -55,6 +55,7 @@ namespace Vatista {
 		Texture2D::Sptr textureStamina;//place holder texture will add more complex later
 		Texture2D::Sptr texture;
 		Texture2D::Sptr texture2;
+		Texture2D::Sptr bladeText;
 		Texture2D::Sptr stamUIText;
 		std::vector<Material::Sptr> stamUIMats;
 		Texture::Sptr textures;
@@ -68,10 +69,16 @@ namespace Vatista {
 		Character::Sptr C2;
 		//GameObject::Sptr TestMap;
 		StationaryObj::Sptr stage;
+		StationaryObj::Sptr sword1;
+		StationaryObj::Sptr sword2;
+		StationaryObj::Sptr sheath1;
+		StationaryObj::Sptr sheath2;
 		Stamina::Sptr S1;
-		UIObject::Sptr StamUI1;
+		UIObject::Sptr UI1;
+		UIObject::Sptr charProfile1;
 		Stamina::Sptr S2;
-		UIObject::Sptr StamUI2;
+		UIObject::Sptr UI2;
+		UIObject::Sptr charProfile2;
 		float x = 100.0f;
 		float y = 100.0f;
 
