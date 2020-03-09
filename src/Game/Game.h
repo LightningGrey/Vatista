@@ -79,7 +79,7 @@ namespace Vatista {
 		float y = 100.0f;
 		float move = 0.1f;
 		//GameObject::Sptr TestStaminaBackground;
-		std::vector<bool> toggles{0,0,0,0,0,0,0,0,0,0};
+		std::vector<bool> toggles{1,1,1,1,1,1,1,1,1,1};
 	
 		Light::Sptr point;
 		Shader::Sptr lightComposite;
@@ -89,6 +89,8 @@ namespace Vatista {
 		Material::Sptr lightMat;
 		StationaryObj::Sptr prop;
 		
+		int meshCounter = 0;
+			
 		//ObjLoader loader;
 		//
 		//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);

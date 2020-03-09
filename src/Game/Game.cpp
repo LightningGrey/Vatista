@@ -146,15 +146,16 @@ void Vatista::Game::init()
 
 
 	//Player 1
-	C1 = std::make_shared<Character>(true, meshList[4], testMat);
+	C1 = std::make_shared<Character>(true, meshList[3], testMat);
 	ObjectList.push_back(C1);
 	
 	//Player 2 
-	C2 = std::make_shared<Character>(false, meshList[4], testMat);
+	C2 = std::make_shared<Character>(false, meshList[3], testMat);
 	ObjectList.push_back(C2);
 	
+
 	point = std::make_shared<Light>();
-	point->setMesh(meshList[2]);
+	point->setMesh(meshList[4]);
 	Material::Sptr pointMat = std::make_shared<Material>(phong2);
 	pointMat->Set("texSample", textureVol, NearestMipped);
 	point->setMat(pointMat);
@@ -167,7 +168,7 @@ void Vatista::Game::init()
 
 
 	prop = std::make_shared<StationaryObj>();
-	prop->setMesh(meshList[3]);
+	prop->setMesh(meshList[2]);
 	Material::Sptr propMat = std::make_shared<Material>(phong2);
 	propMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	propMat->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
@@ -200,15 +201,18 @@ void Vatista::Game::close()
 
 void Vatista::Game::update(float dt)
 {
-	if (point->getControl() == false)
-		point->transform(); 
-	else {
-		point->controller(gameWindow);
+	if (toggles[2]){
+		if (point->getControl() == false)
+			point->transform();
+		else {
+			point->controller(gameWindow);
+		}
+
+		if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_ENTER) == GLFW_PRESS) {
+			point->setControl(!(point->getControl()));
+		}
 	}
 
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_ENTER) == GLFW_PRESS) {
-		point->setControl(!(point->getControl()));
-	}
 	if (C1->getPosX() <= -6.f || C1->collisionCheck(C1->getPos(),C1->getCollider(),C2->getPos(),C2->getCollider()))
 		move *= -1.0f;
 	C1->setPosX(C1->getPosX() + move);
@@ -221,26 +225,33 @@ void Vatista::Game::update(float dt)
 	mainCamera->LookAt(glm::vec3(15.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_1) == GLFW_PRESS)
-		toggles[1] != toggles[1];
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_2) == GLFW_PRESS)
-		toggles[2] != toggles[2];
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_3) == GLFW_PRESS)
-		toggles[3] != toggles[3];
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_4) == GLFW_PRESS)
-		toggles[4] != toggles[4];
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_5) == GLFW_PRESS)
-		toggles[5] != toggles[5];
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_6) == GLFW_PRESS)
-		toggles[6] != toggles[6];
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_7) == GLFW_PRESS)
-		toggles[7] != toggles[7];
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_8) == GLFW_PRESS)
-		toggles[8] != toggles[8];
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_9) == GLFW_PRESS)
-		toggles[9] != toggles[9];
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_0) == GLFW_PRESS)
-		toggles[0] != toggles[0];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_1) == GLFW_PRESS)
+		toggles[1] = !toggles[1];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_2) == GLFW_PRESS)
+		toggles[2] = !toggles[2];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_3) == GLFW_PRESS)
+		toggles[3] = !toggles[3];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_4) == GLFW_PRESS)
+		toggles[4] = !toggles[4];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_5) == GLFW_PRESS)
+		toggles[5] = !toggles[5];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_6) == GLFW_PRESS)
+		toggles[6] = !toggles[6];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_7) == GLFW_PRESS) {
+		toggles[7] = !toggles[7];
+		if (meshCounter == 2) {
+			meshCounter = 0;
+		} else {
+			meshCounter += 1;
+		}
+		point->setMesh(meshList[4 + meshCounter]);
+	}
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_8) == GLFW_PRESS)
+		toggles[8] = !toggles[8];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_9) == GLFW_PRESS)
+		toggles[9] = !toggles[9];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_0) == GLFW_PRESS)
+		toggles[0] = !toggles[0];
 
 }
 
@@ -255,7 +266,7 @@ void Vatista::Game::render(float dt)
 
 	draw(dt);
 	lightPass();
-	//postProcess();
+	postProcess();
 
 }
 
@@ -266,8 +277,10 @@ void Vatista::Game::draw(float)
 	for (auto object : ObjectList) {
 		object->Draw(mainCamera);
 	}
-	for (auto object : LightList) {
-		object->Draw(mainCamera);
+	if (toggles[2]) {
+		for (auto object : LightList) {
+			object->Draw(mainCamera);
+		}
 	}
 	//mainCamera->BackBuffer->unBind();
 
@@ -306,9 +319,12 @@ void Vatista::Game::bufferCreation()
 	depth.Format = RenderTargetType::Depth32; //32 bit depth
 
 	FrameBuffer::Sptr buffer = std::make_shared<FrameBuffer>(gameWindow->getWidth(), gameWindow->getHeight(), 4);
-	buffer->AddAttachment(mainColour);
-	buffer->AddAttachment(normal);
-	buffer->AddAttachment(depth);
+	//if (!toggles[3] && !toggles[4])
+		buffer->AddAttachment(mainColour);
+	//if (!toggles[3] && !toggles[5])
+		buffer->AddAttachment(normal);
+	//if (!toggles[4] && !toggles[5])
+		buffer->AddAttachment(depth);
 	buffer->Validate();
 
 	mainCamera->BackBuffer = buffer;
@@ -473,6 +489,7 @@ void Vatista::Game::lightPass()
 	finalLighting->Bind();
 	// We'll combine the GBuffer color and our lighting contributions
 	renderBuffer->bind(1, RenderTargetAttachment::Color0);
+	//if (toggles[6])
 	accumulationBuffer->bind(2);
 	// Render the quad
 	fullscreenQuad->Draw();
