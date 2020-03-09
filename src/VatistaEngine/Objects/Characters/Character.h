@@ -5,27 +5,6 @@
 #include <iostream>
 #include "Audio/AudioEngine.h"
 
-typedef struct {
-	bool a = false;
-	bool d = false;
-	bool left = false;
-	bool right = false;
-	bool f = false;
-	bool g = false;
-	bool rctrl = false;
-	bool ralt = false;
-	float atkTimer1 = 0.0f;
-	float atkTimer2 = 0.0f;
-	int tap1 = 0;
-	int tap2 = 0;
-	bool doubleTap1 = false;
-	bool doubleTap2 = false;
-	bool dash1 = false;
-	bool dash2 = false;
-	float tapTimer1 = 0.0f;
-	float tapTimer2 = 0.0f;
-}keyboard;
-
 namespace Vatista {
 	class Character : public GameObject {
 	public:
@@ -36,7 +15,6 @@ namespace Vatista {
 		std::vector<std::pair<std::string, std::vector<Vatista::Mesh::Sptr>>> animations;
 		Character(bool ID, Mesh::Sptr mesh, Material::Sptr mat);
 		~Character();
-		void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae);
 
 		void setStamina(float s) { stamina = s; }
 		void setLives(int l) { lives = l; }
@@ -88,9 +66,6 @@ namespace Vatista {
 
 		float startTime;
 		float journeyLength;
-
-		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-		static keyboard kb;
 
 
 		float dt = 0.0167f;

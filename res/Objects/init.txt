@@ -1,3 +1,5 @@
 Terminal/Background.vsf
 Terminal/Terminal_V1.0.vsf
 LightVolumes/volSphere.vsf
+CrateMedium/CrateMedium.vsf
+Cube.vsf

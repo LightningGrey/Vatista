@@ -60,16 +60,19 @@ void Vatista::Game::init()
 
 	load("./res/Objects/init.txt");
 
-	//texture = std::make_shared<Texture2D>();
-	//texture->loadFile("./res/Objects/Z3n/Z3N_Texture.png");
+	texture = std::make_shared<Texture2D>();
+	texture->loadFile("./res/Objects/color-grid.png");
 	
 	Texture2D::Sptr textureVol = std::make_shared<Texture2D>();
 	textureVol->loadFile("./res/Objects/Extra Textures/white.png");
 	//Texture2D::Sptr terminalTexture = std::make_shared<Texture2D>();
 	//terminalTexture->loadFile("./res/Objects/Terminal/Terminal_Texture.png");
 
-	//Shader::Sptr phong = std::make_shared<Shader>();
-	//phong->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
+	Texture2D::Sptr textureProp = std::make_shared<Texture2D>();
+	textureProp->loadFile("./res/Objects/CrateMedium/CrateMedium_Texture.png");
+
+	Shader::Sptr phong = std::make_shared<Shader>();
+	phong->Load("./res/Shaders/passthroughMorph.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
 
 	Shader::Sptr phong2 = std::make_shared<Shader>();
 	phong2->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/lightingDeferred.fs.glsl");
@@ -87,15 +90,15 @@ void Vatista::Game::init()
 	NearestMipped->magFilter = MagFilter::Nearest;
 	NearestMipped->createSampler();
 
-	//Material::Sptr testMat = std::make_shared<Material>(phong);
-	//testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	//testMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
-	//testMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	//testMat->Set("a_AmbientPower", 0.5f);
-	//testMat->Set("a_LightSpecPower", 0.9f);
-	//testMat->Set("a_LightShininess", 256.0f);
-	//testMat->Set("a_LightAttenuation", 0.04f);
-	//testMat->Set("texSample", texture, NearestMipped);
+	Material::Sptr testMat = std::make_shared<Material>(phong);
+	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	testMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
+	testMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	testMat->Set("a_AmbientPower", 0.5f);
+	testMat->Set("a_LightSpecPower", 0.9f);
+	testMat->Set("a_LightShininess", 256.0f);
+	testMat->Set("a_LightAttenuation", 0.04f);
+	testMat->Set("texSample", texture, NearestMipped);
 
 	Material::Sptr testMat2 = std::make_shared<Material>(phong2);
 	testMat2->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -142,14 +145,13 @@ void Vatista::Game::init()
 	}
 
 
-	////Player 1
-	//C1 = std::make_shared<Character>(true, meshList[0], testMat);
-	//ObjectList.push_back(C1);
-	//
-	////Player 2 
-	//C2 = std::make_shared<Character>(false, meshList[0], testMat);
-	//ObjectList.push_back(C2);
-
+	//Player 1
+	C1 = std::make_shared<Character>(true, meshList[4], testMat);
+	ObjectList.push_back(C1);
+	
+	//Player 2 
+	C2 = std::make_shared<Character>(false, meshList[4], testMat);
+	ObjectList.push_back(C2);
 	
 	point = std::make_shared<Light>();
 	point->setMesh(meshList[2]);
@@ -163,14 +165,23 @@ void Vatista::Game::init()
 	point->setScale(glm::vec3(4.f));
 	LightList.push_back(point);
 
-	//Light::Sptr point2 = std::make_shared<Light>();
-	//point2->setMesh(meshList[2]);
-	//point2->setColour(glm::vec3(0.0f, 0.0f, 1.0f));
-	//point2->setAttenuation(0.010f);
-	//point2->setMat(pointMat);
-	//point2->setPos(glm::vec3(0.0f, 3.0f, -25.0f));
-	//point2->setScale(glm::vec3(2.5f));
-	//LightList.push_back(point2);
+
+	prop = std::make_shared<StationaryObj>();
+	prop->setMesh(meshList[3]);
+	Material::Sptr propMat = std::make_shared<Material>(phong2);
+	propMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	propMat->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
+	propMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	propMat->Set("a_AmbientPower", 0.5f);
+	propMat->Set("a_LightSpecPower", 0.9f);
+	propMat->Set("a_LightShininess", 256.0f);
+	propMat->Set("a_LightAttenuation", 0.04f);
+	propMat->Set("texSample", textureProp, NearestMipped);
+	prop->setMat(propMat);
+	prop->setPos(glm::vec3(0.f, 0.f, 0.f));
+	ObjectList.push_back(prop);
+	
+
 
 	bufferCreation();
 
@@ -198,6 +209,39 @@ void Vatista::Game::update(float dt)
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_ENTER) == GLFW_PRESS) {
 		point->setControl(!(point->getControl()));
 	}
+	if (C1->getPosX() <= -6.f || C1->collisionCheck(C1->getPos(),C1->getCollider(),C2->getPos(),C2->getCollider()))
+		move *= -1.0f;
+	C1->setPosX(C1->getPosX() + move);
+
+	float dist = fabs(C1->getPosX() - C2->getPosX());
+	if (dist > 15.0f)
+		mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 10.0f, 2.5f + (dist / 2.0f)));
+	else
+		mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 10.0f, 10.0f));
+	mainCamera->LookAt(glm::vec3(15.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_1) == GLFW_PRESS)
+		toggles[1] != toggles[1];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_2) == GLFW_PRESS)
+		toggles[2] != toggles[2];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_3) == GLFW_PRESS)
+		toggles[3] != toggles[3];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_4) == GLFW_PRESS)
+		toggles[4] != toggles[4];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_5) == GLFW_PRESS)
+		toggles[5] != toggles[5];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_6) == GLFW_PRESS)
+		toggles[6] != toggles[6];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_7) == GLFW_PRESS)
+		toggles[7] != toggles[7];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_8) == GLFW_PRESS)
+		toggles[8] != toggles[8];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_9) == GLFW_PRESS)
+		toggles[9] != toggles[9];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_0) == GLFW_PRESS)
+		toggles[0] != toggles[0];
+
 }
 
 void Vatista::Game::render(float dt)
