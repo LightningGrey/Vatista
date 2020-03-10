@@ -22,6 +22,7 @@
 #include "Objects/Characters/Character.h"
 #include "Objects/UI/Stamina.h"
 #include "Objects/Stationary/StationaryObj.h"
+#include "Objects/UI/Menu.h"
 
 namespace Vatista {
 	class TitleLayer {
@@ -56,17 +57,17 @@ namespace Vatista {
 		Texture2D::Sptr texture4;
 		std::vector<Texture::Sptr> textures;
 		std::vector<Material::Sptr> mats;
-		Camera::Sptr mainCamera;
+		
+
 		Camera::Sptr orthoCamera;
+		Menu::Sptr menu;
+
 
 		std::vector<GameObject::Sptr> ObjectList;
 		std::vector<GameObject::Sptr> UIList;
 		Character::Sptr C1;
 		Character::Sptr C2;
 		//GameObject::Sptr TestMap;
-		StationaryObj::Sptr stage;
-		Stamina::Sptr TestStamina;
-		Stamina::Sptr TestStamina2;
 		float x = 100.0f;
 		float y = 100.0f;
 

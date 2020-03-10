@@ -42,6 +42,8 @@
     <ClInclude Include="src\VatistaEngine\Objects\Characters\Character.h" />
     <ClInclude Include="src\VatistaEngine\Objects\GameObject.h" />
     <ClInclude Include="src\VatistaEngine\Objects\Stationary\StationaryObj.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\UI\Button.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\UI\Menu.h" />
     <ClInclude Include="src\VatistaEngine\Objects\UI\Stamina.h" />
     <ClInclude Include="src\VatistaEngine\Objects\UI\UIObject.h" />
     <ClInclude Include="src\VatistaEngine\Post-Processing\FrameBuffer.h" />
@@ -67,6 +69,7 @@
     <ClCompile Include="src\VatistaEngine\Objects\Characters\Character.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\GameObject.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\Stationary\StationaryObj.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\UI\Menu.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\UI\Stamina.cpp" />
     <ClCompile Include="src\VatistaEngine\Post-Processing\FrameBuffer.cpp" />
     <ClCompile Include="src\VatistaEngine\Utilities\Log.cpp" />

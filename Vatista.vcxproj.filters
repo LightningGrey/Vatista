@@ -20,6 +20,7 @@
     <ClCompile Include="src\VatistaEngine\Graphics\Rendering\Texture2D.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.cpp" />
     <ClCompile Include="src\Game\TitleLayer.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\UI\Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />
@@ -60,6 +61,8 @@
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Texture.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Texture2D.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\UI\Button.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\UI\Menu.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />

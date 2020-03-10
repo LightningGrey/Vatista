@@ -1,4 +1,5 @@
 #include "TitleLayer.h"
+#include "Game.h"
 
 namespace Vatista {
 	TitleLayer::TitleLayer() : gameWindow(nullptr), clearColour(glm::vec4(0, 0, 0, 1)),
@@ -88,7 +89,14 @@ namespace Vatista {
 		planeMat->Set("a_LightShininess", 256.0f);
 		planeMat->Set("a_LightAttenuation", 0.04f);
 		planeMat->Set("texSample", texture, NearestMipped);
-		ObjectList.push_back(stage);
+
+		menu = std::make_shared<Menu>();
+		menu->setPos(glm::vec3(0.0f, 0.0f, 0.0f));
+		menu->setRotY(-90.0f);
+		menu->setMesh(meshList[0]);
+		menu->setMat(planeMat);
+		menu->setScale(10.0f);
+		ObjectList.push_back(menu);
 
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_MULTISAMPLE);
@@ -97,18 +105,44 @@ namespace Vatista {
 
 	void TitleLayer::close()
 	{
+		glfwTerminate();
+		//audioEngine->Shutdown();
 	}
 
 	void TitleLayer::update(float dt)
 	{
+		//audioEngine->Update();
+
+		//if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_ENTER), GLFW_PRESS) {
+		//	if (menu->buttons[0]->isActive()) {
+		//		Vatista::Game* game = new Vatista::Game();
+		//		game->run();
+		//		delete game;
+		//	}
+		//}
+
+
+
 	}
 
 	void TitleLayer::render(float dt)
 	{
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+		glEnable(GL_DEPTH_TEST);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDepthMask(GL_TRUE);
+		glDepthFunc(GL_LESS);
+
+		draw(dt);
 	}
 
 	void TitleLayer::draw(float dt)
 	{
+		//draw game objects
+		for (auto object : ObjectList) {
+			object->Draw(orthoCamera);
+		}
 	}
 
 	bool TitleLayer::load(std::string filename)

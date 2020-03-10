@@ -10,7 +10,13 @@ namespace Vatista {
 	public:
 		SharedPtr(Button);
 
-		Button();
-		~Button();
+		Button() : GameObject(), active(false) {};
+		~Button() {};
+
+		bool isActive() { return active; };
+		void setActive(bool set) { active = set; };
+
+	private:
+		bool active;
 	};
 }
