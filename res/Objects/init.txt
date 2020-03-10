@@ -17,7 +17,7 @@ Barrel/Barrel.vsf
 Electrical_Stuff/Electrical_Stuff.vsf
 UI/ui_plane.vsf
 UI/character_profile_plane.vsf
-Stamina/stamina_plane.vsf
+Stamina/stamina_plane2.vsf
 Z3n/Idle/Idle_Body/z3n_idle_1.vsf
 Z3n/Run/Run_Body/z3n_run_1.vsf
 Z3n/Run/Run_Body/z3n_run_2.vsf

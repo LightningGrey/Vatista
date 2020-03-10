@@ -59,7 +59,7 @@ namespace Vatista {
 		material->GetShader()->SetUniform("staminaValueMax", 100.0f);
 	
 	
-		glm::vec2 offset = glm::vec2(stamina, 0.0f);//off set for the stamina bar don't change
+		glm::vec2 offset = glm::vec2(stamina/200.0f, 0.0f);//off set for the stamina bar don't change
 	
 		material->GetShader()->SetUniform("UVoffset", glm::vec3(offset.x, offset.y, 0.0f));
 	

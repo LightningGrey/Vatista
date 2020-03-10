@@ -225,7 +225,7 @@ void Vatista::Game::init()
 		stamUIMats[i]->Set("texSample", stamUIText, NearestMipped);
 	}
 	textureStamina = std::make_shared<Texture2D>();//connected to staminamat
-	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture.png");
+	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture1.png");
 
 	stamUIText = std::make_shared<Texture2D>();
 	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
@@ -387,7 +387,7 @@ void Vatista::Game::update(float dt)
 	UI2->setMat(stamUIMats[C2->getLives()]);
 	S1->setStamina(C1->getStamina());
 	S2->setStamina(C2->getStamina());
-	//std::cout << C1->getPosX() << " " << C2->getPosX() << std::endl;
+	std::cout << C1->getStamina() << " " << C2->getStamina() << std::endl;
 	float dist = fabs(C1->getPosX() - C2->getPosX());
 	//C1->setStamina(C1->getStamina() + 10.0f);
 	//C2->setStamina(C2->getStamina() + 10.0f);
