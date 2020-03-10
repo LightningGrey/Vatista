@@ -10,9 +10,9 @@
 
 #include "Graphics/Camera.h"
 #include "Graphics/Window.h"
-#include "Graphics/Object Graphics/Mesh.h"
-#include "Graphics/Object Graphics/Shader.h"
-#include "Graphics/Object Graphics/Texture2D.h"
+#include "Graphics/Rendering/Mesh.h"
+#include "Graphics/Rendering/Shader.h"
+#include "Graphics/Rendering/Texture2D.h"
 
 #include "Utilities/Utils.h"
 #include "Miscellaneous Files/Math.h"
@@ -24,11 +24,11 @@
 #include "Objects/Stationary/StationaryObj.h"
 
 namespace Vatista {
-	class Game {
+	class TitleLayer {
 	public:
-		Game();
-		Game(std::string newName);
-		~Game();
+		TitleLayer();
+		TitleLayer(std::string newName);
+		~TitleLayer();
 		void run();
 		void init();
 		void close();
@@ -50,7 +50,6 @@ namespace Vatista {
 		Shader::Sptr myShader;
 		Shader::Sptr myNormalShader;
 		//std::vector<Vatista::Shader::Sptr> shaderList;
-		Texture2D::Sptr textureStamina;//place holder texture will add more complex later
 		Texture2D::Sptr texture;
 		Texture2D::Sptr texture2;
 		Texture2D::Sptr texture3;
@@ -73,12 +72,6 @@ namespace Vatista {
 
 		//GameObject::Sptr TestStaminaBackground;
 
-		glm::mat4 modelTransform2 = glm::mat4(0.f);
-		glm::vec3 pos1;
-		glm::vec3 pos2;
-		glm::vec3 pos3;
-
-		//ObjLoader loader;
 		//
 		//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 

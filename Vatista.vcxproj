@@ -53,6 +53,7 @@
   <ItemGroup>
     <ClCompile Include="include\glad\glad.c" />
     <ClCompile Include="src\Game\Game.cpp" />
+    <ClCompile Include="src\Game\TitleLayer.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\VatistaEngine\Audio\AudioEngine.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Camera.cpp" />
