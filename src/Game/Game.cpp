@@ -191,7 +191,7 @@ void Vatista::Game::init()
 		stage = std::make_shared<StationaryObj>();
 		stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
 		stage->setRotY(-90.0f);
-		stage->setMesh(meshList[i + 1]);
+		stage->setMesh(meshList[i]);
 		stage->setMat(mats);
 		ObjectList.push_back(stage);
 	}
@@ -225,7 +225,7 @@ void Vatista::Game::init()
 		stamUIMats[i]->Set("texSample", stamUIText, NearestMipped);
 	}
 	textureStamina = std::make_shared<Texture2D>();//connected to staminamat
-	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture2.png");
+	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture.png");
 
 	stamUIText = std::make_shared<Texture2D>();
 	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
@@ -253,17 +253,17 @@ void Vatista::Game::init()
 	staminaMat->Set("UVoffset", glm::vec3(0.0f));
 
 	//Player 1
-	C1 = std::make_shared<Character>(true, meshList[0], testMat);
+	C1 = std::make_shared<Character>(true, meshList, testMat);
 	C1->setScale(0.01f);
 	ObjectList.push_back(C1);
 
 	//Player 2 
-	C2 = std::make_shared<Character>(false, meshList[0], testMat);
+	C2 = std::make_shared<Character>(false, meshList, testMat);
 	C2->setScale(0.01f);
 	ObjectList.push_back(C2);
 
 	bladeText = std::make_shared<Texture2D>();
-	bladeText->loadFile("./res/Objects/Z3n/z3n_blade_Texture.png");
+	bladeText->loadFile("./res/Objects/color-grid.png");
 	Material::Sptr bladeMat = std::make_shared<Material>(phong);//blank stamina texture
 	bladeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	bladeMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
@@ -275,13 +275,13 @@ void Vatista::Game::init()
 	bladeMat->Set("texSample", bladeText, NearestMipped);
 
 	sword1 = std::make_shared<StationaryObj>();
-	sword1->setMesh(meshList[21]);
+	sword1->setMesh(meshList[50]);
 	sword1->setMat(bladeMat);
 	sword1->setPos(C1->getPos());
 	sword1->setScale(0.01f);
 	ObjectList.push_back(sword1);
 	sword2 = std::make_shared<StationaryObj>();
-	sword2->setMesh(meshList[21]);
+	sword2->setMesh(meshList[50]);
 	sword2->setMat(bladeMat);
 	sword2->setPos(C2->getPos());
 	sword2->setScale(0.01f);
@@ -298,13 +298,13 @@ void Vatista::Game::init()
 	bladeMat->Set("texSample", bladeText, NearestMipped);
 
 	sheath1 = std::make_shared<StationaryObj>();
-	sheath1->setMesh(meshList[22]);
+	sheath1->setMesh(meshList[51]);
 	sheath1->setMat(bladeMat);
 	sheath1->setPos(C1->getPos());
 	sheath1->setScale(0.01f);
 	ObjectList.push_back(sheath1);
 	sheath2 = std::make_shared<StationaryObj>();
-	sheath2->setMesh(meshList[22]);
+	sheath2->setMesh(meshList[51]);
 	sheath2->setMat(bladeMat);
 	sheath2->setPos(C2->getPos());
 	sheath2->setScale(0.01f);
@@ -312,21 +312,21 @@ void Vatista::Game::init()
 
 	UI1 = std::make_shared<UIObject>();
 	UI1->setPos(glm::vec3(-4.8f, 7.f, 0.f));
-	UI1->setMesh(meshList[19]);
+	UI1->setMesh(meshList[17]);
 	UI1->setMat(stamUIMats[C1->getLives()]);
 	UI1->setScale(2.5f);
 	UIList.push_back(UI1);
 
 	charProfile1 = std::make_shared<UIObject>();
 	charProfile1->setPos(glm::vec3(-4.8f, 7.f, 1.f));
-	charProfile1->setMesh(meshList[20]);
+	charProfile1->setMesh(meshList[18]);
 	charProfile1->setMat(profileMat);
 	charProfile1->setScale(2.5f);
 	UIList.push_back(charProfile1);
 
 	S1 = std::make_shared<Stamina>();
 	S1->setPos(glm::vec3(-4.8f, 7.f, 1.f));
-	S1->setMesh(meshList[18]);//3rd one on init.txt 
+	S1->setMesh(meshList[19]);//3rd one on init.txt 
 	S1->setMat(staminaMat/*staminaMat*/);
 	//S1->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
 	S1->setScale(2.5f);
@@ -335,7 +335,7 @@ void Vatista::Game::init()
 
 	UI2 = std::make_shared<UIObject>();
 	UI2->setPos(glm::vec3(4.8f, 7.f, 0.f));
-	UI2->setMesh(meshList[19]);
+	UI2->setMesh(meshList[17]);
 	UI2->setMat(stamUIMats[C2->getLives()]);
 
 	UI2->setRotY(180.f);
@@ -344,7 +344,7 @@ void Vatista::Game::init()
 
 	charProfile2 = std::make_shared<UIObject>();
 	charProfile2->setPos(glm::vec3(4.8f, 7.f, 1.f));
-	charProfile2->setMesh(meshList[20]);
+	charProfile2->setMesh(meshList[18]);
 	charProfile2->setMat(profileMat);
 	charProfile2->setRotY(180.f);
 	charProfile2->setScale(2.5f);
@@ -352,7 +352,7 @@ void Vatista::Game::init()
 
 	S2 = std::make_shared<Stamina>();
 	S2->setPos(glm::vec3(4.8f, 7.f, 1.f));
-	S2->setMesh(meshList[18]);//3rd one on init.txt 
+	S2->setMesh(meshList[19]);//3rd one on init.txt 
 	S2->setMat(staminaMat/*staminaMat*/);
 	S2->setRotY(180.f);
 	//S2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 

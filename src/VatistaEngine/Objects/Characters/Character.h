@@ -33,8 +33,8 @@ namespace Vatista {
 		SharedPtr(Character);
 
 		bool playerID;
-		std::vector<std::pair<std::string, std::vector<Vatista::Mesh::Sptr>>> animations;
-		Character(bool ID, Mesh::Sptr mesh, Material::Sptr mat);
+		std::vector<std::pair<std::vector<float>, std::vector<Vatista::Mesh::Sptr>>> animations;
+		Character(bool ID, std::vector<Mesh::Sptr>& meshes, Material::Sptr mat);
 		~Character();
 		void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae);
 
@@ -92,11 +92,17 @@ namespace Vatista {
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static keyboard kb;
 
+		int stateTracker = 0;
+		int animIndex = 0;
+		void setStateTracker(int i);
+		int getStateTracker() { return stateTracker; }
+		int getAnimIndex() { return animIndex; }
+		void updateAnim();
 
 		float dt = 0.0167f;
 		float morph;
 
 		float currentTime = 0.0f;
-		float endTime = 10.0f;
+		float endTime = 1.0f;
 	};
 }
