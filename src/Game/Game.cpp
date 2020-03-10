@@ -56,7 +56,7 @@ void Vatista::Game::init()
 	mainCamera = std::make_shared<Vatista::Camera>();
 	mainCamera->SetPosition(glm::vec3(0.0f, 2.0f, 10.0f));
 	mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	mainCamera->Projection = glm::perspective(glm::radians(60.0f), 16.f / 9.f, 1.0f, 200.0f);
+	mainCamera->Projection = glm::perspective(glm::radians(60.0f), 16.f / 9.f, 1.0f, 500.0f);
 
 	orthoCamera = std::make_shared<Vatista::Camera>();
 	orthoCamera->SetPosition(glm::vec3(0.0f));
@@ -122,61 +122,94 @@ void Vatista::Game::init()
 	testMat2->Set("a_LightAttenuation", 0.04f);
 	testMat2->Set("texSample", texture2, NearestMipped);
 
-	//load textures
 
-	for (int i = 0; i < 17; i++) {
+	// ======= STAGE ONE =======
+
+	//for (int i = 0; i < 17; i++) {
+	//	textures = std::make_shared<Texture2D>();
+	//	switch (i) {
+	//	case 0:
+	//		textures->loadFile("./res/Objects/Cave/Cave_Texture.png");
+	//		break;
+	//	case 1:
+	//		textures->loadFile("./res/Objects/Background_Objects/Background_Objects_Texture.png");
+	//		break;
+	//	case 2:
+	//		textures->loadFile("./res/Objects/Bunker/Bunker_Texture.png");
+	//		break;
+	//	case 3:
+	//		textures->loadFile("./res/Objects/Bunker_Door/Bunker_Door_Texture.png");
+	//		break;
+	//	case 4:
+	//		textures->loadFile("./res/Objects/Drill/Drill_Texture.png");
+	//		break;
+	//	case 5:
+	//		textures->loadFile("./res/Objects/Catwalk_Floor/Catwalk_Floor_Texture.png");
+	//		break;
+	//	case 6:
+	//		textures->loadFile("./res/Objects/Catwalk_InsideCorner/Catwalk_Rail_Corners_Texture.png");
+	//		break;
+	//	case 7:
+	//		textures->loadFile("./res/Objects/Catwalk_OutsideCorner/Catwalk_Rail_Corners_Texture.png");
+	//		break;
+	//	case 8:
+	//		textures->loadFile("./res/Objects/Catwalk_Rail_Large/Catwalk_Rail_Large_Texture.png");
+	//		break;
+	//	case 9:
+	//		textures->loadFile("./res/Objects/Catwalk_Rail_Short/Catwalk_Rail_Short_Texture.png");
+	//		break;
+	//	case 10:
+	//		textures->loadFile("./res/Objects/CrateLarge/CrateLarge_Texture.png");
+	//		break;
+	//	case 11:
+	//		textures->loadFile("./res/Objects/CrateMedium/CrateMedium_Texture.png");
+	//		break;
+	//	case 12:
+	//		textures->loadFile("./res/Objects/CrateSmall/CrateSmall_Texture.png");
+	//		break;
+	//	case 13:
+	//		textures->loadFile("./res/Objects/Girders/Girders_Texture.png");
+	//		break;
+	//	case 14:
+	//		textures->loadFile("./res/Objects/MiningShip/MiningShip_Texture.png");
+	//		break;
+	//	case 15:
+	//		textures->loadFile("./res/Objects/Barrel/Barrel_Texture.png");
+	//		break;
+	//	case 16:
+	//		textures->loadFile("./res/Objects/Electrical_Stuff/Wires_&_Lights_Texture.png");
+	//		break;
+	//	}
+	//	mats = std::make_shared<Material>(phong2);
+	//	mats->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	//	mats->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
+	//	mats->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	//	mats->Set("a_AmbientPower", 0.5f);
+	//	mats->Set("a_LightSpecPower", 0.9f);
+	//	mats->Set("a_LightShininess", 256.0f);
+	//	mats->Set("a_LightAttenuation", 0.04f);
+	//	mats->Set("texSample", textures, NearestMipped);
+	//	stage = std::make_shared<StationaryObj>();
+	//	stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
+	//	stage->setRotY(-90.0f);
+	//	stage->setMesh(meshList[i]);
+	//	stage->setMat(mats);
+	//	ObjectList.push_back(stage);
+	//}
+
+	// ======= STAGE TWO =======
+
+	for (int i = 52; i < 55; i++) {
 		textures = std::make_shared<Texture2D>();
 		switch (i) {
-		case 0:
-			textures->loadFile("./res/Objects/Cave/Cave_Texture.png");
+		case 52:
+			textures->loadFile("./res/Objects/Terminal/Background_Texture.png");
 			break;
-		case 1:
-			textures->loadFile("./res/Objects/Background_Objects/Background_Objects_Texture.png");
+		case 53:
+			textures->loadFile("./res/Objects/Terminal/Vatista_Terminal_Texture.png");
 			break;
-		case 2:
-			textures->loadFile("./res/Objects/Bunker/Bunker_Texture.png");
-			break;
-		case 3:
-			textures->loadFile("./res/Objects/Bunker_Door/Bunker_Door_Texture.png");
-			break;
-		case 4:
-			textures->loadFile("./res/Objects/Drill/Drill_Texture.png");
-			break;
-		case 5:
-			textures->loadFile("./res/Objects/Catwalk_Floor/Catwalk_Floor_Texture.png");
-			break;
-		case 6:
-			textures->loadFile("./res/Objects/Catwalk_InsideCorner/Catwalk_Rail_Corners_Texture.png");
-			break;
-		case 7:
-			textures->loadFile("./res/Objects/Catwalk_OutsideCorner/Catwalk_Rail_Corners_Texture.png");
-			break;
-		case 8:
-			textures->loadFile("./res/Objects/Catwalk_Rail_Large/Catwalk_Rail_Large_Texture.png");
-			break;
-		case 9:
-			textures->loadFile("./res/Objects/Catwalk_Rail_Short/Catwalk_Rail_Short_Texture.png");
-			break;
-		case 10:
-			textures->loadFile("./res/Objects/CrateLarge/CrateLarge_Texture.png");
-			break;
-		case 11:
-			textures->loadFile("./res/Objects/CrateMedium/CrateMedium_Texture.png");
-			break;
-		case 12:
-			textures->loadFile("./res/Objects/CrateSmall/CrateSmall_Texture.png");
-			break;
-		case 13:
-			textures->loadFile("./res/Objects/Girders/Girders_Texture.png");
-			break;
-		case 14:
-			textures->loadFile("./res/Objects/MiningShip/MiningShip_Texture.png");
-			break;
-		case 15:
-			textures->loadFile("./res/Objects/Barrel/Barrel_Texture.png");
-			break;
-		case 16:
-			textures->loadFile("./res/Objects/Electrical_Stuff/Wires_&_Lights_Texture.png");
+		case 54:
+			textures->loadFile("./res/Objects/Terminal/CargoShip_Texture.png");
 			break;
 		}
 		mats = std::make_shared<Material>(phong2);
@@ -195,7 +228,7 @@ void Vatista::Game::init()
 		stage->setMat(mats);
 		ObjectList.push_back(stage);
 	}
-	
+
 
 	for (int i = 0; i < 4; i++) {
 		stamUIText = std::make_shared<Texture2D>();
@@ -225,7 +258,7 @@ void Vatista::Game::init()
 		stamUIMats[i]->Set("texSample", stamUIText, NearestMipped);
 	}
 	textureStamina = std::make_shared<Texture2D>();//connected to staminamat
-	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture.png");
+	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture1.png");
 
 	stamUIText = std::make_shared<Texture2D>();
 	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
@@ -373,31 +406,38 @@ void Vatista::Game::close()
 
 void Vatista::Game::update(float dt)
 {
-	C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
-	C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
-	sword1->setPos(C1->getPos());
-	sword1->setRotY(C1->getRot().y);
-	sheath1->setPos(C1->getPos());
-	sheath1->setRotY(C1->getRot().y);
-	sword2->setPos(C2->getPos());
-	sword2->setRotY(C2->getRot().y);
-	sheath2->setPos(C2->getPos());
-	sheath2->setRotY(C2->getRot().y);
-	UI1->setMat(stamUIMats[C1->getLives()]);
-	UI2->setMat(stamUIMats[C2->getLives()]);
-	S1->setStamina(C1->getStamina());
-	S2->setStamina(C2->getStamina());
-	//std::cout << C1->getPosX() << " " << C2->getPosX() << std::endl;
-	float dist = fabs(C1->getPosX() - C2->getPosX());
-	//C1->setStamina(C1->getStamina() + 10.0f);
-	//C2->setStamina(C2->getStamina() + 10.0f);
-	if (dist > 5.0f)
-		mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 11.0f + (dist / 2.0f)));
-	else
-		mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 13.5f));
-	mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	if (C1->getLives() > 0 && C2->getLives() > 0) {
+		C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
+		C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
+		sword1->setPos(C1->getPos());
+		sword1->setRotY(C1->getRot().y);
+		sheath1->setPos(C1->getPos());
+		sheath1->setRotY(C1->getRot().y);
+		sword2->setPos(C2->getPos());
+		sword2->setRotY(C2->getRot().y);
+		sheath2->setPos(C2->getPos());
+		sheath2->setRotY(C2->getRot().y);
+		UI1->setMat(stamUIMats[C1->getLives()]);
+		UI2->setMat(stamUIMats[C2->getLives()]);
+		S1->setStamina(C1->getStamina());
+		S2->setStamina(C2->getStamina());
+		std::cout << C1->getStamina() << " " << C2->getStamina() << std::endl;
+		float dist = fabs(C1->getPosX() - C2->getPosX());
+		//C1->setStamina(C1->getStamina() + 10.0f);
+		//C2->setStamina(C2->getStamina() + 10.0f);
+		if (dist > 5.0f)
+			mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 11.0f + (dist / 2.0f)));
+		else
+			mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 13.5f));
+		mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	}
+	else if(C1->getLives()==0){
 
+	}
+	else if(C2->getLives()==0){
 
+	}
+	
 	audioEngine->Update();
 
 	//S1.setScale(glm::vec3(0.5f)); 

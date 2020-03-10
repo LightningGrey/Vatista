@@ -32,7 +32,7 @@ namespace Vatista {
 		animations[0].first.push_back(1.0f);
 		for (int i = 21; i < 28; i++) {
 			animations[1].second.push_back(meshes[i]); // Run   =  1.0s
-			animations[1].first.push_back(0.1429f);
+			animations[1].first.push_back(0.14285f);
 		}
 		for (int i = 28; i < 33; i++) {
 			animations[2].second.push_back(meshes[i]); // Walk  =  .82s
