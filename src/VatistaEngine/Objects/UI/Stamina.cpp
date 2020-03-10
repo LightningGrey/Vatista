@@ -37,16 +37,16 @@ namespace Vatista {
 		//this part is placeholder, in the future changing this will effect the stamina bar speed etc
 	
 		//static float currentStamina = 0.0f;//current stamina value
-		stamina -= 1.0f;
+		//stamina -= 1.0f;
 		//stamina += 1.0f;
 	
 		//if (currentStamina >= 1.0f) {
 		//	currentStamina = 1.0f;
 		//}
 		//
-		if (stamina < 95.0f) {
-			stamina = 0.0f;
-		}
+		//if (stamina < 95.0f) {
+		//	stamina = 0.0f;
+		//}
 	
 	
 		material->GetShader()->SetUniform("staminaValue", stamina);

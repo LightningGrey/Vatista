@@ -75,21 +75,20 @@ void Vatista::Game::init()
 	
 	load("./res/Objects/init.txt");
 
-
-	textureStamina = std::make_shared<Texture2D>();//connected to staminamat
-	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture.png");
-
 	texture = std::make_shared<Texture2D>();
 	texture->loadFile("./res/Objects/Z3n/Z3N_Texture.png");
 
-	//texture3 = std::make_shared<Texture2D>();
-	//texture3->loadFile("./res/default.png");
+	texture2 = std::make_shared<Texture2D>();
+	texture2->loadFile("./res/Objects/color-grid.png");
 
 	Shader::Sptr phong = std::make_shared<Shader>();
 	phong->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
 
 	Shader::Sptr phong2 = std::make_shared<Shader>();
 	phong2->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
+
+	//Shader::Sptr staminaUIPhong = std::make_shared<Shader>();
+	//staminaUIPhong->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
 
 	Shader::Sptr staminaPhong = std::make_shared<Shader>();//stamina stuff
 	staminaPhong->Load("./res/Shaders/StaminaBar.vs.glsl", "./res/Shaders/StaminaBar.fs.glsl");
@@ -124,86 +123,122 @@ void Vatista::Game::init()
 	testMat2->Set("texSample", texture2, NearestMipped);
 
 	//load textures
+
 	for (int i = 0; i < 17; i++) {
-		textures.emplace_back();
-		textures[i] = std::make_shared<Texture2D>();
+		textures = std::make_shared<Texture2D>();
 		switch (i) {
 		case 0:
-			textures[i]->loadFile("./res/Objects/Cave/Cave_Texture.png");
+			textures->loadFile("./res/Objects/Cave/Cave_Texture.png");
 			break;
 		case 1:
-			textures[i]->loadFile("./res/Objects/Background_Objects/Background_Objects_Texture.png");
+			textures->loadFile("./res/Objects/Background_Objects/Background_Objects_Texture.png");
 			break;
 		case 2:
-			textures[i]->loadFile("./res/Objects/Bunker/Bunker_Texture.png");
+			textures->loadFile("./res/Objects/Bunker/Bunker_Texture.png");
 			break;
 		case 3:
-			textures[i]->loadFile("./res/Objects/Bunker_Door/Bunker_Door_Texture.png");
+			textures->loadFile("./res/Objects/Bunker_Door/Bunker_Door_Texture.png");
 			break;
 		case 4:
-			textures[i]->loadFile("./res/Objects/Drill/Drill_Texture.png");
+			textures->loadFile("./res/Objects/Drill/Drill_Texture.png");
 			break;
 		case 5:
-			textures[i]->loadFile("./res/Objects/Catwalk_Floor/Catwalk_Floor_Texture.png");
+			textures->loadFile("./res/Objects/Catwalk_Floor/Catwalk_Floor_Texture.png");
 			break;
 		case 6:
-			textures[i]->loadFile("./res/Objects/Catwalk_InsideCorner/Catwalk_Rail_Corners_Texture.png");
+			textures->loadFile("./res/Objects/Catwalk_InsideCorner/Catwalk_Rail_Corners_Texture.png");
 			break;
 		case 7:
-			textures[i]->loadFile("./res/Objects/Catwalk_OutsideCorner/Catwalk_Rail_Corners_Texture.png");
+			textures->loadFile("./res/Objects/Catwalk_OutsideCorner/Catwalk_Rail_Corners_Texture.png");
 			break;
 		case 8:
-			textures[i]->loadFile("./res/Objects/Catwalk_Rail_Large/Catwalk_Rail_Large_Texture.png");
+			textures->loadFile("./res/Objects/Catwalk_Rail_Large/Catwalk_Rail_Large_Texture.png");
 			break;
 		case 9:
-			textures[i]->loadFile("./res/Objects/Catwalk_Rail_Short/Catwalk_Rail_Short_Texture.png");
+			textures->loadFile("./res/Objects/Catwalk_Rail_Short/Catwalk_Rail_Short_Texture.png");
 			break;
 		case 10:
-			textures[i]->loadFile("./res/Objects/CrateLarge/CrateLarge_Texture.png");
+			textures->loadFile("./res/Objects/CrateLarge/CrateLarge_Texture.png");
 			break;
 		case 11:
-			textures[i]->loadFile("./res/Objects/CrateMedium/CrateMedium_Texture.png");
+			textures->loadFile("./res/Objects/CrateMedium/CrateMedium_Texture.png");
 			break;
 		case 12:
-			textures[i]->loadFile("./res/Objects/CrateSmall/CrateSmall_Texture.png");
+			textures->loadFile("./res/Objects/CrateSmall/CrateSmall_Texture.png");
 			break;
 		case 13:
-			textures[i]->loadFile("./res/Objects/Girders/Girders_Texture.png");
+			textures->loadFile("./res/Objects/Girders/Girders_Texture.png");
 			break;
 		case 14:
-			textures[i]->loadFile("./res/Objects/MiningShip/MiningShip_Texture.png");
+			textures->loadFile("./res/Objects/MiningShip/MiningShip_Texture.png");
 			break;
 		case 15:
-			textures[i]->loadFile("./res/Objects/Barrel/Barrel_Texture.png");
+			textures->loadFile("./res/Objects/Barrel/Barrel_Texture.png");
 			break;
 		case 16:
-			textures[i]->loadFile("./res/Objects/Electrical_Stuff/Wires_&_Lights_Texture.png");
+			textures->loadFile("./res/Objects/Electrical_Stuff/Wires_&_Lights_Texture.png");
 			break;
 		}
-	}
-
-	for (int i = 0; i < 17; i++) {
-		mats.emplace_back();
-		mats[i] = std::make_shared<Material>(phong2);
-		mats[i]->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-		mats[i]->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
-		mats[i]->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-		mats[i]->Set("a_AmbientPower", 0.5f);
-		mats[i]->Set("a_LightSpecPower", 0.9f);
-		mats[i]->Set("a_LightShininess", 256.0f);
-		mats[i]->Set("a_LightAttenuation", 0.04f);
-		mats[i]->Set("texSample", textures[i], NearestMipped);
-	}
-	
-
-	for (int i = 0; i < 17; i++) {
+		mats = std::make_shared<Material>(phong2);
+		mats->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+		mats->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
+		mats->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+		mats->Set("a_AmbientPower", 0.5f);
+		mats->Set("a_LightSpecPower", 0.9f);
+		mats->Set("a_LightShininess", 256.0f);
+		mats->Set("a_LightAttenuation", 0.04f);
+		mats->Set("texSample", textures, NearestMipped);
 		stage = std::make_shared<StationaryObj>();
 		stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
 		stage->setRotY(-90.0f);
-		stage->setMesh(meshList[i+1]);
-		stage->setMat(mats[i]);
+		stage->setMesh(meshList[i]);
+		stage->setMat(mats);
 		ObjectList.push_back(stage);
 	}
+	
+
+	for (int i = 0; i < 4; i++) {
+		stamUIText = std::make_shared<Texture2D>();
+		switch (i) {
+		case 0:
+			stamUIText->loadFile("./res/Objects/UI/ui_hp0.png");
+			break;
+		case 1:
+			stamUIText->loadFile("./res/Objects/UI/ui_hp1.png");
+			break;
+		case 2:
+			stamUIText->loadFile("./res/Objects/UI/ui_hp2.png");
+			break;
+		case 3:
+			stamUIText->loadFile("./res/Objects/UI/ui_hp3.png");
+			break;
+		}
+		stamUIMats.emplace_back();
+		stamUIMats[i] = std::make_shared<Material>(phong);
+		stamUIMats[i]->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+		stamUIMats[i]->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+		stamUIMats[i]->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+		stamUIMats[i]->Set("a_AmbientPower", 0.5f);
+		stamUIMats[i]->Set("a_LightSpecPower", 0.9f);
+		stamUIMats[i]->Set("a_LightShininess", 256.0f);
+		stamUIMats[i]->Set("a_LightAttenuation", 0.04f);
+		stamUIMats[i]->Set("texSample", stamUIText, NearestMipped);
+	}
+	textureStamina = std::make_shared<Texture2D>();//connected to staminamat
+	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture.png");
+
+	stamUIText = std::make_shared<Texture2D>();
+	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
+
+	Material::Sptr profileMat = std::make_shared<Material>(phong);
+	profileMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	profileMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	profileMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	profileMat->Set("a_AmbientPower", 0.5f);
+	profileMat->Set("a_LightSpecPower", 0.9f);
+	profileMat->Set("a_LightShininess", 256.0f);
+	profileMat->Set("a_LightAttenuation", 0.04f);
+	profileMat->Set("texSample", stamUIText, NearestMipped);
 
 	//stamina
 	Material::Sptr staminaMat = std::make_shared<Material>(staminaPhong);//blank stamina texture
@@ -217,35 +252,112 @@ void Vatista::Game::init()
 	staminaMat->Set("texSample", textureStamina, NearestMipped);
 	staminaMat->Set("UVoffset", glm::vec3(0.0f));
 
-
 	//Player 1
-	C1 = std::make_shared<Character>(true, meshList[0], testMat);
+	C1 = std::make_shared<Character>(true, meshList, testMat);
+	C1->setScale(0.01f);
 	ObjectList.push_back(C1);
 
 	//Player 2 
-	C2 = std::make_shared<Character>(false, meshList[0], testMat);
+	C2 = std::make_shared<Character>(false, meshList, testMat);
+	C2->setScale(0.01f);
 	ObjectList.push_back(C2);
 
+	bladeText = std::make_shared<Texture2D>();
+	bladeText->loadFile("./res/Objects/color-grid.png");
+	Material::Sptr bladeMat = std::make_shared<Material>(phong);//blank stamina texture
+	bladeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	bladeMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	bladeMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	bladeMat->Set("a_AmbientPower", 0.5f);
+	bladeMat->Set("a_LightSpecPower", 0.9f);
+	bladeMat->Set("a_LightShininess", 256.0f);
+	bladeMat->Set("a_LightAttenuation", 0.04f);
+	bladeMat->Set("texSample", bladeText, NearestMipped);
 
-	TestStamina = std::make_shared<Stamina>();
-	TestStamina->setPos(glm::vec3(-5.f, 7.f, 0.f));
-	TestStamina->setMesh(meshList[18]);//3rd one on init.txt 
-	TestStamina->setMat(staminaMat/*staminaMat*/);
+	sword1 = std::make_shared<StationaryObj>();
+	sword1->setMesh(meshList[50]);
+	sword1->setMat(bladeMat);
+	sword1->setPos(C1->getPos());
+	sword1->setScale(0.01f);
+	ObjectList.push_back(sword1);
+	sword2 = std::make_shared<StationaryObj>();
+	sword2->setMesh(meshList[50]);
+	sword2->setMat(bladeMat);
+	sword2->setPos(C2->getPos());
+	sword2->setScale(0.01f);
+	ObjectList.push_back(sword2);
+	bladeText = std::make_shared<Texture2D>();
+	bladeText->loadFile("./res/Objects/Z3n/z3n_Sheath_Texture.png");
+	bladeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	bladeMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	bladeMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	bladeMat->Set("a_AmbientPower", 0.5f);
+	bladeMat->Set("a_LightSpecPower", 0.9f);
+	bladeMat->Set("a_LightShininess", 256.0f);
+	bladeMat->Set("a_LightAttenuation", 0.04f);
+	bladeMat->Set("texSample", bladeText, NearestMipped);
 
-	TestStamina->setRot(glm::vec3(90.f, 0.f, 0.f));
-	//TestStamina->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
-	TestStamina->setScale(glm::vec3(0.5f));
-	UIList.push_back(TestStamina);
+	sheath1 = std::make_shared<StationaryObj>();
+	sheath1->setMesh(meshList[51]);
+	sheath1->setMat(bladeMat);
+	sheath1->setPos(C1->getPos());
+	sheath1->setScale(0.01f);
+	ObjectList.push_back(sheath1);
+	sheath2 = std::make_shared<StationaryObj>();
+	sheath2->setMesh(meshList[51]);
+	sheath2->setMat(bladeMat);
+	sheath2->setPos(C2->getPos());
+	sheath2->setScale(0.01f);
+	ObjectList.push_back(sheath2);
 
-	TestStamina2 = std::make_shared<Stamina>();
-	TestStamina2->setPos(glm::vec3(5.f, 7.f, 0.f));
-	TestStamina2->setMesh(meshList[18]);//3rd one on init.txt 
-	TestStamina2->setMat(staminaMat/*staminaMat*/);
+	UI1 = std::make_shared<UIObject>();
+	UI1->setPos(glm::vec3(-4.8f, 7.f, 0.f));
+	UI1->setMesh(meshList[17]);
+	UI1->setMat(stamUIMats[C1->getLives()]);
+	UI1->setScale(2.5f);
+	UIList.push_back(UI1);
 
-	TestStamina2->setRot(glm::vec3(90.f, 0.f, 0.f));
-	//TestStamina2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
-	TestStamina2->setScale(glm::vec3(0.5f));
-	UIList.push_back(TestStamina2);
+	charProfile1 = std::make_shared<UIObject>();
+	charProfile1->setPos(glm::vec3(-4.8f, 7.f, 1.f));
+	charProfile1->setMesh(meshList[18]);
+	charProfile1->setMat(profileMat);
+	charProfile1->setScale(2.5f);
+	UIList.push_back(charProfile1);
+
+	S1 = std::make_shared<Stamina>();
+	S1->setPos(glm::vec3(-4.8f, 7.f, 1.f));
+	S1->setMesh(meshList[19]);//3rd one on init.txt 
+	S1->setMat(staminaMat/*staminaMat*/);
+	//S1->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
+	S1->setScale(2.5f);
+	UIList.push_back(S1);
+
+
+	UI2 = std::make_shared<UIObject>();
+	UI2->setPos(glm::vec3(4.8f, 7.f, 0.f));
+	UI2->setMesh(meshList[17]);
+	UI2->setMat(stamUIMats[C2->getLives()]);
+
+	UI2->setRotY(180.f);
+	UI2->setScale(2.5f);
+	UIList.push_back(UI2);
+
+	charProfile2 = std::make_shared<UIObject>();
+	charProfile2->setPos(glm::vec3(4.8f, 7.f, 1.f));
+	charProfile2->setMesh(meshList[18]);
+	charProfile2->setMat(profileMat);
+	charProfile2->setRotY(180.f);
+	charProfile2->setScale(2.5f);
+	UIList.push_back(charProfile2);
+
+	S2 = std::make_shared<Stamina>();
+	S2->setPos(glm::vec3(4.8f, 7.f, 1.f));
+	S2->setMesh(meshList[19]);//3rd one on init.txt 
+	S2->setMat(staminaMat/*staminaMat*/);
+	S2->setRotY(180.f);
+	//S2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
+	S2->setScale(2.5f);
+	UIList.push_back(S2);
 	 
 
 	glEnable(GL_CULL_FACE);
@@ -263,11 +375,19 @@ void Vatista::Game::update(float dt)
 {
 	C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
 	C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
-
-	C1->setStamina(C1->getStamina() - 0.0005f);
-
-	TestStamina->setStamina(C1->getStamina());
-	TestStamina2->setStamina(C2->getStamina());
+	sword1->setPos(C1->getPos());
+	sword1->setRotY(C1->getRot().y);
+	sheath1->setPos(C1->getPos());
+	sheath1->setRotY(C1->getRot().y);
+	sword2->setPos(C2->getPos());
+	sword2->setRotY(C2->getRot().y);
+	sheath2->setPos(C2->getPos());
+	sheath2->setRotY(C2->getRot().y);
+	UI1->setMat(stamUIMats[C1->getLives()]);
+	UI2->setMat(stamUIMats[C2->getLives()]);
+	S1->setStamina(C1->getStamina());
+	S2->setStamina(C2->getStamina());
+	//std::cout << C1->getPosX() << " " << C2->getPosX() << std::endl;
 	float dist = fabs(C1->getPosX() - C2->getPosX());
 	//C1->setStamina(C1->getStamina() + 10.0f);
 	//C2->setStamina(C2->getStamina() + 10.0f);
@@ -280,7 +400,7 @@ void Vatista::Game::update(float dt)
 
 	audioEngine->Update();
 
-	//TestStamina.setScale(glm::vec3(0.5f)); 
+	//S1.setScale(glm::vec3(0.5f)); 
 }
 
 void Vatista::Game::render(float dt)
@@ -288,9 +408,11 @@ void Vatista::Game::render(float dt)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDepthMask(GL_TRUE);
 	glDepthFunc(GL_LESS);
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 	draw(dt);
 }

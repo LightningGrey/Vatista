@@ -21,6 +21,7 @@
 #include "Objects/GameObject.h"
 #include "Objects/Characters/Character.h"
 #include "Objects/UI/Stamina.h"
+#include "Objects/UI/UIObject.h"
 #include "Objects/Stationary/StationaryObj.h"
 #include "Objects/UI/Menu.h"
 
@@ -54,10 +55,11 @@ namespace Vatista {
 		Texture2D::Sptr textureStamina;//place holder texture will add more complex later
 		Texture2D::Sptr texture;
 		Texture2D::Sptr texture2;
-		Texture2D::Sptr texture3;
-		Texture2D::Sptr texture4;
-		std::vector<Texture::Sptr> textures;
-		std::vector<Material::Sptr> mats;
+		Texture2D::Sptr bladeText;
+		Texture2D::Sptr stamUIText;
+		std::vector<Material::Sptr> stamUIMats;
+		Texture::Sptr textures;
+		Material::Sptr mats;
 		Camera::Sptr mainCamera;
 		Camera::Sptr orthoCamera;
 
@@ -66,12 +68,20 @@ namespace Vatista {
 		Character::Sptr C1;
 		Character::Sptr C2;
 		StationaryObj::Sptr stage;
-		Stamina::Sptr TestStamina;
-		Stamina::Sptr TestStamina2;
-		//GameObject::Sptr TestMap;
+		StationaryObj::Sptr sword1;
+		StationaryObj::Sptr sword2;
+		StationaryObj::Sptr sheath1;
+		StationaryObj::Sptr sheath2;
+		Stamina::Sptr S1;
+		UIObject::Sptr UI1;
+		UIObject::Sptr charProfile1;
+		Stamina::Sptr S2;
+		UIObject::Sptr UI2;
+		UIObject::Sptr charProfile2;
+		float x = 100.0f;
+		float y = 100.0f;
 
-
-		//GameObject::Sptr TestStaminaBackground;
+		//GameObject::Sptr StaminaBackground;
 
 		glm::mat4 modelTransform2 = glm::mat4(0.f);
 		glm::vec3 pos1;

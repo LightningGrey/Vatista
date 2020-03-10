@@ -95,7 +95,6 @@ namespace Vatista {
 		menu->setRotY(-90.0f);
 		menu->setMesh(meshList[0]);
 		menu->setMat(planeMat);
-		menu->setScale(10.0f);
 		ObjectList.push_back(menu);
 
 		glEnable(GL_CULL_FACE);

@@ -4,30 +4,68 @@
 
 namespace Vatista {
 	keyboard Vatista::Character::kb;
-	Character::Character(bool ID, Vatista::Mesh::Sptr mesh, Vatista::Material::Sptr mat) : playerID(ID)
+	Character::Character(bool ID, std::vector<Mesh::Sptr>& meshes, Material::Sptr mat) : playerID(ID)
 	{
-		setMesh(mesh);
 		setMat(mat);
 		setCollider(0.74f, 1.78f);
 		setStamina(100.0f);
 		setAtk1Coll(glm::vec2(0.4f));
 		setAtk2Coll(glm::vec2(0.4f));
 		setLives(3);
+		setScale(0.01f);
 		walls = 9.0f;
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 8; i++)
 			animations.emplace_back();
 		if (playerID) {
-			setPos(-1.0f, 0.0f, 9.0f);
+			setPos(-8.0f, 0.0f, 9.0f);
 			setRotY(90.0f);
 			setAtk1Pos(glm::vec3(getPosX() + getCollX() + getAtk1CollX(), getPosY(), 9.0f));
 			setAtk2Pos(glm::vec3(getPosX() + getCollX() + getAtk2CollX(), getPosY(), 9.0f));
 		}
 		else {
-			setPos(1.0f, 0.0f, 9.0f);
+			setPos(8.0f, 0.0f, 9.0f);
 			setRotY(-90.f);
 			setAtk1Pos(glm::vec3(getPosX() - getCollX() - getAtk1CollX(), getPosY(), 9.0f));
 			setAtk2Pos(glm::vec3(getPosX() - getCollX() - getAtk2CollX(), getPosY(), 9.0f));
 		}
+		animations[0].second.push_back(meshes[20]);
+		animations[0].first.push_back(1.0f);
+		for (int i = 21; i < 28; i++) {
+			animations[1].second.push_back(meshes[i]); // Run   =  1.0s
+			animations[1].first.push_back(0.1429f);
+		}
+		for (int i = 28; i < 33; i++) {
+			animations[2].second.push_back(meshes[i]); // Walk  =  .82s
+			animations[2].first.push_back(0.164f);
+		}
+		for (int i = 33; i < 35; i++) {
+			animations[3].second.push_back(meshes[i]); // FDash =  0.5s
+			animations[3].first.push_back(0.25f);
+		}
+		for (int i = 35; i < 37; i++) {
+			animations[4].second.push_back(meshes[i]); // BDash =  0.5s
+			animations[4].first.push_back(0.25f);
+		}
+		for (int i = 37; i < 42; i++)
+			animations[5].second.push_back(meshes[i]); // LAtk  =  .41s
+		animations[5].first.push_back(0.0833f);
+		animations[5].first.push_back(0.1667f);
+		animations[5].first.push_back(0.05f);
+		animations[5].first.push_back(0.05f);
+		animations[5].first.push_back(0.0667f);
+		for (int i = 42; i < 48; i++)
+			animations[6].second.push_back(meshes[i]); // HAtk  =  .58s
+		animations[6].first.push_back(0.0833f);
+		animations[6].first.push_back(0.0833f);
+		animations[6].first.push_back(0.1667f);
+		animations[6].first.push_back(0.0667f);
+		animations[6].first.push_back(0.1f);
+		animations[6].first.push_back(0.0833f);
+		for (int i = 48; i < 50; i++) {
+			animations[7].second.push_back(meshes[i]); // Block =  0.2s
+			animations[7].first.push_back(0.1f);
+		}
+		setMesh(animations[0].second[0]);
 	}
 
 	Character::~Character()
@@ -46,44 +84,53 @@ namespace Vatista {
 			if (glfwGetTime() - kb.tapTimer1 > 0.2f)
 				kb.doubleTap1 = false;
 
-			if (kb.a && !kb.dash1 && glfwGetTime() - kb.atkTimer1 > 0.8f) {
+			if (kb.a && !kb.dash1 && !isAttacking && !isDashing) {
 				isWalking = true;
 				if (getRot().y == 90.0f) {
 					movement.x -= speed * 0.001f;
-					if (!isDashing)
-						isBlocking = true;
+					isBlocking = true;
+					setStateTracker(2);
 				}
 				else if (getRot().y == -90.0f) {
 					movement.x -= speed * 0.0025f;
 					isBlocking = false;
+					setStateTracker(1);
 				}
 			}
-			if (kb.d && !kb.dash1 && glfwGetTime() - kb.atkTimer1 > 0.8f) {
+			if (kb.d && !kb.dash1 && !isAttacking && !isDashing) {
 				isWalking = true;
 				if (getRot().y == 90.0f) {
 					movement.x += speed * 0.0025f;
 					isBlocking = false;
+					setStateTracker(1);
 				}
 				else if (getRot().y == -90.0f) {
 					movement.x += speed * 0.001f;
-					if (!isDashing)
-						isBlocking = true;
+					isBlocking = true;
+					setStateTracker(2);
 				}
 			}
 
 			if (glfwGetTime() - kb.atkTimer1 > 0.8f)
 				isAttacking = false;
-			if (kb.f && !isDashing && glfwGetTime() - kb.atkTimer1 > 0.8f && !isAttacking) {
+
+			// Light Attack
+			if (kb.f && !getHitStun() && !isDashing  && !isAttacking && getStamina() >= 5.f) {
 				isAttacking = true;
 				isBlocking = false;
+				setStateTracker(5);
 				atk = true;
+				setStamina(getStamina() - 5.f);
 				kb.atkTimer1 = glfwGetTime();
 				movement.x = 0;
 			}
-			else if (kb.g && !isDashing && glfwGetTime() - kb.atkTimer1 > 0.8f && !isAttacking) {
+			// Heavy Attack
+			else if (kb.g && !getHitStun() && !isDashing && !isAttacking && getStamina() >= 15.f) {
 				isAttacking = true;
 				isBlocking = false;
+				setStateTracker(6);
 				atk = false;
+				setStamina(getStamina() - 15.f);
 				kb.atkTimer1 = glfwGetTime();
 				movement.x = 0;
 			}
@@ -91,11 +138,15 @@ namespace Vatista {
 				if (!p2->hitStun && !p2->isDashing) {
 					if (atk) {
 						if (collisionCheck(getAtk1Pos(), getAtk1Coll(), p2->getPos(), p2->getCollider())) {
-							if (!p2->isBlocking) {
-								p2->setLives(getLives() - 1);
+							if (!p2->isBlocking || (p2->isBlocking && p2->getStamina() < 10.f)) {
+								p2->setLives(p2->getLives() - 1);
 								p2->setHitStun(true);
 								p2->setHSTimer(glfwGetTime());
 								std::cout << "p2 dies" << std::endl;
+								setPosX(-8.0f);
+								p2->setPosX(8.0f);
+								setStamina(100.0f);
+								p2->setStamina(100.0f);
 								ae->SetEventParameter("LightAttack", "Missed", 0.0f);
 								ae->SetEventParameter("LightAttack", "Blocked", 0.0f);
 								ae->PlayEvent("LightAttack");
@@ -104,6 +155,7 @@ namespace Vatista {
 								std::cout << "p2 blocked" << std::endl;
 								p2->setHitStun(true);
 								p2->setHSTimer(glfwGetTime());
+								p2->setStamina(p2->getStamina() - 10.f);
 								ae->SetEventParameter("LightAttack", "Missed", 0.0f);
 								ae->SetEventParameter("LightAttack", "Blocked", 1.0f);
 								ae->PlayEvent("LightAttack");
@@ -117,11 +169,15 @@ namespace Vatista {
 					}
 					else {
 						if (collisionCheck(getAtk2Pos(), getAtk2Coll(), p2->getPos(), p2->getCollider())) {
-							if (!p2->isBlocking) {
-								p2->setLives(getLives() - 1);
+							if (!p2->isBlocking || (p2->isBlocking && p2->getStamina() < 10.f)) {
+								p2->setLives(p2->getLives() - 1);
 								p2->setHitStun(true);
 								p2->setHSTimer(glfwGetTime());
 								std::cout << "p2 dies" << std::endl;
+								setPosX(-8.0f);
+								p2->setPosX(8.0f);
+								setStamina(100.0f);
+								p2->setStamina(100.0f);
 								ae->SetEventParameter("HeavyAttack", "Missed", 0.0f);
 								ae->SetEventParameter("HeavyAttack", "Blocked", 0.0f);
 								ae->PlayEvent("HeavyAttack");
@@ -130,6 +186,7 @@ namespace Vatista {
 								std::cout << "p2 blocked" << std::endl;
 								p2->setHitStun(true);
 								p2->setHSTimer(glfwGetTime());
+								p2->setStamina(p2->getStamina() - 10.f);
 								ae->SetEventParameter("HeavyAttack", "Missed", 0.0f);
 								ae->SetEventParameter("HeavyAttack", "Blocked", 1.0f);
 								ae->PlayEvent("HeavyAttack");
@@ -145,27 +202,38 @@ namespace Vatista {
 			}
 
 			if (!isDashing) {
-				if (kb.dash1 && kb.tap1 == GLFW_KEY_A) {
-					lerpEnd = getPos() - glm::vec3(5.0f, 0.0f, 0.0f);
+				if (kb.dash1 && kb.tap1 == GLFW_KEY_A && getStamina() >= 20.f) {
+					lerpEnd = getPos() - glm::vec3(3.0f, 0.0f, 0.0f);
 					isDashing = true;
+					if (getRot().y == 90.0f)
+						setStateTracker(4); // back dash
+					else if (getRot().y==-90.0f)
+						setStateTracker(3); // forward dash
+					setStamina(getStamina() - 20.f);
 					ae->PlayEvent("Dash");
-
 				}
-				if (kb.dash1 && kb.tap1 == GLFW_KEY_D) {
-					lerpEnd = getPos() + glm::vec3(5.0f, 0.0f, 0.0f);
+				if (kb.dash1 && kb.tap1 == GLFW_KEY_D && getStamina() >= 20.f) {
+					lerpEnd = getPos() + glm::vec3(3.0f, 0.0f, 0.0f);
 					isDashing = true;
+					if (getRot().y == 90.0f)
+						setStateTracker(3); // forward dash
+					else if (getRot().y == -90.0f)
+						setStateTracker(4); // back dash
+					setStamina(getStamina() - 20.f);
 					ae->PlayEvent("Dash");
 				}
 				lerper = getPosX();
 				startTime = glfwGetTime();
 				journeyLength = glm::distance(getPos(), lerpEnd);
 				kb.dash1 = false;
+				if (collisionCheck(getPos() + movement, getCollider(), p2->getPos(), p2->getCollider()))
+					movement.x = 0.f;
 				if (movement.x == 0.f) {
 					isBlocking = false;
 					isWalking = false;
+					if (!isDashing && !isAttacking)
+						setStateTracker(0);
 				}
-				if (collisionCheck(getPos() + movement, getCollider(), p2->getPos(), p2->getCollider()))
-					movement.x = 0.f;
 				setPos(getPos() + movement);
 			}
 			else {
@@ -175,40 +243,25 @@ namespace Vatista {
 				float lerpendFloored = std::floor(lerpEnd.x * 1000.f);
 				if (lerperFloored < lerpendFloored + 10.f && lerperFloored > lerpendFloored - 10.f) {
 					isDashing = false;
-					std::cout << "done" << std::endl;
+					//std::cout << "done" << std::endl;
+					if (collisionCheck(getPos(), getCollider(), p2->getPos(), p2->getCollider())) {
+						float midPoint = (getPosX() + p2->getPosX()) / 2.0f;
+						if (getPosX() > p2->getPosX()) {
+							setPosX(midPoint + (getCollX()/2.0f));
+							p2->setPosX(midPoint - (p2->getCollX()/2.0f));
+						}
+						else {
+							setPosX(midPoint - (getCollX()/2.0f));
+							p2->setPosX(midPoint + (p2->getCollX()/2.0f));
+						}
+					}
 				}
 				else {
 					float distCovered = (glfwGetTime() - startTime) * 0.45f;
 					float fractionOfJourney = distCovered / journeyLength;
 					lerper = (1.0f - fractionOfJourney) * lerper + (fractionOfJourney * lerpEnd.x);
-					std::cout << lerperFloored << " " << lerpendFloored << std::endl;
-				}
-				setPosX(lerper);
-				if (collisionCheck(lerpEnd, getCollider(), p2->getPos(), p2->getCollider())) {
-					if (lerpEnd.x > getPosX() && lerpEnd.x > p2->getPosX()) {
-						//std::cout << "rightA" << std::endl;
-						lerpEnd.x = p2->getPosX() + (p2->getCollX() * 1.02f);
-						journeyLength = glm::distance(getPos(), lerpEnd);
-					}
-					else if (lerpEnd.x < getPosX() && lerpEnd.x < p2->getPosX()) {
-						//std::cout << "leftA" << std::endl;
-						lerpEnd.x = p2->getPosX() - (p2->getCollX() * 1.02f);
-						journeyLength = glm::distance(getPos(), lerpEnd);
-					}
-					if (collisionCheck(getPos(), getCollider(), p2->getPos(), p2->getCollider())) {
-						if (lerpEnd.x > getPosX()) {
-							if (getPosX() < p2->getPosX()) {
-								//std::cout << "leftB" << std::endl;
-								setPosX(p2->getPosX() - (p2->getCollX()));
-							}
-						}
-						else if (lerpEnd.x < getPosX()) {
-							if (getPosX() > p2->getPosX()) {
-								//std::cout << "rightB" << std::endl;
-								setPosX(p2->getPosX() + (p2->getCollX()));
-							}
-						}
-					}
+					setPosX(lerper);
+					//std::cout << lerperFloored << " " << lerpendFloored << std::endl;
 				}
 			}
 		}
@@ -216,64 +269,78 @@ namespace Vatista {
 			if (glfwGetTime() - kb.tapTimer2 > 0.2f)
 				kb.doubleTap2 = false;
 
-			if (kb.left && !kb.dash2 && glfwGetTime() - kb.atkTimer2 > 0.8f) {
+			if (kb.left && !kb.dash2 && !isAttacking && !isDashing) {
 				isWalking = true;
 				if (getRot().y == 90.0f) {
 					movement.x -= speed * 0.001f;
-					if (!isDashing)
-						isBlocking = true;
+					isBlocking = true;
+					setStateTracker(2);
 				}
 				else if (getRot().y == -90.0f) {
 					movement.x -= speed * 0.0025f;
 					isBlocking = false;
+					setStateTracker(1);
 				}
 			}
-			if (kb.right && glfwGetTime() - kb.atkTimer2 > 0.8f) {
+			if (kb.right && !kb.dash2 && !isAttacking && !isDashing) {
 				isWalking = true;
 				if (getRot().y == 90.0f) {
 					movement.x += speed * 0.0025f;
 					isBlocking = false;
+					setStateTracker(1);
 				}
 				else if (getRot().y == -90.0f) {
 					movement.x += speed * 0.001f;
-					if (!isDashing)
-						isBlocking = true;
+					isBlocking = true;
+					setStateTracker(2);
 				}
 			}
 
 			if (glfwGetTime() - kb.atkTimer2 > 0.8f)
 				isAttacking = false;
-			if (kb.rctrl && !isDashing && glfwGetTime() - kb.atkTimer2 > 0.8f && !isAttacking) {
+
+			// Light Attack
+			if (kb.rctrl && !getHitStun() && !isDashing && !isAttacking && getStamina() >= 5.f) {
 				isAttacking = true;
 				isBlocking = false;
+				setStateTracker(5);
 				atk = true;
+				setStamina(getStamina() - 5.f);
 				kb.atkTimer2 = glfwGetTime();
 				movement.x = 0;
 			}
-			else if (kb.ralt && !isDashing && glfwGetTime() - kb.atkTimer2 > 0.8f && !isAttacking) {
+			// Heavy Attack
+			else if (kb.ralt && !getHitStun() && !isDashing && !isAttacking && getStamina() >= 15.f) {
 				isAttacking = true;
 				isBlocking = false;
+				setStateTracker(6);
 				atk = false;
+				setStamina(getStamina() - 15.f);
 				kb.atkTimer2 = glfwGetTime();
 				movement.x = 0;
 			}
-			if (atk) {
-				if (isAttacking && glfwGetTime() - kb.atkTimer2 > 0.2f && glfwGetTime() - kb.atkTimer2 < 0.6f)
-					if (!p2->hitStun && !p2->isDashing) {
+			if (isAttacking && glfwGetTime() - kb.atkTimer2 > 0.2f && glfwGetTime() - kb.atkTimer2 < 0.6f) {
+				if (!p2->hitStun && !p2->isDashing) {
+					if (atk) {
 						if (collisionCheck(getAtk1Pos(), getAtk1Coll(), p2->getPos(), p2->getCollider())) {
-							if (!p2->isBlocking) {
-								p2->lives -= 1;
-								p2->hitStun = true;
-								p2->hitstunTimer = glfwGetTime();
+							if (!p2->isBlocking || (p2->isBlocking && p2->getStamina() < 10.f)) {
+								p2->setLives(p2->getLives() - 1);
+								p2->setHitStun(true);
+								p2->setHSTimer(glfwGetTime());
 								std::cout << "p1 dies" << std::endl;
+								setPosX(8.0f);
+								p2->setPosX(-8.0f);
+								setStamina(100.0f);
+								p2->setStamina(100.0f);
 								ae->SetEventParameter("LightAttack", "Missed", 0.0f);
 								ae->SetEventParameter("LightAttack", "Blocked", 0.0f);
 								ae->PlayEvent("LightAttack");
 							}
 							else {
 								std::cout << "p1 blocked" << std::endl;
-								p2->hitStun = true;
-								p2->hitstunTimer = glfwGetTime();
+								p2->setHitStun(true);
+								p2->setHSTimer(glfwGetTime());
+								p2->setStamina(p2->getStamina() - 10.f);
 								ae->SetEventParameter("LightAttack", "Missed", 0.0f);
 								ae->SetEventParameter("LightAttack", "Blocked", 1.0f);
 								ae->PlayEvent("LightAttack");
@@ -285,25 +352,26 @@ namespace Vatista {
 							ae->PlayEvent("LightAttack");
 						}
 					}
-
-			}
-			else {
-				if (isAttacking && glfwGetTime() - kb.atkTimer2 > 0.2f && glfwGetTime() - kb.atkTimer2 < 0.6f)
-					if (!p2->hitStun && !p2->isDashing) {
+					else {
 						if (collisionCheck(getAtk2Pos(), getAtk2Coll(), p2->getPos(), p2->getCollider())) {
-							if (!p2->isBlocking) {
-								p2->lives -= 1;
-								p2->hitStun = true;
-								p2->hitstunTimer = glfwGetTime();
+							if (!p2->isBlocking || (p2->isBlocking && p2->getStamina() < 10.f)) {
+								p2->setLives(p2->getLives() - 1);
+								p2->setHitStun(true);
+								p2->setHSTimer(glfwGetTime());
 								std::cout << "p1 dies" << std::endl;
+								setPosX(8.0f);
+								p2->setPosX(-8.0f);
+								setStamina(100.0f);
+								p2->setStamina(100.0f);
 								ae->SetEventParameter("HeavyAttack", "Missed", 0.0f);
 								ae->SetEventParameter("HeavyAttack", "Blocked", 0.0f);
 								ae->PlayEvent("HeavyAttack");
 							}
 							else {
 								std::cout << "p1 blocked" << std::endl;
-								p2->hitStun = true;
-								p2->hitstunTimer = glfwGetTime();
+								p2->setHitStun(true);
+								p2->setHSTimer(glfwGetTime());
+								p2->setStamina(p2->getStamina() - 10.f);
 								ae->SetEventParameter("HeavyAttack", "Missed", 0.0f);
 								ae->SetEventParameter("HeavyAttack", "Blocked", 1.0f);
 								ae->PlayEvent("HeavyAttack");
@@ -315,29 +383,42 @@ namespace Vatista {
 							ae->PlayEvent("HeavyAttack");
 						}
 					}
+				}
 			}
 
 			if (!isDashing) {
-				if (kb.dash2 && kb.tap2 == GLFW_KEY_LEFT) {
-					lerpEnd = getPos() - glm::vec3(5.0f, 0.0f, 0.0f);
+				if (kb.dash2 && kb.tap2 == GLFW_KEY_LEFT && getStamina() >= 20.f) {
+					lerpEnd = getPos() - glm::vec3(3.0f, 0.0f, 0.0f);
 					isDashing = true;
+					if (getRot().y == 90.0f)
+						setStateTracker(4); // back dash
+					else if (getRot().y == -90.0f)
+						setStateTracker(3); // forward dash
+					setStamina(getStamina() - 20.f);
 					ae->PlayEvent("Dash");
 				}
-				if (kb.dash2 && kb.tap2 == GLFW_KEY_RIGHT) {
-					lerpEnd = getPos() + glm::vec3(5.0f, 0.0f, 0.0f);
+				if (kb.dash2 && kb.tap2 == GLFW_KEY_RIGHT && getStamina() >= 20.f) {
+					lerpEnd = getPos() + glm::vec3(3.0f, 0.0f, 0.0f);
 					isDashing = true;
+					if (getRot().y == 90.0f)
+						setStateTracker(3); // forward dash
+					else if (getRot().y == -90.0f)
+						setStateTracker(4); // back dash
+					setStamina(getStamina() - 20.f);
 					ae->PlayEvent("Dash");
 				}
 				lerper = getPosX();
 				startTime = glfwGetTime();
 				journeyLength = glm::distance(getPos(), lerpEnd);
 				kb.dash2 = false;
+				if (collisionCheck(getPos() + movement, getCollider(), p2->getPos(), p2->getCollider()))
+					movement.x = 0.f;
 				if (movement.x == 0.f) {
 					isBlocking = false;
 					isWalking = false;
+					if (!isDashing && !isAttacking)
+						setStateTracker(0);
 				}
-				if (collisionCheck(getPos() + movement, getCollider(), p2->getPos(), p2->getCollider()))
-					movement.x = 0.f;
 				setPos(getPos() + movement);
 			}
 			else {
@@ -347,47 +428,38 @@ namespace Vatista {
 				float lerpendFloored = std::floor(lerpEnd.x * 1000.f);
 				if (lerperFloored < lerpendFloored + 10.f && lerperFloored > lerpendFloored - 10.f) {
 					isDashing = false;
-					std::cout << "done" << std::endl;
+					//std::cout << "done" << std::endl;
+					if (collisionCheck(getPos(), getCollider(), p2->getPos(), p2->getCollider())) {
+						float midPoint = (getPosX() + p2->getPosX()) / 2.0f;
+						if (getPosX() > p2->getPosX()) {
+							setPosX(midPoint + (getCollX() / 2.0f));
+							p2->setPosX(midPoint - (p2->getCollX() / 2.0f));
+						}
+						else {
+							setPosX(midPoint - (getCollX() / 2.0f));
+							p2->setPosX(midPoint + (p2->getCollX() / 2.0f));
+						}
+					}
 				}
 				else {
 					float distCovered = (glfwGetTime() - startTime) * 0.45f;
 					float fractionOfJourney = distCovered / journeyLength;
 					lerper = (1.0f - fractionOfJourney) * lerper + (fractionOfJourney * lerpEnd.x);
-					std::cout << lerperFloored << " " << lerpendFloored << std::endl;
-				}
-				setPosX(lerper);
-				if (collisionCheck(lerpEnd, getCollider(), p2->getPos(), p2->getCollider())) {
-					if (lerpEnd.x > getPosX() && lerpEnd.x > p2->getPosX()) {
-						//std::cout << "rightA" << std::endl;
-						lerpEnd.x = p2->getPosX() + (p2->getCollX() * 1.02f);
-						journeyLength = glm::distance(getPos(), lerpEnd);
-					}
-					else if (lerpEnd.x < getPosX() && lerpEnd.x < p2->getPosX()) {
-						//std::cout << "leftA" << std::endl;
-						lerpEnd.x = p2->getPosX() - (p2->getCollX() * 1.02f);
-						journeyLength = glm::distance(getPos(), lerpEnd);
-					}
-					if (collisionCheck(getPos(), getCollider(), p2->getPos(), p2->getCollider())) {
-						if (lerpEnd.x > getPosX()) {
-							if (getPosX() < p2->getPosX()) {
-								//std::cout << "leftB" << std::endl;
-								setPosX(p2->getPosX() - (p2->getCollX()));
-							}
-						}
-						else if (lerpEnd.x < getPosX()) {
-							if (getPosX() > p2->getPosX()) {
-								//std::cout << "rightB" << std::endl;
-								setPosX(p2->getPosX() + (p2->getCollX()));
-							}
-						}
-					}
+					//std::cout << lerperFloored << " " << lerpendFloored << std::endl;
+					setPosX(lerper);
 				}
 			}
 		}
-		if (getPosX() > walls)
+		if (getPosX() > walls) {
 			setPosX(walls);
-		if (getPosX() < walls * -1)
+			if (collisionCheck(getPos(), getCollider(), p2->getPos(), p2->getCollider()))
+				p2->setPosX(getPosX() - getCollX() - p2->getCollX());
+		}
+		if (getPosX() < walls * -1){
 			setPosX(walls * -1);
+			if (collisionCheck(getPos(), getCollider(), p2->getPos(), p2->getCollider()))
+				p2->setPosX(getPosX() + getCollX() + p2->getCollX());
+		}
 		if (getPosX() > p2->getPosX()) {
 			setRotY(-90.0f);
 			setAtk1PosX(getPosX() - getCollX() - getAtk1CollX());
@@ -398,7 +470,42 @@ namespace Vatista {
 			setAtk1PosX(getPosX() + getCollX() + getAtk1CollX());
 			setAtk2PosX(getPosX() + getCollX() + getAtk2CollX());
 		}
+		if (getStamina() < 100.0f) {
+			if (isBlocking)
+				setStamina(getStamina() + 0.05f);
+			else
+				setStamina(getStamina() + 0.1f);
+		}
+		if (getStamina() > 100.0f)
+			setStamina(100.0f);
+		if (getHitStun())
+			setStateTracker(7);
+		updateAnim();
+	}
 
+	void Character::setStateTracker(int i)
+	{
+		if (getStateTracker() != i) {
+			stateTracker = i;
+			animIndex = 0;
+			setMesh(animations[i].second[0]);
+			endTime = animations[i].first[0];
+		}
+	}
+
+	void Character::updateAnim()
+	{
+		if (currentTime >= endTime) {
+			if (getStateTracker()!=0) {
+				if (getAnimIndex() + 1 < animations[getStateTracker()].second.size())
+					animIndex++;
+				else
+					animIndex = 0;
+				setMesh(animations[getStateTracker()].second[getAnimIndex()]);
+				currentTime = 0;
+				endTime = animations[getStateTracker()].first[getAnimIndex()];
+			}
+		}
 	}
 
 	void Character::Draw(const Vatista::Camera::Sptr& camera)
@@ -530,4 +637,5 @@ namespace Vatista {
 		}
 
 	}
+	
 }

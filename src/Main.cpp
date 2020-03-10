@@ -17,13 +17,13 @@ int main() {
 	VATISTA_LOG_INFO("Vatista.dll running.");
 	
 
-	//Vatista::Game* game = new Vatista::Game();
-	//game->run();
-	//delete game;
+	Vatista::Game* game = new Vatista::Game();
+	game->run();
+	delete game;
 	
-	Vatista::TitleLayer* title = new Vatista::TitleLayer();
-	title->run();
-	delete title;
+	//Vatista::TitleLayer* title = new Vatista::TitleLayer();
+	//title->run();
+	//delete title;
 
 	Vatista::Log::Uninitialize();
 	return 0;
