@@ -19,6 +19,12 @@ namespace Vatista {
 
 		GLFWwindow* getWindow();
 
+		int getWidth();
+		void setWidth(int newWidth);
+
+		int getHeight();
+		void setHeight(int newHeight);
+
 	private:
 		GLFWwindow* window;
 		int width, height;

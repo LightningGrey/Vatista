@@ -34,9 +34,12 @@ constexpr bool IsColorAttachment(RenderTargetAttachment attachment) {
 
 ENUM(RenderTargetType, uint32_t,
 	Color32 = GL_RGBA8,
-	Color24 = GL_RGB8,
-	Color16 = GL_RG8,
-	Color8 = GL_R8,
+	ColorRgb10 = GL_RGB10,
+	ColorRgb8 = GL_RGB8,
+	ColorRG8 = GL_RG8,
+	ColorRed8 = GL_R8,
+	ColorRgb16F = GL_RGB16F, // NEW
+	ColorRgba16F = GL_RGBA16F,
 	DepthStencil = GL_DEPTH24_STENCIL8,
 	Depth16 = GL_DEPTH_COMPONENT16,
 	Depth24 = GL_DEPTH_COMPONENT24,
@@ -116,6 +119,7 @@ namespace Vatista {
 
 		
 		Sptr Clone() const;
+		void Blit(const glm::ivec4& srcBounds, const glm::ivec4& dstBounds, BufferFlags flags, MagFilter filterMode);
 		//clones the buffer but no idea if it runs or clones properly yet
 
 

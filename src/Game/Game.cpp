@@ -81,11 +81,11 @@ void Vatista::Game::init()
 	texture2 = std::make_shared<Texture2D>();
 	texture2->loadFile("./res/Objects/color-grid.png");
 
-	Shader::Sptr phong = std::make_shared<Shader>();
-	phong->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
+	Shader::Sptr character = std::make_shared<Shader>();
+	character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
 
-	Shader::Sptr phong2 = std::make_shared<Shader>();
-	phong2->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
+	Shader::Sptr stageProp = std::make_shared<Shader>();
+	stageProp->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
 
 	//Shader::Sptr staminaUIPhong = std::make_shared<Shader>();
 	//staminaUIPhong->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
@@ -102,25 +102,25 @@ void Vatista::Game::init()
 	NearestMipped->magFilter = MagFilter::Nearest;
 	NearestMipped->createSampler();
 
-	Material::Sptr testMat = std::make_shared<Material>(phong);
-	testMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	testMat->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
-	testMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	testMat->Set("a_AmbientPower", 0.5f);
-	testMat->Set("a_LightSpecPower", 0.9f);
-	testMat->Set("a_LightShininess", 256.0f);
-	testMat->Set("a_LightAttenuation", 0.04f);
-	testMat->Set("texSample", texture, NearestMipped);
+	Material::Sptr characterMat = std::make_shared<Material>(character);
+	characterMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	characterMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
+	characterMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	characterMat->Set("a_AmbientPower", 0.5f);
+	characterMat->Set("a_LightSpecPower", 0.9f);
+	characterMat->Set("a_LightShininess", 256.0f);
+	characterMat->Set("a_LightAttenuation", 0.04f);
+	characterMat->Set("texSample", texture, NearestMipped);
 
-	Material::Sptr testMat2 = std::make_shared<Material>(phong2);
-	testMat2->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	testMat2->Set("a_LightColor", { 0.0f, 1.0f, 0 });
-	testMat2->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	testMat2->Set("a_AmbientPower", 0.5f);
-	testMat2->Set("a_LightSpecPower", 0.9f);
-	testMat2->Set("a_LightShininess", 256.0f);
-	testMat2->Set("a_LightAttenuation", 0.04f);
-	testMat2->Set("texSample", texture2, NearestMipped);
+	Material::Sptr stageMat = std::make_shared<Material>(stageProp);
+	stageMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	stageMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
+	stageMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	stageMat->Set("a_AmbientPower", 0.5f);
+	stageMat->Set("a_LightSpecPower", 0.9f);
+	stageMat->Set("a_LightShininess", 256.0f);
+	stageMat->Set("a_LightAttenuation", 0.04f);
+	stageMat->Set("texSample", texture2, NearestMipped);
 
 
 	// ======= STAGE ONE =======
@@ -212,7 +212,7 @@ void Vatista::Game::init()
 			textures->loadFile("./res/Objects/Terminal/CargoShip_Texture.png");
 			break;
 		}
-		mats = std::make_shared<Material>(phong2);
+		mats = std::make_shared<Material>(stageProp);
 		mats->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 		mats->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
 		mats->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
@@ -247,9 +247,9 @@ void Vatista::Game::init()
 			break;
 		}
 		stamUIMats.emplace_back();
-		stamUIMats[i] = std::make_shared<Material>(phong);
+		stamUIMats[i] = std::make_shared<Material>(character);
 		stamUIMats[i]->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-		stamUIMats[i]->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+		stamUIMats[i]->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
 		stamUIMats[i]->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 		stamUIMats[i]->Set("a_AmbientPower", 0.5f);
 		stamUIMats[i]->Set("a_LightSpecPower", 0.9f);
@@ -263,9 +263,9 @@ void Vatista::Game::init()
 	stamUIText = std::make_shared<Texture2D>();
 	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
 
-	Material::Sptr profileMat = std::make_shared<Material>(phong);
+	Material::Sptr profileMat = std::make_shared<Material>(character);
 	profileMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	profileMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	profileMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
 	profileMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	profileMat->Set("a_AmbientPower", 0.5f);
 	profileMat->Set("a_LightSpecPower", 0.9f);
@@ -276,7 +276,7 @@ void Vatista::Game::init()
 	//stamina
 	Material::Sptr staminaMat = std::make_shared<Material>(staminaPhong);//blank stamina texture
 	staminaMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	staminaMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	staminaMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
 	staminaMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	staminaMat->Set("a_AmbientPower", 0.5f);
 	staminaMat->Set("a_LightSpecPower", 0.9f);
@@ -286,20 +286,20 @@ void Vatista::Game::init()
 	staminaMat->Set("UVoffset", glm::vec3(0.0f));
 
 	//Player 1
-	C1 = std::make_shared<Character>(true, meshList, testMat);
+	C1 = std::make_shared<Character>(true, meshList, characterMat);
 	C1->setScale(0.01f);
 	ObjectList.push_back(C1);
 
 	//Player 2 
-	C2 = std::make_shared<Character>(false, meshList, testMat);
+	C2 = std::make_shared<Character>(false, meshList, characterMat);
 	C2->setScale(0.01f);
 	ObjectList.push_back(C2);
 
 	bladeText = std::make_shared<Texture2D>();
 	bladeText->loadFile("./res/Objects/color-grid.png");
-	Material::Sptr bladeMat = std::make_shared<Material>(phong);//blank stamina texture
+	Material::Sptr bladeMat = std::make_shared<Material>(character);//blank stamina texture
 	bladeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	bladeMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	bladeMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
 	bladeMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	bladeMat->Set("a_AmbientPower", 0.5f);
 	bladeMat->Set("a_LightSpecPower", 0.9f);
@@ -322,7 +322,7 @@ void Vatista::Game::init()
 	bladeText = std::make_shared<Texture2D>();
 	bladeText->loadFile("./res/Objects/Z3n/z3n_Sheath_Texture.png");
 	bladeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	bladeMat->Set("a_LightColor", { 0.0f, 1.0f, 0 });
+	bladeMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
 	bladeMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	bladeMat->Set("a_AmbientPower", 0.5f);
 	bladeMat->Set("a_LightSpecPower", 0.9f);
@@ -391,6 +391,8 @@ void Vatista::Game::init()
 	//S2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
 	S2->setScale(2.5f);
 	UIList.push_back(S2);
+
+	//bufferCreation();
 	 
 
 	glEnable(GL_CULL_FACE);
@@ -550,5 +552,80 @@ bool Vatista::Game::load(std::string filename)
 	}
 
 	return true;
+}
+
+void Vatista::Game::bufferCreation()
+{
+	RenderBufferDesc mainColour = RenderBufferDesc();
+	mainColour.ShaderReadable = true;
+	mainColour.Attachment = RenderTargetAttachment::Color0;
+	mainColour.Format = RenderTargetType::ColorRgb8; //RGB8
+
+	//RenderBufferDesc normal = RenderBufferDesc();
+	//normal.ShaderReadable = true;
+	//normal.Attachment = RenderTargetAttachment::Color1;
+	//normal.Format = RenderTargetType::ColorRgb10; //RGB10
+
+	RenderBufferDesc depth = RenderBufferDesc();
+	depth.ShaderReadable = true;
+	depth.Attachment = RenderTargetAttachment::Depth;
+	depth.Format = RenderTargetType::Depth32; //32 bit depth
+	
+	// Our main frame buffer needs a color output, and a depth output
+	FrameBuffer::Sptr buffer = std::make_shared<FrameBuffer>(gameWindow->getWidth(), gameWindow->getHeight(), 4);
+	buffer->AddAttachment(mainColour);
+	//buffer->AddAttachment(normal);
+	buffer->AddAttachment(depth);
+	buffer->Validate();
+}
+
+void Vatista::Game::postProcess()
+{
+	//// We grab the application singleton to get the size of the screen
+	//florp::app::Application* app = florp::app::Application::Get();
+	//FrameBuffer::Sptr mainBuffer = CurrentRegistry().ctx<FrameBuffer::Sptr>();
+	//glDisable(GL_DEPTH_TEST);
+	//
+	//// The last output will start as the output from the rendering
+	//FrameBuffer::Sptr lastPass = mainBuffer;
+	//
+	//for (const PostPass& pass : myPasses) {
+	//	// We'll bind our post-processing output as the current render target and clear it
+	//	pass.Output->Bind(RenderTargetBinding::Draw);
+	//	glClear(GL_COLOR_BUFFER_BIT);
+	//
+	//	// Set the viewport to be the entire size of the passes output
+	//	glViewport(0, 0, pass.Output->GetWidth(), pass.Output->GetHeight());
+	//
+	//	// Use the post processing shader to draw the fullscreen quad
+	//	pass.Shader->Use();
+	//	lastPass->GetAttachment(RenderTargetAttachment::Color0)->Bind(0);
+	//	pass.Shader->SetUniform("xImage", 0);
+	//	pass.Shader->SetUniform("xScreenRes", glm::ivec2(app->GetWindow()->GetWidth(), app->GetWindow()->GetHeight()));
+	//	pass.Shader->SetUniform("time", florp::app::Timing::GameTime);
+	//
+	//	////luts
+	//	//pass.Shader->SetUniform("cool", 3);
+	//	//pass.Shader->SetUniform("warm", 4);
+	//	//pass.Shader->SetUniform("custom", 5);
+	//
+	//	myFullscreenQuad->Draw();
+	//
+	//	// Unbind the output pass so that we can read from it
+	//	pass.Output->UnBind();
+	//	// Update the last pass output to be this passes output
+	//	lastPass = pass.Output;
+	//
+	//	// Bind the last buffer we wrote to as our source for read operations
+	//	lastPass->Bind(RenderTargetBinding::Read);
+	//
+	//	// Copies the image from lastPass into the default back buffer
+	//	FrameBuffer::Blit({ 0, 0, lastPass->GetWidth(), lastPass->GetHeight() },
+	//		{ 0, 0, app->GetWindow()->GetWidth(), app->GetWindow()->GetHeight() },
+	//		BufferFlags::All, florp::graphics::MagFilter::Nearest);
+	//
+	//	// Unbind the last buffer from read operations, so we can write to it again later
+	//	lastPass->UnBind();
+	//}
 }
 

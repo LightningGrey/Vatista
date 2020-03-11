@@ -84,4 +84,20 @@ namespace Vatista {
 	{
 		return window;
 	}
+	int Window::getWidth()
+	{
+		return width;
+	}
+	void Window::setWidth(int newWidth)
+	{
+		width = newWidth;
+	}
+	int Window::getHeight()
+	{
+		return height;
+	}
+	void Window::setHeight(int newHeight)
+	{
+		height = newHeight;
+	}
 }

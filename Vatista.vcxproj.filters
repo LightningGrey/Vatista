@@ -21,6 +21,7 @@
     <ClCompile Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.cpp" />
     <ClCompile Include="src\Game\TitleLayer.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\UI\Menu.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\UI\UIObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />

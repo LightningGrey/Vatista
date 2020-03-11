@@ -1,12 +1,11 @@
 #pragma once
-//#define STB_IMAGE_IMPLEMENTATION
 #include <glad/glad.h>
 #include "Utilities/TextureEnums.h"
 #include "Utilities/Utils.h"
 #include "TextureSampler.h"
 
 namespace Vatista {
-	class Texture {
+	class Texture {  
 	public:
 		SharedPtr(Texture);
 
