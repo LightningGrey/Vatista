@@ -25,6 +25,8 @@
 #include "Objects/Stationary/StationaryObj.h"
 #include "Objects/UI/Menu.h"
 
+#include "Post-Processing/FrameBuffer.h"
+
 namespace Vatista {
 	class Game {
 	public:
@@ -38,6 +40,8 @@ namespace Vatista {
 		void render(float dt);
 		void draw(float dt);
 		bool load(std::string filename);
+		void bufferCreation();
+		void postProcess();
 	private:
 		Window* gameWindow;
 		glm::vec4 clearColour;

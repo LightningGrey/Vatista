@@ -16,7 +16,9 @@ uniform vec3  a_LightColor;
 uniform float a_LightShininess;
 uniform float a_LightAttenuation;
 uniform sampler2D texSample;
-//uniform sampler2D texSample2;
+//uniform sampler2D normalMap;
+
+uniform int rimOn;
 
 void main() {
     // Re-normalize our input, so that it is always length 1
@@ -49,11 +51,17 @@ void main() {
     // Finally, we can calculate the actual specular factor
     vec3 specOut = specPower * a_LightColor;
 
+    ////rim lighting
+	float rimLight = 1 - dot(norm, viewDir);
+	rimLight = clamp(rimLight - 0.4, 0.0, 1.0);
+    rimLight = rimLight * rimOn;
+
     // Calculate our diffuse factor, this is essentially the angle between
     // the surface and the light
     float diffuseFactor = max(dot(norm, toLight), 0);
     // Calculate our diffuse output
     vec3  diffuseOut = diffuseFactor * a_LightColor;
+    diffuseOut += rimLight * vec3(0.0f,0.0f,1.0f);
 	
     // Our ambient is simply the color times the ambient power
     vec3 ambientOut = a_AmbientColor * a_AmbientPower;

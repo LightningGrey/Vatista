@@ -1,8 +1,8 @@
 #include "StationaryObj.h"
-#include <GLM\include\GLM\gtc\matrix_transform.hpp>
+#include <GLM\include\GLM\gtc\matrix_transform.hpp> 
 
-namespace Vatista {
-	StationaryObj::StationaryObj() : GameObject()
+namespace Vatista { 
+	StationaryObj::StationaryObj() : GameObject() 
 	{
 	}
 
