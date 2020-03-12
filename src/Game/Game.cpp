@@ -272,6 +272,7 @@ void Vatista::Game::init()
 	profileMat->Set("a_LightShininess", 256.0f);
 	profileMat->Set("a_LightAttenuation", 0.04f);
 	profileMat->Set("texSample", stamUIText, NearestMipped);
+	profileMat->Set("rimOn", 1);
 
 	//stamina
 	Material::Sptr staminaMat = std::make_shared<Material>(staminaPhong);//blank stamina texture
@@ -581,6 +582,17 @@ void Vatista::Game::bufferCreation()
 
 void Vatista::Game::postProcess()
 {
+	// Bind the last buffer we wrote to as our source for read operations
+	buffer->bind(RenderTargetBinding::Read);
+
+	// Copies the image from lastPass into the default back buffer
+	FrameBuffer::Blit({ 0, 0, buffer->GetWidth(), buffer->GetHeight() },
+		{ 0, 0, gameWindow->getWidth(), gameWindow->getHeight() },
+		BufferFlags::All, MagFilter::Nearest);
+
+	// Unbind the last buffer from read operations, so we can write to it again later
+	buffer->unBind();
+
 	//// We grab the application singleton to get the size of the screen
 	//florp::app::Application* app = florp::app::Application::Get();
 	//FrameBuffer::Sptr mainBuffer = CurrentRegistry().ctx<FrameBuffer::Sptr>();
@@ -616,16 +628,16 @@ void Vatista::Game::postProcess()
 	//	// Update the last pass output to be this passes output
 	//	lastPass = pass.Output;
 	//
-	//	// Bind the last buffer we wrote to as our source for read operations
-	//	lastPass->Bind(RenderTargetBinding::Read);
-	//
-	//	// Copies the image from lastPass into the default back buffer
-	//	FrameBuffer::Blit({ 0, 0, lastPass->GetWidth(), lastPass->GetHeight() },
-	//		{ 0, 0, app->GetWindow()->GetWidth(), app->GetWindow()->GetHeight() },
-	//		BufferFlags::All, florp::graphics::MagFilter::Nearest);
-	//
-	//	// Unbind the last buffer from read operations, so we can write to it again later
-	//	lastPass->UnBind();
+		//// Bind the last buffer we wrote to as our source for read operations
+		//lastPass->bind(RenderTargetBinding::Read);
+		//
+		//// Copies the image from lastPass into the default back buffer
+		//FrameBuffer::Blit({ 0, 0, lastPass->GetWidth(), lastPass->GetHeight() },
+		//	{ 0, 0, app->GetWindow()->GetWidth(), app->GetWindow()->GetHeight() },
+		//	BufferFlags::All, florp::graphics::MagFilter::Nearest);
+		//
+		//// Unbind the last buffer from read operations, so we can write to it again later
+		//lastPass->unBind();
 	//}
 }
 

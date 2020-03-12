@@ -9,6 +9,8 @@ namespace Vatista {
 		for (auto& kvp : myVec3s)
 			myShader->SetUniform(kvp.first.c_str(), kvp.second);
 		for (auto& kvp : myFloats)
+			myShader->SetUniform(kvp.first.c_str(), kvp.second); 
+		for (auto& kvp : myInts)
 			myShader->SetUniform(kvp.first.c_str(), kvp.second);
 
 		int slot = 0;   

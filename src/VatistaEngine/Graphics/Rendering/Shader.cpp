@@ -142,6 +142,13 @@ namespace Vatista {
 		}
 	}
 
+	void Shader::SetUniform(const char* name, const glm::ivec2& value) {
+		GLint loc = glGetUniformLocation(myShaderHandle, name);
+		if (loc != -1) {
+			glProgramUniform2iv(myShaderHandle, loc, 1, &value[0]);
+		}
+	}
+
 	void Shader::SetUniform(const char* name, const float& value) {
 		GLint loc = glGetUniformLocation(myShaderHandle, name);
 		if (loc != -1) {

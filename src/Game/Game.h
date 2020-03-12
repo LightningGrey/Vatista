@@ -86,12 +86,11 @@ namespace Vatista {
 		float y = 100.0f;
 
 		//GameObject::Sptr StaminaBackground;
-
-		glm::mat4 modelTransform2 = glm::mat4(0.f);
-		glm::vec3 pos1;
-		glm::vec3 pos2;
-		glm::vec3 pos3;
 		
+
+		FrameBuffer::Sptr buffer;
+
+
 		//ObjLoader loader;
 		//
 		//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);

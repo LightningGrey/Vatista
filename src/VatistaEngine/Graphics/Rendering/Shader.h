@@ -22,7 +22,8 @@ namespace Vatista {
 		void SetUniform(const char* name, const glm::mat4& value);
 		void SetUniform(const char* name, const glm::vec4& value);
 		void SetUniform(const char* name, const glm::mat3& value);
-		void SetUniform(const char* name, const glm::vec3& value);
+		void SetUniform(const char* name, const glm::vec3& value); 
+		void SetUniform(const char* name, const glm::ivec2& value);
 		void SetUniform(const char* name, const float& value);
 		void SetUniform(const char* name, const int& value);
 
