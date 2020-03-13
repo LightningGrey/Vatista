@@ -111,7 +111,7 @@ void Vatista::Game::init()
 	characterMat->Set("a_LightShininess", 256.0f);
 	characterMat->Set("a_LightAttenuation", 0.04f);
 	characterMat->Set("texSample", texture, NearestMipped);
-
+	
 	Material::Sptr stageMat = std::make_shared<Material>(stageProp);
 	stageMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	stageMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
@@ -213,14 +213,15 @@ void Vatista::Game::init()
 			break;
 		}
 		mats = std::make_shared<Material>(stageProp);
-		mats->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+		mats->Set("a_LightPos", { 0.0f, 3.0f, 8.0f });
 		mats->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
 		mats->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 		mats->Set("a_AmbientPower", 0.5f);
 		mats->Set("a_LightSpecPower", 0.9f);
 		mats->Set("a_LightShininess", 256.0f);
-		mats->Set("a_LightAttenuation", 0.04f);
+		mats->Set("a_LightAttenuation", 0.25f);
 		mats->Set("texSample", textures, NearestMipped);
+		mats->Set("rimOn", 1);
 		stage = std::make_shared<StationaryObj>();
 		stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
 		stage->setRotY(-90.0f);
@@ -272,7 +273,6 @@ void Vatista::Game::init()
 	profileMat->Set("a_LightShininess", 256.0f);
 	profileMat->Set("a_LightAttenuation", 0.04f);
 	profileMat->Set("texSample", stamUIText, NearestMipped);
-	profileMat->Set("rimOn", 1);
 
 	//stamina
 	Material::Sptr staminaMat = std::make_shared<Material>(staminaPhong);//blank stamina texture
