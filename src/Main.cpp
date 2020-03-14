@@ -8,7 +8,6 @@ Authors: DHC Studios
 
 #include "Utilities/Log.h"
 #include "Game/Game.h"
-#include "Game/TitleLayer.h"
 
 int main() {
 
@@ -20,10 +19,7 @@ int main() {
 	Vatista::Game* game = new Vatista::Game();
 	game->run();
 	delete game;
-	
-	//Vatista::TitleLayer* title = new Vatista::TitleLayer();
-	//title->run();
-	//delete title;
+
 
 	Vatista::Log::Uninitialize();
 	return 0;
