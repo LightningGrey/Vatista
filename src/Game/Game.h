@@ -51,32 +51,17 @@ namespace Vatista {
 		//A shared pointer to our mesh
 		Mesh::Sptr myMesh;
 		std::vector<Mesh::Sptr> meshList;
-
-		// A shared pointer to our shader
-		Shader::Sptr myShader;
-		Shader::Sptr myNormalShader;
-		//std::vector<Vatista::Shader::Sptr> shaderList;
-		Texture2D::Sptr textureStamina;//place holder texture will add more complex later
-		Texture2D::Sptr texture;
-		Texture2D::Sptr texture2;
-		Texture2D::Sptr bladeText;
-		Texture2D::Sptr stamUIText;
-		std::vector<Material::Sptr> stamUIMats;
-		Texture::Sptr textures;
-		Material::Sptr mats;
+		Texture::Sptr texture;
 		Camera::Sptr mainCamera;
-		Camera::Sptr orthoCamera;
+
 
 		std::vector<GameObject::Sptr> ObjectList;
+		
 		StationaryObj::Sptr carSphere;
-	
+		StationaryObj::Sptr wallCube;
+		float timer = 0.0f;
+		float velocity = 0.0f;
 
-
-		//ObjLoader loader;
-		//
-		//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
-		float time = 0.0f;
 
 		//file on what to load
 		std::fstream loadingFile;

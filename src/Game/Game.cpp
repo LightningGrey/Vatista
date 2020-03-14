@@ -51,7 +51,7 @@ void Vatista::Game::run()
 void Vatista::Game::init()
 {
 	//window and camera 
-	gameWindow = new Vatista::Window(1600, 900, "Alpha Strike");
+	gameWindow = new Vatista::Window(1600, 900, "Game Sound Assignment #2");
 
 	mainCamera = std::make_shared<Vatista::Camera>();
 	mainCamera->SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
@@ -65,14 +65,15 @@ void Vatista::Game::init()
 	audioEngine->LoadEvent("CarCrash", "{8fa30912-1d55-4c75-addb-edb8a014c40c}");
 
 	audioEngine->PlayEvent("CarCrash");
+	audioEngine->SetEventPosition("CarCrash", glm::vec3(-10.0f, 0.0f, 0.0f));
 	
 	load("./res/Objects/init.txt");
 
 	texture = std::make_shared<Texture2D>();
 	texture->loadFile("./res/Objects/color-grid.png");
 
-	Shader::Sptr car = std::make_shared<Shader>();
-	car->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
+	Shader::Sptr obj = std::make_shared<Shader>();
+	obj->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
 
 	//sample testing
 	TextureSampler::Sptr NearestMipped = std::make_shared<TextureSampler>();
@@ -80,7 +81,7 @@ void Vatista::Game::init()
 	NearestMipped->magFilter = MagFilter::Nearest;
 	NearestMipped->createSampler();
 
-	Material::Sptr carMat = std::make_shared<Material>(car);
+	Material::Sptr carMat = std::make_shared<Material>(obj);
 	carMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	carMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
 	carMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
@@ -96,6 +97,13 @@ void Vatista::Game::init()
 	carSphere->setPos(glm::vec3(-10.0f, 0.0f, 0.0f));
 	ObjectList.push_back(carSphere);
 
+	wallCube = std::make_shared<StationaryObj>();
+	wallCube->setMesh(meshList[1]);
+	wallCube->setMat(carMat);
+	wallCube->setPos(glm::vec3(10.0f, 0.0f, 0.0f));
+	wallCube->setScaleY(10.0f);
+	ObjectList.push_back(wallCube);
+
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_MULTISAMPLE);
 }
@@ -109,10 +117,27 @@ void Vatista::Game::close()
 
 void Vatista::Game::update(float dt)
 {
-	
+	timer += 0.0167;
+
+	if (carSphere->getPosX() < 8.0f) {
+		if (timer >= 93.0f) {
+			if (velocity > 0.0025f) {
+				velocity -= (0.0001f);
+			}
+			carSphere->setPosX(carSphere->getPosX() + velocity);
+			audioEngine->SetEventPosition("CarCrash", carSphere->getPos());
+		}
+		else if (timer >= 28.0f) {
+			if (velocity < 0.0037f) {
+				velocity += (0.0001f);
+			}
+			carSphere->setPosX(carSphere->getPosX() + velocity);
+			audioEngine->SetEventPosition("CarCrash", carSphere->getPos());
+		}
+	}
+
+
 	audioEngine->Update();
-
-
 }
 
 void Vatista::Game::render(float dt)
