@@ -68,27 +68,8 @@ namespace Vatista {
 		Camera::Sptr orthoCamera;
 
 		std::vector<GameObject::Sptr> ObjectList;
-		std::vector<GameObject::Sptr> UIList;
-		Character::Sptr C1;
-		Character::Sptr C2;
-		StationaryObj::Sptr stage;
-		StationaryObj::Sptr sword1;
-		StationaryObj::Sptr sword2;
-		StationaryObj::Sptr sheath1;
-		StationaryObj::Sptr sheath2;
-		Stamina::Sptr S1;
-		UIObject::Sptr UI1;
-		UIObject::Sptr charProfile1;
-		Stamina::Sptr S2;
-		UIObject::Sptr UI2;
-		UIObject::Sptr charProfile2;
-		float x = 100.0f;
-		float y = 100.0f;
-
-		//GameObject::Sptr StaminaBackground;
-		
-
-		FrameBuffer::Sptr buffer;
+		StationaryObj::Sptr carSphere;
+	
 
 
 		//ObjLoader loader;
