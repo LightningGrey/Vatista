@@ -61,26 +61,35 @@ uniform sampler2D texSample;
 
 uniform int rimOn;
 
-void main() {
-    // Re-normalize our input, so that it is always length 1
-    //vec3 norm = normalize(inNormal);
 
-    vec3 norm = texture(texSample, inUV).rgb;
-    // transform normal vector to range [-1,1]
-    norm = normalize(norm * 2.0 - 1.0);   
+uniform DirLight dirlight;
 
 
-	vec4 surfaceColour = texture(texSample, inUV); //* texture(texSample2, inUV);
+vec3 directionLightCalc(DirLight dirlight, vec4 surfaceColour, vec3 norm, vec3 halfDir)
+{
+    vec3 lightDir = normalize(-dirlight.direction);
 
-    // Determine the direction from the position to the light
-    vec3 toLight = a_LightPos - inWorldPos;
-    // Determine the distance to the light (used for attenuation later)
-    float distToLight = length(toLight);
-    // Normalize our toLight vector
-    toLight = normalize(toLight);
+    float diffuse = max(dot(norm, lightDir), 0.0);
+    vec3 diffuseOut = diffuse * a_LightColor;
 
-    // Determine the direction between the camera and the pixel
-    vec3 viewDir = normalize(a_CameraPos - inWorldPos);
+    // Our specular power is the angle between the the normal and the half vector, raised
+    // to the power of the light's shininess
+    float specular = pow(max(dot(norm, halfDir), 0.0), a_LightShininess);
+    vec3 specOut = specular * a_LightColor;
+
+    // Our ambient is simply the color times the ambient power
+    vec3 ambientOut = a_AmbientColor * a_AmbientPower;
+
+    // Our result is our lighting multiplied by our object's color
+    vec3 result = (ambientOut * surfaceColour.rgb) + (diffuseOut * surfaceColour.rgb) 
+        + (specOut * surfaceColour.rgb);
+    return result;
+
+}
+
+
+vec3 pointLightCalc(vec4 surfaceColour, vec3 norm, vec3 toLight, vec3 viewDir, float distToLight)
+{
 
     // Calculate the halfway vector between the direction to the light and the direction to the eye
     vec3 halfDir = normalize(toLight + viewDir);
@@ -113,6 +122,36 @@ void main() {
     
     // Our result is our lighting multiplied by our object's color
     vec3 result = (ambientOut + attenuation * (diffuseOut + specOut)) * surfaceColour.rgb;
+    return result;
+}
+
+
+void main() {
+    // Re-normalize our input, so that it is always length 1
+    //vec3 norm = normalize(inNormal);
+
+    vec3 norm = texture(texSample, inUV).rgb;
+    // transform normal vector to range [-1,1]
+    norm = normalize(norm * 2.0 - 1.0);   
+
+	vec4 surfaceColour = texture(texSample, inUV); //* texture(texSample2, inUV);
+
+       // Determine the direction from the position to the light
+    vec3 toLight = a_LightPos - inWorldPos;
+    // Determine the distance to the light (used for attenuation later)
+    float distToLight = length(toLight);
+    // Normalize our toLight vector
+    toLight = normalize(toLight);
+
+    // Determine the direction between the camera and the pixel
+    vec3 viewDir = normalize(a_CameraPos - inWorldPos);
+
+     vec3 halfDir = normalize(toLight + viewDir);
+
+    //direction light
+    vec3 result = directionLightCalc(dirlight, surfaceColour, norm, halfDir);
+    
+    result += pointLightCalc(surfaceColour, norm, toLight, viewDir, distToLight);
 
     // TODO: gamma correction
 

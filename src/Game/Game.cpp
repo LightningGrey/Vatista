@@ -106,7 +106,7 @@ void Vatista::Game::init()
 	characterMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	characterMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
 	characterMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	characterMat->Set("a_AmbientPower", 0.5f);
+	characterMat->Set("a_AmbientPower", 0.7f);
 	characterMat->Set("a_LightSpecPower", 0.9f);
 	characterMat->Set("a_LightShininess", 256.0f);
 	characterMat->Set("a_LightAttenuation", 0.04f);
@@ -114,7 +114,7 @@ void Vatista::Game::init()
 	
 	Material::Sptr stageMat = std::make_shared<Material>(stageProp);
 	stageMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	stageMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
+	stageMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
 	stageMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	stageMat->Set("a_AmbientPower", 0.5f);
 	stageMat->Set("a_LightSpecPower", 0.9f);
@@ -123,72 +123,122 @@ void Vatista::Game::init()
 	stageMat->Set("texSample", texture2, NearestMipped);
 
 
-	// ======= STAGE ONE =======
+	//======= STAGE ONE =======
 
-	//for (int i = 0; i < 17; i++) {
+	for (int i = 0; i < 17; i++) {
+		textures = std::make_shared<Texture2D>();
+		switch (i) {
+		case 0:
+			textures->loadFile("./res/Objects/Cave/Cave_Texture.png");
+			break;
+		case 1:
+			textures->loadFile("./res/Objects/Background_Objects/Background_Objects_Texture.png");
+			break;
+		case 2:
+			textures->loadFile("./res/Objects/Bunker/Bunker_Texture.png");
+			break;
+		case 3:
+			textures->loadFile("./res/Objects/Bunker_Door/Bunker_Door_Texture.png");
+			break;
+		case 4:
+			textures->loadFile("./res/Objects/Drill/Drill_Texture.png");
+			break;
+		case 5:
+			textures->loadFile("./res/Objects/Catwalk_Floor/Catwalk_Floor_Texture.png");
+			break;
+		case 6:
+			textures->loadFile("./res/Objects/Catwalk_InsideCorner/Catwalk_Rail_Corners_Texture.png");
+			break;
+		case 7:
+			textures->loadFile("./res/Objects/Catwalk_OutsideCorner/Catwalk_Rail_Corners_Texture.png");
+			break;
+		case 8:
+			textures->loadFile("./res/Objects/Catwalk_Rail_Large/Catwalk_Rail_Large_Texture.png");
+			break;
+		case 9:
+			textures->loadFile("./res/Objects/Catwalk_Rail_Short/Catwalk_Rail_Short_Texture.png");
+			break;
+		case 10:
+			textures->loadFile("./res/Objects/CrateLarge/CrateLarge_Texture.png");
+			break;
+		case 11:
+			textures->loadFile("./res/Objects/CrateMedium/CrateMedium_Texture.png");
+			break;
+		case 12:
+			textures->loadFile("./res/Objects/CrateSmall/CrateSmall_Texture.png");
+			break;
+		case 13:
+			textures->loadFile("./res/Objects/Girders/Girders_Texture.png");
+			break;
+		case 14:
+			textures->loadFile("./res/Objects/MiningShip/MiningShip_Texture.png");
+			break;
+		case 15:
+			textures->loadFile("./res/Objects/Barrel/Barrel_Texture.png");
+			break;
+		case 16:
+			textures->loadFile("./res/Objects/Electrical_Stuff/Wires_&_Lights_Texture.png");
+			break;
+		}
+		mats = std::make_shared<Material>(stageProp);
+		if (i == 5) {
+			mats->Set("a_LightPos", { 4.0f, 1.0f, 0.0f });
+		}
+		else {
+			mats->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+		}
+		mats->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
+		mats->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+		if (i == 5) {
+			mats->Set("a_AmbientPower", 0.8f);
+		}
+		else {
+			mats->Set("a_AmbientPower", 0.5f);
+		}
+		mats->Set("a_LightSpecPower", 0.9f);
+		mats->Set("a_LightShininess", 256.0f);
+		if (i == 5) {
+			mats->Set("a_LightAttenuation", 0.04f);
+		}
+		else {
+			mats->Set("a_LightAttenuation", 0.04f);
+		}
+		mats->Set("texSample", textures, NearestMipped);
+		stage = std::make_shared<StationaryObj>();
+		stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
+		stage->setRotY(-90.0f);
+		stage->setMesh(meshList[i]);
+		stage->setMat(mats);
+		//if (i != 5) {
+			ObjectList.push_back(stage);
+		//}
+	}
+
+	//// ======= STAGE TWO =======
+	//
+	//for (int i = 52; i < 55; i++) {
 	//	textures = std::make_shared<Texture2D>();
 	//	switch (i) {
-	//	case 0:
-	//		textures->loadFile("./res/Objects/Cave/Cave_Texture.png");
+	//	case 52:
+	//		textures->loadFile("./res/Objects/Terminal/Background_Texture.png");
 	//		break;
-	//	case 1:
-	//		textures->loadFile("./res/Objects/Background_Objects/Background_Objects_Texture.png");
+	//	case 53:
+	//		textures->loadFile("./res/Objects/Terminal/Vatista_Terminal_Texture.png");
 	//		break;
-	//	case 2:
-	//		textures->loadFile("./res/Objects/Bunker/Bunker_Texture.png");
-	//		break;
-	//	case 3:
-	//		textures->loadFile("./res/Objects/Bunker_Door/Bunker_Door_Texture.png");
-	//		break;
-	//	case 4:
-	//		textures->loadFile("./res/Objects/Drill/Drill_Texture.png");
-	//		break;
-	//	case 5:
-	//		textures->loadFile("./res/Objects/Catwalk_Floor/Catwalk_Floor_Texture.png");
-	//		break;
-	//	case 6:
-	//		textures->loadFile("./res/Objects/Catwalk_InsideCorner/Catwalk_Rail_Corners_Texture.png");
-	//		break;
-	//	case 7:
-	//		textures->loadFile("./res/Objects/Catwalk_OutsideCorner/Catwalk_Rail_Corners_Texture.png");
-	//		break;
-	//	case 8:
-	//		textures->loadFile("./res/Objects/Catwalk_Rail_Large/Catwalk_Rail_Large_Texture.png");
-	//		break;
-	//	case 9:
-	//		textures->loadFile("./res/Objects/Catwalk_Rail_Short/Catwalk_Rail_Short_Texture.png");
-	//		break;
-	//	case 10:
-	//		textures->loadFile("./res/Objects/CrateLarge/CrateLarge_Texture.png");
-	//		break;
-	//	case 11:
-	//		textures->loadFile("./res/Objects/CrateMedium/CrateMedium_Texture.png");
-	//		break;
-	//	case 12:
-	//		textures->loadFile("./res/Objects/CrateSmall/CrateSmall_Texture.png");
-	//		break;
-	//	case 13:
-	//		textures->loadFile("./res/Objects/Girders/Girders_Texture.png");
-	//		break;
-	//	case 14:
-	//		textures->loadFile("./res/Objects/MiningShip/MiningShip_Texture.png");
-	//		break;
-	//	case 15:
-	//		textures->loadFile("./res/Objects/Barrel/Barrel_Texture.png");
-	//		break;
-	//	case 16:
-	//		textures->loadFile("./res/Objects/Electrical_Stuff/Wires_&_Lights_Texture.png");
+	//	case 54:
+	//		textures->loadFile("./res/Objects/Terminal/CargoShip_Texture.png");
 	//		break;
 	//	}
-	//	mats = std::make_shared<Material>(phong2);
-	//	mats->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	//	mats = std::make_shared<Material>(stageProp);
+	//	mats->Set("a_LightPos", { 0.0f, 3.0f, 8.0f });
 	//	mats->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
 	//	mats->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	//	mats->Set("a_AmbientPower", 0.5f);
 	//	mats->Set("a_LightSpecPower", 0.9f);
 	//	mats->Set("a_LightShininess", 256.0f);
-	//	mats->Set("a_LightAttenuation", 0.04f);
+	//	mats->Set("a_LightAttenuation", 0.25f);
 	//	mats->Set("texSample", textures, NearestMipped);
+	//	mats->Set("rimOn", 1);
 	//	stage = std::make_shared<StationaryObj>();
 	//	stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
 	//	stage->setRotY(-90.0f);
@@ -196,40 +246,8 @@ void Vatista::Game::init()
 	//	stage->setMat(mats);
 	//	ObjectList.push_back(stage);
 	//}
-
-	// ======= STAGE TWO =======
-
-	for (int i = 52; i < 55; i++) {
-		textures = std::make_shared<Texture2D>();
-		switch (i) {
-		case 52:
-			textures->loadFile("./res/Objects/Terminal/Background_Texture.png");
-			break;
-		case 53:
-			textures->loadFile("./res/Objects/Terminal/Vatista_Terminal_Texture.png");
-			break;
-		case 54:
-			textures->loadFile("./res/Objects/Terminal/CargoShip_Texture.png");
-			break;
-		}
-		mats = std::make_shared<Material>(stageProp);
-		mats->Set("a_LightPos", { 0.0f, 3.0f, 8.0f });
-		mats->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
-		mats->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-		mats->Set("a_AmbientPower", 0.5f);
-		mats->Set("a_LightSpecPower", 0.9f);
-		mats->Set("a_LightShininess", 256.0f);
-		mats->Set("a_LightAttenuation", 0.25f);
-		mats->Set("texSample", textures, NearestMipped);
-		mats->Set("rimOn", 1);
-		stage = std::make_shared<StationaryObj>();
-		stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
-		stage->setRotY(-90.0f);
-		stage->setMesh(meshList[i]);
-		stage->setMat(mats);
-		ObjectList.push_back(stage);
-	}
-
+	//
+	//
 
 	for (int i = 0; i < 4; i++) {
 		stamUIText = std::make_shared<Texture2D>();
@@ -248,7 +266,7 @@ void Vatista::Game::init()
 			break;
 		}
 		stamUIMats.emplace_back();
-		stamUIMats[i] = std::make_shared<Material>(character);
+		stamUIMats[i] = std::make_shared<Material>(stageProp);
 		stamUIMats[i]->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 		stamUIMats[i]->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
 		stamUIMats[i]->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
@@ -264,7 +282,7 @@ void Vatista::Game::init()
 	stamUIText = std::make_shared<Texture2D>();
 	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
 
-	Material::Sptr profileMat = std::make_shared<Material>(character);
+	Material::Sptr profileMat = std::make_shared<Material>(stageProp);
 	profileMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	profileMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
 	profileMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
@@ -298,7 +316,7 @@ void Vatista::Game::init()
 
 	bladeText = std::make_shared<Texture2D>();
 	bladeText->loadFile("./res/Objects/color-grid.png");
-	Material::Sptr bladeMat = std::make_shared<Material>(character);//blank stamina texture
+	Material::Sptr bladeMat = std::make_shared<Material>(stageProp);//blank stamina texture
 	bladeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	bladeMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
 	bladeMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
@@ -444,6 +462,12 @@ void Vatista::Game::update(float dt)
 	audioEngine->Update();
 
 	//S1.setScale(glm::vec3(0.5f)); 
+
+	//Shader::Sptr lighting = std::make_shared<Shader>();
+	//lighting->Bind();
+	//lighting->SetUniform("light.ambient", 0.0f);
+	//lighting->Compile();
+
 }
 
 void Vatista::Game::render(float dt)

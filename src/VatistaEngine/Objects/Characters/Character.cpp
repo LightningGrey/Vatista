@@ -518,6 +518,7 @@ namespace Vatista {
 
 		material->GetShader()->Bind();
 		material->Apply();
+		//material->GetShader()->SetUniform("dirlight.position", glm::vec3(-0.2f, -1.0f, -0.3f));
 		material->GetShader()->SetUniform("a_CameraPos", camera->GetPosition());
 
 		// Update the MVP using the item's transform
