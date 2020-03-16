@@ -51,7 +51,7 @@ void Vatista::Game::run()
 void Vatista::Game::init()
 {
 	//window and camera 
-	gameWindow = new Vatista::Window(1600, 900, "Alpha Strike");
+	gameWindow = new Vatista::Window(1600, 900, "Zeal: 2341");
 
 	mainCamera = std::make_shared<Vatista::Camera>();
 	mainCamera->SetPosition(glm::vec3(0.0f, 2.0f, 10.0f));
@@ -182,18 +182,25 @@ void Vatista::Game::init()
 		}
 		mats = std::make_shared<Material>(stageProp);
 		if (i == 5) {
-			mats->Set("a_LightPos", { 4.0f, 1.0f, 0.0f });
+			mats->Set("a_LightPos", { -4.0f, 1.0f, 5.0f });
 		}
 		else {
 			mats->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 		}
-		mats->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
+
+		if (i == 5) {
+			mats->Set("a_LightColor", { 0.5f, 0.5f, 0.5f });
+		}
+		else {
+			mats->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
+		}
+
 		mats->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 		if (i == 5) {
 			mats->Set("a_AmbientPower", 0.8f);
 		}
 		else {
-			mats->Set("a_AmbientPower", 0.5f);
+			mats->Set("a_AmbientPower", 0.25f);
 		}
 		mats->Set("a_LightSpecPower", 0.9f);
 		mats->Set("a_LightShininess", 256.0f);
