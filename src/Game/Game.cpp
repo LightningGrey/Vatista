@@ -71,6 +71,7 @@ void Vatista::Game::init()
 	audioEngine->LoadEvent("LightAttack", "{f64fa79a-565d-4493-b4bf-a73a37c31219}");
 	audioEngine->LoadEvent("HeavyAttack", "{621b2e70-27ea-4900-b397-96cb10366574}");
 	audioEngine->LoadEvent("Dash", "{53dbc862-3dec-411a-9fc4-bb15743c2b6b}");
+	audioEngine->LoadEvent("Block", "{81b5ce8f-0f80-4494-8aa7-dc898cbc38bb}");
 	audioEngine->PlayEvent("Music");
 	
 	load("./res/Objects/init.txt");

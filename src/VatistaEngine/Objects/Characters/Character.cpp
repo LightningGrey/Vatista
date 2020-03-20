@@ -4,6 +4,7 @@
 
 namespace Vatista {
 	keyboard Vatista::Character::kb;
+	bool Character::roundEnd = false;
 	Character::Character(bool ID, std::vector<Mesh::Sptr>& meshes, Material::Sptr mat) : playerID(ID)
 	{
 		setMat(mat);
@@ -17,13 +18,13 @@ namespace Vatista {
 		for (int i = 0; i < 8; i++)
 			animations.emplace_back();
 		if (playerID) {
-			setPos(-8.0f, 0.0f, 9.0f);
+			setPos(-4.0f, 0.0f, 9.0f);
 			setRotY(90.0f);
 			setAtk1Pos(glm::vec3(getPosX() + getCollX() + getAtk1CollX(), getPosY(), 9.0f));
 			setAtk2Pos(glm::vec3(getPosX() + getCollX() + getAtk2CollX(), getPosY(), 9.0f));
 		}
 		else {
-			setPos(8.0f, 0.0f, 9.0f);
+			setPos(4.0f, 0.0f, 9.0f);
 			setRotY(-90.f);
 			setAtk1Pos(glm::vec3(getPosX() - getCollX() - getAtk1CollX(), getPosY(), 9.0f));
 			setAtk2Pos(glm::vec3(getPosX() - getCollX() - getAtk2CollX(), getPosY(), 9.0f));
@@ -74,6 +75,26 @@ namespace Vatista {
 
 	void Character::update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae)
 	{
+		if (roundEnd) {
+			isWalking = false;
+			isDashing = false;
+			isAttacking = false;
+			isBlocking = false;
+			setHitStun(false);
+			float lerperFloored = std::floor(lerper * 1000.f);
+			float lerpendFloored = std::floor(lerpEnd.x * 1000.f);
+			if (lerperFloored < lerpendFloored + 10.f && lerperFloored > lerpendFloored - 10.f) {
+				roundEnd = false;
+			}
+			else {
+				float distCovered = (glfwGetTime() - startTime) * 0.45f;
+				float fractionOfJourney = distCovered / journeyLength;
+				lerper = (1.0f - fractionOfJourney) * lerper + (fractionOfJourney * lerpEnd.x);
+				setPosX(lerper);
+				return;
+			}
+		}
+
 		if (getHitStun() && glfwGetTime() - getHSTimer() > 1.0f)
 			setHitStun(false);
 		glm::vec3 movement = glm::vec3(0.0f);
@@ -123,6 +144,7 @@ namespace Vatista {
 				setStamina(getStamina() - 5.f);
 				kb.atkTimer1 = glfwGetTime();
 				movement.x = 0;
+				ae->PlayEvent("LightAttack");
 			}
 			// Heavy Attack
 			else if (kb.g && !getHitStun() && !isDashing && !isAttacking && getStamina() >= 15.f) {
@@ -133,6 +155,7 @@ namespace Vatista {
 				setStamina(getStamina() - 15.f);
 				kb.atkTimer1 = glfwGetTime();
 				movement.x = 0;
+				ae->PlayEvent("HeavyAttack");
 			}
 			if (isAttacking && glfwGetTime() - kb.atkTimer1 > 0.2f && glfwGetTime() - kb.atkTimer1 < 0.6f) {
 				if (!p2->hitStun && !p2->isDashing) {
@@ -140,62 +163,62 @@ namespace Vatista {
 						if (collisionCheck(getAtk1Pos(), getAtk1Coll(), p2->getPos(), p2->getCollider())) {
 							if (!p2->isBlocking || (p2->isBlocking && p2->getStamina() < 10.f)) {
 								p2->setLives(p2->getLives() - 1);
-								p2->setHitStun(true);
-								p2->setHSTimer(glfwGetTime());
+								isAttacking = false;
+								kb.atkTimer1 = 0.0f;
 								std::cout << "p2 dies" << std::endl;
-								setPosX(-8.0f);
-								p2->setPosX(8.0f);
+								lerpEnd = glm::vec3(-4.0f, 0.0f, 9.0f);
+								p2->lerpEnd = glm::vec3(4.0f, 0.0f, 9.0f);
+								lerper = getPosX();
+								startTime = glfwGetTime();
+								journeyLength = glm::distance(getPos(), lerpEnd);
+								p2->lerper = p2->getPosX();
+								p2->startTime = glfwGetTime();
+								p2->journeyLength = glm::distance(p2->getPos(), p2->lerpEnd);
 								setStamina(100.0f);
 								p2->setStamina(100.0f);
-								ae->SetEventParameter("LightAttack", "Missed", 0.0f);
-								ae->SetEventParameter("LightAttack", "Blocked", 0.0f);
-								ae->PlayEvent("LightAttack");
+								setStateTracker(4);
+								p2->setStateTracker(4);
+								roundEnd = true;
+								return;
 							}
 							else {
 								std::cout << "p2 blocked" << std::endl;
 								p2->setHitStun(true);
 								p2->setHSTimer(glfwGetTime());
 								p2->setStamina(p2->getStamina() - 10.f);
-								ae->SetEventParameter("LightAttack", "Missed", 0.0f);
-								ae->SetEventParameter("LightAttack", "Blocked", 1.0f);
-								ae->PlayEvent("LightAttack");
+								ae->PlayEvent("Block");
 							}
-						}
-						else {
-							ae->SetEventParameter("LightAttack", "Missed", 1.0f);
-							ae->SetEventParameter("LightAttack", "Blocked", 0.0f);
-							ae->PlayEvent("LightAttack");
 						}
 					}
 					else {
 						if (collisionCheck(getAtk2Pos(), getAtk2Coll(), p2->getPos(), p2->getCollider())) {
 							if (!p2->isBlocking || (p2->isBlocking && p2->getStamina() < 10.f)) {
 								p2->setLives(p2->getLives() - 1);
-								p2->setHitStun(true);
-								p2->setHSTimer(glfwGetTime());
+								isAttacking = false;
+								kb.atkTimer1 = 0.0f;
 								std::cout << "p2 dies" << std::endl;
-								setPosX(-8.0f);
-								p2->setPosX(8.0f);
+								lerpEnd = glm::vec3(-4.0f, 0.0f, 9.0f);
+								p2->lerpEnd = glm::vec3(4.0f, 0.0f, 9.0f);
+								lerper = getPosX();
+								startTime = glfwGetTime();
+								journeyLength = glm::distance(getPos(), lerpEnd);
+								p2->lerper = p2->getPosX();
+								p2->startTime = glfwGetTime();
+								p2->journeyLength = glm::distance(p2->getPos(), p2->lerpEnd);
 								setStamina(100.0f);
 								p2->setStamina(100.0f);
-								ae->SetEventParameter("HeavyAttack", "Missed", 0.0f);
-								ae->SetEventParameter("HeavyAttack", "Blocked", 0.0f);
-								ae->PlayEvent("HeavyAttack");
+								setStateTracker(4);
+								p2->setStateTracker(4);
+								roundEnd = true;
+								return;
 							}
 							else {
 								std::cout << "p2 blocked" << std::endl;
 								p2->setHitStun(true);
 								p2->setHSTimer(glfwGetTime());
 								p2->setStamina(p2->getStamina() - 10.f);
-								ae->SetEventParameter("HeavyAttack", "Missed", 0.0f);
-								ae->SetEventParameter("HeavyAttack", "Blocked", 1.0f);
-								ae->PlayEvent("HeavyAttack");
+								ae->PlayEvent("Block");
 							}
-						}
-						else {
-							ae->SetEventParameter("HeavyAttack", "Missed", 1.0f);
-							ae->SetEventParameter("HeavyAttack", "Blocked", 0.0f);
-							ae->PlayEvent("HeavyAttack");
 						}
 					}
 				}
@@ -308,6 +331,7 @@ namespace Vatista {
 				setStamina(getStamina() - 5.f);
 				kb.atkTimer2 = glfwGetTime();
 				movement.x = 0;
+				ae->PlayEvent("LightAttack");
 			}
 			// Heavy Attack
 			else if (kb.ralt && !getHitStun() && !isDashing && !isAttacking && getStamina() >= 15.f) {
@@ -318,6 +342,7 @@ namespace Vatista {
 				setStamina(getStamina() - 15.f);
 				kb.atkTimer2 = glfwGetTime();
 				movement.x = 0;
+				ae->PlayEvent("HeavyAttack");
 			}
 			if (isAttacking && glfwGetTime() - kb.atkTimer2 > 0.2f && glfwGetTime() - kb.atkTimer2 < 0.6f) {
 				if (!p2->hitStun && !p2->isDashing) {
@@ -325,62 +350,62 @@ namespace Vatista {
 						if (collisionCheck(getAtk1Pos(), getAtk1Coll(), p2->getPos(), p2->getCollider())) {
 							if (!p2->isBlocking || (p2->isBlocking && p2->getStamina() < 10.f)) {
 								p2->setLives(p2->getLives() - 1);
-								p2->setHitStun(true);
-								p2->setHSTimer(glfwGetTime());
+								isAttacking = false;
+								kb.atkTimer2 = 0.0f;
 								std::cout << "p1 dies" << std::endl;
-								setPosX(8.0f);
-								p2->setPosX(-8.0f);
+								lerpEnd = glm::vec3(4.0f, 0.0f, 9.0f);
+								p2->lerpEnd = glm::vec3(-4.0f, 0.0f, 9.0f);
+								lerper = getPosX();
+								startTime = glfwGetTime();
+								journeyLength = glm::distance(getPos(), lerpEnd);
+								p2->lerper = p2->getPosX();
+								p2->startTime = glfwGetTime();
+								p2->journeyLength = glm::distance(p2->getPos(), p2->lerpEnd);
 								setStamina(100.0f);
 								p2->setStamina(100.0f);
-								ae->SetEventParameter("LightAttack", "Missed", 0.0f);
-								ae->SetEventParameter("LightAttack", "Blocked", 0.0f);
-								ae->PlayEvent("LightAttack");
+								setStateTracker(4);
+								p2->setStateTracker(4);
+								roundEnd = true;
+								return;
 							}
 							else {
 								std::cout << "p1 blocked" << std::endl;
 								p2->setHitStun(true);
 								p2->setHSTimer(glfwGetTime());
 								p2->setStamina(p2->getStamina() - 10.f);
-								ae->SetEventParameter("LightAttack", "Missed", 0.0f);
-								ae->SetEventParameter("LightAttack", "Blocked", 1.0f);
-								ae->PlayEvent("LightAttack");
+								ae->PlayEvent("Block");
 							}
-						}
-						else {
-							ae->SetEventParameter("LightAttack", "Missed", 1.0f);
-							ae->SetEventParameter("LightAttack", "Blocked", 0.0f);
-							ae->PlayEvent("LightAttack");
 						}
 					}
 					else {
 						if (collisionCheck(getAtk2Pos(), getAtk2Coll(), p2->getPos(), p2->getCollider())) {
 							if (!p2->isBlocking || (p2->isBlocking && p2->getStamina() < 10.f)) {
 								p2->setLives(p2->getLives() - 1);
-								p2->setHitStun(true);
-								p2->setHSTimer(glfwGetTime());
+								isAttacking = false;
+								kb.atkTimer2 = 0.0f;
 								std::cout << "p1 dies" << std::endl;
-								setPosX(8.0f);
-								p2->setPosX(-8.0f);
+								lerpEnd = glm::vec3(4.0f, 0.0f, 9.0f);
+								p2->lerpEnd = glm::vec3(-4.0f, 0.0f, 9.0f);
+								lerper = getPosX();
+								startTime = glfwGetTime();
+								journeyLength = glm::distance(getPos(), lerpEnd);
+								p2->lerper = p2->getPosX();
+								p2->startTime = glfwGetTime();
+								p2->journeyLength = glm::distance(p2->getPos(), p2->lerpEnd);
 								setStamina(100.0f);
 								p2->setStamina(100.0f);
-								ae->SetEventParameter("HeavyAttack", "Missed", 0.0f);
-								ae->SetEventParameter("HeavyAttack", "Blocked", 0.0f);
-								ae->PlayEvent("HeavyAttack");
+								setStateTracker(4);
+								p2->setStateTracker(4);
+								roundEnd = true;
+								return;
 							}
 							else {
 								std::cout << "p1 blocked" << std::endl;
 								p2->setHitStun(true);
 								p2->setHSTimer(glfwGetTime());
 								p2->setStamina(p2->getStamina() - 10.f);
-								ae->SetEventParameter("HeavyAttack", "Missed", 0.0f);
-								ae->SetEventParameter("HeavyAttack", "Blocked", 1.0f);
-								ae->PlayEvent("HeavyAttack");
+								ae->PlayEvent("Block");
 							}
-						}
-						else {
-							ae->SetEventParameter("HeavyAttack", "Missed", 1.0f);
-							ae->SetEventParameter("HeavyAttack", "Blocked", 0.0f);
-							ae->PlayEvent("HeavyAttack");
 						}
 					}
 				}

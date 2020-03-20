@@ -88,7 +88,7 @@ namespace Vatista {
 
 		float startTime;
 		float journeyLength;
-
+		static bool roundEnd;
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static keyboard kb;
 
