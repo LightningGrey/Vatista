@@ -15,10 +15,6 @@ struct DirLight {
 
 struct PointLight {
     vec3 position;
-    
-    float constant;
-    float linear;
-    float quadratic;
 	
     vec3 ambient;
     vec3 diffuse;
@@ -28,16 +24,18 @@ struct PointLight {
 struct SpotLight {
     vec3 position;
     vec3 direction;
-    float cutOff;
-    float outerCutOff;
-  
-    float constant;
-    float linear;
-    float quadratic;
-  
+    float cutoff;
+    float outerCutoff;
+
+    float ambientPower;
+    float shininess;      
+    float attenuation;
+    vec3 colour;
+
     vec3 ambient;
     vec3 diffuse;
-    vec3 specular;       
+    vec3 specular;
+ 
 };
 
 
@@ -63,6 +61,7 @@ uniform int rimOn;
 
 
 uniform DirLight dirlight;
+uniform SpotLight spotlight;
 
 
 vec3 directionLightCalc(DirLight dirlight, vec4 surfaceColour, vec3 norm, vec3 halfDir)
@@ -70,15 +69,15 @@ vec3 directionLightCalc(DirLight dirlight, vec4 surfaceColour, vec3 norm, vec3 h
     vec3 lightDir = normalize(-dirlight.direction);
 
     float diffuse = max(dot(norm, lightDir), 0.0);
-    vec3 diffuseOut = diffuse * a_LightColor;
+    vec3 diffuseOut = dirlight.diffuse * diffuse * a_LightColor;
 
     // Our specular power is the angle between the the normal and the half vector, raised
     // to the power of the light's shininess
     float specular = pow(max(dot(norm, halfDir), 0.0), a_LightShininess);
-    vec3 specOut = specular * a_LightColor;
+    vec3 specOut = dirlight.specular * specular * a_LightColor;
 
     // Our ambient is simply the color times the ambient power
-    vec3 ambientOut = a_AmbientColor * a_AmbientPower;
+    vec3 ambientOut = dirlight.ambient * a_AmbientColor * a_AmbientPower;
 
     // Our result is our lighting multiplied by our object's color
     vec3 result = (ambientOut * surfaceColour.rgb) + (diffuseOut * surfaceColour.rgb) 
@@ -88,11 +87,8 @@ vec3 directionLightCalc(DirLight dirlight, vec4 surfaceColour, vec3 norm, vec3 h
 }
 
 
-vec3 pointLightCalc(vec4 surfaceColour, vec3 norm, vec3 toLight, vec3 viewDir, float distToLight)
+vec3 pointLightCalc(vec4 surfaceColour, vec3 norm, vec3 toLight, vec3 viewDir, vec3 halfDir, float distToLight)
 {
-
-    // Calculate the halfway vector between the direction to the light and the direction to the eye
-    vec3 halfDir = normalize(toLight + viewDir);
 
     // Our specular power is the angle between the the normal and the half vector, raised
     // to the power of the light's shininess
@@ -125,6 +121,57 @@ vec3 pointLightCalc(vec4 surfaceColour, vec3 norm, vec3 toLight, vec3 viewDir, f
     return result;
 }
 
+vec3 spotLightCalc(SpotLight spotlight, vec4 surfaceColour, vec3 norm, vec3 toLight, float distToLight)
+{
+
+    // Determine the direction between the camera and the pixel
+    vec3 viewDir = normalize(spotlight.position - inWorldPos);
+
+    vec3 halfDir = normalize(toLight + viewDir);
+
+    // Our specular power is the angle between the the normal and the half vector, raised
+    // to the power of the light's shininess
+    float specPower = pow(max(dot(norm, halfDir), 0.0), spotlight.shininess);
+
+    // Finally, we can calculate the actual specular factor
+    vec3 specOut = specPower * spotlight.specular * spotlight.colour;
+
+    ////rim lighting
+	//float rimLight = 1 - dot(norm, viewDir);
+	//rimLight = clamp(rimLight - 0.4, 0.0, 1.0);
+    //rimLight = rimLight * rimOn;
+
+    // Calculate our diffuse factor, this is essentially the angle between
+    // the surface and the light
+    float diffuseFactor = max(dot(norm, toLight), 0);
+    // Calculate our diffuse output
+    vec3  diffuseOut = diffuseFactor * spotlight.diffuse * spotlight.colour;
+    //diffuseOut += rimLight * vec3(1.0,0.0,0.0);
+
+    // Our ambient is simply the color times the ambient power
+    vec3 ambientOut = spotlight.ambientPower * spotlight.ambient * spotlight.colour;
+
+    // We will use a modified form of distance squared attenuation, which will avoid divide
+    // by zero errors and allow us to control the light's attenuation via a uniform
+    float attenuation = 1.0 / (1.0 + spotlight.attenuation * pow(distToLight, 2));
+
+    //spotlight intensity
+    float theta = dot(viewDir, normalize(-spotlight.direction));
+    float epsilon = spotlight.cutoff - spotlight.outerCutoff;
+    float intensity = clamp ((theta - spotlight.outerCutoff) / epsilon, 
+        0.0, 1.0);
+
+    ambientOut *= intensity;
+    diffuseOut *= intensity;
+    specOut *= intensity;
+    
+    // Our result is our lighting multiplied by our object's color
+    vec3 result = (ambientOut + attenuation * (diffuseOut + specOut)) *  surfaceColour.rgb;
+       //* vec3(1.0, 0.0, 0.0);
+    return result;
+}
+
+
 
 void main() {
     // Re-normalize our input, so that it is always length 1
@@ -146,12 +193,14 @@ void main() {
     // Determine the direction between the camera and the pixel
     vec3 viewDir = normalize(a_CameraPos - inWorldPos);
 
-     vec3 halfDir = normalize(toLight + viewDir);
+    vec3 halfDir = normalize(toLight + viewDir);
 
     //direction light
     vec3 result = directionLightCalc(dirlight, surfaceColour, norm, halfDir);
-    
-    result += pointLightCalc(surfaceColour, norm, toLight, viewDir, distToLight);
+    //point light
+    result += pointLightCalc(surfaceColour, norm, toLight, viewDir, halfDir, distToLight);
+    //spot light
+    result += spotLightCalc(spotlight, surfaceColour, norm, toLight, distToLight);
 
     // TODO: gamma correction
 

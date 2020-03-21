@@ -74,6 +74,7 @@ void Vatista::Game::init()
 	audioEngine->LoadEvent("Block", "{81b5ce8f-0f80-4494-8aa7-dc898cbc38bb}");
 	audioEngine->PlayEvent("Music");
 	
+	//load stage objects
 	load("./res/Objects/init.txt");
 
 	texture = std::make_shared<Texture2D>();
@@ -83,13 +84,15 @@ void Vatista::Game::init()
 	texture2->loadFile("./res/Objects/color-grid.png");
 
 	Shader::Sptr character = std::make_shared<Shader>();
-	character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
+	//character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
+	character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/newLighting.fs.glsl");
 
 	Shader::Sptr stageProp = std::make_shared<Shader>();
-	stageProp->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
+	stageProp->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/newLighting.fs.glsl");
+	//stageProp->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
 
-	//Shader::Sptr staminaUIPhong = std::make_shared<Shader>();
-	//staminaUIPhong->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
+	Shader::Sptr UI = std::make_shared<Shader>();
+	UI->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
 
 	Shader::Sptr staminaPhong = std::make_shared<Shader>();//stamina stuff
 	staminaPhong->Load("./res/Shaders/StaminaBar.vs.glsl", "./res/Shaders/StaminaBar.fs.glsl");
@@ -205,12 +208,8 @@ void Vatista::Game::init()
 		}
 		mats->Set("a_LightSpecPower", 0.9f);
 		mats->Set("a_LightShininess", 256.0f);
-		if (i == 5) {
-			mats->Set("a_LightAttenuation", 0.04f);
-		}
-		else {
-			mats->Set("a_LightAttenuation", 0.04f);
-		}
+		mats->Set("a_LightAttenuation", 0.04f);
+	
 		mats->Set("texSample", textures, NearestMipped);
 		stage = std::make_shared<StationaryObj>();
 		stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
@@ -225,33 +224,33 @@ void Vatista::Game::init()
 	//// ======= STAGE TWO =======
 	//
 	//for (int i = 52; i < 55; i++) {
-	//	textures = std::make_shared<Texture2D>();
-	//	switch (i) {
-	//	case 52:
-	//		textures->loadFile("./res/Objects/Terminal/Background_Texture.png");
-	//		break;
-	//	case 53:
-	//		textures->loadFile("./res/Objects/Terminal/Vatista_Terminal_Texture.png");
-	//		break;
-	//	case 54:
-	//		textures->loadFile("./res/Objects/Terminal/CargoShip_Texture.png");
+	//	textures = std::make_shared<Texture2D>();
+	//	switch (i) {
+	//	case 52:
+	//		textures->loadFile("./res/Objects/Terminal/Background_Texture.png");
+	//		break;
+	//	case 53:
+	//		textures->loadFile("./res/Objects/Terminal/Vatista_Terminal_Texture.png");
+	//		break;
+	//	case 54:
+	//		textures->loadFile("./res/Objects/Terminal/CargoShip_Texture.png");
 	//		break;
 	//	}
-	//	mats = std::make_shared<Material>(stageProp);
-	//	mats->Set("a_LightPos", { 0.0f, 3.0f, 8.0f });
-	//	mats->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
-	//	mats->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	//	mats->Set("a_AmbientPower", 0.5f);
-	//	mats->Set("a_LightSpecPower", 0.9f);
-	//	mats->Set("a_LightShininess", 256.0f);
-	//	mats->Set("a_LightAttenuation", 0.25f);
-	//	mats->Set("texSample", textures, NearestMipped);
-	//	mats->Set("rimOn", 1);
-	//	stage = std::make_shared<StationaryObj>();
-	//	stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
-	//	stage->setRotY(-90.0f);
-	//	stage->setMesh(meshList[i]);
-	//	stage->setMat(mats);
+	//	mats = std::make_shared<Material>(stageProp);
+	//	mats->Set("a_LightPos", { 0.0f, 3.0f, 8.0f });
+	//	mats->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
+	//	mats->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	//	mats->Set("a_AmbientPower", 0.5f);
+	//	mats->Set("a_LightSpecPower", 0.9f);
+	//	mats->Set("a_LightShininess", 256.0f);
+	//	mats->Set("a_LightAttenuation", 0.25f);
+	//	mats->Set("texSample", textures, NearestMipped);
+	//	mats->Set("rimOn", 1);
+	//	stage = std::make_shared<StationaryObj>();
+	//	stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
+	//	stage->setRotY(-90.0f);
+	//	stage->setMesh(meshList[i]);
+	//	stage->setMat(mats);
 	//	ObjectList.push_back(stage);
 	//}
 	//
@@ -274,12 +273,12 @@ void Vatista::Game::init()
 			break;
 		}
 		stamUIMats.emplace_back();
-		stamUIMats[i] = std::make_shared<Material>(stageProp);
+		stamUIMats[i] = std::make_shared<Material>(UI);
 		stamUIMats[i]->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 		stamUIMats[i]->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
 		stamUIMats[i]->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 		stamUIMats[i]->Set("a_AmbientPower", 0.5f);
-		stamUIMats[i]->Set("a_LightSpecPower", 0.9f);
+		stamUIMats[i]->Set("a_LightSpecPower", 0.9f); 
 		stamUIMats[i]->Set("a_LightShininess", 256.0f);
 		stamUIMats[i]->Set("a_LightAttenuation", 0.04f);
 		stamUIMats[i]->Set("texSample", stamUIText, NearestMipped);
@@ -290,7 +289,7 @@ void Vatista::Game::init()
 	stamUIText = std::make_shared<Texture2D>();
 	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
 
-	Material::Sptr profileMat = std::make_shared<Material>(stageProp);
+	Material::Sptr profileMat = std::make_shared<Material>(UI);
 	profileMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	profileMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
 	profileMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
@@ -471,11 +470,6 @@ void Vatista::Game::update(float dt)
 
 	//S1.setScale(glm::vec3(0.5f)); 
 
-	//Shader::Sptr lighting = std::make_shared<Shader>();
-	//lighting->Bind();
-	//lighting->SetUniform("light.ambient", 0.0f);
-	//lighting->Compile();
-
 }
 
 void Vatista::Game::render(float dt)
@@ -585,91 +579,91 @@ bool Vatista::Game::load(std::string filename)
 	}
 
 	return true;
-}
-
-void Vatista::Game::bufferCreation()
-{
-	RenderBufferDesc mainColour = RenderBufferDesc();
-	mainColour.ShaderReadable = true;
-	mainColour.Attachment = RenderTargetAttachment::Color0;
-	mainColour.Format = RenderTargetType::ColorRgb8; //RGB8
-
-	//RenderBufferDesc normal = RenderBufferDesc();
-	//normal.ShaderReadable = true;
-	//normal.Attachment = RenderTargetAttachment::Color1;
-	//normal.Format = RenderTargetType::ColorRgb10; //RGB10
-
-	RenderBufferDesc depth = RenderBufferDesc();
-	depth.ShaderReadable = true;
-	depth.Attachment = RenderTargetAttachment::Depth;
-	depth.Format = RenderTargetType::Depth32; //32 bit depth
-	
-	// Our main frame buffer needs a color output, and a depth output
-	FrameBuffer::Sptr buffer = std::make_shared<FrameBuffer>(gameWindow->getWidth(), gameWindow->getHeight(), 4);
-	buffer->AddAttachment(mainColour);
-	//buffer->AddAttachment(normal);
-	buffer->AddAttachment(depth);
-	buffer->Validate();
-}
-
-void Vatista::Game::postProcess()
-{
-	// Bind the last buffer we wrote to as our source for read operations
-	buffer->bind(RenderTargetBinding::Read);
-
-	// Copies the image from lastPass into the default back buffer
-	FrameBuffer::Blit({ 0, 0, buffer->GetWidth(), buffer->GetHeight() },
-		{ 0, 0, gameWindow->getWidth(), gameWindow->getHeight() },
-		BufferFlags::All, MagFilter::Nearest);
-
-	// Unbind the last buffer from read operations, so we can write to it again later
-	buffer->unBind();
-
-	//// We grab the application singleton to get the size of the screen
-	//florp::app::Application* app = florp::app::Application::Get();
-	//FrameBuffer::Sptr mainBuffer = CurrentRegistry().ctx<FrameBuffer::Sptr>();
-	//glDisable(GL_DEPTH_TEST);
-	//
-	//// The last output will start as the output from the rendering
-	//FrameBuffer::Sptr lastPass = mainBuffer;
-	//
-	//for (const PostPass& pass : myPasses) {
-	//	// We'll bind our post-processing output as the current render target and clear it
-	//	pass.Output->Bind(RenderTargetBinding::Draw);
-	//	glClear(GL_COLOR_BUFFER_BIT);
-	//
-	//	// Set the viewport to be the entire size of the passes output
-	//	glViewport(0, 0, pass.Output->GetWidth(), pass.Output->GetHeight());
-	//
-	//	// Use the post processing shader to draw the fullscreen quad
-	//	pass.Shader->Use();
-	//	lastPass->GetAttachment(RenderTargetAttachment::Color0)->Bind(0);
-	//	pass.Shader->SetUniform("xImage", 0);
-	//	pass.Shader->SetUniform("xScreenRes", glm::ivec2(app->GetWindow()->GetWidth(), app->GetWindow()->GetHeight()));
-	//	pass.Shader->SetUniform("time", florp::app::Timing::GameTime);
-	//
-	//	////luts
-	//	//pass.Shader->SetUniform("cool", 3);
-	//	//pass.Shader->SetUniform("warm", 4);
-	//	//pass.Shader->SetUniform("custom", 5);
-	//
-	//	myFullscreenQuad->Draw();
-	//
-	//	// Unbind the output pass so that we can read from it
-	//	pass.Output->UnBind();
-	//	// Update the last pass output to be this passes output
-	//	lastPass = pass.Output;
-	//
-		//// Bind the last buffer we wrote to as our source for read operations
-		//lastPass->bind(RenderTargetBinding::Read);
-		//
-		//// Copies the image from lastPass into the default back buffer
-		//FrameBuffer::Blit({ 0, 0, lastPass->GetWidth(), lastPass->GetHeight() },
-		//	{ 0, 0, app->GetWindow()->GetWidth(), app->GetWindow()->GetHeight() },
-		//	BufferFlags::All, florp::graphics::MagFilter::Nearest);
-		//
-		//// Unbind the last buffer from read operations, so we can write to it again later
-		//lastPass->unBind();
-	//}
+}
+
+void Vatista::Game::bufferCreation()
+{
+	RenderBufferDesc mainColour = RenderBufferDesc();
+	mainColour.ShaderReadable = true;
+	mainColour.Attachment = RenderTargetAttachment::Color0;
+	mainColour.Format = RenderTargetType::ColorRgb8; //RGB8
+
+	//RenderBufferDesc normal = RenderBufferDesc();
+	//normal.ShaderReadable = true;
+	//normal.Attachment = RenderTargetAttachment::Color1;
+	//normal.Format = RenderTargetType::ColorRgb10; //RGB10
+
+	RenderBufferDesc depth = RenderBufferDesc();
+	depth.ShaderReadable = true;
+	depth.Attachment = RenderTargetAttachment::Depth;
+	depth.Format = RenderTargetType::Depth32; //32 bit depth
+	
+	// Our main frame buffer needs a color output, and a depth output
+	FrameBuffer::Sptr buffer = std::make_shared<FrameBuffer>(gameWindow->getWidth(), gameWindow->getHeight(), 4);
+	buffer->AddAttachment(mainColour);
+	//buffer->AddAttachment(normal);
+	buffer->AddAttachment(depth);
+	buffer->Validate();
+}
+
+void Vatista::Game::postProcess()
+{
+	// Bind the last buffer we wrote to as our source for read operations
+	buffer->bind(RenderTargetBinding::Read);
+
+	// Copies the image from lastPass into the default back buffer
+	FrameBuffer::Blit({ 0, 0, buffer->GetWidth(), buffer->GetHeight() },
+		{ 0, 0, gameWindow->getWidth(), gameWindow->getHeight() },
+		BufferFlags::All, MagFilter::Nearest);
+
+	// Unbind the last buffer from read operations, so we can write to it again later
+	buffer->unBind();
+
+	//// We grab the application singleton to get the size of the screen
+	//florp::app::Application* app = florp::app::Application::Get();
+	//FrameBuffer::Sptr mainBuffer = CurrentRegistry().ctx<FrameBuffer::Sptr>();
+	//glDisable(GL_DEPTH_TEST);
+	//
+	//// The last output will start as the output from the rendering
+	//FrameBuffer::Sptr lastPass = mainBuffer;
+	//
+	//for (const PostPass& pass : myPasses) {
+	//	// We'll bind our post-processing output as the current render target and clear it
+	//	pass.Output->Bind(RenderTargetBinding::Draw);
+	//	glClear(GL_COLOR_BUFFER_BIT);
+	//
+	//	// Set the viewport to be the entire size of the passes output
+	//	glViewport(0, 0, pass.Output->GetWidth(), pass.Output->GetHeight());
+	//
+	//	// Use the post processing shader to draw the fullscreen quad
+	//	pass.Shader->Use();
+	//	lastPass->GetAttachment(RenderTargetAttachment::Color0)->Bind(0);
+	//	pass.Shader->SetUniform("xImage", 0);
+	//	pass.Shader->SetUniform("xScreenRes", glm::ivec2(app->GetWindow()->GetWidth(), app->GetWindow()->GetHeight()));
+	//	pass.Shader->SetUniform("time", florp::app::Timing::GameTime);
+	//
+	//	////luts
+	//	//pass.Shader->SetUniform("cool", 3);
+	//	//pass.Shader->SetUniform("warm", 4);
+	//	//pass.Shader->SetUniform("custom", 5);
+	//
+	//	myFullscreenQuad->Draw();
+	//
+	//	// Unbind the output pass so that we can read from it
+	//	pass.Output->UnBind();
+	//	// Update the last pass output to be this passes output
+	//	lastPass = pass.Output;
+	//
+		//// Bind the last buffer we wrote to as our source for read operations
+		//lastPass->bind(RenderTargetBinding::Read);
+		//
+		//// Copies the image from lastPass into the default back buffer
+		//FrameBuffer::Blit({ 0, 0, lastPass->GetWidth(), lastPass->GetHeight() },
+		//	{ 0, 0, app->GetWindow()->GetWidth(), app->GetWindow()->GetHeight() },
+		//	BufferFlags::All, florp::graphics::MagFilter::Nearest);
+		//
+		//// Unbind the last buffer from read operations, so we can write to it again later
+		//lastPass->unBind();
+	//}
 }
 
