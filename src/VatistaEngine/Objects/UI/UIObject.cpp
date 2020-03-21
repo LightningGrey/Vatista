@@ -11,10 +11,10 @@ namespace Vatista {
 	}
 
 	void UIObject::Draw(const Vatista::Camera::Sptr& camera)
-	{
+	{ 
 		glm::mat4 world =
 			glm::translate(glm::mat4(1.0f), Position) *
-			glm::mat4_cast(glm::quat(glm::radians(EulerRotDeg))) *
+			glm::mat4_cast(glm::quat(glm::radians(EulerRotDeg))) * 
 			glm::scale(glm::mat4(1.0f), Scale);
 		glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(world)));
 
