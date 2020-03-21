@@ -518,7 +518,25 @@ namespace Vatista {
 
 		material->GetShader()->Bind();
 		material->Apply();
-		//material->GetShader()->SetUniform("dirlight.position", {-0.2f, -1.0f, -0.3f});
+		//dir light, move this to variable
+		material->GetShader()->SetUniform("dirlight.direction", { 0.0f, -1.0f, -0.6f });
+		material->GetShader()->SetUniform("dirlight.ambient", { 0.2f, 0.2f, 0.2f });
+		material->GetShader()->SetUniform("dirlight.diffuse", { 0.5f, 0.5f, 0.5f });
+		material->GetShader()->SetUniform("dirlight.specular", { 1.0f, 1.0f, 1.0f });
+
+		material->GetShader()->SetUniform("spotlight.position", { 8.3f, 2.95f, -18.0f });
+		material->GetShader()->SetUniform("spotlight.direction", { -0.4f, -0.05f, 1.0f });
+		material->GetShader()->SetUniform("spotlight.ambientPower", 0.5f);
+		material->GetShader()->SetUniform("spotlight.ambient", { 0.5f,  0.5f,  0.5f });
+		material->GetShader()->SetUniform("spotlight.diffuse", { 1.0f, 1.0f, 1.0f });
+		material->GetShader()->SetUniform("spotlight.specular", { 1.0f, 1.0f, 1.0f });
+		material->GetShader()->SetUniform("spotlight.shininess", 256.0f);
+		material->GetShader()->SetUniform("spotlight.cutoff", glm::cos(glm::radians(5.0f)));
+		material->GetShader()->SetUniform("spotlight.outerCutoff", glm::cos(glm::radians(6.0f)));
+		material->GetShader()->SetUniform("spotlight.attenuation", 0.04f);
+		material->GetShader()->SetUniform("spotlight.colour", { 1.0f, 0.0f, 0.0f });
+
+
 		material->GetShader()->SetUniform("a_CameraPos", camera->GetPosition());
 
 		// Update the MVP using the item's transform

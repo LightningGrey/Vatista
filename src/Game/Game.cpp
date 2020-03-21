@@ -71,8 +71,9 @@ void Vatista::Game::init()
 	audioEngine->LoadEvent("LightAttack", "{f64fa79a-565d-4493-b4bf-a73a37c31219}");
 	audioEngine->LoadEvent("HeavyAttack", "{621b2e70-27ea-4900-b397-96cb10366574}");
 	audioEngine->LoadEvent("Dash", "{53dbc862-3dec-411a-9fc4-bb15743c2b6b}");
-	audioEngine->PlayEvent("Music");
+	//audioEngine->PlayEvent("Music");
 	
+	//load stage objects
 	load("./res/Objects/init.txt");
 
 	texture = std::make_shared<Texture2D>();
@@ -82,13 +83,15 @@ void Vatista::Game::init()
 	texture2->loadFile("./res/Objects/color-grid.png");
 
 	Shader::Sptr character = std::make_shared<Shader>();
-	character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
+	//character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
+	character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/newLighting.fs.glsl");
 
 	Shader::Sptr stageProp = std::make_shared<Shader>();
-	stageProp->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
+	stageProp->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/newLighting.fs.glsl");
+	//stageProp->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
 
-	//Shader::Sptr staminaUIPhong = std::make_shared<Shader>();
-	//staminaUIPhong->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
+	Shader::Sptr UI = std::make_shared<Shader>();
+	UI->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
 
 	Shader::Sptr staminaPhong = std::make_shared<Shader>();//stamina stuff
 	staminaPhong->Load("./res/Shaders/StaminaBar.vs.glsl", "./res/Shaders/StaminaBar.fs.glsl");
@@ -204,12 +207,8 @@ void Vatista::Game::init()
 		}
 		mats->Set("a_LightSpecPower", 0.9f);
 		mats->Set("a_LightShininess", 256.0f);
-		if (i == 5) {
-			mats->Set("a_LightAttenuation", 0.04f);
-		}
-		else {
-			mats->Set("a_LightAttenuation", 0.04f);
-		}
+		mats->Set("a_LightAttenuation", 0.04f);
+	
 		mats->Set("texSample", textures, NearestMipped);
 		stage = std::make_shared<StationaryObj>();
 		stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
@@ -273,12 +272,12 @@ void Vatista::Game::init()
 			break;
 		}
 		stamUIMats.emplace_back();
-		stamUIMats[i] = std::make_shared<Material>(stageProp);
+		stamUIMats[i] = std::make_shared<Material>(UI);
 		stamUIMats[i]->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 		stamUIMats[i]->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
 		stamUIMats[i]->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 		stamUIMats[i]->Set("a_AmbientPower", 0.5f);
-		stamUIMats[i]->Set("a_LightSpecPower", 0.9f);
+		stamUIMats[i]->Set("a_LightSpecPower", 0.9f); 
 		stamUIMats[i]->Set("a_LightShininess", 256.0f);
 		stamUIMats[i]->Set("a_LightAttenuation", 0.04f);
 		stamUIMats[i]->Set("texSample", stamUIText, NearestMipped);
@@ -289,7 +288,7 @@ void Vatista::Game::init()
 	stamUIText = std::make_shared<Texture2D>();
 	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
 
-	Material::Sptr profileMat = std::make_shared<Material>(stageProp);
+	Material::Sptr profileMat = std::make_shared<Material>(UI);
 	profileMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	profileMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
 	profileMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
@@ -469,11 +468,6 @@ void Vatista::Game::update(float dt)
 	audioEngine->Update();
 
 	//S1.setScale(glm::vec3(0.5f)); 
-
-	//Shader::Sptr lighting = std::make_shared<Shader>();
-	//lighting->Bind();
-	//lighting->SetUniform("light.ambient", 0.0f);
-	//lighting->Compile();
 
 }
 
