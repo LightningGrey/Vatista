@@ -48,6 +48,7 @@
     <ClInclude Include="src\VatistaEngine\Objects\UI\UIObject.h" />
     <ClInclude Include="src\VatistaEngine\Post-Processing\FrameBuffer.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\EnumToString.h" />
+    <ClInclude Include="src\VatistaEngine\Utilities\FileReader.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\Log.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\TextureEnums.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\Utils.h" />

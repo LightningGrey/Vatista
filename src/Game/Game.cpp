@@ -75,8 +75,8 @@ void Vatista::Game::init()
 	audioEngine->PlayEvent("Music");
 	
 	//load stage objects
-	load("./res/Objects/init.txt");
-
+	bool oLoad = load("./res/Objects/init.txt");
+	
 	texture = std::make_shared<Texture2D>();
 	texture->loadFile("./res/Objects/Z3n/Z3N_Texture.png");
 
@@ -503,79 +503,25 @@ void Vatista::Game::draw(float)
 
 bool Vatista::Game::load(std::string filename)
 {
-	std::string line;
-
-	//vector of all data to load 
 	std::vector<std::string> dataList;
+	bool fRead = FileReader::readLines(filename, dataList);
 
-	loadingFile.open(filename, std::ios::in | std::ios::binary);
-	if (!loadingFile) {
-		VATISTA_LOG_ERROR("No file");
+	if (fRead) {
+		for (int i = 0; i < dataList.size(); i++) {
+			bool vsf = FileReader::vsfRead(dataList[i], mesh);
+			if (!vsf) {
+				VATISTA_LOG_ERROR("VSF read failed.");
+				throw new std::runtime_error("File open failed");
+				return false;
+			}
+			else {
+				meshList.push_back(mesh);
+			}
+		}
+	} else {
+		VATISTA_LOG_ERROR("Init read failed.");
 		throw new std::runtime_error("File open failed");
 		return false;
-	}
-
-	while (std::getline(loadingFile, line)) {
-		if (!line.empty() && line[line.size() - 1] == '\r')
-			line.pop_back();
-		dataList.push_back(line);
-	}
-	loadingFile.close();
-
-	for (int i = 0; i < dataList.size(); i++) {
-		dataFile.open("./res/Objects/" + dataList[i], std::ios::in | std::ios::binary);
-		if (!dataFile) {
-			VATISTA_LOG_ERROR("No file");
-			throw new std::runtime_error("File open failed");
-			return false;
-		}
-
-		int animBuffer; //check for static obj vs moving 
-		int vertTotalBuffer; //check for verts total 
-		int indiceTotalBuffer; //check for indices total 
-		LoadMorphVertex* morphBuffer;
-		uint32_t* indicesBuffer;
-
-		std::cout << "reading now" << std::endl;
-
-		dataFile.read((char*)&animBuffer, sizeof(int));
-		dataFile.read((char*)&vertTotalBuffer, sizeof(int));
-		dataFile.read((char*)&indiceTotalBuffer, sizeof(int));
-
-		morphBuffer = new LoadMorphVertex[vertTotalBuffer];
-		indicesBuffer = new uint32_t[indiceTotalBuffer];
-
-		//access using pointer (*(value+n)) 
-		dataFile.read((char*)morphBuffer, sizeof(LoadMorphVertex) * vertTotalBuffer);
-		dataFile.read((char*)indicesBuffer, sizeof(uint32_t) * indiceTotalBuffer);
-
-		dataFile.close();
-
-		//vertex data
-		std::vector<uint32_t> indices;
-		std::vector<Vertex> vertData;
-		std::vector<MorphVertex> morphVertData;
-
-		//tangents
-		std::vector<glm::vec3> tangents;
-		std::vector<glm::vec3> bitangents;
-
-		//Math::computeTangents(morphVertData, indices, tangents, bitangents);
-		for (int j = 0; j < vertTotalBuffer; j++) {
-			MorphVertex morph = { Vertex{(*(morphBuffer + j)).Position,
-			(*(morphBuffer + j)).UV, (*(morphBuffer + j)).Normal}, (*(morphBuffer + j)).PositionS, 
-				(*(morphBuffer + j)).NormalS };
-			morphVertData.push_back(morph);
-		}
-
-
-		for (int k = 0; k < indiceTotalBuffer; k++) {
-			indices.push_back(*(indicesBuffer + k));
-		}
-
-		myMesh = std::make_shared<Mesh>(indices, indices.size(),
-			morphVertData, morphVertData.size());
-		meshList.push_back(myMesh);
 	}
 
 	return true;

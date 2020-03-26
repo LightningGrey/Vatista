@@ -15,6 +15,7 @@
 #include "Graphics/Rendering/Texture2D.h"
 
 #include "Utilities/Utils.h"
+#include "Utilities/FileReader.h"
 #include "Miscellaneous Files/Math.h"
 #include "Audio/AudioEngine.h"
 
@@ -49,7 +50,7 @@ namespace Vatista {
 		AudioEngine::Sptr audioEngine;
 
 		//A shared pointer to our mesh
-		Mesh::Sptr myMesh;
+		Mesh::Sptr mesh;
 		std::vector<Mesh::Sptr> meshList;
 
 		// A shared pointer to our shader

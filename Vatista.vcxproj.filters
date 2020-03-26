@@ -64,6 +64,7 @@
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.h" />
     <ClInclude Include="src\VatistaEngine\Objects\UI\Button.h" />
     <ClInclude Include="src\VatistaEngine\Objects\UI\Menu.h" />
+    <ClInclude Include="src\VatistaEngine\Utilities\FileReader.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />
