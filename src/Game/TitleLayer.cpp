@@ -102,10 +102,10 @@ namespace Vatista {
 		titlematerial->Set("texSample", texture, NearestMipped);
 
 		TitleMenu = std::make_shared<Menu>();
-		TitleMenu->setPos(glm::vec3(0.0f, 3.0f, 0.0f));
+		TitleMenu->setPos(glm::vec3(0.0f, 2.0f, 0.0f));
 		TitleMenu->setRotY(-90.0f);
 		TitleMenu->setMesh(meshListMenu[0]);
-		TitleMenu->setScale(2.0f);
+		TitleMenu->setScale(3.0f);
 		TitleMenu->setMat(titlematerial);
 		ObjectList.push_back(TitleMenu);
 
