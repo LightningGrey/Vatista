@@ -65,6 +65,7 @@
     <ClInclude Include="src\VatistaEngine\Objects\UI\Button.h" />
     <ClInclude Include="src\VatistaEngine\Objects\UI\Menu.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\FileReader.h" />
+    <ClInclude Include="src\VatistaEngine\Utilities\EnumToGameState.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />

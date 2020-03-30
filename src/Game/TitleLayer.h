@@ -24,6 +24,8 @@
 #include "Objects/Stationary/StationaryObj.h"
 #include "Objects/UI/Menu.h"
 
+
+// the title screen
 namespace Vatista {
 	class TitleLayer {
 	public:
@@ -44,8 +46,9 @@ namespace Vatista {
 		AudioEngine::Sptr audioEngine;
 
 		//A shared pointer to our mesh
-		Mesh::Sptr myMesh;
-		std::vector<Mesh::Sptr> meshList;
+		Mesh::Sptr meshTitle;
+
+		std::vector<Mesh::Sptr> meshListMenu;
 
 		// A shared pointer to our shader
 		Shader::Sptr myShader;
@@ -60,7 +63,10 @@ namespace Vatista {
 		
 
 		Camera::Sptr orthoCamera;
-		Menu::Sptr menu;
+		Menu::Sptr TitleMenu;
+		//for the title name
+		Menu::Sptr TitleMenu2;
+
 
 
 		std::vector<GameObject::Sptr> ObjectList;

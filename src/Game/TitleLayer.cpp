@@ -25,8 +25,9 @@ namespace Vatista {
 	}
 
 
-	void TitleLayer::run(){
-	
+	//runing layer for titlelayer
+	void TitleLayer::run() {
+
 		init();
 
 		static float previousFrame = (float)glfwGetTime();
@@ -48,10 +49,12 @@ namespace Vatista {
 		close();
 	}
 
+
+
 	void TitleLayer::init()
 	{
 		//window and camera 
-		gameWindow = new Vatista::Window(1600, 900, "Alpha Strike");
+		gameWindow = new Vatista::Window(1600, 900, "Zeal");
 
 		orthoCamera = std::make_shared<Vatista::Camera>();
 		orthoCamera->SetPosition(glm::vec3(0.0f));
@@ -66,36 +69,66 @@ namespace Vatista {
 		//audioEngine->LoadEvent("HeavyAttack", "{621b2e70-27ea-4900-b397-96cb10366574}");
 		//audioEngine->LoadEvent("Dash", "{53dbc862-3dec-411a-9fc4-bb15743c2b6b}");
 		//audioEngine->PlayEvent("Music");
+		//load stage objects
 
 		load("./res/Objects/menuInit.txt");
-
+		
+		//background png
 		texture = std::make_shared<Texture2D>();
-		texture->loadFile("./res/Objects/Menu/Menu_Texture_PlaceHolder.png");
+		texture->loadFile("./res/Objects/titlescreen/Title_Texture_PlaceHolder.png");
+
+		//title png
+		texture2 = std::make_shared<Texture2D>();
+		texture2->loadFile("./res/Objects/titlescreen/zeal-_2341.png");
 
 		Shader::Sptr phong = std::make_shared<Shader>();
 		phong->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
 
+		//texture sampler
 		TextureSampler::Sptr NearestMipped = std::make_shared<TextureSampler>();
 		NearestMipped->minFilter = MinFilter::NearestMipNearest;
 		NearestMipped->magFilter = MagFilter::Nearest;
 		NearestMipped->createSampler();
 
-		Material::Sptr planeMat = std::make_shared<Material>(phong);
-		planeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-		planeMat->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
-		planeMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-		planeMat->Set("a_AmbientPower", 0.5f);
-		planeMat->Set("a_LightSpecPower", 0.9f);
-		planeMat->Set("a_LightShininess", 256.0f);
-		planeMat->Set("a_LightAttenuation", 0.04f);
-		planeMat->Set("texSample", texture, NearestMipped);
+		//title background
+		Material::Sptr titlematerial = std::make_shared<Material>(phong);
+		titlematerial->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+		titlematerial->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
+		titlematerial->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+		titlematerial->Set("a_AmbientPower", 0.5f);
+		titlematerial->Set("a_LightSpecPower", 0.9f);
+		titlematerial->Set("a_LightShininess", 256.0f);
+		titlematerial->Set("a_LightAttenuation", 0.04f);
+		titlematerial->Set("texSample", texture, NearestMipped);
 
-		menu = std::make_shared<Menu>();
-		menu->setPos(glm::vec3(0.0f, 0.0f, 0.0f));
-		menu->setRotY(-90.0f);
-		menu->setMesh(meshList[0]);
-		menu->setMat(planeMat);
-		ObjectList.push_back(menu);
+		TitleMenu = std::make_shared<Menu>();
+		TitleMenu->setPos(glm::vec3(0.0f, 3.0f, 0.0f));
+		TitleMenu->setRotY(-90.0f);
+		TitleMenu->setMesh(meshListMenu[0]);
+		TitleMenu->setScale(2.0f);
+		TitleMenu->setMat(titlematerial);
+		ObjectList.push_back(TitleMenu);
+
+
+		//title name
+		Material::Sptr titlematerial2 = std::make_shared<Material>(phong);
+		titlematerial2->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+		titlematerial2->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
+		titlematerial2->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+		titlematerial2->Set("a_AmbientPower", 0.5f);
+		titlematerial2->Set("a_LightSpecPower", 0.9f);
+		titlematerial2->Set("a_LightShininess", 256.0f);
+		titlematerial2->Set("a_LightAttenuation", 0.04f);
+		titlematerial2->Set("texSample", texture2, NearestMipped);
+
+		TitleMenu2 = std::make_shared<Menu>();
+		TitleMenu2->setPos(glm::vec3(0.0f, 5.0f, 0.5f));
+		TitleMenu2->setRotY(-90.0f);
+		TitleMenu2->setMesh(meshListMenu[1]);
+		TitleMenu2->setScale(0.5f);
+		TitleMenu2->setMat(titlematerial2);
+		ObjectList.push_back(TitleMenu2);
+
 
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_MULTISAMPLE);
@@ -120,8 +153,6 @@ namespace Vatista {
 		//	}
 		//}
 
-
-
 	}
 
 	void TitleLayer::render(float dt)
@@ -142,83 +173,32 @@ namespace Vatista {
 		for (auto object : ObjectList) {
 			object->Draw(orthoCamera);
 		}
+
 	}
 
 	bool TitleLayer::load(std::string filename)
 	{
-		std::string line;
 
-		//vector of all data to load 
 		std::vector<std::string> dataList;
+		bool fRead = FileReader::readLines(filename, dataList);
 
-		loadingFile.open(filename, std::ios::in | std::ios::binary);
-		if (!loadingFile) {
-			VATISTA_LOG_ERROR("No file");
+		if (fRead) {
+			for (int i = 0; i < dataList.size(); i++) {
+				bool vsf = FileReader::vsfRead(dataList[i], meshTitle);
+				if (!vsf) {
+					VATISTA_LOG_ERROR("VSF read failed.");
+					throw new std::runtime_error("File open failed");
+					return false;
+				}
+				else {
+					meshListMenu.push_back(meshTitle);
+				}
+			}
+		}
+		else {
+			VATISTA_LOG_ERROR("Init read failed.");
 			throw new std::runtime_error("File open failed");
 			return false;
-		}
-
-		while (std::getline(loadingFile, line)) {
-			if (!line.empty() && line[line.size() - 1] == '\r')
-				line.pop_back();
-			dataList.push_back(line);
-		}
-		loadingFile.close();
-
-		for (int i = 0; i < dataList.size(); i++) {
-			dataFile.open("./res/Objects/" + dataList[i], std::ios::in | std::ios::binary);
-			if (!dataFile) {
-				VATISTA_LOG_ERROR("No file");
-				throw new std::runtime_error("File open failed");
-				return false;
-			}
-
-			int animBuffer; //check for static obj vs moving 
-			int vertTotalBuffer; //check for verts total 
-			int indiceTotalBuffer; //check for indices total 
-			LoadMorphVertex* morphBuffer;
-			uint32_t* indicesBuffer;
-
-			std::cout << "reading now" << std::endl;
-
-			dataFile.read((char*)&animBuffer, sizeof(int));
-			dataFile.read((char*)&vertTotalBuffer, sizeof(int));
-			dataFile.read((char*)&indiceTotalBuffer, sizeof(int));
-
-			morphBuffer = new LoadMorphVertex[vertTotalBuffer];
-			indicesBuffer = new uint32_t[indiceTotalBuffer];
-
-			//access using pointer (*(value+n)) 
-			dataFile.read((char*)morphBuffer, sizeof(LoadMorphVertex) * vertTotalBuffer);
-			dataFile.read((char*)indicesBuffer, sizeof(uint32_t) * indiceTotalBuffer);
-
-			dataFile.close();
-
-			//vertex data
-			std::vector<uint32_t> indices;
-			std::vector<Vertex> vertData;
-			std::vector<MorphVertex> morphVertData;
-
-			//tangents
-			std::vector<glm::vec3> tangents;
-			std::vector<glm::vec3> bitangents;
-
-			//Math::computeTangents(morphVertData, indices, tangents, bitangents);
-			for (int j = 0; j < vertTotalBuffer; j++) {
-				MorphVertex morph = { Vertex{(*(morphBuffer + j)).Position,
-				(*(morphBuffer + j)).UV, (*(morphBuffer + j)).Normal}, (*(morphBuffer + j)).PositionS,
-					(*(morphBuffer + j)).NormalS };
-				morphVertData.push_back(morph);
-			}
-
-
-			for (int k = 0; k < indiceTotalBuffer; k++) {
-				indices.push_back(*(indicesBuffer + k));
-			}
-
-			myMesh = std::make_shared<Mesh>(indices, indices.size(),
-				morphVertData, morphVertData.size());
-			meshList.push_back(myMesh);
 		}
 
 		return true;

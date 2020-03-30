@@ -52,6 +52,8 @@ namespace Vatista {
 		//A shared pointer to our mesh
 		Mesh::Sptr mesh;
 		std::vector<Mesh::Sptr> meshList;
+		std::vector<Mesh::Sptr> meshListMenu;
+
 
 		// A shared pointer to our shader
 		Shader::Sptr myShader;
@@ -62,6 +64,8 @@ namespace Vatista {
 		Texture2D::Sptr texture2;
 		Texture2D::Sptr bladeText;
 		Texture2D::Sptr stamUIText;
+		Texture2D::Sptr TitleTexture;
+
 		std::vector<Material::Sptr> stamUIMats;
 		Texture::Sptr textures;
 		Material::Sptr mats;
@@ -70,6 +74,8 @@ namespace Vatista {
 
 		std::vector<GameObject::Sptr> ObjectList;
 		std::vector<GameObject::Sptr> UIList;
+		std::vector<GameObject::Sptr> TitleMenuList;
+
 		Character::Sptr C1;
 		Character::Sptr C2;
 		StationaryObj::Sptr stage;
@@ -79,6 +85,7 @@ namespace Vatista {
 		StationaryObj::Sptr sheath2;
 		Stamina::Sptr S1;
 		UIObject::Sptr UI1;
+		Menu::Sptr TitleMenu1; //my changes
 		UIObject::Sptr charProfile1;
 		Stamina::Sptr S2;
 		UIObject::Sptr UI2;

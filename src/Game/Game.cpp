@@ -76,7 +76,8 @@ void Vatista::Game::init()
 	
 	//load stage objects
 	bool oLoad = load("./res/Objects/init.txt");
-	
+	bool oLoad2 = load("./res/Objects/menuInit.txt");
+
 	texture = std::make_shared<Texture2D>();
 	texture->loadFile("./res/Objects/Z3n/Z3N_Texture.png");
 
@@ -125,6 +126,36 @@ void Vatista::Game::init()
 	stageMat->Set("a_LightShininess", 256.0f);
 	stageMat->Set("a_LightAttenuation", 0.04f);
 	stageMat->Set("texSample", texture2, NearestMipped);
+
+
+	//======= MENU ======= moved to title layer
+
+	Shader::Sptr titleScreen = std::make_shared<Shader>();
+	titleScreen->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
+	//menu stuff 
+
+	TitleTexture = std::make_shared<Texture2D>();//connected to the titlemat
+	TitleTexture->loadFile("./res/Objects/Stamina/zeal-_2341.png");
+
+	//TitleMenuList.push_back(TitleMenu1);
+	Material::Sptr titleMat = std::make_shared<Material>(titleScreen);
+	titleMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	titleMat->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
+	titleMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	titleMat->Set("a_AmbientPower", 0.5f);
+	titleMat->Set("a_LightSpecPower", 0.9f);
+	titleMat->Set("a_LightShininess", 256.0f);
+	titleMat->Set("a_LightAttenuation", 0.04f);
+	titleMat->Set("texSample", TitleTexture, NearestMipped);
+
+	TitleMenu1 = std::make_shared<Menu>();
+	TitleMenu1->setPos(glm::vec3(0.0f, 0.0f, 0.0f));
+	TitleMenu1->setRotY(-90.0f);
+	TitleMenu1->setMesh(meshList[0]);
+	TitleMenu1->setMat(titleMat);
+	TitleMenu1->setScale(2.5f);
+	TitleMenuList.push_back(TitleMenu1);
+
 
 
 	//======= STAGE ONE =======
@@ -220,6 +251,8 @@ void Vatista::Game::init()
 			ObjectList.push_back(stage);
 		//}
 	}
+	//end of stage 1 section
+
 
 	//// ======= STAGE TWO =======
 	//
@@ -249,13 +282,13 @@ void Vatista::Game::init()
 	//	stage = std::make_shared<StationaryObj>();
 	//	stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
 	//	stage->setRotY(-90.0f);
-	//	stage->setMesh(meshList[i]);
+	//	stage->setMesh(meshListMenu[i]);
 	//	stage->setMat(mats);
 	//	ObjectList.push_back(stage);
 	//}
 	//
 	//
-
+		//stamina bar?
 	for (int i = 0; i < 4; i++) {
 		stamUIText = std::make_shared<Texture2D>();
 		switch (i) {
@@ -283,12 +316,14 @@ void Vatista::Game::init()
 		stamUIMats[i]->Set("a_LightAttenuation", 0.04f);
 		stamUIMats[i]->Set("texSample", stamUIText, NearestMipped);
 	}
+
 	textureStamina = std::make_shared<Texture2D>();//connected to staminamat
 	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture1.png");
 
 	stamUIText = std::make_shared<Texture2D>();
 	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
 
+	//more ui stuff
 	Material::Sptr profileMat = std::make_shared<Material>(UI);
 	profileMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	profileMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
@@ -299,7 +334,7 @@ void Vatista::Game::init()
 	profileMat->Set("a_LightAttenuation", 0.04f);
 	profileMat->Set("texSample", stamUIText, NearestMipped);
 
-	//stamina
+	//still stamina
 	Material::Sptr staminaMat = std::make_shared<Material>(staminaPhong);//blank stamina texture
 	staminaMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	staminaMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
@@ -420,6 +455,7 @@ void Vatista::Game::init()
 
 	//bufferCreation();
 	 
+	
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_MULTISAMPLE);
@@ -446,6 +482,9 @@ void Vatista::Game::update(float dt)
 		sheath2->setPos(C2->getPos());
 		sheath2->setRotY(C2->getRot().y);
 		UI1->setMat(stamUIMats[C1->getLives()]);
+		
+		TitleMenu1->setMat(stamUIMats[C1->getLives()]);//my changes
+
 		UI2->setMat(stamUIMats[C2->getLives()]);
 		S1->setStamina(C1->getStamina());
 		S2->setStamina(C2->getStamina());
@@ -498,6 +537,12 @@ void Vatista::Game::draw(float)
 	for (auto component : UIList) {
 		component->Draw(orthoCamera);
 	}
+
+	////draw titlescreen
+	//for (auto component2 : TitleMenuList) {
+	//	component2->Draw(orthoCamera);
+	//}
+
 
 }
 

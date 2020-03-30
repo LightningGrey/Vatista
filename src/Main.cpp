@@ -17,7 +17,7 @@ int main() {
 	VATISTA_LOG_INFO("Vatista.dll running.");
 	
 
-	Vatista::Game* game = new Vatista::Game();
+	Vatista::TitleLayer* game = new Vatista::TitleLayer();
 	game->run();
 	delete game;
 	
