@@ -372,7 +372,7 @@ void Vatista::Game::init()
 	UI1 = std::make_shared<UIObject>();
 	UI1->setPos(glm::vec3(-4.8f, 7.f, 0.f));
 	UI1->setMesh(meshList[17]);
-	UI1->setMat(stamUIMats[C1->getLives()]);
+	UI1->setMat(stamUIMats[C1->getWins()]);
 	UI1->setScale(2.5f);
 	UIList.push_back(UI1);
 
@@ -395,7 +395,7 @@ void Vatista::Game::init()
 	UI2 = std::make_shared<UIObject>();
 	UI2->setPos(glm::vec3(4.8f, 7.f, 0.f));
 	UI2->setMesh(meshList[17]);
-	UI2->setMat(stamUIMats[C2->getLives()]);
+	UI2->setMat(stamUIMats[C2->getWins()]);
 
 	UI2->setRotY(180.f);
 	UI2->setScale(2.5f);
@@ -434,7 +434,7 @@ void Vatista::Game::close()
 
 void Vatista::Game::update(float dt)
 {
-	if (C1->getLives() > 0 && C2->getLives() > 0) {
+	if (C1->getWins() < 3 && C2->getWins() < 3) {
 		C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
 		C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
 		sword1->setPos(C1->getPos());
@@ -445,8 +445,8 @@ void Vatista::Game::update(float dt)
 		sword2->setRotY(C2->getRot().y);
 		sheath2->setPos(C2->getPos());
 		sheath2->setRotY(C2->getRot().y);
-		UI1->setMat(stamUIMats[C1->getLives()]);
-		UI2->setMat(stamUIMats[C2->getLives()]);
+		UI1->setMat(stamUIMats[C1->getWins()]);
+		UI2->setMat(stamUIMats[C2->getWins()]);
 		S1->setStamina(C1->getStamina());
 		S2->setStamina(C2->getStamina());
 		std::cout << C1->getStamina() << " " << C2->getStamina() << std::endl;
@@ -459,10 +459,10 @@ void Vatista::Game::update(float dt)
 			mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 13.5f));
 		mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
-	else if(C1->getLives()==0){
+	else if(C1->getWins()==3){
 
 	}
-	else if(C2->getLives()==0){
+	else if(C2->getWins()==3){
 
 	}
 	

@@ -2,8 +2,9 @@
 #include "Objects/GameObject.h"
 #include <GLFW/glfw3.h> 
 #include "Utilities/Utils.h"
-#include <iostream>
 #include "Audio/AudioEngine.h"
+#include <iostream>
+#include <queue>
 
 typedef struct {
 	bool a = false;
@@ -39,7 +40,7 @@ namespace Vatista {
 		void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae);
 
 		void setStamina(float s) { stamina = s; }
-		void setLives(int l) { lives = l; }
+		void setWins(int w) { wins = w; }
 		void setHitStun(bool h) { hitStun = h; }
 		void setHSTimer(float t) { hitstunTimer = t; }
 		void setAtk1Pos(glm::vec3 a) { Atk1Pos = a; }
@@ -50,11 +51,19 @@ namespace Vatista {
 		void setAtk2PosX(float x) { Atk2Pos.x = x; }
 		void setAtk1CollX(float x) { Atk1Collider.x = x; }
 		void setAtk2CollX(float x) { Atk2Collider.x = x; }
+		void setIsWalking(bool state) { isWalking = state; }
+		void setIsDashing(bool state) { isDashing = state; }
+		void setIsAttacking(bool state) { isAttacking = state; }
+		void setIsBlocking(bool state) { isBlocking = state; }
+		void setLerper(float l) { lerper = l; }
+		void setLerpEnd(float l) { lerpEnd = l; }
+		void setStartTime(float t) { startTime = t; }
+		void setJourneyLength(float l) { journeyLength = l; }
 
 		void Draw(const Vatista::Camera::Sptr& camera);
 
 		float getStamina() { return stamina; }
-		int getLives() { return lives; }
+		int getWins() { return wins; }
 		bool getHitStun() { return hitStun; }
 		float getHSTimer() { return hitstunTimer; }
 		glm::vec3 getAtk1Pos() { return Atk1Pos; }
@@ -65,13 +74,27 @@ namespace Vatista {
 		float getAtk2PosX() { return Atk2Pos.x; }
 		float getAtk1CollX() { return Atk1Collider.x; }
 		float getAtk2CollX() { return Atk2Collider.x; }
+		bool getIsWalking(){ return isWalking; }
+		bool getIsDashing(){ return isDashing; }
+		bool getIsAttacking() { return isAttacking; }
+		bool getIsBlocking() { return isBlocking; }
+		float getLerper() { return lerper; }
+		float getLerpEnd() { return lerpEnd; }
+		float getStartTime() { return startTime; }
+		float getJourneyLength() { return journeyLength; }
+
+
+		void setStateTracker(int i);
+		int getStateTracker() { return stateTracker; }
+		int getAnimIndex() { return animIndex; }
+		void updateAnim();
 
 	protected:
 		float stamina;
-		int lives;
+		int wins;
 
 		float lerper;
-		glm::vec3 lerpEnd;
+		float lerpEnd;
 		bool isWalking = false;
 		bool isDashing = false;
 		bool isAttacking = false;
@@ -91,13 +114,11 @@ namespace Vatista {
 		static bool roundEnd;
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static keyboard kb;
+		static std::queue<std::pair<int, int>> inputQueue;
+		static void inputBuffer();
 
 		int stateTracker = 0;
 		int animIndex = 0;
-		void setStateTracker(int i);
-		int getStateTracker() { return stateTracker; }
-		int getAnimIndex() { return animIndex; }
-		void updateAnim();
 
 		float dt = 0.0167f;
 		float morph;
