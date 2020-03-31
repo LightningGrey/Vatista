@@ -514,14 +514,21 @@ void Vatista::Game::render(float dt)
 
 void Vatista::Game::draw(float)
 {
-	buffer->bind();
+	mainCamera->state.BackBuffer->bind();
 
 	//draw game objects
 	for (auto object : ObjectList) {
 		object->Draw(mainCamera);
 	}
 
-	buffer->unBind();
+	mainCamera->state.BackBuffer->unBind();
+
+	if (mainCamera->state.FrontBuffer != nullptr) {
+		// Swap the back and front buffers
+		auto temp = mainCamera->state.BackBuffer;
+		mainCamera->state.BackBuffer = mainCamera->state.FrontBuffer;
+		mainCamera->state.FrontBuffer = temp;
+	}
 
 	postProcess();
 
@@ -584,7 +591,11 @@ void Vatista::Game::bufferCreation()
 	//buffer->AddAttachment(normal);
 	buffer->AddAttachment(depth);
 	buffer->Validate();
-
+	 
+	mainCamera->state.BackBuffer = buffer;
+	mainCamera->state.FrontBuffer = buffer->Clone();
+	mainCamera->state.IsMainCamera = true;
+	mainCamera->state.Projection = glm::perspective(glm::radians(60.0f), 16.f / 9.f, 1.0f, 500.0f);
 }
 
 void Vatista::Game::postPassCreate()
@@ -620,7 +631,7 @@ void Vatista::Game::postProcess()
 
 	glDisable(GL_DEPTH_TEST);
 	// The last output will start as the output from the rendering
-	FrameBuffer::Sptr lastPass = buffer;
+	FrameBuffer::Sptr lastPass = mainCamera->state.BackBuffer;
 
 	for (const PostPass& pass : passes) {
 		// We'll bind our post-processing output as the current render target and clear it
@@ -632,7 +643,7 @@ void Vatista::Game::postProcess()
 	
 		// Use the post processing shader to draw the fullscreen quad
 		pass.Shader->Bind();
-		lastPass->GetAttachment(RenderTargetAttachment::Color0)->bind(0);
+		lastPass->bind(0);
 		pass.Shader->SetUniform("xImage", 0);
 		pass.Shader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
 	
