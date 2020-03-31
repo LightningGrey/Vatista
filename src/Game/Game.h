@@ -29,6 +29,8 @@
 #include "Post-Processing/FrameBuffer.h"
 #include "Post-Processing/PostProcessing.h"
 
+//#include "FBO.h"
+
 namespace Vatista {
 	class Game {
 	public:
@@ -95,7 +97,7 @@ namespace Vatista {
 		FrameBuffer::Sptr buffer;
 		Mesh::Sptr fullscreenQuad;
 		std::vector<PostPass> passes;
-
+		//FBO fbo;
 
 		//ObjLoader loader;
 		//

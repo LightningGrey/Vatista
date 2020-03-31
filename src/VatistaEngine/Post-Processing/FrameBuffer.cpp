@@ -116,17 +116,6 @@ namespace Vatista {
 			imageDesc.Format = (/*within TextureEnum.h*/InternalFormat)desc.Format;
 			imageDesc.NumSamples = myNumSamples;
 			imageDesc.MipmapLevels = 1; // NEW
-			//all the stuff here are gonna be needed in 2d texture
-			/*uint32_t       Width, Height;
-			MinFilter      MinFilter;
-			MagFilter      MagFilter;
-			WrapMode       WrapT;
-			WrapMode       WrapS;
-			InternalFormat Format;
-			uint32_t       MipmapLevels;
-			uint32_t       NumSamples; */
-			//PLace hOLDERS
-
 
 
 			// Create the image, and store it's info in our buffer tag
@@ -152,10 +141,25 @@ namespace Vatista {
 		}
 			GLenum result = glCheckNamedFramebufferStatus(textureID, GL_FRAMEBUFFER);
 			if (result != GL_FRAMEBUFFER_COMPLETE) {
-			//	switch (result) {
-			//	case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-			//		VATISTA_LOG_ERROR("Rendertarget failed to validate. One of the attachment points is framebuffer incomplete."); break;
-			//
+				switch (result) {
+				case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+					VATISTA_LOG_ERROR("Rendertarget failed to validate. One of the attachment points is framebuffer incomplete."); break;
+				case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+					VATISTA_LOG_ERROR("Rendertarget failed to validate. There are no attachments!"); break;
+				case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+					VATISTA_LOG_ERROR("Rendertarget failed to validate. Draw buffer is incomplete."); break;
+				case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+					VATISTA_LOG_ERROR("Rendertarget failed to validate. Read buffer is incomplete."); break;
+				case GL_FRAMEBUFFER_UNSUPPORTED:
+					VATISTA_LOG_ERROR("Rendertarget failed to validate. Check the formats of the attached targets"); break;
+				case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+					VATISTA_LOG_ERROR("Rendertarget failed to validate. Check the multisampling parameters on all attached targets"); break;
+				case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+					VATISTA_LOG_ERROR("Rendertarget failed to validate for unknown reason!"); break;
+				//case GL_FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_OVR:
+				//	VATISTA_LOG_ERROR("Rendertarget failed to validate. Multiview targets issue!"); break;
+				default: VATISTA_LOG_ERROR("Rendertarget failed to validate for unknown reason!");
+				}
 				isValid = false;
 				return false;
 			}

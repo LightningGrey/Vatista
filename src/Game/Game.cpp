@@ -514,16 +514,18 @@ void Vatista::Game::render(float dt)
 
 void Vatista::Game::draw(float)
 {
-	buffer->bind();
+	//buffer->bind();
 
 	//draw game objects
 	for (auto object : ObjectList) {
 		object->Draw(mainCamera);
 	}
 
-	buffer->unBind();
-
+	//buffer->unBind();
+	
 	postProcess();
+
+	fullscreenQuad->Draw();
 
 	//draw UI
 	for (auto component : UIList) {
@@ -589,35 +591,38 @@ void Vatista::Game::bufferCreation()
  
 void Vatista::Game::postPassCreate()
 {
-	float vert[] = {
-		-1.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		-1.0f, -1.0f, 0.0f, 0.0f,
-		1.0f, -1.0f, 1.0f, 0.0f
-	};
-	uint32_t indices[] = {
-		0, 1, 2,
-		1, 3, 2
-	};
+	//float vert[] = {
+	//	-1.0f, 1.0f, 0.0f, 1.0f,
+	//	1.0f, 1.0f, 1.0f, 1.0f,
+	//	-1.0f, -1.0f, 0.0f, 0.0f,
+	//	1.0f, -1.0f, 1.0f, 0.0f
+	//};
+	//uint32_t indices[] = {
+	//	0, 1, 2,
+	//	1, 3, 2
+	//};
 
-	fullscreenQuad = std::make_shared<Mesh>(vert, 4, indices, 6);
+	bool load = FileReader::vsfRead("mesh_Quad.vsf", fullscreenQuad);
 
+	if (load) {
+		auto shader = std::make_shared<Shader>();
+		shader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/invert.fs.glsl");
+		shader->Bind();
 
-	auto shader = std::make_shared<Shader>();
-	shader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/invert.fs.glsl");
-	shader->Bind();
+		auto output = std::make_shared<FrameBuffer>(gameWindow->getWidth(), gameWindow->getHeight());
+		output->AddAttachment(mainColour);
+		output->Validate();
+		// Add the pass to the post processing stack
+		passes.push_back({ shader, output });
+	} else {
+		VATISTA_LOG_ERROR("Quad not loaded.");
+	}
 
-	auto output = std::make_shared<FrameBuffer>(gameWindow->getWidth(), gameWindow->getHeight());
-	output->AddAttachment(mainColour);
-	output->Validate();
-	// Add the pass to the post processing stack
-	passes.push_back({ shader, output });
 }
 
 
 void Vatista::Game::postProcess()
 {
-
 	glDisable(GL_DEPTH_TEST);
 	// The last output will start as the output from the rendering
 	FrameBuffer::Sptr lastPass = buffer;
@@ -633,6 +638,7 @@ void Vatista::Game::postProcess()
 		// Use the post processing shader to draw the fullscreen quad
 		pass.Shader->Bind();
 		lastPass->GetAttachment(RenderTargetAttachment::Color0)->bind(0);
+		//texture2->bind(0);
 		pass.Shader->SetUniform("xImage", 0);
 		pass.Shader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
 	
