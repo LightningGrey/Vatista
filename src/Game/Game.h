@@ -45,6 +45,9 @@ namespace Vatista {
 		void bufferCreation();
 		void postPassCreate();
 		void postProcess();
+
+		void postProcessV2();
+		void postProcessV3();
 	private:
 		Window* gameWindow;
 		glm::vec4 clearColour;
@@ -95,11 +98,13 @@ namespace Vatista {
 		FrameBuffer::Sptr buffer;
 		Mesh::Sptr fullscreenQuad;
 		std::vector<PostPass> passes;
+		
 
-
-		//ObjLoader loader;
-		//
-		//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		//second try
+		Shader::Sptr postShader;
+		unsigned int framebuffer;
+		unsigned int colourbuffer;
+		unsigned int depthstencil;
 
 		float time = 0.0f;
 
