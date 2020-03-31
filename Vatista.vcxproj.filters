@@ -3,7 +3,7 @@
   <ItemGroup>
     <ClCompile Include="include\glad\glad.c" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Game\Game.cpp" />
+	<ClCompile Include="src\Game\Game.cpp" /> 
     <ClCompile Include="src\VatistaEngine\Audio\AudioEngine.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Camera.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Window.cpp" />
@@ -80,6 +80,7 @@
     <None Include="lib\fmodstudioL.dll" />
     <None Include="include\fmod\fmod_studio.cs" />
     <None Include="res\Master.bank" />
+    <None Include="res\Shaders\Post-Processing\invert.fs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\StaminaBar.vs.glsl" />

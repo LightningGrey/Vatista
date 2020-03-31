@@ -1,5 +1,38 @@
 #include "Mesh.h"
 namespace Vatista {
+	Mesh::Mesh(void* vertices, size_t numVerts, uint32_t* indices, size_t numIndices)
+	{
+		myIndexCount = numIndices;
+		myVertexCount = numVerts;
+	
+		// Create and bind our vertex array
+		glCreateVertexArrays(1, &myVao);
+		glBindVertexArray(myVao);
+	
+		// Create 2 buffers, 1 for vertices and the other for indices
+		glCreateBuffers(2, myBuffers);
+	
+		// Bind and buffer our vertex data
+		glBindBuffer(GL_ARRAY_BUFFER, myBuffers[0]);
+		glBufferData(GL_ARRAY_BUFFER, numVerts * sizeof(float), vertices, GL_STATIC_DRAW);
+	
+		// Bind and buffer our index data
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, myBuffers[1]);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+	
+		// Enable vertex attribute 0
+		glEnableVertexAttribArray(0);
+		// Our first attribute is 3 floats, the distance between 
+		// them is the size of our vertex, and they will map to the position in our vertices
+		glVertexAttribPointer(0, 2, GL_FLOAT, false, 4 * sizeof(float), (void*)0);
+	
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	
+		// Unbind our VAO
+		glBindVertexArray(0);
+	}
+
 	Mesh::Mesh(std::vector<uint32_t> indices, size_t numIndices,
 		std::vector<Vertex> vertData, size_t numData) {
 

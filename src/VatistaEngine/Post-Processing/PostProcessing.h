@@ -6,9 +6,8 @@
 
 namespace Vatista {
     struct PostPass {
-        SharedPtr(PostPass);
-        Vatista::Shader::Sptr Shader;
-        Vatista::FrameBuffer::Sptr Output;
+        Shader::Sptr Shader;
+        FrameBuffer::Sptr Output;
     };
 
 //    struct PostProcessing {

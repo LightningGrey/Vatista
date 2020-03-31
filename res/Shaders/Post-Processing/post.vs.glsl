@@ -9,6 +9,7 @@ uniform ivec2 screenRes;
 
 void main() {
 	gl_Position = vec4(inPosition, 0, 1);
+	outScreenCoords = ((inPosition + vec2(1, 1)) / 2.0f) * screenRes;
 
 	outUV = inUV;
 }
