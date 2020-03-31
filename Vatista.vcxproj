@@ -40,6 +40,7 @@
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Window.h" />
     <ClInclude Include="src\VatistaEngine\Objects\Characters\Character.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\Characters\Tashia.h" />
     <ClInclude Include="src\VatistaEngine\Objects\Characters\Z3n.h" />
     <ClInclude Include="src\VatistaEngine\Objects\GameObject.h" />
     <ClInclude Include="src\VatistaEngine\Objects\Stationary\StationaryObj.h" />
@@ -69,6 +70,7 @@
     <ClCompile Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Window.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\Characters\Character.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\Characters\Tashia.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\Characters\Z3n.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\GameObject.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\Stationary\StationaryObj.cpp" />
