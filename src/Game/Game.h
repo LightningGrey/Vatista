@@ -27,6 +27,7 @@
 #include "Objects/UI/Menu.h"
 
 #include "Post-Processing/FrameBuffer.h"
+#include "Post-Processing/PostProcessing.h"
 
 namespace Vatista {
 	class Game {
@@ -42,6 +43,7 @@ namespace Vatista {
 		void draw(float dt);
 		bool load(std::string filename);
 		void bufferCreation();
+		void postPassCreate();
 		void postProcess();
 	private:
 		Window* gameWindow;
@@ -88,8 +90,11 @@ namespace Vatista {
 
 		//GameObject::Sptr StaminaBackground;
 		
-
+		RenderBufferDesc mainColour; 
+		RenderBufferDesc depth;
 		FrameBuffer::Sptr buffer;
+		Mesh::Sptr fullscreenQuad;
+		std::vector<PostPass> passes;
 
 
 		//ObjLoader loader;

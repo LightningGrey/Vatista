@@ -45,6 +45,7 @@ namespace Vatista {
 	public:	
 		SharedPtr(Mesh);
 		// Creates a new mesh from the given vertices and indices
+		Mesh(void* vertices, size_t numVerts, uint32_t* indices, size_t numIndices);
 		Mesh(std::vector<uint32_t> indices, size_t numIndices,
 			std::vector<Vertex> vertData, size_t numData);
 		Mesh(std::vector<uint32_t> indices, size_t numIndices,
@@ -52,7 +53,7 @@ namespace Vatista {
 		~Mesh();
 
 
-		void resize();
+		//void resize();
 		// Draws this mesh
 		void Draw();
 

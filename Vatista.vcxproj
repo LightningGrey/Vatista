@@ -55,7 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\glad\glad.c" />
-    <ClCompile Include="src\Game\Game.cpp" />
+	<ClCompile Include="src\Game\Game.cpp" /> 
     <ClCompile Include="src\Game\TitleLayer.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\VatistaEngine\Audio\AudioEngine.cpp" />
@@ -92,6 +92,7 @@
     <None Include="res\Master.bank" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\Shaders\Post-Processing\invert.fs.glsl" />
     <None Include="res\StaminaBar.fs.glsl" />
     <None Include="res\StaminaBar.vs.glsl" />
   </ItemGroup>
