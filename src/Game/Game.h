@@ -21,6 +21,7 @@
 
 #include "Objects/GameObject.h"
 #include "Objects/Characters/Character.h"
+#include "Objects/Characters/Z3n.h"
 #include "Objects/UI/Stamina.h"
 #include "Objects/UI/UIObject.h"
 #include "Objects/Stationary/StationaryObj.h"
@@ -70,8 +71,8 @@ namespace Vatista {
 
 		std::vector<GameObject::Sptr> ObjectList;
 		std::vector<GameObject::Sptr> UIList;
-		Character::Sptr C1;
-		Character::Sptr C2;
+		Z3n::Sptr C1;
+		Z3n::Sptr C2;
 		StationaryObj::Sptr stage;
 		StationaryObj::Sptr sword1;
 		StationaryObj::Sptr sword2;

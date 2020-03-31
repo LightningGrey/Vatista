@@ -312,13 +312,11 @@ void Vatista::Game::init()
 	staminaMat->Set("UVoffset", glm::vec3(0.0f));
 
 	//Player 1
-	C1 = std::make_shared<Character>(true, meshList, characterMat);
-	C1->setScale(0.01f);
+	C1 = std::make_shared<Z3n>(true, meshList, characterMat);
 	ObjectList.push_back(C1);
 
 	//Player 2 
-	C2 = std::make_shared<Character>(false, meshList, characterMat);
-	C2->setScale(0.01f);
+	C2 = std::make_shared<Z3n>(false, meshList, characterMat);
 	ObjectList.push_back(C2);
 
 	bladeText = std::make_shared<Texture2D>();

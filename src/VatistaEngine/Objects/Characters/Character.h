@@ -35,9 +35,9 @@ namespace Vatista {
 
 		bool playerID;
 		std::vector<std::pair<std::vector<float>, std::vector<Vatista::Mesh::Sptr>>> animations;
-		Character(bool ID, std::vector<Mesh::Sptr>& meshes, Material::Sptr mat);
+		Character() : wins(0), stamina(100), walls(9.0f) { setScale(0.01f); }
 		~Character();
-		void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae);
+		virtual void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae) = 0;
 
 		void setStamina(float s) { stamina = s; }
 		void setWins(int w) { wins = w; }
