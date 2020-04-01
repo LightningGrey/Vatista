@@ -4,6 +4,9 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
+#include <memory>
+#include <stdint.h>
+#include <cstdint> 
 
 #include "GLM/glm.hpp"
 #include "GLM/gtc/matrix_transform.hpp"
@@ -101,6 +104,8 @@ namespace Vatista {
 		Mesh::Sptr fullscreenQuad;
 		std::vector<PostPass> passes;
 		//FBO fbo;
+		Shader::Sptr postShader;
+
 
 		//ObjLoader loader;
 		//
