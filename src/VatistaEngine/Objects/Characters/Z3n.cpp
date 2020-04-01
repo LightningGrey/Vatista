@@ -34,11 +34,11 @@ namespace Vatista {
 		}
 		for (int i = 13; i < 15; i++) {
 			animations[3].second.push_back(meshes[i]); // FDash =  0.5s
-			animations[3].first.push_back(0.25f);
+			animations[3].first.push_back(0.75f);
 		}
 		for (int i = 15; i < 17; i++) {
 			animations[4].second.push_back(meshes[i]); // BDash =  0.5s
-			animations[4].first.push_back(0.25f);
+			animations[4].first.push_back(0.75f);
 		}
 		for (int i = 17; i < 22; i++)
 			animations[5].second.push_back(meshes[i]); // LAtk  =  .41s
@@ -86,8 +86,12 @@ namespace Vatista {
 			}
 		}
 
-		if (getHitStun() && glfwGetTime() - getHSTimer() > 1.0f)
-			setHitStun(false);
+		if (getHitStun()) {
+			if (glfwGetTime() - getHSTimer() > 1.0f)
+				setHitStun(false);
+			else
+				return;
+		}
 		glm::vec3 movement = glm::vec3(0.0f);
 		float speed = 10.0f;
 		glfwSetInputMode(gameWindow, GLFW_STICKY_KEYS, GLFW_TRUE);
@@ -124,7 +128,7 @@ namespace Vatista {
 				}
 			}
 
-			if (glfwGetTime() - kb.atkTimer1 > 0.8f)
+			if ((glfwGetTime() - kb.atkTimer1 > 0.42f && atk) || (glfwGetTime() - kb.atkTimer1 > 0.59f && !atk))
 				setIsAttacking(false);
 
 			// Light Attack
@@ -149,68 +153,68 @@ namespace Vatista {
 				movement.x = 0;
 				ae->PlayEvent("HeavyAttack");
 			}
-			if (getIsAttacking() && glfwGetTime() - kb.atkTimer1 > 0.2f && glfwGetTime() - kb.atkTimer1 < 0.6f) {
-				if (!p2->getHitStun() && !p2->getIsDashing()) {
-					if (atk) {
-						if (collisionCheck(getAtk1Pos(), getAtk1Coll(), p2->getPos(), p2->getCollider())) {
-							if (!p2->getIsBlocking() || (p2->getIsBlocking() && p2->getStamina() < 10.f)) {
-								setWins(getWins() + 1);
-								setIsAttacking(false);
-								kb.atkTimer1 = 0.0f;
-								std::cout << "p2 dies" << std::endl;
-								setLerpEnd(-4.0f);
-								p2->setLerpEnd(4.0f);
-								setLerper(getPosX());
-								setStartTime(glfwGetTime());
-								setJourneyLength(glm::distance(getPosX(), getLerpEnd()));
-								p2->setLerper(p2->getPosX());
-								p2->setStartTime(glfwGetTime());
-								p2->setJourneyLength(glm::distance(p2->getPosX(), p2->getLerpEnd()));
-								setStamina(100.0f);
-								p2->setStamina(100.0f);
-								setStateTracker(4);
-								p2->setStateTracker(4);
-								roundEnd = true;
-								return;
-							}
-							else {
-								std::cout << "p2 blocked" << std::endl;
-								p2->setHitStun(true);
-								p2->setHSTimer(glfwGetTime());
-								p2->setStamina(p2->getStamina() - 10.f);
-								ae->PlayEvent("Block");
-							}
+			if (getIsAttacking() && !p2->getHitStun() && !p2->getIsDashing()) {
+				if (atk && glfwGetTime() - kb.atkTimer1 > 0.2f && glfwGetTime() - kb.atkTimer1 < 0.40f) {
+					if (collisionCheck(getAtk1Pos(), getAtk1Coll(), p2->getPos(), p2->getCollider())) {
+						if (!p2->getIsBlocking() || (p2->getIsBlocking() && p2->getStamina() < 10.f)) {
+							setWins(getWins() + 1);
+							setIsAttacking(false);
+							kb.atkTimer1 = 0.0f;
+							std::cout << "p2 dies" << std::endl;
+							setLerpEnd(-4.0f);
+							p2->setLerpEnd(4.0f);
+							setLerper(getPosX());
+							setStartTime(glfwGetTime());
+							setJourneyLength(glm::distance(getPosX(), getLerpEnd()));
+							p2->setLerper(p2->getPosX());
+							p2->setStartTime(glfwGetTime());
+							p2->setJourneyLength(glm::distance(p2->getPosX(), p2->getLerpEnd()));
+							setStamina(100.0f);
+							p2->setStamina(100.0f);
+							setStateTracker(4);
+							p2->setStateTracker(4);
+							roundEnd = true;
+							return;
+						}
+						else {
+							std::cout << "p2 blocked" << std::endl;
+							p2->setHitStun(true);
+							p2->setStateTracker(7);
+							p2->setHSTimer(glfwGetTime());
+							p2->setStamina(p2->getStamina() - 10.f);
+							ae->PlayEvent("Block");
 						}
 					}
-					else {
-						if (collisionCheck(getAtk2Pos(), getAtk2Coll(), p2->getPos(), p2->getCollider())) {
-							if (!p2->getIsBlocking() || (p2->getIsBlocking() && p2->getStamina() < 10.f)) {
-								setWins(getWins() + 1);
-								setIsAttacking(false);
-								kb.atkTimer1 = 0.0f;
-								std::cout << "p2 dies" << std::endl;
-								setLerpEnd(-4.0f);
-								p2->setLerpEnd(4.0f);
-								setLerper(getPosX());
-								setStartTime(glfwGetTime());
-								setJourneyLength(glm::distance(getPosX(), getLerpEnd()));
-								p2->setLerper(p2->getPosX());
-								p2->setStartTime(glfwGetTime());
-								p2->setJourneyLength(glm::distance(p2->getPosX(), p2->getLerpEnd()));
-								setStamina(100.0f);
-								p2->setStamina(100.0f);
-								setStateTracker(4);
-								p2->setStateTracker(4);
-								roundEnd = true;
-								return;
-							}
-							else {
-								std::cout << "p2 blocked" << std::endl;
-								p2->setHitStun(true);
-								p2->setHSTimer(glfwGetTime());
-								p2->setStamina(p2->getStamina() - 10.f);
-								ae->PlayEvent("Block");
-							}
+				}
+				else if (!atk && glfwGetTime() - kb.atkTimer1 > 0.3f && glfwGetTime() - kb.atkTimer1 < 0.57f) {
+					if (collisionCheck(getAtk2Pos(), getAtk2Coll(), p2->getPos(), p2->getCollider())) {
+						if (!p2->getIsBlocking() || (p2->getIsBlocking() && p2->getStamina() < 10.f)) {
+							setWins(getWins() + 1);
+							setIsAttacking(false);
+							kb.atkTimer1 = 0.0f;
+							std::cout << "p2 dies" << std::endl;
+							setLerpEnd(-4.0f);
+							p2->setLerpEnd(4.0f);
+							setLerper(getPosX());
+							setStartTime(glfwGetTime());
+							setJourneyLength(glm::distance(getPosX(), getLerpEnd()));
+							p2->setLerper(p2->getPosX());
+							p2->setStartTime(glfwGetTime());
+							p2->setJourneyLength(glm::distance(p2->getPosX(), p2->getLerpEnd()));
+							setStamina(100.0f);
+							p2->setStamina(100.0f);
+							setStateTracker(4);
+							p2->setStateTracker(4);
+							roundEnd = true;
+							return;
+						}
+						else {
+							std::cout << "p2 blocked" << std::endl;
+							p2->setHitStun(true);
+							p2->setStateTracker(7);
+							p2->setHSTimer(glfwGetTime());
+							p2->setStamina(p2->getStamina() - 10.f);
+							ae->PlayEvent("Block");
 						}
 					}
 				}
@@ -258,6 +262,7 @@ namespace Vatista {
 				float lerpendFloored = std::floor(getLerpEnd() * 1000.f);
 				if (lerperFloored < lerpendFloored + 10.f && lerperFloored > lerpendFloored - 10.f) {
 					setIsDashing(false);
+					std::cout << glfwGetTime() - getStartTime() << std::endl;
 					//std::cout << "done" << std::endl;
 					if (collisionCheck(getPos(), getCollider(), p2->getPos(), p2->getCollider())) {
 						float midPoint = (getPosX() + p2->getPosX()) / 2.0f;
@@ -311,7 +316,7 @@ namespace Vatista {
 				}
 			}
 
-			if (glfwGetTime() - kb.atkTimer2 > 0.8f)
+			if ((glfwGetTime() - kb.atkTimer2 > 0.42f && atk) || (glfwGetTime() - kb.atkTimer2 > 0.59f && !atk))
 				setIsAttacking(false);
 
 			// Light Attack
@@ -336,68 +341,68 @@ namespace Vatista {
 				movement.x = 0;
 				ae->PlayEvent("HeavyAttack");
 			}
-			if (getIsAttacking() && glfwGetTime() - kb.atkTimer2 > 0.2f && glfwGetTime() - kb.atkTimer2 < 0.6f) {
-				if (!p2->getHitStun() && !p2->getIsDashing()) {
-					if (atk) {
-						if (collisionCheck(getAtk1Pos(), getAtk1Coll(), p2->getPos(), p2->getCollider())) {
-							if (!p2->getIsBlocking() || (p2->getIsBlocking() && p2->getStamina() < 10.f)) {
-								setWins(getWins() + 1);
-								setIsAttacking(false);
-								kb.atkTimer2 = 0.0f;
-								std::cout << "p1 dies" << std::endl;
-								setLerpEnd(4.0f);
-								p2->setLerpEnd(-4.0f);
-								setLerper(getPosX());
-								setStartTime(glfwGetTime());
-								setJourneyLength(glm::distance(getPosX(), getLerpEnd()));
-								p2->setLerper(p2->getPosX());
-								p2->setStartTime(glfwGetTime());
-								p2->setJourneyLength(glm::distance(p2->getPosX(), p2->getLerpEnd()));
-								setStamina(100.0f);
-								p2->setStamina(100.0f);
-								setStateTracker(4);
-								p2->setStateTracker(4);
-								roundEnd = true;
-								return;
-							}
-							else {
-								std::cout << "p1 blocked" << std::endl;
-								p2->setHitStun(true);
-								p2->setHSTimer(glfwGetTime());
-								p2->setStamina(p2->getStamina() - 10.f);
-								ae->PlayEvent("Block");
-							}
+			if (getIsAttacking() && !p2->getHitStun() && !p2->getIsDashing()) {
+				if (atk && glfwGetTime() - kb.atkTimer2 > 0.2f && glfwGetTime() - kb.atkTimer2 < 0.40f) {
+					if (collisionCheck(getAtk1Pos(), getAtk1Coll(), p2->getPos(), p2->getCollider())) {
+						if (!p2->getIsBlocking() || (p2->getIsBlocking() && p2->getStamina() < 10.f)) {
+							setWins(getWins() + 1);
+							setIsAttacking(false);
+							kb.atkTimer2 = 0.0f;
+							std::cout << "p1 dies" << std::endl;
+							setLerpEnd(4.0f);
+							p2->setLerpEnd(-4.0f);
+							setLerper(getPosX());
+							setStartTime(glfwGetTime());
+							setJourneyLength(glm::distance(getPosX(), getLerpEnd()));
+							p2->setLerper(p2->getPosX());
+							p2->setStartTime(glfwGetTime());
+							p2->setJourneyLength(glm::distance(p2->getPosX(), p2->getLerpEnd()));
+							setStamina(100.0f);
+							p2->setStamina(100.0f);
+							setStateTracker(4);
+							p2->setStateTracker(4);
+							roundEnd = true;
+							return;
+						}
+						else {
+							std::cout << "p1 blocked" << std::endl;
+							p2->setHitStun(true);
+							p2->setStateTracker(7);
+							p2->setHSTimer(glfwGetTime());
+							p2->setStamina(p2->getStamina() - 10.f);
+							ae->PlayEvent("Block");
 						}
 					}
-					else {
-						if (collisionCheck(getAtk2Pos(), getAtk2Coll(), p2->getPos(), p2->getCollider())) {
-							if (!p2->getIsBlocking() || (p2->getIsBlocking() && p2->getStamina() < 10.f)) {
-								setWins(getWins() + 1);
-								setIsAttacking(false);
-								kb.atkTimer2 = 0.0f;
-								std::cout << "p1 dies" << std::endl;
-								setLerpEnd(4.0f);
-								p2->setLerpEnd(-4.0f);
-								setLerper(getPosX());
-								setStartTime(glfwGetTime());
-								setJourneyLength(glm::distance(getPosX(), getLerpEnd()));
-								p2->setLerper(p2->getPosX());
-								p2->setStartTime(glfwGetTime());
-								p2->setJourneyLength(glm::distance(p2->getPosX(), p2->getLerpEnd()));
-								setStamina(100.0f);
-								p2->setStamina(100.0f);
-								setStateTracker(4);
-								p2->setStateTracker(4);
-								roundEnd = true;
-								return;
-							}
-							else {
-								std::cout << "p1 blocked" << std::endl;
-								p2->setHitStun(true);
-								p2->setHSTimer(glfwGetTime());
-								p2->setStamina(p2->getStamina() - 10.f);
-								ae->PlayEvent("Block");
-							}
+				}
+				else if (!atk && glfwGetTime() - kb.atkTimer2 > 0.3f && glfwGetTime() - kb.atkTimer2 < 0.59f) {
+					if (collisionCheck(getAtk2Pos(), getAtk2Coll(), p2->getPos(), p2->getCollider())) {
+						if (!p2->getIsBlocking() || (p2->getIsBlocking() && p2->getStamina() < 10.f)) {
+							setWins(getWins() + 1);
+							setIsAttacking(false);
+							kb.atkTimer2 = 0.0f;
+							std::cout << "p1 dies" << std::endl;
+							setLerpEnd(4.0f);
+							p2->setLerpEnd(-4.0f);
+							setLerper(getPosX());
+							setStartTime(glfwGetTime());
+							setJourneyLength(glm::distance(getPosX(), getLerpEnd()));
+							p2->setLerper(p2->getPosX());
+							p2->setStartTime(glfwGetTime());
+							p2->setJourneyLength(glm::distance(p2->getPosX(), p2->getLerpEnd()));
+							setStamina(100.0f);
+							p2->setStamina(100.0f);
+							setStateTracker(4);
+							p2->setStateTracker(4);
+							roundEnd = true;
+							return;
+						}
+						else {
+							std::cout << "p1 blocked" << std::endl;
+							p2->setHitStun(true);
+							p2->setStateTracker(7);
+							p2->setHSTimer(glfwGetTime());
+							p2->setStamina(p2->getStamina() - 10.f);
+							ae->PlayEvent("Block");
 						}
 					}
 				}
@@ -495,8 +500,6 @@ namespace Vatista {
 		}
 		if (getStamina() > 100.0f)
 			setStamina(100.0f);
-		if (getHitStun())
-			setStateTracker(7);
 		updateAnim();
 	}
 }

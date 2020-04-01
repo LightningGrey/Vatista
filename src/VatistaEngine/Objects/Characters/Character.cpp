@@ -24,16 +24,14 @@ namespace Vatista {
 
 	void Character::updateAnim()
 	{
-		if (currentTime >= endTime) {
-			if (getStateTracker()!=0) {
-				if (getAnimIndex() + 1 < animations[getStateTracker()].second.size())
-					animIndex++;
-				else
-					animIndex = 0;
-				setMesh(animations[getStateTracker()].second[getAnimIndex()]);
-				currentTime = 0;
-				endTime = animations[getStateTracker()].first[getAnimIndex()];
-			}
+		if (currentTime >= endTime && getStateTracker() != 0) {
+			if (getAnimIndex() + 1 < animations[getStateTracker()].second.size())
+				animIndex++;
+			else
+				animIndex = 0;
+			setMesh(animations[getStateTracker()].second[getAnimIndex()]);
+			currentTime = 0;
+			endTime = animations[getStateTracker()].first[getAnimIndex()];
 		}
 	}
 

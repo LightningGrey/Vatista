@@ -393,7 +393,6 @@ void Vatista::Game::update(float dt)
 		UI2->setMat(stamUIMats[P2->getWins()]);
 		S1->setStamina(P1->getStamina());
 		S2->setStamina(P2->getStamina());
-		std::cout << P1->getStamina() << " " << P2->getStamina() << std::endl;
 		float dist = fabs(P1->getPosX() - P2->getPosX());
 		//P1->setStamina(P1->getStamina() + 10.0f);
 		//P2->setStamina(P2->getStamina() + 10.0f);
