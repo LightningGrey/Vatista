@@ -14,7 +14,7 @@ namespace Vatista {
 	
 		// Bind and buffer our vertex data
 		glBindBuffer(GL_ARRAY_BUFFER, myBuffers[0]);
-		glBufferData(GL_ARRAY_BUFFER, numVerts * sizeof(Vertex), vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, numVerts * sizeof(float), vertices, GL_STATIC_DRAW);
 	
 		// Bind and buffer our index data
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, myBuffers[1]);

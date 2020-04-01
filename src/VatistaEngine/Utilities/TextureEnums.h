@@ -6,9 +6,9 @@
 
 namespace Vatista
 {
-
+	
 	// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexImage2D.xhtml
-	// These are some of our more common available internal formats
+			// These are some of our more common available internal formats
 	ENUM(InternalFormat, GLint,
 		Depth = GL_DEPTH_COMPONENT,
 		DepthStencil = GL_DEPTH_STENCIL,
@@ -16,24 +16,26 @@ namespace Vatista
 		R16 = GL_R16,
 		RG8 = GL_RG8,
 		RGB8 = GL_RGB8,
+		RGB10 = GL_RGB10,
 		RGB16 = GL_RGB16,
 		RGBA8 = GL_RGBA8,
 		RGBA16 = GL_RGBA16
 
 		// Note: There are sized internal formats but there is a LOT of them
-	);
+		);
 
 	// The layout of the input pixel data
 	ENUM(PixelFormat, GLint,
 		Red = GL_RED,
 		Rg = GL_RG,
 		Rgb = GL_RGB,
+		SRgb = GL_SRGB,
 		Bgr = GL_BGR,
 		Rgba = GL_RGBA,
 		Bgra = GL_BGRA,
 		Depth = GL_DEPTH_COMPONENT,
 		DepthStencil = GL_DEPTH_STENCIL
-	);
+		);
 
 	// The type for each component of the pixel data
 	ENUM(PixelType, GLint,
@@ -44,7 +46,7 @@ namespace Vatista
 		UInt = GL_UNSIGNED_INT,
 		Int = GL_INT,
 		Float = GL_FLOAT
-	);
+		);
 
 	// These are our options for GL_TEXTURE_WRAP_T, GL_TEXTURE_WRAP_S and GL_TEXTURE_WRAP_R
 	ENUM(WrapMode, GLint,
@@ -53,7 +55,7 @@ namespace Vatista
 		MirroredRepeat = GL_MIRRORED_REPEAT,
 		Repeat = GL_REPEAT, // Default
 		MirrorClampToEdge = GL_MIRROR_CLAMP_TO_EDGE
-	);
+		);
 
 	// These are our available options for the GL_TEXTURE_MIN_FILTER setting
 	ENUM(MinFilter, GLint,
@@ -63,13 +65,13 @@ namespace Vatista
 		LinearMipNearest = GL_LINEAR_MIPMAP_NEAREST,
 		NearestMipLinear = GL_NEAREST_MIPMAP_LINEAR, // This is the default setting
 		LinearMipLinear = GL_LINEAR_MIPMAP_LINEAR
-	);
+		);
 
 	// These are our available options for the GL_TEXTURE_MAG_FILTER setting
 	ENUM(MagFilter, GLint,
 		Nearest = GL_NEAREST,
 		Linear = GL_LINEAR  // This is the default setting
-	);
+		);
 
 	/*
 	 * Gets the number of bytes needed to represent a single texel of the given format and type

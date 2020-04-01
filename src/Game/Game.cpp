@@ -443,26 +443,8 @@ void Vatista::Game::init()
 	S2->setScale(2.5f);
 	UIList.push_back(S2);
 
-	//bufferCreation();
-	//postPassCreate();
-
-	//for postprocess
-	{
-		float vert[] = {
-		-1.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 1.0f,
-		-1.0f, -1.0f, 0.0f, 0.0f,
-		1.0f, -1.0f, 1.0f, 0.0f
-		};
-		uint32_t indices[] = {
-		0, 1, 2,
-		1, 3, 2
-		};
-
-		fullscreenQuad = std::make_shared<Mesh>(vert, 4, indices, 6);
-	}
-
-	postProcessV2();
+	bufferCreation();
+	postPassCreate();
 	 
 
 	glEnable(GL_CULL_FACE);
@@ -535,23 +517,18 @@ void Vatista::Game::render(float dt)
 
 void Vatista::Game::draw(float)
 {
-	//mainCamera->state.BackBuffer->bind();
+	//buffer->bind();
 
 	//draw game objects
 	for (auto object : ObjectList) {
 		object->Draw(mainCamera);
 	}
 
-	//mainCamera->state.BackBuffer->unBind();
+	//buffer->unBind();
+	
+	postProcess();
 
-	//if (mainCamera->state.FrontBuffer != nullptr) {
-	//	// Swap the back and front buffers
-	//	auto temp = mainCamera->state.BackBuffer;
-	//	mainCamera->state.BackBuffer = mainCamera->state.FrontBuffer;
-	//	mainCamera->state.FrontBuffer = temp;
-	//}
-
-	postProcessV3();
+	fullscreenQuad->Draw();
 
 	//draw UI
 	for (auto component : UIList) {
@@ -612,47 +589,46 @@ void Vatista::Game::bufferCreation()
 	//buffer->AddAttachment(normal);
 	buffer->AddAttachment(depth);
 	buffer->Validate();
-	 
-	mainCamera->state.BackBuffer = buffer;
-	mainCamera->state.FrontBuffer = buffer->Clone();
-	mainCamera->state.IsMainCamera = true;
-	mainCamera->state.Projection = glm::perspective(glm::radians(60.0f), 16.f / 9.f, 1.0f, 500.0f);
-}
 
+}
+ 
 void Vatista::Game::postPassCreate()
 {
-	auto shader = std::make_shared<Shader>();
-	shader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/invert.fs.glsl");
-	shader->Bind();
+	//float vert[] = {
+	//	-1.0f, 1.0f, 0.0f, 1.0f,
+	//	1.0f, 1.0f, 1.0f, 1.0f,
+	//	-1.0f, -1.0f, 0.0f, 0.0f,
+	//	1.0f, -1.0f, 1.0f, 0.0f
+	//};
+	//uint32_t indices[] = {
+	//	0, 1, 2,
+	//	1, 3, 2
+	//};
 
-	auto output = std::make_shared<FrameBuffer>(gameWindow->getWidth(), gameWindow->getHeight());
-	output->AddAttachment(mainColour);
-	output->Validate();
-	// Add the pass to the post processing stack
-	passes.push_back({ shader, output });
+	bool load = FileReader::vsfRead("mesh_Quad.vsf", fullscreenQuad);
+
+	if (load) {
+		auto shader = std::make_shared<Shader>();
+		shader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/invert.fs.glsl");
+		shader->Bind();
+
+		auto output = std::make_shared<FrameBuffer>(gameWindow->getWidth(), gameWindow->getHeight());
+		output->AddAttachment(mainColour);
+		output->Validate();
+		// Add the pass to the post processing stack
+		passes.push_back({ shader, output });
+	} else {
+		VATISTA_LOG_ERROR("Quad not loaded.");
+	}
+
 }
 
 
 void Vatista::Game::postProcess()
 {
-	{
-		float vert[] = {
-		-1.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 1.0f,
-		-1.0f, -1.0f, 0.0f, 0.0f,
-		1.0f, -1.0f, 1.0f, 0.0f
-		};
-		uint32_t indices[] = {
-		0, 1, 2,
-		1, 3, 2
-		};
-		
-		fullscreenQuad = std::make_shared<Mesh>(vert, 4, indices, 6);
-	}
-
 	glDisable(GL_DEPTH_TEST);
 	// The last output will start as the output from the rendering
-	FrameBuffer::Sptr lastPass = mainCamera->state.BackBuffer;
+	FrameBuffer::Sptr lastPass = buffer;
 
 	for (const PostPass& pass : passes) {
 		// We'll bind our post-processing output as the current render target and clear it
@@ -664,7 +640,8 @@ void Vatista::Game::postProcess()
 	
 		// Use the post processing shader to draw the fullscreen quad
 		pass.Shader->Bind();
-		lastPass->bind(0);
+		lastPass->GetAttachment(RenderTargetAttachment::Color0)->bind(0);
+		//texture2->bind(0);
 		pass.Shader->SetUniform("xImage", 0);
 		pass.Shader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
 	
@@ -685,45 +662,5 @@ void Vatista::Game::postProcess()
 		lastPass->unBind();
 	}
 
-}
-
-void Vatista::Game::postProcessV2()
-{
-	postShader = std::make_shared<Shader>();
-	postShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/invert.fs.glsl");
-	//postShader->Bind();
-
-	glGenFramebuffers(1, &framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-
-	glGenTextures(1, &colourbuffer);
-	glBindTexture(GL_TEXTURE_2D, colourbuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gameWindow->getWidth(), gameWindow->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colourbuffer, 0);
-
-	glGenRenderbuffers(1, &depthstencil);
-	glBindRenderbuffer(GL_RENDERBUFFER, depthstencil);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, gameWindow->getWidth(), gameWindow->getHeight());
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		VATISTA_LOG_WARN("Framebuffer not complete.");
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-}
-
-void Vatista::Game::postProcessV3()
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDisable(GL_DEPTH_TEST);
-
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	postShader->Bind();
-	glBindTexture(GL_TEXTURE_2D, colourbuffer);
-	fullscreenQuad->Draw();
 }
 
