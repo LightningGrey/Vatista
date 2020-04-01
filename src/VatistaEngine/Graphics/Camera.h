@@ -4,8 +4,23 @@
 #include <GLM/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include "Utilities/Utils.h"
+#include "Post-Processing/FrameBuffer.h"
 
 namespace Vatista {
+	struct CamState {
+		// True if this camera is the main camera for the scene (ie, what gets rendered fullscreen)
+		bool              IsMainCamera;
+		// The render target that this camera will render to
+		FrameBuffer::Sptr BackBuffer;
+		// The previous frame this camera rendered
+		FrameBuffer::Sptr FrontBuffer;
+		// The Color to clear to when using this camera
+		glm::vec4         ClearCol = glm::vec4(0, 0, 0, 1);
+
+		// The projection matrix for this camera
+		glm::mat4         Projection;
+	};
+
 	class Camera {
 	public:
 		SharedPtr(Camera);
@@ -14,6 +29,8 @@ namespace Vatista {
 		virtual ~Camera();
 
 		glm::mat4 Projection;
+
+		CamState state;
 
 		const glm::mat4& GetView() const { return myView; }
 		inline glm::mat4 GetViewProjection() const { return Projection * myView; }
