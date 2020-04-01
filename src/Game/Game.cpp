@@ -75,7 +75,9 @@ void Vatista::Game::init()
 	audioEngine->PlayEvent("Music");
 	
 	//load stage objects
-	bool oLoad = load("./res/Objects/init.txt");
+	bool oLoad = load("./res/Objects/StageOne.txt", stageMeshList);
+	oLoad = load("./res/Objects/UI.txt", uiMeshList);
+	oLoad = load("./res/Objects/Z3n.txt", z3nMeshList);
 	
 	texture = std::make_shared<Texture2D>();
 	texture->loadFile("./res/Objects/Z3n/Z3N_Texture.png");
@@ -214,7 +216,7 @@ void Vatista::Game::init()
 		stage = std::make_shared<StationaryObj>();
 		stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
 		stage->setRotY(-90.0f);
-		stage->setMesh(meshList[i]);
+		stage->setMesh(stageMeshList[i]);
 		stage->setMat(mats);
 		//if (i != 5) {
 			ObjectList.push_back(stage);
@@ -337,80 +339,30 @@ void Vatista::Game::init()
 	staminaMat->Set("UVoffset", glm::vec3(0.0f));
 
 	//Player 1
-	C1 = std::make_shared<Character>(true, meshList, characterMat);
-	C1->setScale(0.01f);
-	ObjectList.push_back(C1);
+	P1 = std::make_shared<Z3n>(true, z3nMeshList, characterMat);
+	ObjectList.push_back(P1);
 
 	//Player 2 
-	C2 = std::make_shared<Character>(false, meshList, characterMat);
-	C2->setScale(0.01f);
-	ObjectList.push_back(C2);
-
-	bladeText = std::make_shared<Texture2D>();
-	bladeText->loadFile("./res/Objects/color-grid.png");
-	Material::Sptr bladeMat = std::make_shared<Material>(stageProp);//blank stamina texture
-	bladeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	bladeMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
-	bladeMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	bladeMat->Set("a_AmbientPower", 0.5f);
-	bladeMat->Set("a_LightSpecPower", 0.9f);
-	bladeMat->Set("a_LightShininess", 256.0f);
-	bladeMat->Set("a_LightAttenuation", 0.04f);
-	bladeMat->Set("texSample", bladeText, NearestMipped);
-
-	sword1 = std::make_shared<StationaryObj>();
-	sword1->setMesh(meshList[50]);
-	sword1->setMat(bladeMat);
-	sword1->setPos(C1->getPos());
-	sword1->setScale(0.01f);
-	ObjectList.push_back(sword1);
-	sword2 = std::make_shared<StationaryObj>();
-	sword2->setMesh(meshList[50]);
-	sword2->setMat(bladeMat);
-	sword2->setPos(C2->getPos());
-	sword2->setScale(0.01f);
-	ObjectList.push_back(sword2);
-	bladeText = std::make_shared<Texture2D>();
-	bladeText->loadFile("./res/Objects/Z3n/z3n_Sheath_Texture.png");
-	bladeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	bladeMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
-	bladeMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	bladeMat->Set("a_AmbientPower", 0.5f);
-	bladeMat->Set("a_LightSpecPower", 0.9f);
-	bladeMat->Set("a_LightShininess", 256.0f);
-	bladeMat->Set("a_LightAttenuation", 0.04f);
-	bladeMat->Set("texSample", bladeText, NearestMipped);
-
-	sheath1 = std::make_shared<StationaryObj>();
-	sheath1->setMesh(meshList[51]);
-	sheath1->setMat(bladeMat);
-	sheath1->setPos(C1->getPos());
-	sheath1->setScale(0.01f);
-	ObjectList.push_back(sheath1);
-	sheath2 = std::make_shared<StationaryObj>();
-	sheath2->setMesh(meshList[51]);
-	sheath2->setMat(bladeMat);
-	sheath2->setPos(C2->getPos());
-	sheath2->setScale(0.01f);
-	ObjectList.push_back(sheath2);
+	P2 = std::make_shared<Z3n>(false, z3nMeshList, characterMat);
+	ObjectList.push_back(P2);
 
 	UI1 = std::make_shared<UIObject>();
 	UI1->setPos(glm::vec3(-4.8f, 7.f, 0.f));
-	UI1->setMesh(meshList[17]);
-	UI1->setMat(stamUIMats[C1->getWins()]);
+	UI1->setMesh(uiMeshList[0]);
+	UI1->setMat(stamUIMats[P1->getWins()]);
 	UI1->setScale(2.5f);
 	UIList.push_back(UI1);
 
 	charProfile1 = std::make_shared<UIObject>();
 	charProfile1->setPos(glm::vec3(-4.8f, 7.f, 1.f));
-	charProfile1->setMesh(meshList[18]);
+	charProfile1->setMesh(uiMeshList[1]);
 	charProfile1->setMat(profileMat);
 	charProfile1->setScale(2.5f);
 	UIList.push_back(charProfile1);
 
 	S1 = std::make_shared<Stamina>();
 	S1->setPos(glm::vec3(-4.8f, 7.f, 1.f));
-	S1->setMesh(meshList[19]);//3rd one on init.txt 
+	S1->setMesh(uiMeshList[2]);//3rd one on init.txt 
 	S1->setMat(staminaMat/*staminaMat*/);
 	//S1->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
 	S1->setScale(2.5f);
@@ -419,8 +371,8 @@ void Vatista::Game::init()
 
 	UI2 = std::make_shared<UIObject>();
 	UI2->setPos(glm::vec3(4.8f, 7.f, 0.f));
-	UI2->setMesh(meshList[17]);
-	UI2->setMat(stamUIMats[C2->getWins()]);
+	UI2->setMesh(uiMeshList[0]);
+	UI2->setMat(stamUIMats[P2->getWins()]);
 
 	UI2->setRotY(180.f);
 	UI2->setScale(2.5f);
@@ -428,7 +380,7 @@ void Vatista::Game::init()
 
 	charProfile2 = std::make_shared<UIObject>();
 	charProfile2->setPos(glm::vec3(4.8f, 7.f, 1.f));
-	charProfile2->setMesh(meshList[18]);
+	charProfile2->setMesh(uiMeshList[1]);
 	charProfile2->setMat(profileMat);
 	charProfile2->setRotY(180.f);
 	charProfile2->setScale(2.5f);
@@ -436,7 +388,7 @@ void Vatista::Game::init()
 
 	S2 = std::make_shared<Stamina>();
 	S2->setPos(glm::vec3(4.8f, 7.f, 1.f));
-	S2->setMesh(meshList[19]);//3rd one on init.txt 
+	S2->setMesh(uiMeshList[2]);//3rd one on init.txt 
 	S2->setMat(staminaMat/*staminaMat*/);
 	S2->setRotY(180.f);
 	//S2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
@@ -457,35 +409,26 @@ void Vatista::Game::close()
 
 void Vatista::Game::update(float dt)
 {
-	if (C1->getWins() < 3 && C2->getWins() < 3) {
-		C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
-		C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
-		sword1->setPos(C1->getPos());
-		sword1->setRotY(C1->getRot().y);
-		sheath1->setPos(C1->getPos());
-		sheath1->setRotY(C1->getRot().y);
-		sword2->setPos(C2->getPos());
-		sword2->setRotY(C2->getRot().y);
-		sheath2->setPos(C2->getPos());
-		sheath2->setRotY(C2->getRot().y);
-		UI1->setMat(stamUIMats[C1->getWins()]);
-		UI2->setMat(stamUIMats[C2->getWins()]);
-		S1->setStamina(C1->getStamina());
-		S2->setStamina(C2->getStamina());
-		std::cout << C1->getStamina() << " " << C2->getStamina() << std::endl;
-		float dist = fabs(C1->getPosX() - C2->getPosX());
-		//C1->setStamina(C1->getStamina() + 10.0f);
-		//C2->setStamina(C2->getStamina() + 10.0f);
+	if (P1->getWins() < 3 && P2->getWins() < 3) {
+		P1->update(dt, gameWindow->getWindow(), P2, audioEngine);
+		P2->update(dt, gameWindow->getWindow(), P1, audioEngine);
+		UI1->setMat(stamUIMats[P1->getWins()]);
+		UI2->setMat(stamUIMats[P2->getWins()]);
+		S1->setStamina(P1->getStamina());
+		S2->setStamina(P2->getStamina());
+		float dist = fabs(P1->getPosX() - P2->getPosX());
+		//P1->setStamina(P1->getStamina() + 10.0f);
+		//P2->setStamina(P2->getStamina() + 10.0f);
 		if (dist > 5.0f)
-			mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 11.0f + (dist / 2.0f)));
+			mainCamera->SetPosition(glm::vec3((P1->getPosX() + P2->getPosX()) / 2.0f, 2.0f, 11.0f + (dist / 2.0f)));
 		else
-			mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 13.5f));
+			mainCamera->SetPosition(glm::vec3((P1->getPosX() + P2->getPosX()) / 2.0f, 2.0f, 13.5f));
 		mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
-	else if(C1->getWins()==3){
+	else if(P1->getWins()==3){
 
 	}
-	else if(C2->getWins()==3){
+	else if(P2->getWins()==3){
 
 	}
 	
@@ -538,7 +481,7 @@ void Vatista::Game::draw(float)
 
 }
 
-bool Vatista::Game::load(std::string filename)
+bool Vatista::Game::load(std::string filename, std::vector<Mesh::Sptr>& meshes)
 {
 	std::vector<std::string> dataList;
 	bool fRead = FileReader::readLines(filename, dataList);
@@ -552,7 +495,7 @@ bool Vatista::Game::load(std::string filename)
 				return false;
 			}
 			else {
-				meshList.push_back(mesh);
+				meshes.push_back(mesh);
 			}
 		}
 	} else {

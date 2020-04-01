@@ -22,6 +22,8 @@
     <ClCompile Include="src\Game\TitleLayer.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\UI\Menu.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\UI\UIObject.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\Characters\Z3n.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\Characters\Tashia.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h" />
@@ -65,6 +67,8 @@
     <ClInclude Include="src\VatistaEngine\Objects\UI\Button.h" />
     <ClInclude Include="src\VatistaEngine\Objects\UI\Menu.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\FileReader.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\Characters\Z3n.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\Characters\Tashia.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3.lib" />
