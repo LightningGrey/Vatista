@@ -41,7 +41,7 @@ namespace Vatista {
 		void update(float dt);
 		void render(float dt);
 		void draw(float dt);
-		bool load(std::string filename);
+		bool load(std::string filename, std::vector<Mesh::Sptr>& meshes);
 		void bufferCreation();
 		void postProcess();
 	private:
@@ -52,7 +52,11 @@ namespace Vatista {
 
 		//A shared pointer to our mesh
 		Mesh::Sptr mesh;
-		std::vector<Mesh::Sptr> meshList;
+		std::vector<Mesh::Sptr> menuMeshList;
+		std::vector<Mesh::Sptr> stageMeshList;
+		std::vector<Mesh::Sptr> uiMeshList;
+		std::vector<Mesh::Sptr> z3nMeshList;
+		std::vector<Mesh::Sptr> tashiaMeshList;
 
 		// A shared pointer to our shader
 		Shader::Sptr myShader;
@@ -71,13 +75,9 @@ namespace Vatista {
 
 		std::vector<GameObject::Sptr> ObjectList;
 		std::vector<GameObject::Sptr> UIList;
-		Z3n::Sptr C1;
-		Z3n::Sptr C2;
+		Character::Sptr P1;
+		Character::Sptr P2;
 		StationaryObj::Sptr stage;
-		StationaryObj::Sptr sword1;
-		StationaryObj::Sptr sword2;
-		StationaryObj::Sptr sheath1;
-		StationaryObj::Sptr sheath2;
 		Stamina::Sptr S1;
 		UIObject::Sptr UI1;
 		UIObject::Sptr charProfile1;
