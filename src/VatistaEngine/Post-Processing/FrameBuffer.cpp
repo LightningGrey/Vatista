@@ -25,6 +25,16 @@ namespace Vatista {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)attach, GL_TEXTURE_2D, this->textureColorbuffer, 0);
+	} 
+
+	void FrameBuffer::createFloatAttachment(int width, int height, RenderTargetAttachment attach)
+	{
+		glGenTextures(1, &this->textureColorbuffer);
+		glBindTexture(GL_TEXTURE_2D, this->textureColorbuffer);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)attach, GL_TEXTURE_2D, this->textureColorbuffer, 0);
 	}
 
 	void FrameBuffer::createRenderBuffer(int width, int height, RenderTargetAttachment attach,

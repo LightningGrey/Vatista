@@ -434,6 +434,14 @@ void Vatista::Game::update(float dt)
 	
 	audioEngine->Update();
 
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_ADD)) {
+		exposure += 0.01f;
+	}
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_SUBTRACT)) {
+		exposure -= 0.01f;
+	}
+
+
 	//S1.setScale(glm::vec3(0.5f)); 
 
 }
@@ -510,9 +518,10 @@ bool Vatista::Game::load(std::string filename, std::vector<Mesh::Sptr>& meshes)
 
 
 void Vatista::Game::bufferCreation()
-{
+{  
 	buffer = std::make_shared<FrameBuffer>();
-	buffer->createAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+	//buffer->createAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+	buffer->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
 	buffer->createRenderBuffer(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::DepthStencil,
 		RenderTargetType::DepthStencil);
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -522,31 +531,9 @@ void Vatista::Game::bufferCreation()
 	bool load = FileReader::vsfRead("mesh_Quad.vsf", fullscreenQuad);
 	
 	postShader = std::make_shared<Shader>();
-	postShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/invert.fs.glsl");
+	postShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/hdr.fs.glsl");
 	postShader->Bind();
 
-	//mainColour = RenderBufferDesc();
-	//mainColour.ShaderReadable = true;
-	//mainColour.Attachment = RenderTargetAttachment::Color0;
-	//mainColour.Format = RenderTargetType::ColorRgb8; //RGB8
-	//
-	////RenderBufferDesc normal = RenderBufferDesc();
-	////normal.ShaderReadable = true;
-	////normal.Attachment = RenderTargetAttachment::Color1;
-	////normal.Format = RenderTargetType::ColorRgb10; //RGB10
-	//
-	//depth = RenderBufferDesc();
-	//depth.ShaderReadable = true;
-	//depth.Attachment = RenderTargetAttachment::Depth;
-	//depth.Format = RenderTargetType::Depth32; //32 bit depth
-	//
-	//
-	//// Our main frame buffer needs a color output, and a depth output
-	//buffer = std::make_shared<FrameBuffer>(gameWindow->getWidth(), gameWindow->getHeight());
-	//buffer->AddAttachment(mainColour);
-	////buffer->AddAttachment(normal);
-	//buffer->AddAttachment(depth);
-	//buffer->Validate();
 
 }
  
@@ -589,7 +576,7 @@ void Vatista::Game::postProcess()
 
 	// clear all relevant buffers
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f); 
-	glClear(GL_COLOR_BUFFER_BIT); 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
 	//buffer->bindColour();
 
@@ -597,6 +584,7 @@ void Vatista::Game::postProcess()
 	buffer->bindColour(4);
 	postShader->SetUniform("xImage", 4);
 	postShader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
+	postShader->SetUniform("exposure", exposure);
 	fullscreenQuad->Draw();
 
 	//// The last output will start as the output from the rendering

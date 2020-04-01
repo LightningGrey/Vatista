@@ -107,6 +107,8 @@ namespace Vatista {
 		//FBO fbo;
 		Shader::Sptr postShader;
 
+		//test
+		float exposure = 0.5f;
 
 		//ObjLoader loader;
 		//
