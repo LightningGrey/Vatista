@@ -49,11 +49,9 @@ namespace Vatista {
 		void draw(float dt);
 		bool load(std::string filename, std::vector<Mesh::Sptr>& meshes);
 		void bufferCreation();
-		void postPassCreate();
+		void lightCreation();
 		void postProcess();
 
-		void postProcessV2();
-		void postProcessV3();
 	private:
 		Window* gameWindow;
 		glm::vec4 clearColour;
@@ -107,6 +105,8 @@ namespace Vatista {
 		//FBO fbo;
 		Shader::Sptr postShader;
 
+		//test
+		float exposure = 0.5f;
 
 		//ObjLoader loader;
 		//
