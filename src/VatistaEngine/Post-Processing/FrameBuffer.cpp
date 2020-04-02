@@ -19,26 +19,28 @@ namespace Vatista {
 
 	void FrameBuffer::createAttachment(int width, int height, RenderTargetAttachment attach)
 	{
-		glGenTextures(1, &this->textureColorbuffer);
-		glBindTexture(GL_TEXTURE_2D, this->textureColorbuffer);
+		GLuint textureColorbuffer;
+		glGenTextures(1, &textureColorbuffer);
+		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)attach, GL_TEXTURE_2D, this->textureColorbuffer, 0);
-		//colours.push_back(attach);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)attach, GL_TEXTURE_2D, textureColorbuffer, 0);
+		colours.push_back(textureColorbuffer);
 	} 
 
 	void FrameBuffer::createFloatAttachment(int width, int height, RenderTargetAttachment attach)
 	{
-		glGenTextures(1, &this->textureColorbuffer);
-		glBindTexture(GL_TEXTURE_2D, this->textureColorbuffer);
+		GLuint textureColorbuffer;
+		glGenTextures(1, &textureColorbuffer);
+		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);  
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)attach, GL_TEXTURE_2D, this->textureColorbuffer, 0);
-		//colours.push_back(attach);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)attach, GL_TEXTURE_2D, textureColorbuffer, 0);
+		colours.push_back(textureColorbuffer);
 	}
 
 	void FrameBuffer::createRenderBuffer(int width, int height, RenderTargetAttachment attach,
@@ -70,10 +72,9 @@ namespace Vatista {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	void FrameBuffer::bindColour(int slot)
+	void FrameBuffer::bindColour(int slot, int texLocation)
 	{
-		//glBindTexture(GL_TEXTURE_2D, this->textureColorbuffer);
-		glBindTextureUnit(slot, this->textureColorbuffer);
+		glBindTextureUnit(slot, colours[texLocation]);
 	}
 
 }

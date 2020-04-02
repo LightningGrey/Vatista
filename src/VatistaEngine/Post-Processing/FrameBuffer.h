@@ -90,16 +90,16 @@ namespace Vatista {
 		void bind();
 		void bindDefault();
 
-		void bindColour(int slot);
+		void bindColour(int slot, int texLocation);
 		
 		GLuint getID() {	return renderID;	};
-		GLuint getColour() { return textureColorbuffer; };
+		//GLuint getColour() { return textureColorbuffer; };
 
 	private:
 		GLuint renderID;
-		GLuint textureColorbuffer;
+		//GLuint textureColorbuffer;
 		GLuint rbo;
-		std::vector<std::pair<RenderTargetAttachment, GLuint>> colours;
+		std::vector<GLuint> colours;
 	};
 	
 }

@@ -575,7 +575,7 @@ void Vatista::Game::postProcess()
 	//buffer->bindColour();
 
 	hdrShader->Bind();
-	buffer->bindColour(2);
+	buffer->bindColour(2, 0);
 	hdrShader->SetUniform("xImage", 2);
 	hdrShader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
 	hdrShader->SetUniform("exposure", exposure);
