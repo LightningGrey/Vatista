@@ -26,7 +26,7 @@ namespace Vatista {
 	{
 		if (currentTime >= endTime && getStateTracker() != 0) {
 			if (getAnimIndex() + 1 < animations[getStateTracker()].second.size())
-				animIndex++;
+				animIndex++; 
 			else
 				animIndex = 0;
 			setMesh(animations[getStateTracker()].second[getAnimIndex()]);
@@ -45,8 +45,8 @@ namespace Vatista {
 
 		material->GetShader()->Bind();
 		material->Apply();
-		//dir light, move this to variable
-		material->GetShader()->SetUniform("dirlight.direction", { 0.0f, -1.0f, -0.6f });
+		//dir light, move this to variable  
+		material->GetShader()->SetUniform("dirlight.direction", { -0.2f, -1.0f, -0.3f });
 		material->GetShader()->SetUniform("dirlight.ambient", { 0.2f, 0.2f, 0.2f });
 		material->GetShader()->SetUniform("dirlight.diffuse", { 0.5f, 0.5f, 0.5f });
 		material->GetShader()->SetUniform("dirlight.specular", { 1.0f, 1.0f, 1.0f });

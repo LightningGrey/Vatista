@@ -110,13 +110,25 @@ void Vatista::Game::init()
 
 	Material::Sptr characterMat = std::make_shared<Material>(character);
 	characterMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	characterMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
+	characterMat->Set("a_LightColor", { 15.0f, 0.0f, 0.0f });
+	//characterMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
 	characterMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	characterMat->Set("a_AmbientPower", 0.7f);
 	characterMat->Set("a_LightSpecPower", 0.9f);
 	characterMat->Set("a_LightShininess", 256.0f);
 	characterMat->Set("a_LightAttenuation", 0.04f);
 	characterMat->Set("texSample", texture, NearestMipped);
+
+	Material::Sptr characterMat2 = std::make_shared<Material>(character);
+	characterMat2->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	characterMat2->Set("a_LightColor", { 0.0f, 0.0f, 15.0f });
+	//characterMat2->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
+	characterMat2->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	characterMat2->Set("a_AmbientPower", 0.7f);
+	characterMat2->Set("a_LightSpecPower", 0.9f);
+	characterMat2->Set("a_LightShininess", 256.0f);
+	characterMat2->Set("a_LightAttenuation", 0.04f);
+	characterMat2->Set("texSample", texture, NearestMipped);
 	
 	Material::Sptr stageMat = std::make_shared<Material>(stageProp);
 	stageMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -343,7 +355,7 @@ void Vatista::Game::init()
 	ObjectList.push_back(P1);
 
 	//Player 2 
-	P2 = std::make_shared<Z3n>(false, z3nMeshList, characterMat);
+	P2 = std::make_shared<Z3n>(false, z3nMeshList, characterMat2);
 	ObjectList.push_back(P2);
 
 	UI1 = std::make_shared<UIObject>();
@@ -396,7 +408,6 @@ void Vatista::Game::init()
 	UIList.push_back(S2);
 
 	bufferCreation(); 
-	//lightCreation();
 
 }
 
@@ -458,13 +469,10 @@ void Vatista::Game::render(float dt)
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_MULTISAMPLE);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
 
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	
 
 	draw(dt);
 }
@@ -476,11 +484,8 @@ void Vatista::Game::draw(float)
 	for (auto object : ObjectList) {
 		object->Draw(mainCamera);
 	}
-
-	//buffer->unBind();
 	
 	postProcess();
-	//fullscreenQuad->Draw();
 
 	//draw UI
 	for (auto component : UIList) {
@@ -522,23 +527,38 @@ void Vatista::Game::bufferCreation()
 	buffer = std::make_shared<FrameBuffer>();
 	//buffer->createAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
 	buffer->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+	//buffer->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color1);
+	//unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	//glDrawBuffers(2, attachments);
 	buffer->createRenderBuffer(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::DepthStencil,
 		RenderTargetType::DepthStencil);
+	
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::POSTPROCESSOR: Failed to initialize FBO" << std::endl;
 	buffer->bindDefault();
 
+
+	//pingpongBuffer1 = std::make_shared<FrameBuffer>();
+	//pingpongBuffer1->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+	//pingpongBuffer2 = std::make_shared<FrameBuffer>();
+	//pingpongBuffer2->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+
+	 
 	bool load = FileReader::vsfRead("mesh_Quad.vsf", fullscreenQuad);
 	
-	postShader = std::make_shared<Shader>();
-	postShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/hdr.fs.glsl");
-	postShader->Bind();
+	hdrShader = std::make_shared<Shader>(); 
+	hdrShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/hdr.fs.glsl");
+	hdrShader->Bind();
+	 
+	hblurShader = std::make_shared<Shader>();
+	hblurShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/gaussianblur.fs.glsl");
+	hblurShader->Bind();
+	hblurShader->SetUniform("isHorizontal", 1);
 
-
-}
- 
-void Vatista::Game::lightCreation()
-{
+	vblurShader = std::make_shared<Shader>();
+	vblurShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/gaussianblur.fs.glsl");
+	vblurShader->Bind();
+	vblurShader->SetUniform("isHorizontal", 0);
 
 }
 
@@ -554,47 +574,15 @@ void Vatista::Game::postProcess()
 
 	//buffer->bindColour();
 
-	postShader->Bind();
-	buffer->bindColour(4);
-	postShader->SetUniform("xImage", 4);
-	postShader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
-	postShader->SetUniform("exposure", exposure);
+	hdrShader->Bind();
+	buffer->bindColour(2);
+	hdrShader->SetUniform("xImage", 2);
+	hdrShader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
+	hdrShader->SetUniform("exposure", exposure);
+
+
 	fullscreenQuad->Draw();
 
-	//// The last output will start as the output from the rendering
-	//FrameBuffer::Sptr lastPass = buffer;
-	//
-	//for (const PostPass& pass : passes) {
-	//	// We'll bind our post-processing output as the current render target and clear it
-	//	pass.Output->bind(RenderTargetBinding::Draw);
-	//	glClear(GL_COLOR_BUFFER_BIT);
-	//
-	//	// Set the viewport to be the entire size of the passes output
-	//	glViewport(0, 0, pass.Output->GetWidth(), pass.Output->GetHeight());
-	//
-	//	// Use the post processing shader to draw the fullscreen quad
-	//	pass.Shader->Bind();
-	//	lastPass->GetAttachment(RenderTargetAttachment::Color0)->bind(0);
-	//	//texture2->bind(0);
-	//	pass.Shader->SetUniform("xImage", 0);
-	//	pass.Shader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
-	//
-	//	fullscreenQuad->Draw();
-	//
-	//	pass.Output->unBind();
-	//	lastPass = pass.Output;
-	//	
-	//	// Bind the last buffer we wrote to as our source for read operations
-	//	lastPass->bind(RenderTargetBinding::Read);
-	//	
-	//	// Copies the image from lastPass into the default back buffer
-	//	FrameBuffer::Blit({ 0, 0, lastPass->GetWidth(), lastPass->GetHeight() },
-	//		{ 0, 0, gameWindow->getWidth(), gameWindow->getHeight() },
-	//		BufferFlags::All, MagFilter::Nearest);
-	//	
-	//	// Unbind the last buffer from read operations, so we can write to it again later
-	//	lastPass->unBind();
-	//}
 
 }
 

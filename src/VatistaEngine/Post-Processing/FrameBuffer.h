@@ -99,7 +99,7 @@ namespace Vatista {
 		GLuint renderID;
 		GLuint textureColorbuffer;
 		GLuint rbo;
-		//std::vector<RenderTargetAttachment> colours;
+		std::vector<std::pair<RenderTargetAttachment, GLuint>> colours;
 	};
 	
 }

@@ -97,7 +97,7 @@ vec3 pointLightCalc(vec4 surfaceColour, vec3 norm, vec3 toLight, vec3 viewDir, v
     // Finally, we can calculate the actual specular factor
     vec3 specOut = specPower * a_LightColor;
 
-    ////rim lighting
+    //rim lighting
 	float rimLight = 1 - dot(norm, viewDir);
 	rimLight = clamp(rimLight - 0.4, 0.0, 1.0);
     rimLight = rimLight * rimOn;
@@ -107,7 +107,7 @@ vec3 pointLightCalc(vec4 surfaceColour, vec3 norm, vec3 toLight, vec3 viewDir, v
     float diffuseFactor = max(dot(norm, toLight), 0);
     // Calculate our diffuse output
     vec3  diffuseOut = diffuseFactor * a_LightColor;
-    diffuseOut += rimLight * vec3(0.0f,0.0f,1.0f);
+    diffuseOut += rimLight * vec3(1.0f,1.0f,1.0f);
 	
     // Our ambient is simply the color times the ambient power
     vec3 ambientOut = a_AmbientColor * a_AmbientPower;

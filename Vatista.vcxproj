@@ -97,6 +97,8 @@
     <None Include="res\Master.bank" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\Shaders\Post-Processing\additive.fs.glsl" />
+    <None Include="res\Shaders\Post-Processing\gaussianblur.fs.glsl" />
     <None Include="res\Shaders\Post-Processing\hdr.fs.glsl" />
     <None Include="res\Shaders\Post-Processing\invert.fs.glsl" />
     <None Include="res\StaminaBar.fs.glsl" />

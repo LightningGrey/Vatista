@@ -49,7 +49,6 @@ namespace Vatista {
 		void draw(float dt);
 		bool load(std::string filename, std::vector<Mesh::Sptr>& meshes);
 		void bufferCreation();
-		void lightCreation();
 		void postProcess();
 
 	private:
@@ -97,13 +96,17 @@ namespace Vatista {
 
 		//GameObject::Sptr StaminaBackground;
 		
-		RenderBufferDesc mainColour; 
-		RenderBufferDesc depth;
+	
 		FrameBuffer::Sptr buffer;
+		FrameBuffer::Sptr pingpongBuffer1;
+		FrameBuffer::Sptr pingpongBuffer2;
+
 		Mesh::Sptr fullscreenQuad;
 		std::vector<PostPass> passes;
-		//FBO fbo;
-		Shader::Sptr postShader;
+		
+		Shader::Sptr hdrShader;
+		Shader::Sptr hblurShader;
+		Shader::Sptr vblurShader;
 
 		//test
 		float exposure = 0.5f;
