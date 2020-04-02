@@ -9,7 +9,7 @@ layout (location = 1) out vec4 brightColor;
 uniform sampler2D xImage;
 
 void main() {
-	vec3 color = pow(texture(xImage, inUV).rgb;
+	vec3 color = texture(xImage, inUV).rgb;
 
-	outColor = vec4(color.rgb, color.a);
+	outColor = vec4(color.rgb, 1.0);
 }
