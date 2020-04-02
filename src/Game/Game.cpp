@@ -109,8 +109,8 @@ void Vatista::Game::init()
 	NearestMipped->createSampler();
 
 	Material::Sptr characterMat = std::make_shared<Material>(character);
-	characterMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	characterMat->Set("a_LightColor", { 15.0f, 0.0f, 0.0f });
+	characterMat->Set("a_LightPos", { 0.0f, 1.0f, -1.0f });
+	characterMat->Set("a_LightColor", { 50.0f, 0.0f, 0.0f }); 
 	//characterMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
 	characterMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	characterMat->Set("a_AmbientPower", 0.7f);
@@ -120,8 +120,8 @@ void Vatista::Game::init()
 	characterMat->Set("texSample", texture, NearestMipped);
 
 	Material::Sptr characterMat2 = std::make_shared<Material>(character);
-	characterMat2->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	characterMat2->Set("a_LightColor", { 0.0f, 0.0f, 15.0f });
+	characterMat2->Set("a_LightPos", { 0.0f, 1.0f, -1.0f });
+	characterMat2->Set("a_LightColor", { 0.0f, 0.0f, 50.0f });
 	//characterMat2->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
 	characterMat2->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	characterMat2->Set("a_AmbientPower", 0.7f);
@@ -527,9 +527,9 @@ void Vatista::Game::bufferCreation()
 	buffer = std::make_shared<FrameBuffer>();
 	//buffer->createAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
 	buffer->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
-	//buffer->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color1);
-	//unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-	//glDrawBuffers(2, attachments);
+	buffer->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color1);
+	unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	glDrawBuffers(2, attachments);
 	buffer->createRenderBuffer(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::DepthStencil,
 		RenderTargetType::DepthStencil);
 	
@@ -538,47 +538,89 @@ void Vatista::Game::bufferCreation()
 	buffer->bindDefault();
 
 
-	//pingpongBuffer1 = std::make_shared<FrameBuffer>();
-	//pingpongBuffer1->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
-	//pingpongBuffer2 = std::make_shared<FrameBuffer>();
-	//pingpongBuffer2->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+	pingpongBufferH = std::make_shared<FrameBuffer>();
+	pingpongBufferH->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+	pingpongBufferV = std::make_shared<FrameBuffer>();
+	pingpongBufferV->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
 
 	 
 	bool load = FileReader::vsfRead("mesh_Quad.vsf", fullscreenQuad);
+	
+	basePost = std::make_shared<Shader>();
+	basePost->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/hdr.fs.glsl");
+	basePost->Bind();
 	
 	hdrShader = std::make_shared<Shader>(); 
 	hdrShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/hdr.fs.glsl");
 	hdrShader->Bind();
 	 
-	hblurShader = std::make_shared<Shader>();
-	hblurShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/gaussianblur.fs.glsl");
-	hblurShader->Bind();
-	hblurShader->SetUniform("isHorizontal", 1);
+	blurShader = std::make_shared<Shader>();
+	blurShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/gaussianblur.fs.glsl");
+	blurShader->Bind();
+	
+	additiveShader = std::make_shared<Shader>();
+	additiveShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/additive.fs.glsl");
+	additiveShader->Bind();
 
-	vblurShader = std::make_shared<Shader>();
-	vblurShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/gaussianblur.fs.glsl");
-	vblurShader->Bind();
-	vblurShader->SetUniform("isHorizontal", 0);
+	//vblurShader = std::make_shared<Shader>();
+	//vblurShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/gaussianblur.fs.glsl");
+	//vblurShader->Bind();
+	//vblurShader->SetUniform("isHorizontal", 0);
 
 }
 
 
 void Vatista::Game::postProcess()
 {
+	//Gaussian blur
+	blurShader->Bind();
+	for (int i = 0; i < 2; i++) {
+		pingpongBufferH->bind();
+		if(i == 0){
+			buffer->bindColour(3, 0);
+		}
+		else {
+			pingpongBufferV->bindColour(3, 0);
+		}
+		blurShader->SetUniform("xImage", 3);
+		blurShader->SetUniform("horizontal", 1);
+		fullscreenQuad->Draw();
+
+		pingpongBufferV->bind();
+		pingpongBufferH->bindColour(3, 0);
+		blurShader->SetUniform("xImage", 3);
+		blurShader->SetUniform("horizontal", 0);
+		fullscreenQuad->Draw();
+	}
+
+	//final additive
 	buffer->bindDefault();
 	glDisable(GL_DEPTH_TEST);
 
 	// clear all relevant buffers
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f); 
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
-	//buffer->bindColour();
-
-	hdrShader->Bind();
+	additiveShader->Bind();
 	buffer->bindColour(2, 0);
-	hdrShader->SetUniform("xImage", 2);
-	hdrShader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
-	hdrShader->SetUniform("exposure", exposure);
+	pingpongBufferV->bindColour(3, 0);
+	additiveShader->SetUniform("mainImage", 2);
+	additiveShader->SetUniform("blurImage", 3);
+	additiveShader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
+	additiveShader->SetUniform("exposure", exposure);
+
+
+
+	//basePost->Bind();
+	//buffer->bindColour(2, 0);
+	//basePost->SetUniform("xImage", 2);
+	//basePost->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
+
+	//hdrShader->Bind();
+	//buffer->bindColour(2, 0);
+	//hdrShader->SetUniform("xImage", 2);
+	//hdrShader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
+	//hdrShader->SetUniform("exposure", exposure);
 
 
 	fullscreenQuad->Draw();

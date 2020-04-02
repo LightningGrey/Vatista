@@ -7,18 +7,17 @@ layout (location = 0) out vec4 outColor;
 
 uniform sampler2D xImage;
 
-uniform bool isHorizontal;
+uniform bool horizontal;
+//uniform vec2 offset;
 uniform float weights[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216); 
 
 
 void main() {
-    vec2 off = 1.0 / textureSize(xImage, 0);
-    if (isHorizontal) {
-		off = off * vec2(1, 0);
-	} else {
-		off = off * vec2(0, 1);
-	}
-
+    vec2 off = (1.0 / textureSize(xImage, 0)); 
+    //off = off * offset;
+    if (horizontal) { off = off * vec2(1, 0); }
+    else { off = off * vec2(0, 1); }
+    
     vec4 result = texture(xImage, inUV) * weights[0];
 
 	for(int i = 1; i < 5; ++i)

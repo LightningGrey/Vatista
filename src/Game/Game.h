@@ -98,15 +98,22 @@ namespace Vatista {
 		
 	
 		FrameBuffer::Sptr buffer;
-		FrameBuffer::Sptr pingpongBuffer1;
-		FrameBuffer::Sptr pingpongBuffer2;
+		FrameBuffer::Sptr pingpongBufferH;
+		FrameBuffer::Sptr pingpongBufferV;
 
 		Mesh::Sptr fullscreenQuad;
 		std::vector<PostPass> passes;
 		
+		//basic post-process
+		Shader::Sptr basePost;
+
+		//post-process effects
 		Shader::Sptr hdrShader;
-		Shader::Sptr hblurShader;
-		Shader::Sptr vblurShader;
+		Shader::Sptr brightShader;
+		Shader::Sptr blurShader;
+		Shader::Sptr additiveShader;
+		//Shader::Sptr hblurShader;
+		//Shader::Sptr vblurShader;
 
 		//test
 		float exposure = 0.5f;
