@@ -16,13 +16,14 @@ Vatista::Game::~Game()
 {
 }
 
-void GlfwWindowResizedCallback(GLFWwindow*, int width, int height) {
-	glViewport(0, 0, width, height);
-	//Vatista::Window* gameWindow = ; 
-	//if (gameWindow != nullptr) { 
-	//	gameWindow->getWindow()->resize(width, height); 
-	//} 
-}
+//the same function was made in windows.cpp don't have doubles for this
+//void GlfwWindowResizedCallback(GLFWwindow*, int width, int height) {
+//	glViewport(0, 0, width, height);
+//	//Vatista::Window* gameWindow = ; 
+//	//if (gameWindow != nullptr) { 
+//	//	gameWindow->getWindow()->resize(width, height); 
+//	//} 
+//}
 
 void Vatista::Game::run()
 {

@@ -1,46 +1,39 @@
-#include "TitleLayer.h"
+#include "menuLayer.h"
+#include "MenuLayer.h"
 #include "Game.h"
 
 namespace Vatista {
-	TitleLayer::TitleLayer() : gameWindow(nullptr), clearColour(glm::vec4(0, 0, 0, 1)),
-		windowName("Vatista Engine")
+	MenuLayer::MenuLayer() : gameWindow2(nullptr), clearColour2(glm::vec4(0, 0, 0, 1)),
+		windowName2("Vatista Engine")
 	{
 	}
 
-	TitleLayer::TitleLayer(std::string newName) : gameWindow(nullptr),
-		clearColour(glm::vec4(0, 0, 0, 1)), windowName(newName)
+	MenuLayer::MenuLayer(std::string newName) : gameWindow2(nullptr),
+		clearColour2(glm::vec4(0, 0, 0, 1)), windowName2(newName)
 	{
 	}
 
-	TitleLayer::~TitleLayer()
+	MenuLayer::~MenuLayer()
 	{
-	}
-
-	void GlfwWindowResizedCallback(GLFWwindow*, int width, int height) {
-		glViewport(0, 0, width, height);
-		//Vatista::Window* gameWindow = ; 
-		//if (gameWindow != nullptr) { 
-		//	gameWindow->getWindow()->resize(width, height); 
-		//} 
 	}
 
 
 	//runing layer for titlelayer
-	void TitleLayer::run() {
+	void MenuLayer::run() {
 
 		init();
 
 		static float previousFrame = (float)glfwGetTime();
 
 		//game loop 
-		while (!gameWindow->shouldClose()) {
+		while (!gameWindow2->shouldClose()) {
 			static float currentFrame = (float)glfwGetTime();
 			static float deltaTime = currentFrame - previousFrame;
 
 			update(deltaTime);
 			render(deltaTime);
 
-			glfwSwapBuffers(gameWindow->getWindow());
+			glfwSwapBuffers(gameWindow2->getWindow());
 			glfwPollEvents();
 
 			previousFrame = currentFrame;
@@ -51,10 +44,10 @@ namespace Vatista {
 
 
 
-	void TitleLayer::init()
+	void MenuLayer::init()
 	{
 		//window and camera 
-		gameWindow = new Vatista::Window(1600, 900, "Zeal");
+		gameWindow2 = new Vatista::Window(1600, 900, "Zeal");
 
 		orthoCamera = std::make_shared<Vatista::Camera>();
 		orthoCamera->SetPosition(glm::vec3(0.0f));
@@ -72,7 +65,7 @@ namespace Vatista {
 		//load stage objects
 
 		load("./res/Objects/menuInit.txt");
-		
+
 		//background png
 		texture = std::make_shared<Texture2D>();
 		texture->loadFile("./res/Objects/titlescreen/Title_Texture_PlaceHolder.png");
@@ -99,7 +92,7 @@ namespace Vatista {
 		titlematerial->Set("a_LightSpecPower", 0.9f);
 		titlematerial->Set("a_LightShininess", 256.0f);
 		titlematerial->Set("a_LightAttenuation", 0.04f);
-		titlematerial->Set("texSample", texture, NearestMipped);
+		titlematerial->Set("texSample", texture2, NearestMipped);
 
 		TitleMenu = std::make_shared<Menu>();
 		TitleMenu->setPos(glm::vec3(0.0f, 2.0f, 0.0f));
@@ -119,7 +112,7 @@ namespace Vatista {
 		titlematerial2->Set("a_LightSpecPower", 0.9f);
 		titlematerial2->Set("a_LightShininess", 256.0f);
 		titlematerial2->Set("a_LightAttenuation", 0.04f);
-		titlematerial2->Set("texSample", texture2, NearestMipped);
+		titlematerial2->Set("texSample", texture, NearestMipped);
 
 		TitleMenu2 = std::make_shared<Menu>();
 		TitleMenu2->setPos(glm::vec3(0.0f, 5.0f, 0.5f));
@@ -135,13 +128,13 @@ namespace Vatista {
 
 	}
 
-	void TitleLayer::close()
+	void MenuLayer::close()
 	{
 		glfwTerminate();
 		//audioEngine->Shutdown();
 	}
 
-	void TitleLayer::update(float dt)
+	void MenuLayer::update(float dt)
 	{
 		//audioEngine->Update();
 
@@ -155,7 +148,7 @@ namespace Vatista {
 
 	}
 
-	void TitleLayer::render(float dt)
+	void MenuLayer::render(float dt)
 	{
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -167,7 +160,7 @@ namespace Vatista {
 		draw(dt);
 	}
 
-	void TitleLayer::draw(float dt)
+	void MenuLayer::draw(float dt)
 	{
 		//draw game objects
 		for (auto object : ObjectList) {
@@ -176,7 +169,7 @@ namespace Vatista {
 
 	}
 
-	bool TitleLayer::load(std::string filename)
+	bool MenuLayer::load(std::string filename)
 	{
 
 		std::vector<std::string> dataList;
@@ -184,14 +177,14 @@ namespace Vatista {
 
 		if (fRead) {
 			for (int i = 0; i < dataList.size(); i++) {
-				bool vsf = FileReader::vsfRead(dataList[i], meshTitle);
+				bool vsf = FileReader::vsfRead(dataList[i], meshTitle2);
 				if (!vsf) {
 					VATISTA_LOG_ERROR("VSF read failed.");
 					throw new std::runtime_error("File open failed");
 					return false;
 				}
 				else {
-					meshListMenu.push_back(meshTitle);
+					meshListMenu.push_back(meshTitle2);
 				}
 			}
 		}

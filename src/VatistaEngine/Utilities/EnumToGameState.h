@@ -9,15 +9,20 @@
 
 namespace Vatista {
 
+
+	
 	class EnumToGameState {
 	public:
-		enum Gamestate : char
+
+		
+		enum Gamestate
 		{
 			mainMenu = 0, stage1 = 1, stage2 = 2
 		};
 
+
 	private:
-		Gamestate stagelevel = mainMenu;
+		Gamestate stagelevel;
 	public:
 		void SetGameState(Gamestate Gamestate_){
 			stagelevel = Gamestate_;

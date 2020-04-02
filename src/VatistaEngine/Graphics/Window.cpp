@@ -73,6 +73,13 @@ namespace Vatista {
 		}
 	}
 
+	//pls don't have more than one copy of this delete this everywhere else only have a single
+	//window resize callback please
+	void GlfwWindowResizedCallback(GLFWwindow*, int width, int height) {
+		glViewport(0, 0, width, height);
+
+	}
+
 	//void Window::resize(int width, int height)
 	//{
 	//	myAspect = newWidth / (float)newHeight;

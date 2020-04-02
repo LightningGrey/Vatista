@@ -7,8 +7,10 @@ Authors: DHC Studios
 */
 
 #include "Utilities/Log.h"
-#include "Game/Game.h"
-#include "Game/TitleLayer.h"
+#include "Game/sceneLayers/Game.h"
+#include "Game/sceneLayers/TitleLayer.h"
+#include "Utilities/EnumToGameState.h"
+#include "Game/sceneLayers/MenuLayer.h"
 
 int main() {
 
@@ -16,10 +18,35 @@ int main() {
 	Vatista::Log::Init();
 	VATISTA_LOG_INFO("Vatista.dll running.");
 	
+	
+	Vatista::EnumToGameState::Gamestate currentscene = Vatista::EnumToGameState::Gamestate::mainMenu;
+	Vatista::EnumToGameState SetGameState(Vatista::EnumToGameState::Gamestate Gamestate_);
 
-	Vatista::TitleLayer* game = new Vatista::TitleLayer();
-	game->run();
-	delete game;
+	Vatista::TitleLayer* titleScreenScene = new Vatista::TitleLayer();
+	
+	Vatista::MenuLayer* stage1Scene = new Vatista::MenuLayer();
+
+	switch (currentscene)
+	{
+	case Vatista::EnumToGameState::Gamestate::mainMenu:
+		
+		titleScreenScene->run();
+		delete titleScreenScene;
+		break;
+
+	case Vatista::EnumToGameState::Gamestate::stage1:
+	
+		stage1Scene->run();
+		delete stage1Scene;
+
+		break;
+	case Vatista::EnumToGameState::Gamestate::stage2:
+		// ...
+		break;
+	}
+
+
+
 	
 	//Vatista::TitleLayer* title = new Vatista::TitleLayer();
 	//title->run();

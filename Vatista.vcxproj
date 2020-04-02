@@ -26,9 +26,11 @@
     <ClInclude Include="include\GLFW\glfw3.h" />
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
-    <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Game\LoadingLayer.h" />
-    <ClInclude Include="src\Game\TitleLayer.h" />
+    <ClInclude Include="src\Game\scenelayers\Game.h" />
+    <ClInclude Include="src\Game\mouseControls\mouse.h" />
+    <ClInclude Include="src\Game\scenelayers\menuLayer.h" />
+    <ClInclude Include="src\Game\scenelayers\TitleLayer.h" />
     <ClInclude Include="src\VatistaEngine\Audio\AudioEngine.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Camera.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Material.h" />
@@ -56,8 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\glad\glad.c" />
-    <ClCompile Include="src\Game\Game.cpp" />
-    <ClCompile Include="src\Game\TitleLayer.cpp" />
+    <ClCompile Include="src\Game\scenelayers\Game.cpp" />
+    <ClCompile Include="src\Game\scenelayers\menuLayer.cpp" />
+    <ClCompile Include="src\Game\scenelayers\TitleLayer.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\VatistaEngine\Audio\AudioEngine.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Camera.cpp" />

@@ -48,7 +48,7 @@ namespace Vatista {
 		//A shared pointer to our mesh
 		Mesh::Sptr meshTitle;
 
-		std::vector<Mesh::Sptr> meshListMenu;
+		std::vector<Mesh::Sptr> meshListTitle;
 
 		// A shared pointer to our shader
 		Shader::Sptr myShader;
