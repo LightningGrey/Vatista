@@ -89,6 +89,8 @@ namespace Vatista {
 		int getAnimIndex() { return animIndex; }
 		void updateAnim();
 
+		void setNormalMap(Texture::Sptr norm) { normalMap = norm; }
+
 	protected:
 		float stamina;
 		int wins;
@@ -116,6 +118,8 @@ namespace Vatista {
 		static keyboard kb;
 		static std::queue<std::pair<int, int>> inputQueue;
 		static void inputBuffer();
+
+		Texture::Sptr normalMap;
 
 		int stateTracker = 0;
 		int animIndex = 0;

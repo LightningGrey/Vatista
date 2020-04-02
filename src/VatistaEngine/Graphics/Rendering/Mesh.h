@@ -41,6 +41,36 @@ namespace Vatista {
 		glm::vec3 NormalS;
 	};
 
+	//used to load morph vertices
+	struct MorphVertex2 : public Vertex {
+		//start position
+		//vertex is end
+		glm::vec3 PositionS;
+		glm::vec3 NormalS;
+		glm::vec3 Tangent;
+		glm::vec3 TangentS;
+
+
+		MorphVertex2(Vertex vert,
+			glm::vec3 posS, glm::vec3 normS, glm::vec3 tan, glm::vec3 tanS) : Vertex(vert),
+			PositionS(posS), NormalS(normS), Tangent(tan), TangentS(tanS) {}
+	};
+
+	//used to load morph vertices
+	struct LoadMorphVertex2 {
+		//start position
+		//vertex is end
+		glm::vec3 Position;
+		glm::vec2 UV;
+		glm::vec3 Normal;
+		glm::vec3 PositionS;
+		glm::vec3 NormalS;
+		glm::vec3 Tangent;
+		glm::vec3 TangentS;
+	};
+
+
+
 	class Mesh {
 	public:	
 		SharedPtr(Mesh);
@@ -50,6 +80,8 @@ namespace Vatista {
 			std::vector<Vertex> vertData, size_t numData);
 		Mesh(std::vector<uint32_t> indices, size_t numIndices,
 			std::vector<MorphVertex> vertData, size_t numData);
+		Mesh(std::vector<uint32_t> indices, size_t numIndices,
+			std::vector<MorphVertex2> vertData, size_t numData);
 		~Mesh();
 
 

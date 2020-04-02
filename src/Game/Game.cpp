@@ -87,7 +87,7 @@ void Vatista::Game::init()
 
 	Shader::Sptr character = std::make_shared<Shader>();
 	//character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
-	character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/newLighting.fs.glsl");
+	character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/newLightingChar.fs.glsl");
 
 	Shader::Sptr stageProp = std::make_shared<Shader>();
 	stageProp->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/newLighting.fs.glsl");
