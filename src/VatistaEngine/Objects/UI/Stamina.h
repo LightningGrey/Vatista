@@ -14,6 +14,7 @@ namespace Vatista {
 		~Stamina();
 
 		void Draw(const Vatista::Camera::Sptr& camera);
+		void depthdraw(Shader::Sptr shader) {};
 
 		//change later
 		float getStamina() { return stamina; }

@@ -14,5 +14,6 @@ namespace Vatista {
 		~StationaryObj();
 
 		void Draw(const Vatista::Camera::Sptr& camera);
+		void depthdraw(Shader::Sptr shader) {};
 	};
 }

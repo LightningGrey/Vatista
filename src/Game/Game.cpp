@@ -87,7 +87,7 @@ void Vatista::Game::init()
 
 	Shader::Sptr character = std::make_shared<Shader>();
 	//character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
-	character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/newLighting.fs.glsl");
+	character->Load("./res/Shaders/passthroughMorph.vs.glsl", "./res/Shaders/newLighting.fs.glsl");
 
 	Shader::Sptr stageProp = std::make_shared<Shader>();
 	stageProp->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/newLighting.fs.glsl");
@@ -534,11 +534,13 @@ void Vatista::Game::bufferCreation()
 	buffer->createRenderBuffer(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::DepthStencil,
 		RenderTargetType::DepthStencil);
 	
-	depthbuffer->createFloatAttachment(SHADOW_WIDTH, SHADOW_HEIGHT, RenderTargetAttachment::Depth);
-
+	depthbuffer = std::make_shared<FrameBuffer>();
+	depthbuffer->createDepthAttachment(SHADOW_WIDTH, SHADOW_HEIGHT, RenderTargetAttachment::Depth);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::POSTPROCESSOR: Failed to initialize FBO" << std::endl;
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
 	buffer->bindDefault();
 
 
@@ -577,7 +579,7 @@ void Vatista::Game::preProcess()
 {
 	glm::mat4 lightProjection, lightView;
 	glm::mat4 lightSpaceMatrix;
-	float near_plane = 1.0f, far_plane = 7.5f;
+	float near_plane = -1.0f, far_plane = 1.0f;
 	lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 	lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
 	lightSpaceMatrix = lightProjection * lightView;
