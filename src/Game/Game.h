@@ -99,16 +99,15 @@ namespace Vatista {
 		float y = 100.0f;
 
 		//GameObject::Sptr StaminaBackground;
-		
-	
+
+
 		FrameBuffer::Sptr buffer;
 		FrameBuffer::Sptr depthbuffer;
 		FrameBuffer::Sptr pingpongBufferH;
 		FrameBuffer::Sptr pingpongBufferV;
 
 		Mesh::Sptr fullscreenQuad;
-		std::vector<PostPass> passes;
-		
+
 		//basic post-process
 		Shader::Sptr basePost;
 
@@ -121,9 +120,14 @@ namespace Vatista {
 		//Shader::Sptr vblurShader;
 
 		const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-		
-		//test
+
+		//toggleables
 		float exposure = 0.5f;
+		int passes = 2;
+		float brightness = 1.0f;
+		//ambient, diffuse, specular, directional light, point light, spot light, texture
+		std::vector<bool> toggles{1, 1, 1, 1, 1, 1, 1, 1};
+		Texture::Sptr blankwhite;
 
 
 		glm::vec3 lightPos = glm::vec3(0.2f, 1.0f, 0.3f);

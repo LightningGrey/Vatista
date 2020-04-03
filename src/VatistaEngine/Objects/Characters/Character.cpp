@@ -35,7 +35,7 @@ namespace Vatista {
 		}
 	}
 
-	void Character::Draw(const Vatista::Camera::Sptr& camera)
+	void Character::Draw(const Vatista::Camera::Sptr& camera, std::vector<bool> toggles, float brightness)
 	{
 		glm::mat4 world =
 			glm::translate(glm::mat4(1.0f), Position) *
@@ -45,6 +45,18 @@ namespace Vatista {
 
 		material->GetShader()->Bind();
 		material->Apply();
+
+		material->GetShader()->SetUniform("ambientOn", toggles[0]);
+		material->GetShader()->SetUniform("diffuseOn", toggles[1]);
+		material->GetShader()->SetUniform("specularOn", toggles[2]);
+		material->GetShader()->SetUniform("directionLightOn", toggles[3]);
+		material->GetShader()->SetUniform("pointLightOn", toggles[4]);
+		material->GetShader()->SetUniform("spotLightOn", toggles[5]);
+		material->GetShader()->SetUniform("textureOn", toggles[6]);
+		material->GetShader()->SetUniform("rimOn", toggles[7]);
+		material->GetShader()->SetUniform("blank", 99);
+		material->GetShader()->SetUniform("brightValue", brightness);
+
 		//dir light, move this to variable  
 		material->GetShader()->SetUniform("dirlight.direction", { -0.2f, -1.0f, -0.3f });
 		material->GetShader()->SetUniform("dirlight.ambient", { 0.2f, 0.2f, 0.2f });

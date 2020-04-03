@@ -12,7 +12,7 @@ namespace Vatista {
 		GameObject() : Scale(1.0f), model(nullptr), material(nullptr), Position(0.0f), EulerRotDeg(0.0f), Collider(0.0f) {}
 		~GameObject() {}
 
-		virtual void Draw(const Vatista::Camera::Sptr& camera) = 0;
+		virtual void Draw(const Vatista::Camera::Sptr& camera, std::vector<bool> toggles, float brightness) = 0;
 		virtual void depthdraw(Shader::Sptr shader) = 0;
 		bool collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2);
 
