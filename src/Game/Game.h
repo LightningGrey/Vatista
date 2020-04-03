@@ -126,7 +126,7 @@ namespace Vatista {
 		int passes = 2;
 		float brightness = 1.0f;
 		//ambient, diffuse, specular, directional light, point light, spot light, texture
-		std::vector<bool> toggles{1, 1, 1, 1, 1, 1, 1, 1};
+		std::vector<bool> toggles{1, 1, 1, 1, 1, 1, 1, 0, 1};
 		Texture::Sptr blankwhite;
 
 

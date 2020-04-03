@@ -505,10 +505,10 @@ void Vatista::Game::update(float dt)
 
 
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_9)) {
-		brightness += 0.1f;
+		brightness += 100.0f;
 	}
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_8)) {
-		brightness -= 0.1f;
+		brightness -= 100.0f;
 	}
 
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_1)) {
@@ -522,7 +522,7 @@ void Vatista::Game::update(float dt)
 	}
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_4)) {
 		toggles[3] = !toggles[3];
-	}
+	} 
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_5)) {
 		toggles[4] = !toggles[4];
 	}
@@ -531,9 +531,10 @@ void Vatista::Game::update(float dt)
 	}
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_7)) {
 		toggles[6] = !toggles[6];
+		toggles[7] = !toggles[7]; 
 	}
-	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_8)) {
-		toggles[7] = !toggles[7];
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_0)) {
+		toggles[8] = !toggles[8];
 	}
 	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_DECIMAL)){
 		toggles[0] = 1;
