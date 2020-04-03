@@ -13,6 +13,7 @@ namespace Vatista {
 		~GameObject() {}
 
 		virtual void Draw(const Vatista::Camera::Sptr& camera) = 0;
+		virtual void depthdraw(Shader::Sptr shader) = 0;
 		bool collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2);
 
 		//getters and setters

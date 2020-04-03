@@ -49,6 +49,7 @@ namespace Vatista {
 		void draw(float dt);
 		bool load(std::string filename, std::vector<Mesh::Sptr>& meshes);
 		void bufferCreation();
+		void preProcess();
 		void postProcess();
 
 	private:
@@ -98,6 +99,7 @@ namespace Vatista {
 		
 	
 		FrameBuffer::Sptr buffer;
+		FrameBuffer::Sptr depthbuffer;
 		FrameBuffer::Sptr pingpongBufferH;
 		FrameBuffer::Sptr pingpongBufferV;
 
@@ -112,15 +114,17 @@ namespace Vatista {
 		Shader::Sptr brightShader;
 		Shader::Sptr blurShader;
 		Shader::Sptr additiveShader;
-		//Shader::Sptr hblurShader;
+		Shader::Sptr depthShader;
 		//Shader::Sptr vblurShader;
 
+		const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+		
 		//test
 		float exposure = 0.5f;
 
-		//ObjLoader loader;
-		//
-		//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+		glm::vec3 lightPos = glm::vec3(0.2f, 1.0f, 0.3f);
+	
 
 		float time = 0.0f;
 

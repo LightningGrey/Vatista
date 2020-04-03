@@ -61,6 +61,7 @@ namespace Vatista {
 		void setJourneyLength(float l) { journeyLength = l; }
 
 		void Draw(const Vatista::Camera::Sptr& camera);
+		void depthdraw(Shader::Sptr shader);
 
 		float getStamina() { return stamina; }
 		int getWins() { return wins; }
