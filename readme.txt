@@ -9,8 +9,9 @@ Numpad toggles:
 0 to toggle rim light
 . (decimal) to toggle all light on
 
-8 to increase brightness threshold for bloom
-9 to decrease brightness threshold for bloom
+8 to increase brightness value for bloom
+9 to decrease brightness value for bloom
+//brightness threshold may not appear to work
 + to increase exposure
 - to decrease exposure
 * to increase blur passes

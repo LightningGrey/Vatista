@@ -53,7 +53,8 @@ namespace Vatista {
 		material->GetShader()->SetUniform("pointLightOn", toggles[4]);
 		material->GetShader()->SetUniform("spotLightOn", toggles[5]);
 		material->GetShader()->SetUniform("textureOn", toggles[6]);
-		material->GetShader()->SetUniform("rimOn", toggles[7]);
+		material->GetShader()->SetUniform("textureOff", toggles[7]);
+		material->GetShader()->SetUniform("rimOn", toggles[8]);
 		material->GetShader()->SetUniform("blank", 99);
 		material->GetShader()->SetUniform("brightValue", brightness);
 

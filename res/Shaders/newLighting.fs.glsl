@@ -66,6 +66,8 @@ uniform int specularOn;
 uniform int directionLightOn;
 uniform int pointLightOn;
 uniform int spotLightOn;
+uniform int textureOn;
+uniform int textureOff;
 uniform int rimOn;
 uniform float brightValue;
 
@@ -222,7 +224,7 @@ void main() {
     // transform normal vector to range [-1,1]
     norm = normalize(norm * 2.0 - 1.0);   
 
-	vec4 surfaceColour = texture(texSample, inUV); //* texture(texSample2, inUV);
+	vec4 surfaceColour = (texture(texSample, inUV) * textureOn) + (texture(blank, inUV) * textureOff); 
 
        // Determine the direction from the position to the light
     vec3 toLight = a_LightPos - inWorldPos;
@@ -251,8 +253,8 @@ void main() {
     // Write the output
 	outColor = vec4(result, surfaceColour.a);// * a_ColorMultiplier;
 
-    float brightness = dot(outColor.rgb, vec3(0.7152, 0.0, 0.7152));
-    if(brightness > brightValue)
+    float brightness = dot(outColor.rgb, vec3(0.7152, 0.0, 0.7152) * brightValue);
+    if(brightness > 1.0)
         brightColor = vec4(outColor.rgb, 1.0);
     else
         brightColor = vec4(0.0, 0.0, 0.0, 1.0);
