@@ -128,6 +128,6 @@ namespace Vatista {
 		float morph;
 
 		float currentTime = 0.0f;
-		float endTime = 1.0f;
+		float endTime = 0.3333f;
 	};
 }
