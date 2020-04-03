@@ -2,17 +2,24 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
-
 #include "GLM/glm.hpp"
 
-class mouse {
+namespace Vatista {
+    class KeyInput {
+    public:
+
+        //void glfwSetKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+       
+
+        int buttonSelected = 0;
 
 
-   
 
 
-};
+    };
 
+}
 
 
 

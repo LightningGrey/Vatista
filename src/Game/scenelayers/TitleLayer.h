@@ -23,6 +23,8 @@
 #include "Objects/UI/Stamina.h"
 #include "Objects/Stationary/StationaryObj.h"
 #include "Objects/UI/Menu.h"
+#include "Utilities/EnumToGameState.h"
+
 
 
 // the title screen
@@ -39,8 +41,13 @@ namespace Vatista {
 		void render(float dt);
 		void draw(float dt);
 		bool load(std::string filename);
-	private:
+
+		void glfwSetKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+		int buttonSelected = 0;
+
 		Window* gameWindow;
+	private:
 		glm::vec4 clearColour;
 		std::string windowName;
 		AudioEngine::Sptr audioEngine;
@@ -66,6 +73,9 @@ namespace Vatista {
 		Menu::Sptr TitleMenu;
 		//for the title name
 		Menu::Sptr TitleMenu2;
+		Menu::Sptr ButtonMenu;
+		Menu::Sptr ButtonMenu2;
+
 
 
 

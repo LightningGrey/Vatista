@@ -17,7 +17,7 @@ namespace Vatista {
 		
 		enum Gamestate
 		{
-			mainMenu = 0, stage1 = 1, stage2 = 2
+			mainMenu = 0, selectionMenu = 1, stage1 = 2, stage2 = 3
 		};
 
 

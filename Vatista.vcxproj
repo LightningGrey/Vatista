@@ -28,7 +28,7 @@
     <ClInclude Include="include\KHR\khrplatform.h" />
     <ClInclude Include="src\Game\LoadingLayer.h" />
     <ClInclude Include="src\Game\scenelayers\Game.h" />
-    <ClInclude Include="src\Game\mouseControls\mouse.h" />
+    <ClInclude Include="src\Game\scenelayers\keyInput.h" />
     <ClInclude Include="src\Game\scenelayers\menuLayer.h" />
     <ClInclude Include="src\Game\scenelayers\TitleLayer.h" />
     <ClInclude Include="src\VatistaEngine\Audio\AudioEngine.h" />

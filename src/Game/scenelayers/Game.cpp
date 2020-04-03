@@ -16,14 +16,6 @@ Vatista::Game::~Game()
 {
 }
 
-//the same function was made in windows.cpp don't have doubles for this
-//void GlfwWindowResizedCallback(GLFWwindow*, int width, int height) {
-//	glViewport(0, 0, width, height);
-//	//Vatista::Window* gameWindow = ; 
-//	//if (gameWindow != nullptr) { 
-//	//	gameWindow->getWindow()->resize(width, height); 
-//	//} 
-//}
 
 void Vatista::Game::run()
 {
@@ -74,10 +66,11 @@ void Vatista::Game::init()
 	audioEngine->LoadEvent("Dash", "{53dbc862-3dec-411a-9fc4-bb15743c2b6b}");
 	audioEngine->LoadEvent("Block", "{81b5ce8f-0f80-4494-8aa7-dc898cbc38bb}");
 	audioEngine->PlayEvent("Music");
-	
+
 	//load stage objects
-	bool oLoad = load("./res/Objects/init.txt");
-	bool oLoad2 = load("./res/Objects/menuInit.txt");
+	bool oLoad = load("./res/Objects/StageOne.txt", stageMeshList);
+	oLoad = load("./res/Objects/UI.txt", uiMeshList);
+	oLoad = load("./res/Objects/Z3n.txt", z3nMeshList);
 
 	texture = std::make_shared<Texture2D>();
 	texture->loadFile("./res/Objects/Z3n/Z3N_Texture.png");
@@ -109,15 +102,27 @@ void Vatista::Game::init()
 	NearestMipped->createSampler();
 
 	Material::Sptr characterMat = std::make_shared<Material>(character);
-	characterMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	characterMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
+	characterMat->Set("a_LightPos", { 0.0f, 1.0f, -1.0f });
+	characterMat->Set("a_LightColor", { 50.0f, 0.0f, 0.0f });
+	//characterMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
 	characterMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	characterMat->Set("a_AmbientPower", 0.7f);
 	characterMat->Set("a_LightSpecPower", 0.9f);
 	characterMat->Set("a_LightShininess", 256.0f);
 	characterMat->Set("a_LightAttenuation", 0.04f);
 	characterMat->Set("texSample", texture, NearestMipped);
-	
+
+	Material::Sptr characterMat2 = std::make_shared<Material>(character);
+	characterMat2->Set("a_LightPos", { 0.0f, 1.0f, -1.0f });
+	characterMat2->Set("a_LightColor", { 0.0f, 0.0f, 50.0f });
+	//characterMat2->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
+	characterMat2->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	characterMat2->Set("a_AmbientPower", 0.7f);
+	characterMat2->Set("a_LightSpecPower", 0.9f);
+	characterMat2->Set("a_LightShininess", 256.0f);
+	characterMat2->Set("a_LightAttenuation", 0.04f);
+	characterMat2->Set("texSample", texture, NearestMipped);
+
 	Material::Sptr stageMat = std::make_shared<Material>(stageProp);
 	stageMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	stageMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
@@ -127,36 +132,6 @@ void Vatista::Game::init()
 	stageMat->Set("a_LightShininess", 256.0f);
 	stageMat->Set("a_LightAttenuation", 0.04f);
 	stageMat->Set("texSample", texture2, NearestMipped);
-
-
-	//======= MENU ======= moved to title layer
-
-	Shader::Sptr titleScreen = std::make_shared<Shader>();
-	titleScreen->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/blinn-phong.fs.glsl");
-	//menu stuff 
-
-	TitleTexture = std::make_shared<Texture2D>();//connected to the titlemat
-	TitleTexture->loadFile("./res/Objects/Stamina/zeal-_2341.png");
-
-	//TitleMenuList.push_back(TitleMenu1);
-	Material::Sptr titleMat = std::make_shared<Material>(titleScreen);
-	titleMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	titleMat->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
-	titleMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	titleMat->Set("a_AmbientPower", 0.5f);
-	titleMat->Set("a_LightSpecPower", 0.9f);
-	titleMat->Set("a_LightShininess", 256.0f);
-	titleMat->Set("a_LightAttenuation", 0.04f);
-	titleMat->Set("texSample", TitleTexture, NearestMipped);
-
-	TitleMenu1 = std::make_shared<Menu>();
-	TitleMenu1->setPos(glm::vec3(0.0f, 0.0f, 0.0f));
-	TitleMenu1->setRotY(-90.0f);
-	TitleMenu1->setMesh(meshList[0]);
-	TitleMenu1->setMat(titleMat);
-	TitleMenu1->setScale(2.5f);
-	TitleMenuList.push_back(TitleMenu1);
-
 
 
 	//======= STAGE ONE =======
@@ -241,55 +216,78 @@ void Vatista::Game::init()
 		mats->Set("a_LightSpecPower", 0.9f);
 		mats->Set("a_LightShininess", 256.0f);
 		mats->Set("a_LightAttenuation", 0.04f);
-	
+
 		mats->Set("texSample", textures, NearestMipped);
 		stage = std::make_shared<StationaryObj>();
 		stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
 		stage->setRotY(-90.0f);
-		stage->setMesh(meshList[i]);
+		stage->setMesh(stageMeshList[i]);
 		stage->setMat(mats);
 		//if (i != 5) {
-			ObjectList.push_back(stage);
+		ObjectList.push_back(stage);
 		//}
 	}
-	//end of stage 1 section
-
 
 	//// ======= STAGE TWO =======
 	//
 	//for (int i = 52; i < 55; i++) {
-	//	textures = std::make_shared<Texture2D>();
-	//	switch (i) {
-	//	case 52:
-	//		textures->loadFile("./res/Objects/Terminal/Background_Texture.png");
-	//		break;
-	//	case 53:
-	//		textures->loadFile("./res/Objects/Terminal/Vatista_Terminal_Texture.png");
-	//		break;
-	//	case 54:
-	//		textures->loadFile("./res/Objects/Terminal/CargoShip_Texture.png");
+	//	textures = std::make_shared<Texture2D>();
+
+	//	switch (i) {
+
+	//	case 52:
+
+	//		textures->loadFile("./res/Objects/Terminal/Background_Texture.png");
+
+	//		break;
+
+	//	case 53:
+
+	//		textures->loadFile("./res/Objects/Terminal/Vatista_Terminal_Texture.png");
+
+	//		break;
+
+	//	case 54:
+
+	//		textures->loadFile("./res/Objects/Terminal/CargoShip_Texture.png");
+
 	//		break;
 	//	}
-	//	mats = std::make_shared<Material>(stageProp);
-	//	mats->Set("a_LightPos", { 0.0f, 3.0f, 8.0f });
-	//	mats->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
-	//	mats->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	//	mats->Set("a_AmbientPower", 0.5f);
-	//	mats->Set("a_LightSpecPower", 0.9f);
-	//	mats->Set("a_LightShininess", 256.0f);
-	//	mats->Set("a_LightAttenuation", 0.25f);
-	//	mats->Set("texSample", textures, NearestMipped);
-	//	mats->Set("rimOn", 1);
-	//	stage = std::make_shared<StationaryObj>();
-	//	stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
-	//	stage->setRotY(-90.0f);
-	//	stage->setMesh(meshListMenu[i]);
-	//	stage->setMat(mats);
+	//	mats = std::make_shared<Material>(stageProp);
+
+	//	mats->Set("a_LightPos", { 0.0f, 3.0f, 8.0f });
+
+	//	mats->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
+
+	//	mats->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+
+	//	mats->Set("a_AmbientPower", 0.5f);
+
+	//	mats->Set("a_LightSpecPower", 0.9f);
+
+	//	mats->Set("a_LightShininess", 256.0f);
+
+	//	mats->Set("a_LightAttenuation", 0.25f);
+
+	//	mats->Set("texSample", textures, NearestMipped);
+
+	//	mats->Set("rimOn", 1);
+
+	//	stage = std::make_shared<StationaryObj>();
+
+	//	stage->setPos(glm::vec3(0.0f, 0.0f, 5.0f));
+
+	//	stage->setRotY(-90.0f);
+
+	//	stage->setMesh(meshList[i]);
+
+	//	stage->setMat(mats);
+
 	//	ObjectList.push_back(stage);
 	//}
 	//
 	//
-		//stamina bar?
+
 	for (int i = 0; i < 4; i++) {
 		stamUIText = std::make_shared<Texture2D>();
 		switch (i) {
@@ -312,19 +310,17 @@ void Vatista::Game::init()
 		stamUIMats[i]->Set("a_LightColor", { 1.0f, 1.0f, 1.0f });
 		stamUIMats[i]->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 		stamUIMats[i]->Set("a_AmbientPower", 0.5f);
-		stamUIMats[i]->Set("a_LightSpecPower", 0.9f); 
+		stamUIMats[i]->Set("a_LightSpecPower", 0.9f);
 		stamUIMats[i]->Set("a_LightShininess", 256.0f);
 		stamUIMats[i]->Set("a_LightAttenuation", 0.04f);
 		stamUIMats[i]->Set("texSample", stamUIText, NearestMipped);
 	}
-
 	textureStamina = std::make_shared<Texture2D>();//connected to staminamat
 	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture1.png");
 
 	stamUIText = std::make_shared<Texture2D>();
 	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
 
-	//more ui stuff
 	Material::Sptr profileMat = std::make_shared<Material>(UI);
 	profileMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	profileMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
@@ -335,7 +331,7 @@ void Vatista::Game::init()
 	profileMat->Set("a_LightAttenuation", 0.04f);
 	profileMat->Set("texSample", stamUIText, NearestMipped);
 
-	//still stamina
+	//stamina
 	Material::Sptr staminaMat = std::make_shared<Material>(staminaPhong);//blank stamina texture
 	staminaMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
 	staminaMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
@@ -348,80 +344,30 @@ void Vatista::Game::init()
 	staminaMat->Set("UVoffset", glm::vec3(0.0f));
 
 	//Player 1
-	C1 = std::make_shared<Character>(true, meshList, characterMat);
-	C1->setScale(0.01f);
-	ObjectList.push_back(C1);
+	P1 = std::make_shared<Z3n>(true, z3nMeshList, characterMat);
+	ObjectList.push_back(P1);
 
 	//Player 2 
-	C2 = std::make_shared<Character>(false, meshList, characterMat);
-	C2->setScale(0.01f);
-	ObjectList.push_back(C2);
-
-	bladeText = std::make_shared<Texture2D>();
-	bladeText->loadFile("./res/Objects/color-grid.png");
-	Material::Sptr bladeMat = std::make_shared<Material>(stageProp);//blank stamina texture
-	bladeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	bladeMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
-	bladeMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	bladeMat->Set("a_AmbientPower", 0.5f);
-	bladeMat->Set("a_LightSpecPower", 0.9f);
-	bladeMat->Set("a_LightShininess", 256.0f);
-	bladeMat->Set("a_LightAttenuation", 0.04f);
-	bladeMat->Set("texSample", bladeText, NearestMipped);
-
-	sword1 = std::make_shared<StationaryObj>();
-	sword1->setMesh(meshList[50]);
-	sword1->setMat(bladeMat);
-	sword1->setPos(C1->getPos());
-	sword1->setScale(0.01f);
-	ObjectList.push_back(sword1);
-	sword2 = std::make_shared<StationaryObj>();
-	sword2->setMesh(meshList[50]);
-	sword2->setMat(bladeMat);
-	sword2->setPos(C2->getPos());
-	sword2->setScale(0.01f);
-	ObjectList.push_back(sword2);
-	bladeText = std::make_shared<Texture2D>();
-	bladeText->loadFile("./res/Objects/Z3n/z3n_Sheath_Texture.png");
-	bladeMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	bladeMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
-	bladeMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	bladeMat->Set("a_AmbientPower", 0.5f);
-	bladeMat->Set("a_LightSpecPower", 0.9f);
-	bladeMat->Set("a_LightShininess", 256.0f);
-	bladeMat->Set("a_LightAttenuation", 0.04f);
-	bladeMat->Set("texSample", bladeText, NearestMipped);
-
-	sheath1 = std::make_shared<StationaryObj>();
-	sheath1->setMesh(meshList[51]);
-	sheath1->setMat(bladeMat);
-	sheath1->setPos(C1->getPos());
-	sheath1->setScale(0.01f);
-	ObjectList.push_back(sheath1);
-	sheath2 = std::make_shared<StationaryObj>();
-	sheath2->setMesh(meshList[51]);
-	sheath2->setMat(bladeMat);
-	sheath2->setPos(C2->getPos());
-	sheath2->setScale(0.01f);
-	ObjectList.push_back(sheath2);
+	P2 = std::make_shared<Z3n>(false, z3nMeshList, characterMat2);
+	ObjectList.push_back(P2);
 
 	UI1 = std::make_shared<UIObject>();
 	UI1->setPos(glm::vec3(-4.8f, 7.f, 0.f));
-	UI1->setMesh(meshList[17]);
-	UI1->setMat(stamUIMats[C1->getLives()]);
+	UI1->setMesh(uiMeshList[0]);
+	UI1->setMat(stamUIMats[P1->getWins()]);
 	UI1->setScale(2.5f);
 	UIList.push_back(UI1);
 
 	charProfile1 = std::make_shared<UIObject>();
 	charProfile1->setPos(glm::vec3(-4.8f, 7.f, 1.f));
-	charProfile1->setMesh(meshList[18]);
+	charProfile1->setMesh(uiMeshList[1]);
 	charProfile1->setMat(profileMat);
 	charProfile1->setScale(2.5f);
 	UIList.push_back(charProfile1);
 
 	S1 = std::make_shared<Stamina>();
 	S1->setPos(glm::vec3(-4.8f, 7.f, 1.f));
-	S1->setMesh(meshList[19]);//3rd one on init.txt 
+	S1->setMesh(uiMeshList[2]);//3rd one on init.txt 
 	S1->setMat(staminaMat/*staminaMat*/);
 	//S1->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
 	S1->setScale(2.5f);
@@ -430,8 +376,8 @@ void Vatista::Game::init()
 
 	UI2 = std::make_shared<UIObject>();
 	UI2->setPos(glm::vec3(4.8f, 7.f, 0.f));
-	UI2->setMesh(meshList[17]);
-	UI2->setMat(stamUIMats[C2->getLives()]);
+	UI2->setMesh(uiMeshList[0]);
+	UI2->setMat(stamUIMats[P2->getWins()]);
 
 	UI2->setRotY(180.f);
 	UI2->setScale(2.5f);
@@ -439,7 +385,7 @@ void Vatista::Game::init()
 
 	charProfile2 = std::make_shared<UIObject>();
 	charProfile2->setPos(glm::vec3(4.8f, 7.f, 1.f));
-	charProfile2->setMesh(meshList[18]);
+	charProfile2->setMesh(uiMeshList[1]);
 	charProfile2->setMat(profileMat);
 	charProfile2->setRotY(180.f);
 	charProfile2->setScale(2.5f);
@@ -447,19 +393,15 @@ void Vatista::Game::init()
 
 	S2 = std::make_shared<Stamina>();
 	S2->setPos(glm::vec3(4.8f, 7.f, 1.f));
-	S2->setMesh(meshList[19]);//3rd one on init.txt 
+	S2->setMesh(uiMeshList[2]);//3rd one on init.txt 
 	S2->setMat(staminaMat/*staminaMat*/);
 	S2->setRotY(180.f);
 	//S2->setTexture(textureStamina/*placeholder*/);//might want to use fbo rended texture to change it in real time 
 	S2->setScale(2.5f);
 	UIList.push_back(S2);
 
-	//bufferCreation();
-	 
-	
+	bufferCreation();
 
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_MULTISAMPLE);
 }
 
 
@@ -471,42 +413,38 @@ void Vatista::Game::close()
 
 void Vatista::Game::update(float dt)
 {
-	if (C1->getLives() > 0 && C2->getLives() > 0) {
-		C1->update(dt, gameWindow->getWindow(), C2, audioEngine);
-		C2->update(dt, gameWindow->getWindow(), C1, audioEngine);
-		sword1->setPos(C1->getPos());
-		sword1->setRotY(C1->getRot().y);
-		sheath1->setPos(C1->getPos());
-		sheath1->setRotY(C1->getRot().y);
-		sword2->setPos(C2->getPos());
-		sword2->setRotY(C2->getRot().y);
-		sheath2->setPos(C2->getPos());
-		sheath2->setRotY(C2->getRot().y);
-		UI1->setMat(stamUIMats[C1->getLives()]);
-		
-		TitleMenu1->setMat(stamUIMats[C1->getLives()]);//my changes
-
-		UI2->setMat(stamUIMats[C2->getLives()]);
-		S1->setStamina(C1->getStamina());
-		S2->setStamina(C2->getStamina());
-		std::cout << C1->getStamina() << " " << C2->getStamina() << std::endl;
-		float dist = fabs(C1->getPosX() - C2->getPosX());
-		//C1->setStamina(C1->getStamina() + 10.0f);
-		//C2->setStamina(C2->getStamina() + 10.0f);
+	if (P1->getWins() < 3 && P2->getWins() < 3) {
+		P1->update(dt, gameWindow->getWindow(), P2, audioEngine);
+		P2->update(dt, gameWindow->getWindow(), P1, audioEngine);
+		UI1->setMat(stamUIMats[P1->getWins()]);
+		UI2->setMat(stamUIMats[P2->getWins()]);
+		S1->setStamina(P1->getStamina());
+		S2->setStamina(P2->getStamina());
+		float dist = fabs(P1->getPosX() - P2->getPosX());
+		//P1->setStamina(P1->getStamina() + 10.0f);
+		//P2->setStamina(P2->getStamina() + 10.0f);
 		if (dist > 5.0f)
-			mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 11.0f + (dist / 2.0f)));
+			mainCamera->SetPosition(glm::vec3((P1->getPosX() + P2->getPosX()) / 2.0f, 2.0f, 11.0f + (dist / 2.0f)));
 		else
-			mainCamera->SetPosition(glm::vec3((C1->getPosX() + C2->getPosX()) / 2.0f, 2.0f, 13.5f));
+			mainCamera->SetPosition(glm::vec3((P1->getPosX() + P2->getPosX()) / 2.0f, 2.0f, 13.5f));
 		mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
-	else if(C1->getLives()==0){
+	else if (P1->getWins() == 3) {
 
 	}
-	else if(C2->getLives()==0){
+	else if (P2->getWins() == 3) {
 
 	}
-	
+
 	audioEngine->Update();
+
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_ADD)) {
+		exposure += 0.01f;
+	}
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_SUBTRACT)) {
+		exposure -= 0.01f;
+	}
+
 
 	//S1.setScale(glm::vec3(0.5f)); 
 
@@ -514,14 +452,20 @@ void Vatista::Game::update(float dt)
 
 void Vatista::Game::render(float dt)
 {
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+	buffer->bind();
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDepthMask(GL_TRUE);
 	glDepthFunc(GL_LESS);
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_MULTISAMPLE);
+
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
 	draw(dt);
 }
@@ -534,20 +478,16 @@ void Vatista::Game::draw(float)
 		object->Draw(mainCamera);
 	}
 
+	postProcess();
+
 	//draw UI
 	for (auto component : UIList) {
 		component->Draw(orthoCamera);
 	}
 
-	////draw titlescreen
-	//for (auto component2 : TitleMenuList) {
-	//	component2->Draw(orthoCamera);
-	//}
-
-
 }
 
-bool Vatista::Game::load(std::string filename)
+bool Vatista::Game::load(std::string filename, std::vector<Mesh::Sptr>& meshes)
 {
 	std::vector<std::string> dataList;
 	bool fRead = FileReader::readLines(filename, dataList);
@@ -561,101 +501,124 @@ bool Vatista::Game::load(std::string filename)
 				return false;
 			}
 			else {
-				meshList.push_back(mesh);
+				meshes.push_back(mesh);
 			}
 		}
-	} else {
+	}
+	else {
 		VATISTA_LOG_ERROR("Init read failed.");
 		throw new std::runtime_error("File open failed");
 		return false;
 	}
 
 	return true;
-}
-
-void Vatista::Game::bufferCreation()
-{
-	RenderBufferDesc mainColour = RenderBufferDesc();
-	mainColour.ShaderReadable = true;
-	mainColour.Attachment = RenderTargetAttachment::Color0;
-	mainColour.Format = RenderTargetType::ColorRgb8; //RGB8
-
-	//RenderBufferDesc normal = RenderBufferDesc();
-	//normal.ShaderReadable = true;
-	//normal.Attachment = RenderTargetAttachment::Color1;
-	//normal.Format = RenderTargetType::ColorRgb10; //RGB10
-
-	RenderBufferDesc depth = RenderBufferDesc();
-	depth.ShaderReadable = true;
-	depth.Attachment = RenderTargetAttachment::Depth;
-	depth.Format = RenderTargetType::Depth32; //32 bit depth
-	
-	// Our main frame buffer needs a color output, and a depth output
-	FrameBuffer::Sptr buffer = std::make_shared<FrameBuffer>(gameWindow->getWidth(), gameWindow->getHeight(), 4);
-	buffer->AddAttachment(mainColour);
-	//buffer->AddAttachment(normal);
-	buffer->AddAttachment(depth);
-	buffer->Validate();
-}
-
-void Vatista::Game::postProcess()
-{
-	// Bind the last buffer we wrote to as our source for read operations
-	buffer->bind(RenderTargetBinding::Read);
-
-	// Copies the image from lastPass into the default back buffer
-	FrameBuffer::Blit({ 0, 0, buffer->GetWidth(), buffer->GetHeight() },
-		{ 0, 0, gameWindow->getWidth(), gameWindow->getHeight() },
-		BufferFlags::All, MagFilter::Nearest);
-
-	// Unbind the last buffer from read operations, so we can write to it again later
-	buffer->unBind();
-
-	//// We grab the application singleton to get the size of the screen
-	//florp::app::Application* app = florp::app::Application::Get();
-	//FrameBuffer::Sptr mainBuffer = CurrentRegistry().ctx<FrameBuffer::Sptr>();
-	//glDisable(GL_DEPTH_TEST);
-	//
-	//// The last output will start as the output from the rendering
-	//FrameBuffer::Sptr lastPass = mainBuffer;
-	//
-	//for (const PostPass& pass : myPasses) {
-	//	// We'll bind our post-processing output as the current render target and clear it
-	//	pass.Output->Bind(RenderTargetBinding::Draw);
-	//	glClear(GL_COLOR_BUFFER_BIT);
-	//
-	//	// Set the viewport to be the entire size of the passes output
-	//	glViewport(0, 0, pass.Output->GetWidth(), pass.Output->GetHeight());
-	//
-	//	// Use the post processing shader to draw the fullscreen quad
-	//	pass.Shader->Use();
-	//	lastPass->GetAttachment(RenderTargetAttachment::Color0)->Bind(0);
-	//	pass.Shader->SetUniform("xImage", 0);
-	//	pass.Shader->SetUniform("xScreenRes", glm::ivec2(app->GetWindow()->GetWidth(), app->GetWindow()->GetHeight()));
-	//	pass.Shader->SetUniform("time", florp::app::Timing::GameTime);
-	//
-	//	////luts
-	//	//pass.Shader->SetUniform("cool", 3);
-	//	//pass.Shader->SetUniform("warm", 4);
-	//	//pass.Shader->SetUniform("custom", 5);
-	//
-	//	myFullscreenQuad->Draw();
-	//
-	//	// Unbind the output pass so that we can read from it
-	//	pass.Output->UnBind();
-	//	// Update the last pass output to be this passes output
-	//	lastPass = pass.Output;
-	//
-		//// Bind the last buffer we wrote to as our source for read operations
-		//lastPass->bind(RenderTargetBinding::Read);
-		//
-		//// Copies the image from lastPass into the default back buffer
-		//FrameBuffer::Blit({ 0, 0, lastPass->GetWidth(), lastPass->GetHeight() },
-		//	{ 0, 0, app->GetWindow()->GetWidth(), app->GetWindow()->GetHeight() },
-		//	BufferFlags::All, florp::graphics::MagFilter::Nearest);
-		//
-		//// Unbind the last buffer from read operations, so we can write to it again later
-		//lastPass->unBind();
-	//}
+}
+
+
+
+void Vatista::Game::bufferCreation()
+{
+	buffer = std::make_shared<FrameBuffer>();
+	//buffer->createAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+	buffer->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+	buffer->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color1);
+	unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	glDrawBuffers(2, attachments);
+	buffer->createRenderBuffer(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::DepthStencil,
+		RenderTargetType::DepthStencil);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "ERROR::POSTPROCESSOR: Failed to initialize FBO" << std::endl;
+	buffer->bindDefault();
+
+
+	pingpongBufferH = std::make_shared<FrameBuffer>();
+	pingpongBufferH->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+	pingpongBufferV = std::make_shared<FrameBuffer>();
+	pingpongBufferV->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+
+
+	bool load = FileReader::vsfRead("mesh_Quad.vsf", fullscreenQuad);
+
+	basePost = std::make_shared<Shader>();
+	basePost->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/hdr.fs.glsl");
+	basePost->Bind();
+
+	hdrShader = std::make_shared<Shader>();
+	hdrShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/hdr.fs.glsl");
+	hdrShader->Bind();
+
+	blurShader = std::make_shared<Shader>();
+	blurShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/gaussianblur.fs.glsl");
+	blurShader->Bind();
+
+	additiveShader = std::make_shared<Shader>();
+	additiveShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/additive.fs.glsl");
+	additiveShader->Bind();
+
+	//vblurShader = std::make_shared<Shader>();
+	//vblurShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/gaussianblur.fs.glsl");
+	//vblurShader->Bind();
+	//vblurShader->SetUniform("isHorizontal", 0);
+
+}
+
+
+void Vatista::Game::postProcess()
+{
+	//Gaussian blur
+	blurShader->Bind();
+	for (int i = 0; i < 2; i++) {
+		pingpongBufferH->bind();
+		if (i == 0) {
+			buffer->bindColour(3, 0);
+		}
+		else {
+			pingpongBufferV->bindColour(3, 0);
+		}
+		blurShader->SetUniform("xImage", 3);
+		blurShader->SetUniform("offset", glm::vec2(1, 0));
+		fullscreenQuad->Draw();
+
+		pingpongBufferV->bind();
+		pingpongBufferH->bindColour(3, 0);
+		blurShader->SetUniform("xImage", 3);
+		blurShader->SetUniform("offset", glm::vec2(0, 1));
+		fullscreenQuad->Draw();
+	}
+
+	//final additive
+	buffer->bindDefault();
+	glDisable(GL_DEPTH_TEST);
+
+	// clear all relevant buffers
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	additiveShader->Bind();
+	buffer->bindColour(2, 0);
+	pingpongBufferV->bindColour(3, 0);
+	additiveShader->SetUniform("mainImage", 2);
+	additiveShader->SetUniform("blurImage", 3);
+	additiveShader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
+	additiveShader->SetUniform("exposure", exposure);
+
+
+
+	//basePost->Bind();
+	//buffer->bindColour(2, 0);
+	//basePost->SetUniform("xImage", 2);
+	//basePost->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
+
+	//hdrShader->Bind();
+	//buffer->bindColour(2, 0);
+	//hdrShader->SetUniform("xImage", 2);
+	//hdrShader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
+	//hdrShader->SetUniform("exposure", exposure);
+
+
+	fullscreenQuad->Draw();
+
+
 }
 

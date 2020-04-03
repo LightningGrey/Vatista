@@ -4,6 +4,9 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
+#include <memory>
+#include <stdint.h>
+#include <cstdint> 
 
 #include "GLM/glm.hpp"
 #include "GLM/gtc/matrix_transform.hpp"
@@ -21,12 +24,16 @@
 
 #include "Objects/GameObject.h"
 #include "Objects/Characters/Character.h"
+#include "Objects/Characters/Z3n.h"
 #include "Objects/UI/Stamina.h"
 #include "Objects/UI/UIObject.h"
 #include "Objects/Stationary/StationaryObj.h"
 #include "Objects/UI/Menu.h"
 
 #include "Post-Processing/FrameBuffer.h"
+#include "Post-Processing/PostProcessing.h"
+
+//#include "FBO.h"
 
 namespace Vatista {
 	class Game {
@@ -40,9 +47,10 @@ namespace Vatista {
 		void update(float dt);
 		void render(float dt);
 		void draw(float dt);
-		bool load(std::string filename);
+		bool load(std::string filename, std::vector<Mesh::Sptr>& meshes);
 		void bufferCreation();
 		void postProcess();
+
 	private:
 		Window* gameWindow;
 		glm::vec4 clearColour;
@@ -51,9 +59,11 @@ namespace Vatista {
 
 		//A shared pointer to our mesh
 		Mesh::Sptr mesh;
-		std::vector<Mesh::Sptr> meshList;
-		std::vector<Mesh::Sptr> meshListMenu;
-
+		std::vector<Mesh::Sptr> menuMeshList;
+		std::vector<Mesh::Sptr> stageMeshList;
+		std::vector<Mesh::Sptr> uiMeshList;
+		std::vector<Mesh::Sptr> z3nMeshList;
+		std::vector<Mesh::Sptr> tashiaMeshList;
 
 		// A shared pointer to our shader
 		Shader::Sptr myShader;
@@ -64,8 +74,6 @@ namespace Vatista {
 		Texture2D::Sptr texture2;
 		Texture2D::Sptr bladeText;
 		Texture2D::Sptr stamUIText;
-		Texture2D::Sptr TitleTexture;
-
 		std::vector<Material::Sptr> stamUIMats;
 		Texture::Sptr textures;
 		Material::Sptr mats;
@@ -74,18 +82,11 @@ namespace Vatista {
 
 		std::vector<GameObject::Sptr> ObjectList;
 		std::vector<GameObject::Sptr> UIList;
-		std::vector<GameObject::Sptr> TitleMenuList;
-
-		Character::Sptr C1;
-		Character::Sptr C2;
+		Character::Sptr P1;
+		Character::Sptr P2;
 		StationaryObj::Sptr stage;
-		StationaryObj::Sptr sword1;
-		StationaryObj::Sptr sword2;
-		StationaryObj::Sptr sheath1;
-		StationaryObj::Sptr sheath2;
 		Stamina::Sptr S1;
 		UIObject::Sptr UI1;
-		Menu::Sptr TitleMenu1; //my changes
 		UIObject::Sptr charProfile1;
 		Stamina::Sptr S2;
 		UIObject::Sptr UI2;
@@ -94,10 +95,28 @@ namespace Vatista {
 		float y = 100.0f;
 
 		//GameObject::Sptr StaminaBackground;
-		
+
 
 		FrameBuffer::Sptr buffer;
+		FrameBuffer::Sptr pingpongBufferH;
+		FrameBuffer::Sptr pingpongBufferV;
 
+		Mesh::Sptr fullscreenQuad;
+		std::vector<PostPass> passes;
+
+		//basic post-process
+		Shader::Sptr basePost;
+
+		//post-process effects
+		Shader::Sptr hdrShader;
+		Shader::Sptr brightShader;
+		Shader::Sptr blurShader;
+		Shader::Sptr additiveShader;
+		//Shader::Sptr hblurShader;
+		//Shader::Sptr vblurShader;
+
+		//test
+		float exposure = 0.5f;
 
 		//ObjLoader loader;
 		//

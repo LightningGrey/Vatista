@@ -11,6 +11,9 @@ Authors: DHC Studios
 #include "Game/sceneLayers/TitleLayer.h"
 #include "Utilities/EnumToGameState.h"
 #include "Game/sceneLayers/MenuLayer.h"
+#include "Graphics/Window.h"
+
+
 
 int main() {
 
@@ -24,7 +27,20 @@ int main() {
 
 	Vatista::TitleLayer* titleScreenScene = new Vatista::TitleLayer();
 	
-	Vatista::MenuLayer* stage1Scene = new Vatista::MenuLayer();
+	Vatista::MenuLayer* menuScene = new Vatista::MenuLayer();
+
+	Vatista::Game* stage1Scene = new Vatista::Game();
+
+	//Vatista::Game2* stage2Scene = new Vatista::Gane2();
+
+	//Vatista::Window* gameWindow1;
+
+	//int buttonSelected = 0;
+
+	//if (glfwGetKey(gameWindow1->getWindow(), GLFW_KEY_W) == GLFW_PRESS) {
+	//	buttonSelected++;
+	//}
+
 
 	switch (currentscene)
 	{
@@ -34,18 +50,25 @@ int main() {
 		delete titleScreenScene;
 		break;
 
+	case Vatista::EnumToGameState::Gamestate::selectionMenu:
+
+		menuScene->run();
+		delete menuScene;
+
+		break;
+
 	case Vatista::EnumToGameState::Gamestate::stage1:
 	
 		stage1Scene->run();
-		delete stage1Scene;
+		delete menuScene;
 
 		break;
 	case Vatista::EnumToGameState::Gamestate::stage2:
-		// ...
+		
+	/*	stage2Scene->run();
+		delete stage2Scene;*/
 		break;
 	}
-
-
 
 	
 	//Vatista::TitleLayer* title = new Vatista::TitleLayer();
