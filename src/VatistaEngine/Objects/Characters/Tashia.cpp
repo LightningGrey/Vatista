@@ -138,7 +138,7 @@ namespace Vatista {
 				setStamina(getStamina() - 5.f);
 				kb.atkTimer1 = glfwGetTime();
 				movement.x = 0;
-				ae->PlayEvent("LightAttack");
+				ae->PlayEvent("Tashia Light Attack");
 			}
 			// Heavy Attack
 			else if (kb.g && !getHitStun() && !getIsDashing() && !getIsAttacking() && getStamina() >= 15.f) {
@@ -149,7 +149,7 @@ namespace Vatista {
 				setStamina(getStamina() - 15.f);
 				kb.atkTimer1 = glfwGetTime();
 				movement.x = 0;
-				ae->PlayEvent("HeavyAttack");
+				ae->PlayEvent("Tashia Heavy Attack");
 			}
 			if (getIsAttacking() && !p2->getHitStun() && !p2->getIsDashing()) {
 				if (atk && glfwGetTime() - kb.atkTimer1 > 0.2f && glfwGetTime() - kb.atkTimer1 < 0.4f) {
@@ -171,6 +171,7 @@ namespace Vatista {
 							p2->setStamina(100.0f);
 							setStateTracker(4);
 							p2->setStateTracker(4);
+							p2->hurtSound(p2, ae);
 							roundEnd = true;
 							return;
 						}
@@ -203,6 +204,7 @@ namespace Vatista {
 							p2->setStamina(100.0f);
 							setStateTracker(4);
 							p2->setStateTracker(4);
+							p2->hurtSound(p2, ae);
 							roundEnd = true;
 							return;
 						}
@@ -326,7 +328,7 @@ namespace Vatista {
 				setStamina(getStamina() - 5.f);
 				kb.atkTimer2 = glfwGetTime();
 				movement.x = 0;
-				ae->PlayEvent("LightAttack");
+				ae->PlayEvent("Tashia Light Attack");
 			}
 			// Heavy Attack
 			else if (kb.ralt && !getHitStun() && !getIsDashing() && !getIsAttacking() && getStamina() >= 15.f) {
@@ -337,7 +339,7 @@ namespace Vatista {
 				setStamina(getStamina() - 15.f);
 				kb.atkTimer2 = glfwGetTime();
 				movement.x = 0;
-				ae->PlayEvent("HeavyAttack");
+				ae->PlayEvent("Tashia Heavy Attack");
 			}
 			if (getIsAttacking() && !p2->getHitStun() && !p2->getIsDashing()) {
 				if (atk && glfwGetTime() - kb.atkTimer2 > 0.2f && glfwGetTime() - kb.atkTimer2 < 0.4f) {
@@ -359,6 +361,7 @@ namespace Vatista {
 							p2->setStamina(100.0f);
 							setStateTracker(4);
 							p2->setStateTracker(4);
+							p2->hurtSound(p2, ae);
 							roundEnd = true;
 							return;
 						}
@@ -391,6 +394,7 @@ namespace Vatista {
 							p2->setStamina(100.0f);
 							setStateTracker(4);
 							p2->setStateTracker(4);
+							p2->hurtSound(p2, ae);
 							roundEnd = true;
 							return;
 						}
@@ -494,12 +498,29 @@ namespace Vatista {
 		}
 		if (getStamina() < 100.0f) {
 			if (getIsBlocking())
-				setStamina(getStamina() + 0.05f);
+				setStamina(getStamina() + 0.025f);
 			else
-				setStamina(getStamina() + 0.1f);
+				setStamina(getStamina() + 0.05f);
+			if (getStamina() < 20.0f)
+				ae->SetEventParameter("Tashia Stamina Pants", "LowStamina", 1);
+			else
+				ae->SetEventParameter("Tashia Stamina Pants", "LowStamina", 0);
+
 		}
 		if (getStamina() > 100.0f)
 			setStamina(100.0f);
 		updateAnim();
+	}
+	void Tashia::hurtSound(Character::Sptr p2, AudioEngine::Sptr ae)
+	{
+		ae->PlayEvent("Tashia Hurt Grunts");
+		if (p2->getWins() == 1)
+			ae->SetEventParameter("Tashia Hurt Grunts", "Lives", 1);
+		else if (p2->getWins() == 2)
+			ae->SetEventParameter("Tashia Hurt Grunts", "Lives", 2);
+	}
+	void Tashia::victoryLine(AudioEngine::Sptr ae)
+	{
+		ae->PlayEvent("Tashia Victory");
 	}
 }

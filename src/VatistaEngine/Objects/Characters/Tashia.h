@@ -10,6 +10,8 @@ namespace Vatista {
 		Tashia(bool ID, std::vector<Mesh::Sptr>& meshes, Material::Sptr mat);
 		~Tashia();
 		virtual void update(float dt, GLFWwindow* gameWindow, Character::Sptr p2, AudioEngine::Sptr ae) override;
+		virtual void hurtSound(Character::Sptr p2, AudioEngine::Sptr ae) override;
+		virtual void victoryLine(AudioEngine::Sptr ae) override;
 
 	};
 }

@@ -68,11 +68,26 @@ void Vatista::Game::init()
 	audioEngine->Init();
 	audioEngine->LoadBank("./res/Music and Sound/Master", FMOD_STUDIO_LOAD_BANK_NORMAL);
 	audioEngine->LoadEvent("Music", "{fd7618a1-5880-4a64-ae37-e0f01ef54912}");
-	audioEngine->LoadEvent("LightAttack", "{f64fa79a-565d-4493-b4bf-a73a37c31219}");
-	audioEngine->LoadEvent("HeavyAttack", "{621b2e70-27ea-4900-b397-96cb10366574}");
-	audioEngine->LoadEvent("Dash", "{53dbc862-3dec-411a-9fc4-bb15743c2b6b}");
+	audioEngine->LoadEvent("Stage1 BGNoise", "{57fec8ec-22cd-4b76-be25-95fa3423193d}");
+	audioEngine->LoadEvent("Stage2 BGNoise", "{2594ba35-7209-4c59-b5a1-db34faf5e7ed}");
+	audioEngine->LoadEvent("Z3n Select", "{90e982a9-8b74-4e2e-8716-fc64701f4297}");
+	audioEngine->LoadEvent("Z3n Light Attack", "{f64fa79a-565d-4493-b4bf-a73a37c31219}");
+	audioEngine->LoadEvent("Z3n Heavy Attack", "{621b2e70-27ea-4900-b397-96cb10366574}");
+	audioEngine->LoadEvent("Z3n Hurt Grunts", "{269721a1-93ec-4eee-a16e-e848b19e15d2}");
+	audioEngine->LoadEvent("Z3n Stamina Pants", "{9be48229-ebad-4655-89d0-058437d4e68f}");
+	audioEngine->LoadEvent("Z3n Victory", "{6768dd0d-9f95-4d4d-a0b8-dd128cac64f3}");
+	audioEngine->LoadEvent("Tashia Select", "{41668ae5-b336-4c4b-89ff-723f79cefa0b}");
+	audioEngine->LoadEvent("Tashia Light Attack", "{00effbec-24ed-4d48-a446-61679fd3131e}");
+	audioEngine->LoadEvent("Tashia Heavy Attack", "{b0312316-aa68-4993-b48d-1e17beed8374}");
+	audioEngine->LoadEvent("Tashia Hurt Grunts", "{ed38b13f-3bfc-44d1-b52d-665580308706}");
+	audioEngine->LoadEvent("Tashia Stamina Pants", "{cec94898-5830-4502-90a0-5024932b4d2b}");
+	audioEngine->LoadEvent("Tashia Victory", "{d966a2fd-e28e-4fd1-82ac-89e7a9bfe18e}");
 	audioEngine->LoadEvent("Block", "{81b5ce8f-0f80-4494-8aa7-dc898cbc38bb}");
+	audioEngine->LoadEvent("Dash", "{53dbc862-3dec-411a-9fc4-bb15743c2b6b}");
 	audioEngine->PlayEvent("Music");
+	audioEngine->PlayEvent("Stage1 BGNoise");
+	audioEngine->PlayEvent("Z3n Stamina Pants");
+	audioEngine->PlayEvent("Tashia Stamina Pants");
 	
 	//load stage objects
 	bool oLoad = load("./res/Objects/StageOne.txt", stageMeshList, false);
@@ -119,8 +134,8 @@ void Vatista::Game::init()
 	NearestMipped->createSampler();
 
 	Material::Sptr tashiaMat = std::make_shared<Material>(character);
-	tashiaMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	tashiaMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
+	tashiaMat->Set("a_LightPos", { 0.0f, 1.0f, -1.0f });
+	tashiaMat->Set("a_LightColor", { 0.0f,0.0f,50.0f });
 	tashiaMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	tashiaMat->Set("a_AmbientPower", 0.7f);
 	tashiaMat->Set("a_LightSpecPower", 0.9f);
@@ -128,8 +143,8 @@ void Vatista::Game::init()
 	tashiaMat->Set("a_LightAttenuation", 0.04f);
 	tashiaMat->Set("texSample", tashiaTexture, NearestMipped);
 	Material::Sptr z3nMat = std::make_shared<Material>(character);
-	z3nMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	z3nMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
+	z3nMat->Set("a_LightPos", { 0.0f, 1.0f, -1.0f });
+	z3nMat->Set("a_LightColor", { 50.0f,0.0f,0.0f });
 	z3nMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
 	z3nMat->Set("a_AmbientPower", 0.7f);
 	z3nMat->Set("a_LightSpecPower", 0.9f);
@@ -459,7 +474,6 @@ void Vatista::Game::update(float dt)
 		mainCamera->LookAt(glm::vec3(0.0f, 2.0f, -50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 	else if(P1->getWins()==3){
-
 	}
 	else if(P2->getWins()==3){
 
@@ -605,13 +619,13 @@ void Vatista::Game::postProcess()
 			pingpongBufferV->bindColour(3, 0);
 		}
 		blurShader->SetUniform("xImage", 3);
-		blurShader->SetUniform("offset", glm::vec2(1, 0));
+		blurShader->SetUniform("horizontal", 1);
 		fullscreenQuad->Draw();
 
 		pingpongBufferV->bind();
 		pingpongBufferH->bindColour(3, 0);
 		blurShader->SetUniform("xImage", 3);
-		blurShader->SetUniform("offset", glm::vec2(0, 1));
+		blurShader->SetUniform("horizontal", 0);
 		fullscreenQuad->Draw();
 	}
 

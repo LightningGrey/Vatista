@@ -48,6 +48,7 @@ layout (location = 5) in vec3 tangentFragPos;
 
 
 layout (location = 0) out vec4 outColor;
+layout (location = 1) out vec4 brightColor;
 
 uniform vec3  a_CameraPos;
 
@@ -210,4 +211,10 @@ void main() {
 
     // Write the output
 	outColor = vec4(result, surfaceColour.a);// * a_ColorMultiplier;
+
+	float brightness = dot(outColor.rgb, vec3(0.7152, 0.0, 0.7152));
+    if(brightness > 1.0)
+        brightColor = vec4(outColor.rgb, 1.0);
+    else
+        brightColor = vec4(0.0, 0.0, 0.0, 1.0);
 }

@@ -83,7 +83,8 @@ namespace Vatista {
 		float getStartTime() { return startTime; }
 		float getJourneyLength() { return journeyLength; }
 
-
+		virtual void hurtSound(Character::Sptr p2, AudioEngine::Sptr ae) = 0;
+		virtual void victoryLine(AudioEngine::Sptr ae) = 0;
 		void setStateTracker(int i);
 		int getStateTracker() { return stateTracker; }
 		int getAnimIndex() { return animIndex; }
