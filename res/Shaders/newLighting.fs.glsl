@@ -42,8 +42,10 @@ struct SpotLight {
 layout (location = 0) in vec3 inWorldPos;
 layout (location = 1) in vec2 inUV;
 layout (location = 2) in vec3 inNormal;
+layout (location = 3) in vec4 lightSpacePos;
 
 layout (location = 0) out vec4 outColor;
+layout (location = 1) out vec4 brightColor;
 
 uniform vec3  a_CameraPos;
 
@@ -55,7 +57,7 @@ uniform vec3  a_LightColor;
 uniform float a_LightShininess;
 uniform float a_LightAttenuation;
 uniform sampler2D texSample;
-//uniform sampler2D normalMap;
+uniform sampler2D shadowMap;
 
 uniform int rimOn;
 
@@ -171,7 +173,38 @@ vec3 spotLightCalc(SpotLight spotlight, vec4 surfaceColour, vec3 norm, vec3 toLi
     return result;
 }
 
-
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+    // perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // calculate bias (based on depth map resolution and slope)
+    vec3 normal = normalize(inNormal);
+    vec3 lightDir = normalize(a_LightPos - inWorldPos);
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+   
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += currentDepth - bias > pcfDepth  ? 1.0 : 0.0;        
+        }    
+    }
+    shadow /= 9.0;
+    
+    if(projCoords.z > 1.0)
+        shadow = 0.0;
+        
+    return shadow;
+}
 
 void main() {
     // Re-normalize our input, so that it is always length 1
@@ -202,8 +235,17 @@ void main() {
     //spot light
     result += spotLightCalc(spotlight, surfaceColour, norm, toLight, distToLight);
 
+    float shadow = ShadowCalculation(lightSpacePos);
+    result = result * (1.0 - shadow);
+
     // TODO: gamma correction
 
     // Write the output
 	outColor = vec4(result, surfaceColour.a);// * a_ColorMultiplier;
+
+    float brightness = dot(outColor.rgb, vec3(0.7152, 0.0, 0.7152));
+    if(brightness > 1.0)
+        brightColor = vec4(outColor.rgb, 1.0);
+    else
+        brightColor = vec4(0.0, 0.0, 0.0, 1.0);
 }

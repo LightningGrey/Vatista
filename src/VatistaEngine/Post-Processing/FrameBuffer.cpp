@@ -43,6 +43,20 @@ namespace Vatista {
 		colours.push_back(textureColorbuffer);
 	}
 
+	void FrameBuffer::createDepthAttachment(int width, int height, RenderTargetAttachment attach)
+	{
+		GLuint depthbuffer;
+		glGenTextures(1, &depthbuffer);
+		glBindTexture(GL_TEXTURE_2D, depthbuffer);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)attach, GL_TEXTURE_2D, depthbuffer, 0);
+		colours.push_back(depthbuffer);
+	}
+
 	void FrameBuffer::createRenderBuffer(int width, int height, RenderTargetAttachment attach,
 		RenderTargetType type)
 	{

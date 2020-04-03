@@ -521,6 +521,7 @@ void Vatista::Game::draw(float)
 
 	//draw game objects
 	for (auto object : ObjectList) {
+		object->getMat()->GetShader()->SetUniform("shadowMap", 5);
 		object->Draw(mainCamera);
 	}
 	
@@ -564,7 +565,7 @@ bool Vatista::Game::load(std::string filename, std::vector<Mesh::Sptr>& meshes, 
 void Vatista::Game::bufferCreation()
 {  
 	buffer = std::make_shared<FrameBuffer>();
-	//buffer->createAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+	
 	buffer->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
 	buffer->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color1);
 	unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
@@ -572,8 +573,13 @@ void Vatista::Game::bufferCreation()
 	buffer->createRenderBuffer(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::DepthStencil,
 		RenderTargetType::DepthStencil);
 	
+	depthbuffer = std::make_shared<FrameBuffer>();
+	depthbuffer->createDepthAttachment(SHADOW_WIDTH, SHADOW_HEIGHT, RenderTargetAttachment::Depth);
+
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::POSTPROCESSOR: Failed to initialize FBO" << std::endl;
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
 	buffer->bindDefault();
 
 
@@ -606,6 +612,34 @@ void Vatista::Game::bufferCreation()
 	//vblurShader->Bind();
 	//vblurShader->SetUniform("isHorizontal", 0);
 
+}
+
+void Vatista::Game::preProcess()
+{
+	glm::mat4 lightProjection, lightView;
+	glm::mat4 lightSpaceMatrix;
+	float near_plane = -1.0f, far_plane = 1.0f;
+	lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+	lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+	lightSpaceMatrix = lightProjection * lightView;
+	// render scene from light's point of view
+	depthShader->Bind();
+	depthShader->SetUniform("lightSpaceMatrix", lightSpaceMatrix);
+
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	depthbuffer->bind();
+	glClear(GL_DEPTH_BUFFER_BIT);
+\
+	for (auto object : ObjectList) {
+		object->depthdraw(depthShader);
+	}
+	depthbuffer->bindDefault();
+
+	// reset viewport
+	glViewport(0, 0, 1600, 900);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	depthbuffer->bindColour(5, 0);
 }
 
 

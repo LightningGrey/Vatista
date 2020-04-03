@@ -14,11 +14,13 @@ layout (location = 2) out vec3 outNormal;
 layout (location = 3) out vec3 tangentLightPos;
 layout (location = 4) out vec3 tangentViewPos;
 layout (location = 5) out vec3 tangentFragPos;
+layout (location = 6) out vec4 lightSpacePos;
 
 uniform mat4 a_ModelViewProjection;
 uniform mat4 a_Model;
 uniform mat4 a_ModelView;
 uniform mat3 a_NormalMatrix;
+uniform mat4 lightSpaceMatrix;
 uniform float morphT;
 
 uniform vec3  a_LightPos;
@@ -40,6 +42,7 @@ void main() {
 	outNormal = a_NormalMatrix * lerpNorm;
 	outUV = inUV;
 	outWorldPos =  (a_Model * vec4(lerpPos, 1)).xyz;
+	lightSpacePos = lightSpaceMatrix * vec4(lerpPos, 1.0);
 	gl_Position = a_ModelViewProjection * vec4(lerpPos,1);
 
 	mat3 TBN = transpose(mat3(T, B, N));

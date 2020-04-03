@@ -101,6 +101,12 @@ namespace Vatista {
 		model->Draw();
 	}
 
+	void Character::depthdraw(Shader::Sptr shader)
+	{
+		shader->SetUniform("model", transform);
+		model->Draw();
+	}
+
 	void Character::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		inputQueue.emplace();

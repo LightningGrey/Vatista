@@ -90,6 +90,8 @@
     <None Include="res\Shaders\Post-Processing\gaussianblur.fs.glsl" />
     <None Include="res\Shaders\Post-Processing\additive.fs.glsl" />
     <None Include="res\Shaders\Post-Processing\basepost.fs.glsl" />
+    <None Include="res\Shaders\Post-Processing\depthmap.vs.glsl" />
+    <None Include="res\Shaders\Post-Processing\depthmap.fs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\StaminaBar.vs.glsl" />
