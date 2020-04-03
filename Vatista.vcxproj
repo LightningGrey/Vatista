@@ -33,6 +33,7 @@
     <ClInclude Include="src\Game\scenelayers\TitleLayer.h" />
     <ClInclude Include="src\VatistaEngine\Audio\AudioEngine.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Camera.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Light.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Material.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Mesh.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\MeshRenderer.h" />
@@ -42,6 +43,8 @@
     <ClInclude Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.h" />
     <ClInclude Include="src\VatistaEngine\Graphics\Window.h" />
     <ClInclude Include="src\VatistaEngine\Objects\Characters\Character.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\Characters\Tashia.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\Characters\Z3n.h" />
     <ClInclude Include="src\VatistaEngine\Objects\GameObject.h" />
     <ClInclude Include="src\VatistaEngine\Objects\Stationary\StationaryObj.h" />
     <ClInclude Include="src\VatistaEngine\Objects\UI\Button.h" />
@@ -72,6 +75,8 @@
     <ClCompile Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.cpp" />
     <ClCompile Include="src\VatistaEngine\Graphics\Window.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\Characters\Character.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\Characters\Tashia.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\Characters\Z3n.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\GameObject.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\Stationary\StationaryObj.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\UI\Menu.cpp" />
@@ -96,6 +101,11 @@
     <None Include="res\Master.bank" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\Shaders\Post-Processing\additive.fs.glsl" />
+    <None Include="res\Shaders\Post-Processing\gaussianblur.fs.glsl" />
+    <None Include="res\Shaders\Post-Processing\hdr.fs.glsl" />
+    <None Include="res\Shaders\Post-Processing\invert.fs.glsl" />
+    <None Include="res\Shaders\Post-Processing\basepost.fs.glsl" />
     <None Include="res\StaminaBar.fs.glsl" />
     <None Include="res\StaminaBar.vs.glsl" />
   </ItemGroup>

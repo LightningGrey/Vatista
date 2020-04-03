@@ -23,7 +23,7 @@ namespace Vatista {
 			while (std::getline(loadingFile, line)) {
 				if (!line.empty() && line[line.size() - 1] == '\r')
 					line.pop_back();
-				dataList.push_back(line);
+				dataList.push_back(line); 
 			}
 			loadingFile.close();
 			return true;

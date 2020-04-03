@@ -35,7 +35,7 @@ void Vatista::Texture2D::loadFile(const std::string& filename, bool alpha)
 
 		//glTextureSubImage2D(textureID, 0, 0, 0, texWidth, texHeight, GL_RGBA, 
 		//	GL_UNSIGNED_BYTE, data);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth, texHeight, 0, GL_RGBA,
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, texWidth, texHeight, 0, GL_RGBA,
 			GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

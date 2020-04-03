@@ -44,6 +44,7 @@ layout (location = 1) in vec2 inUV;
 layout (location = 2) in vec3 inNormal;
 
 layout (location = 0) out vec4 outColor;
+layout (location = 1) out vec4 brightColor;
 
 uniform vec3  a_CameraPos;
 
@@ -97,7 +98,7 @@ vec3 pointLightCalc(vec4 surfaceColour, vec3 norm, vec3 toLight, vec3 viewDir, v
     // Finally, we can calculate the actual specular factor
     vec3 specOut = specPower * a_LightColor;
 
-    ////rim lighting
+    //rim lighting
 	float rimLight = 1 - dot(norm, viewDir);
 	rimLight = clamp(rimLight - 0.4, 0.0, 1.0);
     rimLight = rimLight * rimOn;
@@ -107,7 +108,7 @@ vec3 pointLightCalc(vec4 surfaceColour, vec3 norm, vec3 toLight, vec3 viewDir, v
     float diffuseFactor = max(dot(norm, toLight), 0);
     // Calculate our diffuse output
     vec3  diffuseOut = diffuseFactor * a_LightColor;
-    diffuseOut += rimLight * vec3(0.0f,0.0f,1.0f);
+    diffuseOut += rimLight * vec3(1.0f,1.0f,1.0f);
 	
     // Our ambient is simply the color times the ambient power
     vec3 ambientOut = a_AmbientColor * a_AmbientPower;
@@ -206,4 +207,10 @@ void main() {
 
     // Write the output
 	outColor = vec4(result, surfaceColour.a);// * a_ColorMultiplier;
+
+    float brightness = dot(outColor.rgb, vec3(0.7152, 0.0, 0.7152));
+    if(brightness > 1.0)
+        brightColor = vec4(outColor.rgb, 1.0);
+    else
+        brightColor = vec4(0.0, 0.0, 0.0, 1.0);
 }

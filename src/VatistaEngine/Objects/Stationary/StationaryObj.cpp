@@ -38,6 +38,7 @@ namespace Vatista {
 		material->GetShader()->SetUniform("spotlight.outerCutoff", glm::cos(glm::radians(6.0f)));
 		material->GetShader()->SetUniform("spotlight.attenuation", 0.04f);
 		material->GetShader()->SetUniform("spotlight.colour", { 1.0f, 0.83922f, 0.66667f });
+		//material->GetShader()->SetUniform("spotlight.colour", { 1.0f, 21.0f, 2.0f });
 
 		material->GetShader()->SetUniform("a_CameraPos", camera->GetPosition());
 

@@ -1,0 +1,17 @@
+Cave/Cave.vsf
+Background_Objects/Background_Objects.vsf
+Bunker/Bunker.vsf
+Bunker_Door/Bunker_Door.vsf
+Drill/Drill.vsf
+Catwalk_Floor/Catwalk_Floor.vsf
+Catwalk_InsideCorner/Catwalk_InsideCorner.vsf
+Catwalk_OutsideCorner/Catwalk_OutsideCorner.vsf
+Catwalk_Rail_Large/Catwalk_Rail_Large.vsf
+Catwalk_Rail_Short/Catwalk_Rail_Short.vsf
+CrateLarge/CrateLarge.vsf
+CrateMedium/CrateMedium.vsf
+CrateSmall/CrateSmall.vsf
+Girders/Girders.vsf
+MiningShip/MiningShip.vsf
+Barrel/Barrel.vsf
+Electrical_Stuff/Electrical_Stuff.vsf

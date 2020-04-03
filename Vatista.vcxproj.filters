@@ -20,6 +20,8 @@
     <ClCompile Include="src\VatistaEngine\Graphics\Rendering\TextureSampler.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\UI\Menu.cpp" />
     <ClCompile Include="src\VatistaEngine\Objects\UI\UIObject.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\Characters\Z3n.cpp" />
+    <ClCompile Include="src\VatistaEngine\Objects\Characters\Tashia.cpp" />
     <ClCompile Include="src\Game\scenelayers\TitleLayer.cpp" />
     <ClCompile Include="src\Game\scenelayers\Game.cpp" />
     <ClCompile Include="src\Game\scenelayers\menuLayer.cpp" />
@@ -63,6 +65,9 @@
     <ClInclude Include="src\VatistaEngine\Objects\UI\Button.h" />
     <ClInclude Include="src\VatistaEngine\Objects\UI\Menu.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\FileReader.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\Characters\Z3n.h" />
+    <ClInclude Include="src\VatistaEngine\Objects\Characters\Tashia.h" />
+    <ClInclude Include="src\VatistaEngine\Graphics\Rendering\Light.h" />
     <ClInclude Include="src\VatistaEngine\Utilities\EnumToGameState.h" />
     <ClInclude Include="src\Game\scenelayers\menuLayer.h" />
     <ClInclude Include="src\Game\mouseControls\mouse.h" />
@@ -84,6 +89,11 @@
     <None Include="lib\fmodstudioL.dll" />
     <None Include="include\fmod\fmod_studio.cs" />
     <None Include="res\Master.bank" />
+    <None Include="res\Shaders\Post-Processing\invert.fs.glsl" />
+    <None Include="res\Shaders\Post-Processing\hdr.fs.glsl" />
+    <None Include="res\Shaders\Post-Processing\gaussianblur.fs.glsl" />
+    <None Include="res\Shaders\Post-Processing\additive.fs.glsl" />
+    <None Include="res\Shaders\Post-Processing\basepost.fs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\StaminaBar.vs.glsl" />
