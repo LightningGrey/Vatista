@@ -25,7 +25,7 @@ namespace Vatista {
 		void setPosX(float newX) { Position.x = newX; };
 		void setPosY(float newY) { Position.y = newY; };
 		void setPosZ(float newZ) { Position.z = newZ; };
-		void setScale(glm::vec3 newScale) { Scale = newScale; }
+		void setScale(glm::vec3 newScale) { Scale = newScale; } 
 		void setScale(float newScale) { setScale(glm::vec3(newScale)); }
 		void setScaleX(float newX) { Scale.x = newX; }
 		void setScaleY(float newY) { Scale.y = newY; }

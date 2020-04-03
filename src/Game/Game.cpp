@@ -666,7 +666,7 @@ void Vatista::Game::postProcess()
 		fullscreenQuad->Draw();
 	}
 
-	//final additive
+	//final additive 
 	buffer->bindDefault();
 	glDisable(GL_DEPTH_TEST);
 
