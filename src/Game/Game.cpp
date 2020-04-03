@@ -460,6 +460,10 @@ void Vatista::Game::update(float dt)
 	if (P1->getWins() < 3 && P2->getWins() < 3) {
 		P1->update(dt, gameWindow->getWindow(), P2, audioEngine);
 		P2->update(dt, gameWindow->getWindow(), P1, audioEngine);
+		if (P1->getWins() == 3)
+			P1->victoryLine(audioEngine);
+		else if (P2->getWins() == 3)
+			P2->victoryLine(audioEngine);
 		UI1->setMat(stamUIMats[P1->getWins()]);
 		UI2->setMat(stamUIMats[P2->getWins()]);
 		S1->setStamina(P1->getStamina());
@@ -476,7 +480,6 @@ void Vatista::Game::update(float dt)
 	else if(P1->getWins()==3){
 	}
 	else if(P2->getWins()==3){
-
 	}
 	
 	audioEngine->Update();
