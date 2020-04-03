@@ -23,42 +23,39 @@ namespace Vatista {
 			setAtk2Pos(glm::vec3(getPosX() - getCollX() - getAtk2CollX(), getPosY(), 9.0f));
 		}
 		animations[0].second.push_back(meshes[0]);
-		animations[0].first.push_back(1.0f);
-		for (int i = 1; i < 8; i++) {
+		animations[0].first.push_back(0.3333f);
+		for (int i = 1; i < 11; i++) {
 			animations[1].second.push_back(meshes[i]); // Run   =  1.0s
-			animations[1].first.push_back(0.14285f);
+			animations[1].first.push_back(0.1f);
 		}
-		for (int i = 8; i < 13; i++) {
+		for (int i = 11; i < 15; i++) {
 			animations[2].second.push_back(meshes[i]); // Walk  =  .82s
-			animations[2].first.push_back(0.164f);
+			animations[2].first.push_back(0.1667f);
 		}
-		for (int i = 13; i < 15; i++) {
+		for (int i = 15; i < 17; i++)
 			animations[3].second.push_back(meshes[i]); // FDash =  0.5s
-			animations[3].first.push_back(0.75f);
-		}
-		for (int i = 15; i < 17; i++) {
+		animations[3].first.push_back(0.1667f);
+		animations[3].first.push_back(1.2733f);
+		for (int i = 17; i < 19; i++)
 			animations[4].second.push_back(meshes[i]); // BDash =  0.5s
-			animations[4].first.push_back(0.75f);
-		}
-		for (int i = 17; i < 22; i++)
+		animations[4].first.push_back(0.1667f);
+		animations[4].first.push_back(1.2733f);
+		for (int i = 19; i < 23; i++)
 			animations[5].second.push_back(meshes[i]); // LAtk  =  .41s
+		animations[5].first.push_back(0.1667f);
+		animations[5].first.push_back(0.0833f);
 		animations[5].first.push_back(0.0833f);
 		animations[5].first.push_back(0.1667f);
-		animations[5].first.push_back(0.05f);
-		animations[5].first.push_back(0.05f);
-		animations[5].first.push_back(0.0667f);
-		for (int i = 22; i < 28; i++)
+		for (int i = 23; i < 28; i++)
 			animations[6].second.push_back(meshes[i]); // HAtk  =  .58s
+		animations[6].first.push_back(0.1667f);
+		animations[6].first.push_back(0.0833f);
 		animations[6].first.push_back(0.0833f);
 		animations[6].first.push_back(0.0833f);
 		animations[6].first.push_back(0.1667f);
-		animations[6].first.push_back(0.0667f);
-		animations[6].first.push_back(0.1f);
-		animations[6].first.push_back(0.0833f);
-		for (int i = 28; i < 30; i++) {
-			animations[7].second.push_back(meshes[i]); // Block =  0.2s
-			animations[7].first.push_back(0.1f);
-		}
+
+		animations[7].second.push_back(meshes[28]); // Block =  0.2s
+		animations[7].first.push_back(0.1667f);
 		setMesh(animations[0].second[0]);
 	}
 	Z3n::~Z3n()
@@ -482,15 +479,17 @@ namespace Vatista {
 			if (collisionCheck(getPos(), getCollider(), p2->getPos(), p2->getCollider()))
 				p2->setPosX(getPosX() + getCollX() + p2->getCollX());
 		}
-		if (getPosX() > p2->getPosX()) {
-			setRotY(-90.0f);
-			setAtk1PosX(getPosX() - getCollX() - getAtk1CollX());
-			setAtk2PosX(getPosX() - getCollX() - getAtk2CollX());
-		}
-		else {
-			setRotY(90.0f);
-			setAtk1PosX(getPosX() + getCollX() + getAtk1CollX());
-			setAtk2PosX(getPosX() + getCollX() + getAtk2CollX());
+		if (!getIsDashing()) {
+			if (getPosX() > p2->getPosX()) {
+				setRotY(-90.0f);
+				setAtk1PosX(getPosX() - getCollX() - getAtk1CollX());
+				setAtk2PosX(getPosX() - getCollX() - getAtk2CollX());
+			}
+			else {
+				setRotY(90.0f);
+				setAtk1PosX(getPosX() + getCollX() + getAtk1CollX());
+				setAtk2PosX(getPosX() + getCollX() + getAtk2CollX());
+			}
 		}
 		if (getStamina() < 100.0f) {
 			if (getIsBlocking())

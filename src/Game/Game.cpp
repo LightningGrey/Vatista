@@ -75,19 +75,29 @@ void Vatista::Game::init()
 	audioEngine->PlayEvent("Music");
 	
 	//load stage objects
-	bool oLoad = load("./res/Objects/StageOne.txt", stageMeshList);
-	oLoad = load("./res/Objects/UI.txt", uiMeshList);
-	oLoad = load("./res/Objects/Z3n.txt", z3nMeshList);
+	bool oLoad = load("./res/Objects/StageOne.txt", stageMeshList, false);
+	oLoad = load("./res/Objects/UI.txt", uiMeshList, false);
+	oLoad = load("./res/Objects/Tashia.txt", tashiaMeshList, true);
+	oLoad = load("./res/Objects/Z3n.txt", z3nMeshList, true);
 	
-	texture = std::make_shared<Texture2D>();
-	texture->loadFile("./res/Objects/Z3n/Z3N_Texture.png");
+	tashiaTexture = std::make_shared<Texture2D>();
+	tashiaTexture->loadFile("./res/Objects/Tashia/Tashia_Texture.png");
 
-	texture2 = std::make_shared<Texture2D>();
-	texture2->loadFile("./res/Objects/color-grid.png");
+	tashiaMap = std::make_shared<Texture2D>();
+	tashiaMap->loadFile("./res/Objects/Tashia/Tashia_mesh_map.png");
+
+	z3nTexture = std::make_shared<Texture2D>();
+	z3nTexture->loadFile("./res/Objects/Z3n/Z3n_Texture.png");
+
+	z3nMap = std::make_shared<Texture2D>();
+	z3nMap->loadFile("./res/Objects/Z3n/Z3n_mesh_map.png");
+
+	propTexture = std::make_shared<Texture2D>();
+	propTexture->loadFile("./res/Objects/color-grid.png");
 
 	Shader::Sptr character = std::make_shared<Shader>();
 	//character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
-	character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/newLighting.fs.glsl");
+	character->Load("./res/Shaders/passthroughMorph.vs.glsl", "./res/Shaders/newLightingChar.fs.glsl");
 
 	Shader::Sptr stageProp = std::make_shared<Shader>();
 	stageProp->Load("./res/Shaders/lighting.vs.glsl", "./res/Shaders/newLighting.fs.glsl");
@@ -108,27 +118,24 @@ void Vatista::Game::init()
 	NearestMipped->magFilter = MagFilter::Nearest;
 	NearestMipped->createSampler();
 
-	Material::Sptr characterMat = std::make_shared<Material>(character);
-	characterMat->Set("a_LightPos", { 0.0f, 1.0f, -1.0f });
-	characterMat->Set("a_LightColor", { 50.0f, 0.0f, 0.0f }); 
-	//characterMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
-	characterMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	characterMat->Set("a_AmbientPower", 0.7f);
-	characterMat->Set("a_LightSpecPower", 0.9f);
-	characterMat->Set("a_LightShininess", 256.0f);
-	characterMat->Set("a_LightAttenuation", 0.04f);
-	characterMat->Set("texSample", texture, NearestMipped);
-
-	Material::Sptr characterMat2 = std::make_shared<Material>(character);
-	characterMat2->Set("a_LightPos", { 0.0f, 1.0f, -1.0f });
-	characterMat2->Set("a_LightColor", { 0.0f, 0.0f, 50.0f });
-	//characterMat2->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
-	characterMat2->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	characterMat2->Set("a_AmbientPower", 0.7f);
-	characterMat2->Set("a_LightSpecPower", 0.9f);
-	characterMat2->Set("a_LightShininess", 256.0f);
-	characterMat2->Set("a_LightAttenuation", 0.04f);
-	characterMat2->Set("texSample", texture, NearestMipped);
+	Material::Sptr tashiaMat = std::make_shared<Material>(character);
+	tashiaMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	tashiaMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
+	tashiaMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	tashiaMat->Set("a_AmbientPower", 0.7f);
+	tashiaMat->Set("a_LightSpecPower", 0.9f);
+	tashiaMat->Set("a_LightShininess", 256.0f);
+	tashiaMat->Set("a_LightAttenuation", 0.04f);
+	tashiaMat->Set("texSample", tashiaTexture, NearestMipped);
+	Material::Sptr z3nMat = std::make_shared<Material>(character);
+	z3nMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	z3nMat->Set("a_LightColor", { 0.0f, 0.0f, 0.0f });
+	z3nMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	z3nMat->Set("a_AmbientPower", 0.7f);
+	z3nMat->Set("a_LightSpecPower", 0.9f);
+	z3nMat->Set("a_LightShininess", 256.0f);
+	z3nMat->Set("a_LightAttenuation", 0.04f);
+	z3nMat->Set("texSample", z3nTexture, NearestMipped);
 	
 	Material::Sptr stageMat = std::make_shared<Material>(stageProp);
 	stageMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -138,7 +145,7 @@ void Vatista::Game::init()
 	stageMat->Set("a_LightSpecPower", 0.9f);
 	stageMat->Set("a_LightShininess", 256.0f);
 	stageMat->Set("a_LightAttenuation", 0.04f);
-	stageMat->Set("texSample", texture2, NearestMipped);
+	stageMat->Set("texSample", propTexture, NearestMipped);
 
 
 	//======= STAGE ONE =======
@@ -231,7 +238,7 @@ void Vatista::Game::init()
 		stage->setMesh(stageMeshList[i]);
 		stage->setMat(mats);
 		//if (i != 5) {
-			ObjectList.push_back(stage);
+		ObjectList.push_back(stage);
 		//}
 	}
 
@@ -325,19 +332,6 @@ void Vatista::Game::init()
 	textureStamina = std::make_shared<Texture2D>();//connected to staminamat
 	textureStamina->loadFile("./res/Objects/Stamina/staminaRampTexture1.png");
 
-	stamUIText = std::make_shared<Texture2D>();
-	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
-
-	Material::Sptr profileMat = std::make_shared<Material>(UI);
-	profileMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
-	profileMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
-	profileMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
-	profileMat->Set("a_AmbientPower", 0.5f);
-	profileMat->Set("a_LightSpecPower", 0.9f);
-	profileMat->Set("a_LightShininess", 256.0f);
-	profileMat->Set("a_LightAttenuation", 0.04f);
-	profileMat->Set("texSample", stamUIText, NearestMipped);
-
 	//stamina
 	Material::Sptr staminaMat = std::make_shared<Material>(staminaPhong);//blank stamina texture
 	staminaMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
@@ -351,11 +345,13 @@ void Vatista::Game::init()
 	staminaMat->Set("UVoffset", glm::vec3(0.0f));
 
 	//Player 1
-	P1 = std::make_shared<Z3n>(true, z3nMeshList, characterMat);
+	P1 = std::make_shared<Tashia>(true, tashiaMeshList, tashiaMat);
+	P1->setNormalMap(tashiaMap);
 	ObjectList.push_back(P1);
 
 	//Player 2 
-	P2 = std::make_shared<Z3n>(false, z3nMeshList, characterMat2);
+	P2 = std::make_shared<Z3n>(false, z3nMeshList, z3nMat);
+	P2->setNormalMap(z3nMap);
 	ObjectList.push_back(P2);
 
 	UI1 = std::make_shared<UIObject>();
@@ -364,6 +360,19 @@ void Vatista::Game::init()
 	UI1->setMat(stamUIMats[P1->getWins()]);
 	UI1->setScale(2.5f);
 	UIList.push_back(UI1);
+
+	stamUIText = std::make_shared<Texture2D>();
+	stamUIText->loadFile("./res/Objects/Tashia/Tashia_render.png");
+
+	Material::Sptr profileMat = std::make_shared<Material>(UI);
+	profileMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	profileMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
+	profileMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	profileMat->Set("a_AmbientPower", 0.5f);
+	profileMat->Set("a_LightSpecPower", 0.9f);
+	profileMat->Set("a_LightShininess", 256.0f);
+	profileMat->Set("a_LightAttenuation", 0.04f);
+	profileMat->Set("texSample", stamUIText, NearestMipped);
 
 	charProfile1 = std::make_shared<UIObject>();
 	charProfile1->setPos(glm::vec3(-4.8f, 7.f, 1.f));
@@ -389,6 +398,19 @@ void Vatista::Game::init()
 	UI2->setRotY(180.f);
 	UI2->setScale(2.5f);
 	UIList.push_back(UI2);
+
+	stamUIText = std::make_shared<Texture2D>();
+	stamUIText->loadFile("./res/Objects/Z3n/Z3n_render.png");
+
+	profileMat = std::make_shared<Material>(UI);
+	profileMat->Set("a_LightPos", { 0.0f, 0.0f, 1.0f });
+	profileMat->Set("a_LightColor", { 0.0f, 1.0f, 0.0f });
+	profileMat->Set("a_AmbientColor", { 1.0f, 1.0f, 1.0f });
+	profileMat->Set("a_AmbientPower", 0.5f);
+	profileMat->Set("a_LightSpecPower", 0.9f);
+	profileMat->Set("a_LightShininess", 256.0f);
+	profileMat->Set("a_LightAttenuation", 0.04f);
+	profileMat->Set("texSample", stamUIText, NearestMipped);
 
 	charProfile2 = std::make_shared<UIObject>();
 	charProfile2->setPos(glm::vec3(4.8f, 7.f, 1.f));
@@ -494,14 +516,14 @@ void Vatista::Game::draw(float)
 
 }
 
-bool Vatista::Game::load(std::string filename, std::vector<Mesh::Sptr>& meshes)
+bool Vatista::Game::load(std::string filename, std::vector<Mesh::Sptr>& meshes, bool isChar)
 {
 	std::vector<std::string> dataList;
 	bool fRead = FileReader::readLines(filename, dataList);
 
 	if (fRead) {
 		for (int i = 0; i < dataList.size(); i++) {
-			bool vsf = FileReader::vsfRead(dataList[i], mesh);
+			bool vsf = isChar ? FileReader::vsfRead2(dataList[i], mesh) : FileReader::vsfRead(dataList[i], mesh);
 			if (!vsf) {
 				VATISTA_LOG_ERROR("VSF read failed.");
 				throw new std::runtime_error("File open failed");
@@ -625,6 +647,40 @@ void Vatista::Game::postProcess()
 
 	fullscreenQuad->Draw();
 
+	//// The last output will start as the output from the rendering
+	//FrameBuffer::Sptr lastPass = buffer;
+	//
+	//for (const PostPass& pass : passes) {
+	//	// We'll bind our post-processing output as the current render target and clear it
+	//	pass.Output->bind(RenderTargetBinding::Draw);
+	//	glClear(GL_COLOR_BUFFER_BIT);
+	//
+	//	// Set the viewport to be the entire size of the passes output
+	//	glViewport(0, 0, pass.Output->GetWidth(), pass.Output->GetHeight());
+	//
+	//	// Use the post processing shader to draw the fullscreen quad
+	//	pass.Shader->Bind();
+	//	lastPass->GetAttachment(RenderTargetAttachment::Color0)->bind(0);
+	//	//propTexture->bind(0);
+	//	pass.Shader->SetUniform("xImage", 0);
+	//	pass.Shader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
+	//
+	//	fullscreenQuad->Draw();
+	//
+	//	pass.Output->unBind();
+	//	lastPass = pass.Output;
+	//	
+	//	// Bind the last buffer we wrote to as our source for read operations
+	//	lastPass->bind(RenderTargetBinding::Read);
+	//	
+	//	// Copies the image from lastPass into the default back buffer
+	//	FrameBuffer::Blit({ 0, 0, lastPass->GetWidth(), lastPass->GetHeight() },
+	//		{ 0, 0, gameWindow->getWidth(), gameWindow->getHeight() },
+	//		BufferFlags::All, MagFilter::Nearest);
+	//	
+	//	// Unbind the last buffer from read operations, so we can write to it again later
+	//	lastPass->unBind();
+	//}
 
 }
 

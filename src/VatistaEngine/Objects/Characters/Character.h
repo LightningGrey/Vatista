@@ -89,6 +89,8 @@ namespace Vatista {
 		int getAnimIndex() { return animIndex; }
 		void updateAnim();
 
+		void setNormalMap(Texture::Sptr norm) { normalMap = norm; }
+
 	protected:
 		float stamina;
 		int wins;
@@ -117,6 +119,8 @@ namespace Vatista {
 		static std::queue<std::pair<int, int>> inputQueue;
 		static void inputBuffer();
 
+		Texture::Sptr normalMap;
+
 		int stateTracker = 0;
 		int animIndex = 0;
 
@@ -124,6 +128,6 @@ namespace Vatista {
 		float morph;
 
 		float currentTime = 0.0f;
-		float endTime = 1.0f;
+		float endTime = 0.3333f;
 	};
 }

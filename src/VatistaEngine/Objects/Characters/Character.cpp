@@ -66,6 +66,10 @@ namespace Vatista {
 
 		material->GetShader()->SetUniform("a_CameraPos", camera->GetPosition());
 
+		normalMap->bind(2);
+		material->GetShader()->SetUniform("normalMap", 2);
+
+
 		// Update the MVP using the item's transform
 		material->GetShader()->SetUniform(
 			"a_ModelViewProjection",

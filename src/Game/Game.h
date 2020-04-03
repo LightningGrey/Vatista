@@ -25,6 +25,7 @@
 #include "Objects/GameObject.h"
 #include "Objects/Characters/Character.h"
 #include "Objects/Characters/Z3n.h"
+#include "Objects/Characters/Tashia.h"
 #include "Objects/UI/Stamina.h"
 #include "Objects/UI/UIObject.h"
 #include "Objects/Stationary/StationaryObj.h"
@@ -47,7 +48,7 @@ namespace Vatista {
 		void update(float dt);
 		void render(float dt);
 		void draw(float dt);
-		bool load(std::string filename, std::vector<Mesh::Sptr>& meshes);
+		bool load(std::string filename, std::vector<Mesh::Sptr>& meshes, bool isChar);
 		void bufferCreation();
 		void postProcess();
 
@@ -70,9 +71,11 @@ namespace Vatista {
 		Shader::Sptr myNormalShader;
 		//std::vector<Vatista::Shader::Sptr> shaderList;
 		Texture2D::Sptr textureStamina;//place holder texture will add more complex later
-		Texture2D::Sptr texture;
-		Texture2D::Sptr texture2;
-		Texture2D::Sptr bladeText;
+		Texture2D::Sptr z3nTexture;
+		Texture2D::Sptr tashiaTexture;
+		Texture2D::Sptr propTexture;
+		Texture2D::Sptr z3nMap;
+		Texture2D::Sptr tashiaMap;
 		Texture2D::Sptr stamUIText;
 		std::vector<Material::Sptr> stamUIMats;
 		Texture::Sptr textures;

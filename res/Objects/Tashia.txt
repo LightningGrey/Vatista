@@ -1,8 +1,14 @@
 Tashia/tashia_idle_1.vsf
+Tashia/tashia_run_1.vsf
 Tashia/tashia_run_2.vsf
+Tashia/tashia_run_3.vsf
 Tashia/tashia_run_4.vsf
 Tashia/tashia_run_5.vsf
 Tashia/tashia_run_6.vsf
+Tashia/tashia_run_7.vsf
+Tashia/tashia_run_8.vsf
+Tashia/tashia_run_9.vsf
+Tashia/tashia_run_10.vsf
 Tashia/tashia_defense_walk_1.vsf
 Tashia/tashia_defense_walk_2.vsf
 Tashia/tashia_defense_walk_3.vsf
