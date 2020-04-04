@@ -90,7 +90,7 @@ namespace Vatista {
 				return;
 		}
 		glm::vec3 movement = glm::vec3(0.0f);
-		float speed = 10.0f;
+		float speed = 20.0f;
 		glfwSetInputMode(gameWindow, GLFW_STICKY_KEYS, GLFW_TRUE);
 		glfwSetKeyCallback(gameWindow, key_callback);
 		inputBuffer();
@@ -500,9 +500,9 @@ namespace Vatista {
 			else
 				setStamina(getStamina() + 0.05f);
 			if (getStamina() < 20.0f)
-				ae->SetEventParameter("Tashia Stamina Pants", "LowStamina", 1);
+				ae->SetEventParameter("Z3n Stamina Pants", "LowStamina", 1);
 			else
-				ae->SetEventParameter("Tashia Stamina Pants", "LowStamina", 0);
+				ae->SetEventParameter("Z3n Stamina Pants", "LowStamina", 0);
 		}
 		if (getStamina() > 100.0f)
 			setStamina(100.0f);

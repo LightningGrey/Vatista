@@ -84,6 +84,7 @@ namespace Vatista {
 
 		void createAttachment(int width, int height, RenderTargetAttachment attach);
 		void createFloatAttachment(int width, int height, RenderTargetAttachment attach);
+		void createDepthAttachment(int width, int height, RenderTargetAttachment attach);
 		void createRenderBuffer(int width, int height, RenderTargetAttachment attach, RenderTargetType type);
 		void setup();
 

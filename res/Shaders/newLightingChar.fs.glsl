@@ -45,7 +45,7 @@ layout (location = 2) in vec3 inNormal;
 layout (location = 3) in vec3 tangentLightPos;
 layout (location = 4) in vec3 tangentViewPos;
 layout (location = 5) in vec3 tangentFragPos;
-
+layout (location = 6) in vec4 lightSpacePos;
 
 layout (location = 0) out vec4 outColor;
 layout (location = 1) out vec4 brightColor;
@@ -61,9 +61,22 @@ uniform float a_LightShininess;
 uniform float a_LightAttenuation;
 uniform sampler2D texSample;
 uniform sampler2D normalMap;
+uniform sampler2D shadowMap;
+uniform sampler2D blank;
 
+
+uniform int ambientOn;
+uniform int diffuseOn;
+uniform int specularOn;
+uniform int directionLightOn;
+uniform int pointLightOn;
+uniform int spotLightOn;
+uniform int textureOn;
+uniform int textureOff;
 uniform int rimOn;
 
+
+uniform float brightValue;
 
 uniform DirLight dirlight;
 uniform SpotLight spotlight;
@@ -74,15 +87,15 @@ vec3 directionLightCalc(DirLight dirlight, vec4 surfaceColour, vec3 norm, vec3 h
     vec3 lightDir = normalize(-dirlight.direction);
 
     float diffuse = max(dot(norm, lightDir), 0.0);
-    vec3 diffuseOut = dirlight.diffuse * diffuse * a_LightColor;
+    vec3 diffuseOut = dirlight.diffuse * diffuse * a_LightColor * diffuseOn;
 
     // Our specular power is the angle between the the normal and the half vector, raised
     // to the power of the light's shininess
     float specular = pow(max(dot(norm, halfDir), 0.0), a_LightShininess);
-    vec3 specOut = dirlight.specular * specular * a_LightColor;
+    vec3 specOut = dirlight.specular * specular * a_LightColor * specularOn;
 
     // Our ambient is simply the color times the ambient power
-    vec3 ambientOut = dirlight.ambient * a_AmbientColor * a_AmbientPower;
+    vec3 ambientOut = dirlight.ambient * a_AmbientColor * a_AmbientPower * ambientOn;
 
     // Our result is our lighting multiplied by our object's color
     vec3 result = (ambientOut * surfaceColour.rgb) + (diffuseOut * surfaceColour.rgb) 
@@ -100,7 +113,7 @@ vec3 pointLightCalc(vec4 surfaceColour, vec3 norm, vec3 toLight, vec3 viewDir, v
     float specPower = pow(max(dot(norm, halfDir), 0.0), a_LightShininess);
 
     // Finally, we can calculate the actual specular factor
-    vec3 specOut = specPower * a_LightColor;
+    vec3 specOut = specPower * a_LightColor * specularOn;
 
     ////rim lighting
 	float rimLight = 1 - dot(norm, viewDir);
@@ -113,9 +126,10 @@ vec3 pointLightCalc(vec4 surfaceColour, vec3 norm, vec3 toLight, vec3 viewDir, v
     // Calculate our diffuse output
     vec3  diffuseOut = diffuseFactor * a_LightColor;
     diffuseOut += rimLight * vec3(0.0f,0.0f,1.0f);
+    diffuseOut *= diffuseOn;
 	
     // Our ambient is simply the color times the ambient power
-    vec3 ambientOut = a_AmbientColor * a_AmbientPower;
+    vec3 ambientOut = a_AmbientColor * a_AmbientPower * ambientOn;
 
     // We will use a modified form of distance squared attenuation, which will avoid divide
     // by zero errors and allow us to control the light's attenuation via a uniform
@@ -139,7 +153,7 @@ vec3 spotLightCalc(SpotLight spotlight, vec4 surfaceColour, vec3 norm, vec3 toLi
     float specPower = pow(max(dot(norm, halfDir), 0.0), spotlight.shininess);
 
     // Finally, we can calculate the actual specular factor
-    vec3 specOut = specPower * spotlight.specular * spotlight.colour;
+    vec3 specOut = specPower * spotlight.specular * spotlight.colour * specularOn;
 
     ////rim lighting
 	//float rimLight = 1 - dot(norm, viewDir);
@@ -150,11 +164,11 @@ vec3 spotLightCalc(SpotLight spotlight, vec4 surfaceColour, vec3 norm, vec3 toLi
     // the surface and the light
     float diffuseFactor = max(dot(norm, toLight), 0);
     // Calculate our diffuse output
-    vec3  diffuseOut = diffuseFactor * spotlight.diffuse * spotlight.colour;
+    vec3  diffuseOut = diffuseFactor * spotlight.diffuse * spotlight.colour * diffuseOn;
     //diffuseOut += rimLight * vec3(1.0,0.0,0.0);
 
     // Our ambient is simply the color times the ambient power
-    vec3 ambientOut = spotlight.ambientPower * spotlight.ambient * spotlight.colour;
+    vec3 ambientOut = spotlight.ambientPower * spotlight.ambient * spotlight.colour * ambientOn;
 
     // We will use a modified form of distance squared attenuation, which will avoid divide
     // by zero errors and allow us to control the light's attenuation via a uniform
@@ -176,7 +190,38 @@ vec3 spotLightCalc(SpotLight spotlight, vec4 surfaceColour, vec3 norm, vec3 toLi
     return result;
 }
 
-
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+    // perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // calculate bias (based on depth map resolution and slope)
+    vec3 normal = normalize(inNormal);
+    vec3 lightDir = normalize(a_LightPos - inWorldPos);
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+   
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += currentDepth - bias > pcfDepth  ? 1.0 : 0.0;        
+        }    
+    }
+    shadow /= 9.0;
+    
+    if(projCoords.z > 1.0)
+        shadow = 0.0;
+        
+    return shadow;
+}
 
 void main() {
     // Re-normalize our input, so that it is always length 1
@@ -186,7 +231,7 @@ void main() {
     // transform normal vector to range [-1,1]
     norm = normalize(norm * 2.0 - 1.0);   
 
-	vec4 surfaceColour = texture(texSample, inUV); //* texture(texSample2, inUV);
+	vec4 surfaceColour = (texture(texSample, inUV) * textureOn) + (texture(blank, inUV) * textureOff); 
 
        // Determine the direction from the position to the light
     vec3 toLight = tangentLightPos - tangentFragPos;
@@ -201,18 +246,20 @@ void main() {
     vec3 halfDir = normalize(toLight + viewDir);
 
     //direction light
-    vec3 result = directionLightCalc(dirlight, surfaceColour, norm, halfDir);
+    vec3 result = directionLightCalc(dirlight, surfaceColour, norm, halfDir) * directionLightOn;
     //point light
-    result += pointLightCalc(surfaceColour, norm, toLight, viewDir, halfDir, distToLight);
+    result += pointLightCalc(surfaceColour, norm, toLight, viewDir, halfDir, distToLight) * pointLightOn;
     //spot light
-    result += spotLightCalc(spotlight, surfaceColour, norm, toLight, distToLight);
+    result += spotLightCalc(spotlight, surfaceColour, norm, toLight, distToLight) * spotLightOn;
 
+    float shadow = ShadowCalculation(lightSpacePos);
+    result = result * (1.0 - shadow);
     // TODO: gamma correction
 
     // Write the output
 	outColor = vec4(result, surfaceColour.a);// * a_ColorMultiplier;
 
-	float brightness = dot(outColor.rgb, vec3(0.7152, 0.0, 0.7152));
+	float brightness = dot(outColor.rgb, vec3(0.7152, 0.0, 0.7152) * brightValue);
     if(brightness > 1.0)
         brightColor = vec4(outColor.rgb, 1.0);
     else

@@ -12,7 +12,8 @@ namespace Vatista {
 		GameObject() : Scale(1.0f), model(nullptr), material(nullptr), Position(0.0f), EulerRotDeg(0.0f), Collider(0.0f) {}
 		~GameObject() {}
 
-		virtual void Draw(const Vatista::Camera::Sptr& camera) = 0;
+		virtual void Draw(const Vatista::Camera::Sptr& camera, std::vector<bool> toggles, float brightness) = 0;
+		virtual void depthdraw(Shader::Sptr shader) = 0;
 		bool collisionCheck(glm::vec3 x, glm::vec2 collider1, glm::vec3 y, glm::vec2 collider2);
 
 		//getters and setters
@@ -24,7 +25,7 @@ namespace Vatista {
 		void setPosX(float newX) { Position.x = newX; };
 		void setPosY(float newY) { Position.y = newY; };
 		void setPosZ(float newZ) { Position.z = newZ; };
-		void setScale(glm::vec3 newScale) { Scale = newScale; }
+		void setScale(glm::vec3 newScale) { Scale = newScale; } 
 		void setScale(float newScale) { setScale(glm::vec3(newScale)); }
 		void setScaleX(float newX) { Scale.x = newX; }
 		void setScaleY(float newY) { Scale.y = newY; }

@@ -10,7 +10,7 @@ namespace Vatista {
 	{
 	}
 
-	void UIObject::Draw(const Vatista::Camera::Sptr& camera)
+	void UIObject::Draw(const Vatista::Camera::Sptr& camera, std::vector<bool> toggles, float brightness)
 	{ 
 		glm::mat4 world =
 			glm::translate(glm::mat4(1.0f), Position) *

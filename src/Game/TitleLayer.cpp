@@ -138,10 +138,10 @@ namespace Vatista {
 
 	void TitleLayer::draw(float dt)
 	{
-		//draw game objects
-		for (auto object : ObjectList) {
-			object->Draw(orthoCamera);
-		}
+		////draw game objects
+		//for (auto object : ObjectList) {
+		//	object->Draw(orthoCamera);
+		//}
 	}
 
 	bool TitleLayer::load(std::string filename)

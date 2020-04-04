@@ -110,6 +110,10 @@ void Vatista::Game::init()
 	propTexture = std::make_shared<Texture2D>();
 	propTexture->loadFile("./res/Objects/color-grid.png");
 
+	blankwhite = std::make_shared<Texture2D>();
+	blankwhite->loadFile("./res/Objects/White.png");
+	blankwhite->bind(99);
+
 	Shader::Sptr character = std::make_shared<Shader>();
 	//character->Load("./res/Shaders/passthroughMorph.vs", "./res/Shaders/blinn-phong.fs.glsl");
 	character->Load("./res/Shaders/passthroughMorph.vs.glsl", "./res/Shaders/newLightingChar.fs.glsl");
@@ -491,8 +495,52 @@ void Vatista::Game::update(float dt)
 		exposure -= 0.01f;
 	}
 
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_MULTIPLY)) {
+		passes += 1;
+	}
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_DIVIDE)) {
+		if (passes > 1)
+			passes -= 1;
+	}
 
-	//S1.setScale(glm::vec3(0.5f)); 
+
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_9)) {
+		brightness += 100.0f;
+	}
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_8)) {
+		brightness -= 100.0f;
+	}
+
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_1)) {
+		toggles[0] = !toggles[0];
+	}
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_2)) {
+		toggles[1] = !toggles[1];
+	}
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_3)) {
+		toggles[2] = !toggles[2];
+	}
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_4)) {
+		toggles[3] = !toggles[3];
+	} 
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_5)) {
+		toggles[4] = !toggles[4];
+	}
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_6)) {
+		toggles[5] = !toggles[5];
+	}
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_7)) {
+		toggles[6] = !toggles[6];
+		toggles[7] = !toggles[7]; 
+	}
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_0)) {
+		toggles[8] = !toggles[8];
+	}
+	if (glfwGetKey(gameWindow->getWindow(), GLFW_KEY_KP_DECIMAL)){
+		toggles[0] = 1;
+		toggles[1] = 1;
+		toggles[2] = 1;
+	}
 
 }
 
@@ -521,14 +569,15 @@ void Vatista::Game::draw(float)
 
 	//draw game objects
 	for (auto object : ObjectList) {
-		object->Draw(mainCamera);
+		object->getMat()->GetShader()->SetUniform("shadowMap", 5);
+		object->Draw(mainCamera, toggles, brightness);
 	}
 	
 	postProcess();
 
 	//draw UI
 	for (auto component : UIList) {
-		component->Draw(orthoCamera);
+		component->Draw(orthoCamera, toggles, brightness);
 	}
 
 }
@@ -564,7 +613,7 @@ bool Vatista::Game::load(std::string filename, std::vector<Mesh::Sptr>& meshes, 
 void Vatista::Game::bufferCreation()
 {  
 	buffer = std::make_shared<FrameBuffer>();
-	//buffer->createAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
+	
 	buffer->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color0);
 	buffer->createFloatAttachment(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::Color1);
 	unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
@@ -572,8 +621,13 @@ void Vatista::Game::bufferCreation()
 	buffer->createRenderBuffer(gameWindow->getWidth(), gameWindow->getHeight(), RenderTargetAttachment::DepthStencil,
 		RenderTargetType::DepthStencil);
 	
+	depthbuffer = std::make_shared<FrameBuffer>();
+	depthbuffer->createDepthAttachment(SHADOW_WIDTH, SHADOW_HEIGHT, RenderTargetAttachment::Depth);
+
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::POSTPROCESSOR: Failed to initialize FBO" << std::endl;
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
 	buffer->bindDefault();
 
 
@@ -601,11 +655,34 @@ void Vatista::Game::bufferCreation()
 	additiveShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/additive.fs.glsl");
 	additiveShader->Bind();
 
-	//vblurShader = std::make_shared<Shader>();
-	//vblurShader->Load("./res/Shaders/Post-Processing/post.vs.glsl", "./res/Shaders/Post-Processing/gaussianblur.fs.glsl");
-	//vblurShader->Bind();
-	//vblurShader->SetUniform("isHorizontal", 0);
+}
 
+void Vatista::Game::preProcess()
+{
+	glm::mat4 lightProjection, lightView;
+	glm::mat4 lightSpaceMatrix;
+	float near_plane = -1.0f, far_plane = 1.0f;
+	lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+	lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+	lightSpaceMatrix = lightProjection * lightView;
+	// render scene from light's point of view
+	depthShader->Bind();
+	depthShader->SetUniform("lightSpaceMatrix", lightSpaceMatrix);
+
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	depthbuffer->bind();
+	glClear(GL_DEPTH_BUFFER_BIT);
+\
+	for (auto object : ObjectList) {
+		object->depthdraw(depthShader);
+	}
+	depthbuffer->bindDefault();
+
+	// reset viewport
+	glViewport(0, 0, 1600, 900);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	depthbuffer->bindColour(5, 0);
 }
 
 
@@ -613,7 +690,7 @@ void Vatista::Game::postProcess()
 {
 	//Gaussian blur
 	blurShader->Bind();
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < passes; i++) {
 		pingpongBufferH->bind();
 		if(i == 0){
 			buffer->bindColour(3, 0);
@@ -632,7 +709,7 @@ void Vatista::Game::postProcess()
 		fullscreenQuad->Draw();
 	}
 
-	//final additive
+	//final additive 
 	buffer->bindDefault();
 	glDisable(GL_DEPTH_TEST);
 
@@ -648,56 +725,7 @@ void Vatista::Game::postProcess()
 	additiveShader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
 	additiveShader->SetUniform("exposure", exposure);
 
-
-
-	//basePost->Bind();
-	//buffer->bindColour(2, 0);
-	//basePost->SetUniform("xImage", 2);
-	//basePost->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
-
-	//hdrShader->Bind();
-	//buffer->bindColour(2, 0);
-	//hdrShader->SetUniform("xImage", 2);
-	//hdrShader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
-	//hdrShader->SetUniform("exposure", exposure);
-
-
 	fullscreenQuad->Draw();
-
-	//// The last output will start as the output from the rendering
-	//FrameBuffer::Sptr lastPass = buffer;
-	//
-	//for (const PostPass& pass : passes) {
-	//	// We'll bind our post-processing output as the current render target and clear it
-	//	pass.Output->bind(RenderTargetBinding::Draw);
-	//	glClear(GL_COLOR_BUFFER_BIT);
-	//
-	//	// Set the viewport to be the entire size of the passes output
-	//	glViewport(0, 0, pass.Output->GetWidth(), pass.Output->GetHeight());
-	//
-	//	// Use the post processing shader to draw the fullscreen quad
-	//	pass.Shader->Bind();
-	//	lastPass->GetAttachment(RenderTargetAttachment::Color0)->bind(0);
-	//	//propTexture->bind(0);
-	//	pass.Shader->SetUniform("xImage", 0);
-	//	pass.Shader->SetUniform("screenRes", glm::ivec2(gameWindow->getWidth(), gameWindow->getHeight()));
-	//
-	//	fullscreenQuad->Draw();
-	//
-	//	pass.Output->unBind();
-	//	lastPass = pass.Output;
-	//	
-	//	// Bind the last buffer we wrote to as our source for read operations
-	//	lastPass->bind(RenderTargetBinding::Read);
-	//	
-	//	// Copies the image from lastPass into the default back buffer
-	//	FrameBuffer::Blit({ 0, 0, lastPass->GetWidth(), lastPass->GetHeight() },
-	//		{ 0, 0, gameWindow->getWidth(), gameWindow->getHeight() },
-	//		BufferFlags::All, MagFilter::Nearest);
-	//	
-	//	// Unbind the last buffer from read operations, so we can write to it again later
-	//	lastPass->unBind();
-	//}
 
 }
 

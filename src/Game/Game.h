@@ -50,6 +50,7 @@ namespace Vatista {
 		void draw(float dt);
 		bool load(std::string filename, std::vector<Mesh::Sptr>& meshes, bool isChar);
 		void bufferCreation();
+		void preProcess();
 		void postProcess();
 
 	private:
@@ -98,15 +99,15 @@ namespace Vatista {
 		float y = 100.0f;
 
 		//GameObject::Sptr StaminaBackground;
-		
-	
+
+
 		FrameBuffer::Sptr buffer;
+		FrameBuffer::Sptr depthbuffer;
 		FrameBuffer::Sptr pingpongBufferH;
 		FrameBuffer::Sptr pingpongBufferV;
 
 		Mesh::Sptr fullscreenQuad;
-		std::vector<PostPass> passes;
-		
+
 		//basic post-process
 		Shader::Sptr basePost;
 
@@ -115,15 +116,22 @@ namespace Vatista {
 		Shader::Sptr brightShader;
 		Shader::Sptr blurShader;
 		Shader::Sptr additiveShader;
-		//Shader::Sptr hblurShader;
+		Shader::Sptr depthShader;
 		//Shader::Sptr vblurShader;
 
-		//test
-		float exposure = 0.5f;
+		const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 
-		//ObjLoader loader;
-		//
-		//static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		//toggleables
+		float exposure = 0.5f;
+		int passes = 2;
+		float brightness = 1.0f;
+		//ambient, diffuse, specular, directional light, point light, spot light, texture
+		std::vector<bool> toggles{1, 1, 1, 1, 1, 1, 1, 0, 1};
+		Texture::Sptr blankwhite;
+
+
+		glm::vec3 lightPos = glm::vec3(0.2f, 1.0f, 0.3f);
+	
 
 		float time = 0.0f;
 

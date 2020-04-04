@@ -91,7 +91,7 @@ namespace Vatista {
 				return;
 		}
 		glm::vec3 movement = glm::vec3(0.0f);
-		float speed = 10.0f;
+		float speed = 20.0f;
 		glfwSetInputMode(gameWindow, GLFW_STICKY_KEYS, GLFW_TRUE);
 		glfwSetKeyCallback(gameWindow, key_callback);
 		inputBuffer();
