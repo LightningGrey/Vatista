@@ -1,3 +1,23 @@
+Controls
+P1
+A - move left
+D - move right
+F - light attack
+G - heavy attack
+
+P2 
+left arrow - move left
+right arrow - move right
+right Ctrl - light attack
+right Alt - heavy attack
+
+
+double tap in movement direction to dash
+block attacks automatically by moving backwards
+stamina decreases from actions done
+hit your opponent three times to win
+
+
 Numpad toggles:
 1 to toggle ambient
 2 to toggle diffuse
