@@ -500,9 +500,9 @@ namespace Vatista {
 			else
 				setStamina(getStamina() + 0.05f);
 			if (getStamina() < 20.0f)
-				ae->SetEventParameter("Tashia Stamina Pants", "LowStamina", 1);
+				ae->SetEventParameter("Z3n Stamina Pants", "LowStamina", 1);
 			else
-				ae->SetEventParameter("Tashia Stamina Pants", "LowStamina", 0);
+				ae->SetEventParameter("Z3n Stamina Pants", "LowStamina", 0);
 		}
 		if (getStamina() > 100.0f)
 			setStamina(100.0f);
